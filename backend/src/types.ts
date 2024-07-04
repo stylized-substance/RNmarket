@@ -2,8 +2,8 @@ export type Review = {
   name: string;
   title: string;
   content: string;
-  rating: number
-}
+  rating: number;
+};
 
 export interface BaseProduct {
   title: string;
@@ -15,44 +15,51 @@ export interface BaseProduct {
   eta: number;
   id: string;
   rating: number;
-  reviews: Review[]
+  reviews: Review[];
 }
 
 export interface Mobile extends BaseProduct {
-  popular?: boolean
-  Brand: string
-  RAM: string
+  popular?: boolean;
+  Brand: string;
+  RAM: string;
 }
 
 export interface Book extends BaseProduct {
-  popular?: boolean
-  Language: string
-  Genre: string
+  popular?: boolean;
+  Language: string;
+  Genre: string;
 }
 
 export interface ClothingItem extends BaseProduct {
-  popular?: boolean
-  For: string
+  popular?: boolean;
+  For: string;
 }
 
 export interface BeautyItem extends BaseProduct {
-  popular?: boolean
-  Type: string
+  popular?: boolean;
+  Type: string;
 }
 
 export interface FurnitureItem extends BaseProduct {
-  popular?: boolean
-  Type: string
+  popular?: boolean;
+  Type: string;
 }
 
 export interface Laptop extends BaseProduct {
-  popular?: boolean
-  For: string
-  Brand: string
-  RAM: string
-  Processor: string
-  DisplaySize: string
-  HasSSD: string
+  popular?: boolean;
+  For: string;
+  Brand: string;
+  RAM: string;
+  Processor: string;
+  DisplaySize: string;
+  HasSSD: string;
 }
 
-export type Product = BaseProduct | Mobile | Book | ClothingItem | BeautyItem | FurnitureItem | Laptop
+export type Product =
+  | BaseProduct
+  | Mobile
+  | Book
+  | ClothingItem
+  | BeautyItem
+  | FurnitureItem
+  | Laptop;

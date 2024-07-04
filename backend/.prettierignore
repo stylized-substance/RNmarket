@@ -2,4 +2,6 @@
 build
 coverage
 
+data
 *.json
+postgresql/

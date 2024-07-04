@@ -10,7 +10,7 @@ services:
     volumes:
       - ./src:/usr/src/app/src
     environment:
-      - POSTGRES_PASSWORD=dbpassword
+      - DATABASE_URL=postgres://postgres:dbpassword@postgres:5432/postgres
   postgres:
     container_name: rnmarket-backend-postgres
     attach: false

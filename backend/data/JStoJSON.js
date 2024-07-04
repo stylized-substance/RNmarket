@@ -1,5 +1,5 @@
-const fs = require("fs");
-const { categories, products } = require("./data");
+const fs = require('fs');
+const { categories, products } = require('./data');
 
 // Concatenating categories and products
 let data = { categories: categories, products: products };
@@ -8,10 +8,10 @@ let data = { categories: categories, products: products };
 let dataInJSON = JSON.stringify(data);
 
 // Writing data in JSON format to data.json
-fs.writeFile("./data.json", dataInJSON, (err) => {
+fs.writeFile('./data.json', dataInJSON, (err) => {
   if (err) {
     console.error(err);
     return;
   }
-  console.log("Success!");
+  console.log('Success!');
 });
