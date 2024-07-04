@@ -5,7 +5,7 @@ export type Review = {
   rating: number
 }
 
-export interface Product {
+export interface BaseProduct {
   title: string;
   category: string;
   price: number;
@@ -18,34 +18,34 @@ export interface Product {
   reviews: Review[]
 }
 
-export interface Mobile extends Product {
+export interface Mobile extends BaseProduct {
   popular?: boolean
   Brand: string
   RAM: string
 }
 
-export interface Book extends Product {
+export interface Book extends BaseProduct {
   popular?: boolean
   Language: string
   Genre: string
 }
 
-export interface ClothingItem extends Product {
+export interface ClothingItem extends BaseProduct {
   popular?: boolean
   For: string
 }
 
-export interface BeautyItem extends Product {
+export interface BeautyItem extends BaseProduct {
   popular?: boolean
   Type: string
 }
 
-export interface FurnitureItem extends Product {
+export interface FurnitureItem extends BaseProduct {
   popular?: boolean
   Type: string
 }
 
-export interface Laptop extends Product {
+export interface Laptop extends BaseProduct {
   popular?: boolean
   For: string
   Brand: string
@@ -55,3 +55,4 @@ export interface Laptop extends Product {
   HasSSD: string
 }
 
+export type Product = BaseProduct | Mobile | Book | ClothingItem | BeautyItem | FurnitureItem | Laptop
