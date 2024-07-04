@@ -1,11 +1,18 @@
 import express from 'express'
+import { isNumber } from '../utils/typeNarrowers'
 import { products } from '../../data/data.json'
+let data = products
 
 const router = express.Router()
 
-router.get('/', (_req, res) => {
-  //const ids = products.map(product => product.id)
-  res.send(products)
+router.get('/', (req, res) => {
+  if (req.query.limit) {
+    if (isNumber(req.query.limit)) {
+      const limit: number = req.query.limit
+      data = data.slice(0, limit)
+    }
+  }
+  res.send(data)
 });
 
 router.get('/:id', (req, res) => {

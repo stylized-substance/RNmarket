@@ -1,26 +1,20 @@
 import { products } from '../../data/data.json'
+import _ from 'lodash'
 
 const findCommonProperties = () => {
-  const categories = products.map(product => product.category)
-  const uniqueCategories = [...new Set(categories)]
-
-  // const mobiles = products.filter(product => product.category === 'Mobiles')
-  // const books = products.filter(product => product.category === 'Books')
-  // const clothings = products.filter(product => product.category === 'Clothings')
-  // const beauty = products.filter(product => product.category === 'Beauty')
-  // const furniture = products.filter(product => product.category === 'Furniture')
-  // const laptops = products.filter(product => product.category === 'Laptops')
-
-    // uniqueCategories.forEach((category) => {
-  //   const productsInCategory = products.filter((product) => product.category === category)
-  //   console.log(productsInCategory.length)
-  // })
-
-  // console.log()
-  // const allProperties = products.map(product => Object.keys(product))
-  console.log(uniqueCategories)
+  const productProperties = products.map(product => Object.keys(product))
+  const commonProperties = _.intersection(...productProperties)
+  return commonProperties
 }
 
-findCommonProperties()
+const findExtraPropertiesForCategory = (category: string) => {
+  const commonProperties = findCommonProperties()
+  const categoryContents = products.filter(product => product.category === category)
+  const categoryContentsProperties = _.uniq(categoryContents.map(product => Object.keys(product)).flat())
+  const extraProperties = _.difference(categoryContentsProperties, commonProperties)
+  return [ commonProperties, extraProperties ]
+}
+
+console.log(findExtraPropertiesForCategory('Laptops'))
 
 export default findCommonProperties
