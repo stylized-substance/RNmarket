@@ -3,3 +3,4 @@
 | ---- | ----- | ---------- | ------------------ |
 | 02.07.2024 | 1 | Started initializing project backend and config | 1
 | 03.07.2024 | 6 | Working on backend routes | 7
+| 04.07.2024 | 6 | Added types to backend, created Docker dev environment and added PostgreSQl database | 13
