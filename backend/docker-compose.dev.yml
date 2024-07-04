@@ -1,0 +1,22 @@
+services:
+  server:
+    container_name: rnmarket-backend-server
+    image: rnmarket-backend-server
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3003:3003
+    volumes:
+      - ./src:/usr/src/app/src
+    environment:
+      - POSTGRES_PASSWORD=dbpassword
+  postgres:
+    container_name: rnmarket-backend-postgres
+    attach: false
+    image: postgres
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=dbpassword
+      - PGDATA=/var/lib/postgresql/data/pgdata
