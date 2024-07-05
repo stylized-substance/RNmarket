@@ -5,3 +5,4 @@ docker-compose*
 
 postgresql
 node_modules
+build

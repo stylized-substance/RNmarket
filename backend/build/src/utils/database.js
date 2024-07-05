@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectToDatabase = void 0;
+exports.rollbackMigration = exports.connectToDatabase = void 0;
 const sequelize_1 = require("sequelize");
 const umzug_1 = require("umzug");
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -35,6 +35,7 @@ const rollbackMigration = () => __awaiter(void 0, void 0, void 0, function* () {
     const migrator = new umzug_1.Umzug(migrationConfig);
     yield migrator.down();
 });
+exports.rollbackMigration = rollbackMigration;
 const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield sequelize.authenticate();

@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import productsRouter from './routes/products';
+import productsRouter from '#src/routes/products';
 import { connectToDatabase } from './utils/database';
 
 const app = express();

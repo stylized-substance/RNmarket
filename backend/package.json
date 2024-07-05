@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Node/Express backend for RNmarket",
   "main": "index.ts",
+  "imports": {
+    "#src/*": "./src/*"
+  },
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "startprod": "node build/index.js",
