@@ -1,5 +1,5 @@
 import express from 'express';
-import { isNumber } from '../utils/typeNarrowers';
+import { isNumber } from '#src/utils/typeNarrowers';
 import { products } from '../../data/data.json';
 let data = products;
 
