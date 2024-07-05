@@ -8,6 +8,6 @@ export default tseslint.config(
   ...tseslint.configs.strict,
   eslintConfigPrettier,
   {
-    ignores: ["data"]
+    ignores: ['data']
   }
 );
