@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "startprod": "node build/index.js",
-    "dev": "ts-node-dev ./src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint *.ts .",
     "prettier": "prettier . '!./postgresql' --write",
@@ -27,6 +27,7 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.2",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^7.15.0"
   },
