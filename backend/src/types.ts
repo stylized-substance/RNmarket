@@ -1,3 +1,8 @@
+  // Define special omit for unions
+  type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
 export type Review = {
   name: string;
   title: string;
@@ -15,7 +20,7 @@ export interface BaseProduct {
   eta: number;
   id: string;
   rating: number;
-  reviews: Review[];
+  reviews?: Review[];
 }
 
 export interface Mobile extends BaseProduct {
@@ -63,3 +68,5 @@ export type Product =
   | BeautyItem
   | FurnitureItem
   | Laptop;
+
+export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>
