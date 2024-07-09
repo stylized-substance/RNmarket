@@ -1,15 +1,9 @@
-import * as data from '../../data/data.json'
-import { Review, ProductWithoutReviews } from '#src/types'
+import * as data from '../../data/data.json';
+// import { Review, ProductWithoutReviews, Product } from '#src/types'
+// import { toProduct, isReview } from '../utils/typeNarrowers'
 
-const products: Product[] = data
-
-const { reviews, ...productsArray }: { reviews: Review[]; productsArray: ProductWithoutReviews[] } = products
-
-const { reviews } = products
-
-// { reviews: Review[]; productsArray: ProductWithoutReviews[]} 
-console.log(reviewsArray, productsArray)
-// const productReviews: Review[] = products.map({ reviews } => reviews)
+const { products } = data;
+console.log(products);
 
 // Using ES5 export so Umzug can work with it
 module.exports = {
@@ -17,4 +11,4 @@ module.exports = {
   // up: async ({ context: queryInterface }) => {
   //   await queryInterface.bulkInsert()
   // }
-}
+};

@@ -1,5 +1,5 @@
-  // Define special omit for unions
-  type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never;
 
@@ -24,33 +24,39 @@ export interface BaseProduct {
 }
 
 export interface Mobile extends BaseProduct {
+  category: 'Mobiles';
   popular?: boolean;
   Brand: string;
   RAM: string;
 }
 
 export interface Book extends BaseProduct {
+  category: 'Books';
   popular?: boolean;
   Language: string;
   Genre: string;
 }
 
 export interface ClothingItem extends BaseProduct {
+  category: 'Clothings';
   popular?: boolean;
   For: string;
 }
 
 export interface BeautyItem extends BaseProduct {
+  category: 'Beauty';
   popular?: boolean;
   Type: string;
 }
 
 export interface FurnitureItem extends BaseProduct {
+  category: 'Furniture';
   popular?: boolean;
   Type: string;
 }
 
 export interface Laptop extends BaseProduct {
+  category: 'Laptops';
   popular?: boolean;
   For: string;
   Brand: string;
@@ -61,7 +67,6 @@ export interface Laptop extends BaseProduct {
 }
 
 export type Product =
-  | BaseProduct
   | Mobile
   | Book
   | ClothingItem
@@ -69,4 +74,4 @@ export type Product =
   | FurnitureItem
   | Laptop;
 
-export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>
+export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>;

@@ -41,4 +41,4 @@ const connectToDatabase = async () => {
   return null;
 };
 
-export { connectToDatabase, rollbackMigration };
+export { connectToDatabase, rollbackMigration, sequelize };
