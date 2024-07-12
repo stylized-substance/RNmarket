@@ -42,4 +42,4 @@ Review.init(
   }
 );
 
-export default { Review };
+export default Review;
