@@ -8,6 +8,7 @@ export type Review = {
   title: string;
   content: string;
   rating: number;
+  product_id?: string
 };
 
 export interface BaseProduct {
