@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import path from 'path';
 import productsRouter from '#src/routes/products';
 import { connectToDatabase } from '#src/utils/database';

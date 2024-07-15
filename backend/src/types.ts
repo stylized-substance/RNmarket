@@ -8,15 +8,18 @@ export type Review = {
   title: string;
   content: string;
   rating: number;
-  product_id?: string
 };
+
+export interface ReviewWithProductId extends Review {
+  product_id: string;
+}
 
 export interface BaseProduct {
   title: string;
   category: string;
   price: number;
   imgs: string[];
-  specs: string[];
+  specs: string[] | string;
   inStock: number;
   eta: number;
   id: string;

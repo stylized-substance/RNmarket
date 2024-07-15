@@ -101,7 +101,7 @@ module.exports = {
         autoIncrement: true
       },
       product_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TEXT,
         allowNull: false,
         references: { model: 'products', key: 'id' }
       },

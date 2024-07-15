@@ -7,3 +7,4 @@
 | 08.07.2024 | 2 | Worked on database migrations and type narrowing | 20
 | 09.07.2024 | 2 | Types, type narrowing, database models | 22
 | 12.7.2024 | 1 | Extracting reviews from products | 23
+| 15.7.2024 | 2 | Work on type narrowing and db migration | 25

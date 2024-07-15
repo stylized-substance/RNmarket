@@ -1,5 +1,6 @@
 import {
   Review,
+  ReviewWithProductId,
   Product,
   Mobile,
   Book,
@@ -21,29 +22,55 @@ const isObject = (param: unknown): param is object => {
   return param !== null && typeof param === 'object';
 };
 
+const isStringArray = (param: unknown): param is string[] => {
+  return Array.isArray(param) && param.every((item) => isString(item));
+};
+
 const isReview = (param: unknown): param is Review => {
   return (
     isObject(param) &&
     'name' in param &&
+    isString(param.name) &&
     'title' in param &&
+    isString(param.title) &&
     'content' in param &&
-    'rating' in param
+    isString(param.title) &&
+    'rating' in param &&
+    isNumber(param.rating)
   );
+};
+
+const isReviewWithProductId = (
+  param: unknown
+): param is ReviewWithProductId => {
+  return isReview(param) && 'product_id' in param && isString(param.product_id);
+};
+
+const parseSpecs = (param: unknown): param is string[] | string => {
+  return isStringArray(param) || isString(param);
 };
 
 const isProduct = (param: unknown): param is Product => {
   return (
     isObject(param) &&
     'title' in param &&
+    isString(param.title) &&
     'category' in param &&
+    isString(param.category) &&
     'price' in param &&
+    isNumber(param.price) &&
     'imgs' in param &&
+    isStringArray(param.imgs) &&
     'specs' in param &&
+    parseSpecs(param.specs) &&
     'inStock' in param &&
+    isNumber(param.inStock) &&
     'eta' in param &&
+    isNumber(param.eta) &&
     'id' in param &&
+    isString(param.id) &&
     'rating' in param &&
-    'reviews' in param
+    isNumber(param.rating)
   );
 };
 
@@ -73,6 +100,7 @@ const isLaptop = (product: Product): product is Laptop => {
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
+    console.log(param);
     throw new Error('Object has incorrect data for a product');
   }
 
@@ -120,4 +148,4 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-export { isString, isNumber, isReview, toProduct };
+export { isString, isNumber, isReview, isReviewWithProductId, toProduct };
