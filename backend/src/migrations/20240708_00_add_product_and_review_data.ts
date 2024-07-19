@@ -3,23 +3,24 @@ import { Product, ReviewWithProductId } from '#src/types';
 import { toProduct } from '#src/utils/typeNarrowers';
 import { toReviewWithProductId } from '#src/utils/reviews';
 
-// Escape newlines in JSON to make migration work
-
-const { products } = JSON.parse(JSON.stringify(data).replace('\n', '\\n'));
+const { products } = data
 
 const productArray: Product[] = [];
 const reviewArray: ReviewWithProductId[] = [];
 
 for (const product of products) {
   const typeCheckedProduct: Product = toProduct(product);
-  productArray.push(typeCheckedProduct);
-
+  
   if (typeCheckedProduct.reviews) {
-    const { reviews } = typeCheckedProduct;
+    const { reviews, ...productWithoutReviews } = typeCheckedProduct
+    productArray.push(productWithoutReviews);
     for (const review of reviews) {
       const reviewWithProductId = toReviewWithProductId(review, product.id);
+      reviewWithProductId.content = reviewWithProductId.content.replace(/\n/g, '')
       reviewArray.push(reviewWithProductId);
     }
+  } else {
+    productArray.push(typeCheckedProduct);
   }
 }
 
@@ -28,7 +29,7 @@ module.exports = {
   // @ts-expect-error - no type available for queryInterface
   up: async ({ context: queryInterface }) => {
     await queryInterface.bulkInsert('products', productArray);
-    await queryInterface.bulkInsert('reviews', reviewArray);
+    // await queryInterface.bulkInsert('reviews', reviewArray);
   },
   // @ts-expect-error - no type available for queryInterface
   down: async ({ context: queryInterface }) => {

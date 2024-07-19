@@ -100,7 +100,6 @@ const isLaptop = (product: Product): product is Laptop => {
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
-    console.log(param);
     throw new Error('Object has incorrect data for a product');
   }
 
