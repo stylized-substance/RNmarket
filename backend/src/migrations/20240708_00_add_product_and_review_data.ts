@@ -5,14 +5,41 @@ import { toReviewWithProductId } from '#src/utils/reviews';
 
 const { products } = data
 
+// interface ProductObject {
+//   [key: string]: string | string[] | number | number[] | boolean
+// }
+
+const keysToLowercase = (param: Product) => {
+  const entries = Object.entries(param)
+  const lowerCased = Object.fromEntries(
+    entries.map(([key, value]) => {
+      return [key.toLowerCase(), value]
+    })
+  )
+  return lowerCased
+  // const newObject: Product = {}
+  // Object.keys(param).forEach(key => {
+  //   newObject[key.toLowerCase()] = param[key]
+  // })
+  // return newObject
+  // const newObject: ProductObject = {}
+  // Object.keys(param).forEach(key => {
+  //   newObject[key.toLowerCase()] = param[key]
+  // })
+  // const transformedProduct = Object.keys(param).forEach(key => key.toLowerCase())
+  // return transformedProduct
+}
+
 const productArray: Product[] = [];
 const reviewArray: ReviewWithProductId[] = [];
 
 for (const product of products) {
   const typeCheckedProduct: Product = toProduct(product);
+  // Transform object keys to lowercase to comply with database field names
+  const lowerCaseProduct = keysToLowercase(typeCheckedProduct)
   
-  if (typeCheckedProduct.reviews) {
-    const { reviews, ...productWithoutReviews } = typeCheckedProduct
+  if (lowerCaseProduct.reviews) {
+    const { reviews, ...productWithoutReviews } = lowerCaseProduct
     productArray.push(productWithoutReviews);
     for (const review of reviews) {
       const reviewWithProductId = toReviewWithProductId(review, product.id);
@@ -20,7 +47,7 @@ for (const product of products) {
       reviewArray.push(reviewWithProductId);
     }
   } else {
-    productArray.push(typeCheckedProduct);
+    productArray.push(lowerCaseProduct);
   }
 }
 
