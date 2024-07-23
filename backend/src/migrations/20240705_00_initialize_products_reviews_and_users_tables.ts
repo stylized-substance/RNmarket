@@ -10,6 +10,10 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
+      original_id: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
       title: {
         type: DataTypes.TEXT,
         allowNull: false
@@ -22,22 +26,18 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      images: {
+      imgs: {
         type: DataTypes.ARRAY(DataTypes.TEXT)
       },
       specs: {
         type: DataTypes.ARRAY(DataTypes.TEXT)
       },
-      inStock: {
+      instock: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
       eta: {
         type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      productId: {
-        type: DataTypes.TEXT,
         allowNull: false
       },
       rating: {
@@ -101,9 +101,9 @@ module.exports = {
         autoIncrement: true
       },
       product_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TEXT,
         allowNull: false,
-        references: { model: 'products', key: 'id' }
+        references: { model: 'products', key: 'original_id' }
       },
       user_id: {
         type: DataTypes.INTEGER,

@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  const product = products.find((product) => req.params.id === product.id);
+  const product = products.find((product) => req.params.id === product.original_id);
   if (product) {
     res.send(product);
   } else {

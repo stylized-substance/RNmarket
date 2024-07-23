@@ -19,10 +19,10 @@ export interface BaseProduct {
   category: string;
   price: number;
   imgs: string[];
-  specs: string[] | string;
-  inStock: number;
+  specs: string[];
+  instock: number;
   eta: number;
-  id: string;
+  original_id: string;
   rating: number;
   reviews?: Review[];
 }
@@ -30,44 +30,44 @@ export interface BaseProduct {
 export interface Mobile extends BaseProduct {
   category: 'Mobiles';
   popular?: boolean;
-  Brand: string;
-  RAM: string;
+  brand: string;
+  ram: string;
 }
 
 export interface Book extends BaseProduct {
   category: 'Books';
   popular?: boolean;
-  Language: string;
-  Genre: string;
+  language: string;
+  genre: string;
 }
 
 export interface ClothingItem extends BaseProduct {
   category: 'Clothings';
   popular?: boolean;
-  For: string;
+  for: string;
 }
 
 export interface BeautyItem extends BaseProduct {
   category: 'Beauty';
   popular?: boolean;
-  Type: string;
+  type: string;
 }
 
 export interface FurnitureItem extends BaseProduct {
   category: 'Furniture';
   popular?: boolean;
-  Type: string;
+  type: string;
 }
 
 export interface Laptop extends BaseProduct {
   category: 'Laptops';
   popular?: boolean;
-  For: string;
-  Brand: string;
-  RAM: string;
-  Processor: string;
-  DisplaySize: string;
-  HasSSD: string;
+  for: string;
+  brand: string;
+  ram: string;
+  processor: string;
+  displaysize: string;
+  has_ssd: string;
 }
 
 export type Product =

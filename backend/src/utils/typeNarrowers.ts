@@ -47,7 +47,7 @@ const isReviewWithProductId = (
 };
 
 const parseSpecs = (param: unknown): param is string[] | string => {
-  return isStringArray(param) || isString(param);
+  return isStringArray(param);
 };
 
 const isProduct = (param: unknown): param is Product => {
@@ -63,12 +63,12 @@ const isProduct = (param: unknown): param is Product => {
     isStringArray(param.imgs) &&
     'specs' in param &&
     parseSpecs(param.specs) &&
-    'inStock' in param &&
-    isNumber(param.inStock) &&
+    'instock' in param &&
+    isNumber(param.instock) &&
     'eta' in param &&
     isNumber(param.eta) &&
-    'id' in param &&
-    isString(param.id) &&
+    'original_id' in param &&
+    isString(param.original_id) &&
     'rating' in param &&
     isNumber(param.rating)
   );
@@ -100,8 +100,10 @@ const isLaptop = (product: Product): product is Laptop => {
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
+    console.log(param)
     throw new Error('Object has incorrect data for a product');
   }
+  
 
   switch (param.category) {
     case 'Mobiles': {

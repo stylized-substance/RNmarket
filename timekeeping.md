@@ -10,3 +10,4 @@
 | 15.7.2024 | 2 | Work on type narrowing and db migration | 25
 | 19.7.2024 | 2 | Progress on db migration | 27
 | 22.7.2024 | 1 | Work on db migration | 28
+| 23.7.2024 | 2 | Work on db migration | 30
