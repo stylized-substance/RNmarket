@@ -73,6 +73,14 @@ module.exports = {
       },
       has_ssd: {
         type: DataTypes.TEXT
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date
       }
     });
     await queryInterface.createTable('users', {
@@ -92,6 +100,14 @@ module.exports = {
       name: {
         type: DataTypes.TEXT,
         allowNull: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date
       }
     });
     await queryInterface.createTable('reviews', {
@@ -121,6 +137,14 @@ module.exports = {
       },
       rating: {
         type: DataTypes.INTEGER
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date
       }
     });
   },
