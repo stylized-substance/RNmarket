@@ -1,10 +1,9 @@
 import { products } from '../../data/data.json';
-import { Product, ReviewWithProductId } from '#src/types';
+import { Product, Review } from '#src/types';
 import { toProduct } from '#src/utils/typeNarrowers';
-import { toReviewWithProductId } from '#src/utils/reviews';
 
 const productArray: Product[] = [];
-const reviewArray: ReviewWithProductId[] = [];
+const reviewArray: Review[] = [];
 
 for (const product of products) {
   const typeCheckedProduct: Product = toProduct(product);
@@ -13,9 +12,7 @@ for (const product of products) {
     const { reviews, ...productWithoutReviews } = typeCheckedProduct
     productArray.push(productWithoutReviews);
     for (const review of reviews) {
-      const reviewWithProductId = toReviewWithProductId(review, typeCheckedProduct.original_id);
-      //reviewWithProductId.content = reviewWithProductId.content.replace(/\n/g, '')
-      reviewArray.push(reviewWithProductId);
+      reviewArray.push(review);
     }
   } else {
     productArray.push(typeCheckedProduct);

@@ -12,13 +12,13 @@ Review.init(
       autoIncrement: true
     },
     product_id: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      references: { model: 'products', key: 'original_id' }
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: { model: 'products', key: 'id' }
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: { model: 'users', key: 'id' }
     },
     name: {
