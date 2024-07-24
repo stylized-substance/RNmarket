@@ -4,17 +4,15 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   : never;
 
 export type Review = {
+  product_id?: string;
   name: string;
   title: string;
   content: string;
   rating: number;
 };
 
-export interface ReviewWithProductId extends Review {
-  product_id: string;
-}
-
 export interface BaseProduct {
+  id: string;
   title: string;
   category: string;
   price: number;
@@ -79,3 +77,5 @@ export type Product =
   | Laptop;
 
 export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>;
+
+export type ProductWithoutId = UnionOmit<Product, 'id'>;

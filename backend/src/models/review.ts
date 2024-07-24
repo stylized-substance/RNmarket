@@ -12,8 +12,8 @@ Review.init(
       autoIncrement: true
     },
     product_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
+      type: DataTypes.UUID,
+      allowNull: false,
       references: { model: 'products', key: 'id' }
     },
     user_id: {

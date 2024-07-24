@@ -1,6 +1,5 @@
 import {
   Review,
-  ReviewWithProductId,
   Product,
   Mobile,
   Book,
@@ -38,12 +37,6 @@ const isReview = (param: unknown): param is Review => {
     'rating' in param &&
     isNumber(param.rating)
   );
-};
-
-const isReviewWithProductId = (
-  param: unknown
-): param is ReviewWithProductId => {
-  return isReview(param) && 'product_id' in param && isString(param.product_id);
 };
 
 const parseSpecs = (param: unknown): param is string[] | string => {
@@ -100,10 +93,9 @@ const isLaptop = (product: Product): product is Laptop => {
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
-    console.log(param)
+    console.log(param);
     throw new Error('Object has incorrect data for a product');
   }
-  
 
   switch (param.category) {
     case 'Mobiles': {
@@ -149,4 +141,4 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-export { isString, isNumber, isReview, isReviewWithProductId, toProduct };
+export { isString, isNumber, isReview, toProduct };

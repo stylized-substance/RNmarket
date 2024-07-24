@@ -4,20 +4,24 @@ import { Product, Review } from '#src/models';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   if (req.query.limit) {
     if (isNumber(req.query.limit)) {
       const limit: number = req.query.limit;
-      limit
+      limit;
     }
   }
 
-  const products = Product.findAll({
+  const products = await Product.findAll({
     include: {
       model: Review
     }
-  })
-  res.send(products);
+  });
+
+  const reviews = await Review.findAll({});
+  console.log(reviews);
+  console.log(products[1]);
+  res.json(products);
 });
 
 // router.get('/:id', (req, res) => {

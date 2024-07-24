@@ -7,9 +7,8 @@ class Product extends Model {}
 Product.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
+      type: DataTypes.UUID,
+      primaryKey: true
     },
     original_id: {
       type: DataTypes.TEXT,

@@ -6,9 +6,8 @@ module.exports = {
   up: async ({ context: queryInterface }) => {
     await queryInterface.createTable('products', {
       id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        type: DataTypes.UUID,
+        primaryKey: true
       },
       original_id: {
         type: DataTypes.TEXT,
@@ -76,11 +75,11 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date()
       },
       updated_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date()
       }
     });
     await queryInterface.createTable('users', {
@@ -103,11 +102,11 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date()
       },
       updated_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date()
       }
     });
     await queryInterface.createTable('reviews', {
@@ -117,8 +116,8 @@ module.exports = {
         autoIncrement: true
       },
       product_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.UUID,
+        allowNull: false,
         references: { model: 'products', key: 'id' }
       },
       user_id: {
@@ -140,11 +139,11 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date()
       },
       updated_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date()
       }
     });
   },
