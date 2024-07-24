@@ -11,3 +11,4 @@
 | 19.7.2024 | 2 | Progress on db migration | 27
 | 22.7.2024 | 1 | Work on db migration | 28
 | 23.7.2024 | 2 | Work on db migration | 30
+| 24.7.2024 | 2 | Work on db migration | 32
