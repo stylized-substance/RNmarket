@@ -22,19 +22,9 @@ for (const product of products) {
 
     // Loop through reviews and find all unique users
     for (const review of reviews) {
-      if (!userNameArray.includes(review.name)) {
+      if (!(userNameArray.includes(review.name))) {
         userNameArray.push(review.name)
       }
-    }
-
-    // Turn user names into user objects
-    for (const name of userNameArray) {
-      const user: User = {
-        id: uuidv4(),
-        username: `${name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
-        name: name
-      };
-      userArray.push(user)
     }
 
     // Add user and products ids to reviews
@@ -56,6 +46,19 @@ for (const product of products) {
   }
 }
 
+// Turn user names into user objects
+for (const name of userNameArray) {
+  const user: User = {
+    id: uuidv4(),
+    username: `${name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
+    name: name
+  };
+  userArray.push(user)
+}
+
+console.log('userArray', userArray)
+
+
 // Using ES5 export so Umzug can work with it
 module.exports = {
   // @ts-expect-error - no type available for queryInterface
@@ -66,6 +69,7 @@ module.exports = {
   },
   // @ts-expect-error - no type available for queryInterface
   down: async ({ context: queryInterface }) => {
+    await queryInterface.bulkDelete('users');
     await queryInterface.bulkDelete('products');
     await queryInterface.bulkDelete('reviews');
   }
