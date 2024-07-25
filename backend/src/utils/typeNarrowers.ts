@@ -1,4 +1,5 @@
 import {
+  User,
   Review,
   Product,
   Mobile,
@@ -24,6 +25,18 @@ const isObject = (param: unknown): param is object => {
 const isStringArray = (param: unknown): param is string[] => {
   return Array.isArray(param) && param.every((item) => isString(item));
 };
+
+const isUser = (param: unknown): param is User => {
+  return (
+    isObject(param) &&
+    'id' in param &&
+    isString(param.id) &&
+    'username' in param &&
+    isString(param.username) &&
+    'name' in param &&
+    isString(param.name)
+  )
+}
 
 const isReview = (param: unknown): param is Review => {
   return (
@@ -141,4 +154,4 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-export { isString, isNumber, isReview, toProduct };
+export { isString, isNumber, isReview, toProduct, isUser };

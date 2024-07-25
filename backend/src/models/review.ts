@@ -7,9 +7,8 @@ class Review extends Model {}
 Review.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      autoIncrement: true
     },
     product_id: {
       type: DataTypes.UUID,
@@ -17,7 +16,7 @@ Review.init(
       references: { model: 'products', key: 'id' }
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: true,
       references: { model: 'users', key: 'id' }
     },

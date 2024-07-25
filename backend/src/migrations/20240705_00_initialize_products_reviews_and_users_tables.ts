@@ -84,9 +84,8 @@ module.exports = {
     });
     await queryInterface.createTable('users', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true
       },
       username: {
         type: DataTypes.TEXT,
@@ -98,6 +97,7 @@ module.exports = {
       },
       name: {
         type: DataTypes.TEXT,
+        unique: true,
         allowNull: false
       },
       created_at: {
@@ -111,9 +111,8 @@ module.exports = {
     });
     await queryInterface.createTable('reviews', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true
       },
       product_id: {
         type: DataTypes.UUID,
@@ -121,8 +120,8 @@ module.exports = {
         references: { model: 'products', key: 'id' }
       },
       user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.UUID,
+        allowNull: false,
         references: { model: 'users', key: 'id' }
       },
       name: {

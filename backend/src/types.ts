@@ -4,12 +4,20 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   : never;
 
 export type Review = {
-  product_id?: string;
+  id: string;
+  product_id: string;
+  user_id: string;
   name: string;
   title: string;
   content: string;
   rating: number;
 };
+
+export interface User {
+  id: string;
+  username: string;
+  name: string
+}
 
 export interface BaseProduct {
   id: string;
