@@ -13,3 +13,4 @@
 | 23.7.2024 | 2 | Work on db migration | 30
 | 24.7.2024 | 2 | Work on db migration | 32
 | 25.7.2024 | 1 | Work on db migration | 33
+| 06.08.2024 | 5 | Work on products router, middleware, types | 38

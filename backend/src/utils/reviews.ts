@@ -1,4 +1,4 @@
-import { ReviewWithProductId } from '#src/types';
+import { ReviewWithProductId } from '#src/types/types';
 import { isReview, isReviewWithProductId } from './typeNarrowers';
 
 const toReviewWithProductId = (

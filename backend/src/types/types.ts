@@ -3,6 +3,8 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never;
 
+// Types for reviews, products and users
+
 export type Review = {
   id: string;
   product_id: string;
@@ -16,7 +18,7 @@ export type Review = {
 export interface User {
   id: string;
   username: string;
-  name: string
+  name: string;
 }
 
 export interface BaseProduct {
@@ -87,3 +89,11 @@ export type Product =
 export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>;
 
 export type ProductWithoutId = UnionOmit<Product, 'id'>;
+
+// Types for epxress controllers
+
+export interface ProductSearchParameters {
+  limit?: number;
+  include?: object;
+  where?: object;
+}

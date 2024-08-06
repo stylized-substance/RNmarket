@@ -1,27 +1,24 @@
-import { Request, Response, NextFunction } from 'express'
-import { isNumber } from '#src/utils/typeNarrowers';
+import { Request, Response, NextFunction } from 'express';
+import { isNumber, parseCategory } from '#src/utils/typeNarrowers';
 import { Review } from '#src/models';
+import { ProductSearchParameters } from '#src/types/types'
+import { Op } from 'sequelize'
 
-// Type definitions
+const processProductQueryParameters = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const searchParameters: ProductSearchParameters = {};
 
-interface SearchParameters {
-  limit?: number,
-  include?: object
-}
-
-interface RequestWithSearchParameters extends Request {
-  searchParameters: SearchParameters
-}
-
-const processProductQueryParameters = (req: RequestWithSearchParameters, res: Response, next: NextFunction) => {
-  const searchParameters: SearchParameters = {}
+  const { limit, category } = req.query
 
   // Limit number of products returned
-  if (req.query.limit) {
-    if (isNumber(req.query.limit)) {
-      searchParameters.limit = req.query.limit;
+  if (limit) {
+    if (isNumber(limit)) {
+      searchParameters.limit = limit;
     } else {
-      res.status(400).send('Invalid query limit')
+      res.status(400).send('Invalid product query limit');
     }
   }
 
@@ -29,12 +26,22 @@ const processProductQueryParameters = (req: RequestWithSearchParameters, res: Re
   if (req.query.withReviews === 'true') {
     searchParameters.include = {
       model: Review
+    };
+  }
+
+  // Filter products by category
+  if (category && parseCategory(category)) {
+    searchParameters.where = {
+      category: {
+        [Op.eq]: category
+      }
     }
   }
 
-  req.searchParameters = searchParameters
+  // Add search parameters to request object
+  req.searchParameters = searchParameters;
 
-  next()
-}
+  next();
+};
 
-export { processProductQueryParameters }
+export { processProductQueryParameters };

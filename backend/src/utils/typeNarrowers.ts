@@ -8,10 +8,10 @@ import {
   BeautyItem,
   FurnitureItem,
   Laptop
-} from '#src/types';
+} from '#src/types/types';
 
 const isString = (param: unknown) => {
-  return typeof param === 'string' || param instanceof String;
+  return typeof param === 'string';
 };
 
 const isNumber = (value: unknown): value is number => {
@@ -35,8 +35,8 @@ const isUser = (param: unknown): param is User => {
     isString(param.username) &&
     'name' in param &&
     isString(param.name)
-  )
-}
+  );
+};
 
 const isReview = (param: unknown): param is Review => {
   return (
@@ -55,6 +55,19 @@ const isReview = (param: unknown): param is Review => {
 const parseSpecs = (param: unknown): param is string[] | string => {
   return isStringArray(param);
 };
+
+const parseCategory = (param: unknown): boolean => {
+  const categories = [
+    'Mobiles',
+    'Books',
+    'Clothings',
+    'Beauty',
+    'Furniture',
+    'Laptops'
+  ]
+
+  return (isString(param) && categories.includes(param))
+}
 
 const isProduct = (param: unknown): param is Product => {
   return (
@@ -153,4 +166,4 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-export { isString, isNumber, isReview, toProduct, isUser };
+export { isString, isNumber, isReview, toProduct, isUser, parseCategory };

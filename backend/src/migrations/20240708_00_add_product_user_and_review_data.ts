@@ -1,5 +1,5 @@
 import { products } from '../../data/data.json';
-import { Product, Review, User } from '#src/types';
+import { Product, Review, User } from '#src/types/types';
 import { toProduct, isReview } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,13 +22,13 @@ for (const product of products) {
     // Loop through reviews and find all unique users
     for (const review of reviews) {
       // Create user object and save to array
-      if (!(userArray.find(user => user.name === review.name))) {
+      if (!userArray.find((user) => user.name === review.name)) {
         const user: User = {
           id: uuidv4(),
           username: `${review.name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
-          name: review.name,
-        }
-        userArray.push(user)
+          name: review.name
+        };
+        userArray.push(user);
       }
     }
 
@@ -37,9 +37,9 @@ for (const product of products) {
       if (isReview(review)) {
         review.product_id = productId;
         review.id = uuidv4();
-        const reviewUser = userArray.find(user => user.name === review.name)
+        const reviewUser = userArray.find((user) => user.name === review.name);
         if (reviewUser) {
-          review.user_id = reviewUser.id
+          review.user_id = reviewUser.id;
         }
         reviewArray.push(review);
       } else {
