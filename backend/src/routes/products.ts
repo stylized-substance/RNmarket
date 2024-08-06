@@ -1,26 +1,17 @@
-import express from 'express';
-import { isNumber } from '#src/utils/typeNarrowers';
-import { Product, Review } from '#src/models';
+import { Request, Response, Router } from "express"
+import { Product } from '#src/models';
+import { processProductQueryParameters } from '#src/utils/middleware'
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', async (req, res) => {
-  if (req.query.limit) {
-    if (isNumber(req.query.limit)) {
-      const limit: number = req.query.limit;
-      limit;
-    }
-  }
+interface RequestWithSearchParamaters extends Request {
+  searchParameters: object
+}
 
-  const products = await Product.findAll({
-    include: {
-      model: Review
-    }
-  });
+// Get products
+router.get('/', processProductQueryParameters, async (req: RequestWithSearchParamaters, res: Response) => {
+  const products = await Product.findAll(req.searchParameters);
 
-  const reviews = await Review.findAll({});
-  console.log(reviews);
-  console.log(products[1]);
   res.json(products);
 });
 
