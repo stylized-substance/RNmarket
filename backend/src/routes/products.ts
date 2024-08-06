@@ -4,12 +4,17 @@ import { processProductQueryParameters } from '#src/utils/middleware'
 
 const router = Router();
 
-interface RequestWithSearchParamaters extends Request {
-  searchParameters: object
+interface SearchParameters {
+  limit?: number,
+  include?: object
+}
+
+interface RequestWithSearchParameters extends Request {
+  searchParameters: SearchParameters
 }
 
 // Get products
-router.get('/', processProductQueryParameters, async (req: RequestWithSearchParamaters, res: Response) => {
+router.get('/', processProductQueryParameters, async (req: RequestWithSearchParameters, res: Response) => {
   const products = await Product.findAll(req.searchParameters);
 
   res.json(products);

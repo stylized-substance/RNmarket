@@ -9,11 +9,11 @@ interface SearchParameters {
   include?: object
 }
 
-interface RequestWithSearchParamaters extends Request {
+interface RequestWithSearchParameters extends Request {
   searchParameters: SearchParameters
 }
 
-const processProductQueryParameters = (req: RequestWithSearchParamaters, res: Response, next: NextFunction) => {
+const processProductQueryParameters = (req: RequestWithSearchParameters, res: Response, next: NextFunction) => {
   const searchParameters: SearchParameters = {}
 
   // Limit number of products returned
