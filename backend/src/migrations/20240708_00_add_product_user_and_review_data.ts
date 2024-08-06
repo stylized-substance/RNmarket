@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 const productArray: Product[] = [];
 const reviewArray: Review[] = [];
-const userNameArray: string[] = [];
 const userArray: User[] = [];
 
 for (const product of products) {
@@ -22,8 +21,14 @@ for (const product of products) {
 
     // Loop through reviews and find all unique users
     for (const review of reviews) {
-      if (!(userNameArray.includes(review.name))) {
-        userNameArray.push(review.name)
+      // Create user object and save to array
+      if (!(userArray.find(user => user.name === review.name))) {
+        const user: User = {
+          id: uuidv4(),
+          username: `${review.name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
+          name: review.name,
+        }
+        userArray.push(user)
       }
     }
 
@@ -45,19 +50,6 @@ for (const product of products) {
     productArray.push(typeCheckedProduct);
   }
 }
-
-// Turn user names into user objects
-for (const name of userNameArray) {
-  const user: User = {
-    id: uuidv4(),
-    username: `${name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
-    name: name
-  };
-  userArray.push(user)
-}
-
-console.log('userArray', userArray)
-
 
 // Using ES5 export so Umzug can work with it
 module.exports = {
