@@ -8,7 +8,7 @@ Review.init(
   {
     id: {
       type: DataTypes.UUID,
-      primaryKey: true,
+      primaryKey: true
     },
     product_id: {
       type: DataTypes.UUID,

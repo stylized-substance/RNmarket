@@ -8,7 +8,7 @@ User.init(
   {
     id: {
       type: DataTypes.UUID,
-      primaryKey: true,
+      primaryKey: true
     },
     username: {
       type: DataTypes.TEXT,

@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { isNumber, isString, parseProductCategory } from '#src/utils/typeNarrowers';
+import {
+  isNumber,
+  isString,
+  parseProductCategory
+} from '#src/utils/typeNarrowers';
 import { Review } from '#src/models';
 import { ProductSearchParameters } from '#src/types/types';
 import { Op } from 'sequelize';
@@ -48,7 +52,7 @@ const processProductQueryParameters = (
 
   // Filter products by category
   if (category) {
-    const parsedCategory = parseProductCategory(category)
+    const parsedCategory = parseProductCategory(category);
     if (parsedCategory) {
       where = {
         category: {

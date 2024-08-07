@@ -85,7 +85,7 @@ module.exports = {
     await queryInterface.createTable('users', {
       id: {
         type: DataTypes.UUID,
-        primaryKey: true,
+        primaryKey: true
       },
       username: {
         type: DataTypes.TEXT,
@@ -112,7 +112,7 @@ module.exports = {
     await queryInterface.createTable('reviews', {
       id: {
         type: DataTypes.UUID,
-        primaryKey: true,
+        primaryKey: true
       },
       product_id: {
         type: DataTypes.UUID,

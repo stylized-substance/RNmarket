@@ -15,7 +15,7 @@ app.use('/api/images', express.static(path.join(__dirname, 'data/images')));
 
 app.use('/api/products', productsRouter);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 const PORT = 3003;
 

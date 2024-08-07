@@ -54,9 +54,10 @@ const isReview = (param: unknown): param is Review => {
 };
 
 const isProductCategory = (param: string): param is ProductCategory => {
-  return Object.entries(ProductCategory).map(value => value.toString()).includes(param)
-}
-
+  return Object.entries(ProductCategory)
+    .map((value) => value.toString())
+    .includes(param);
+};
 
 const isProduct = (param: unknown): param is Product => {
   return (
@@ -112,17 +113,17 @@ const parseSpecs = (param: unknown): param is string[] | string => {
 
 const parseProductCategory = (param: unknown): ProductCategory => {
   if (!isString(param) || !isProductCategory(param)) {
-    throw new Error('Invalid product category')
+    throw new Error('Invalid product category');
   }
-  
-  return param
-}
+
+  return param;
+};
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
     throw new Error('Object has incorrect data for a product');
   }
-  
+
   switch (param.category) {
     case 'Mobiles': {
       if (!isMobile(param)) {
@@ -167,4 +168,11 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-export { isString, isNumber, isReview, toProduct, isUser, parseProductCategory };
+export {
+  isString,
+  isNumber,
+  isReview,
+  toProduct,
+  isUser,
+  parseProductCategory
+};
