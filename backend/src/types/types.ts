@@ -86,6 +86,15 @@ export type Product =
   | FurnitureItem
   | Laptop;
 
+export enum ProductCategory {
+  Mobiles = 'Mobiles',
+  Books = 'Books',
+  Clothings = 'Clothings',
+  Beauty = 'Beauty',
+  Furniture = 'Furniture',
+  Laptops = 'Laptops'
+}
+
 export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>;
 
 export type ProductWithoutId = UnionOmit<Product, 'id'>;

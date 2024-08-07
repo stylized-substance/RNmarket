@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { Product } from '#src/models';
-import { processProductQueryParameters } from '#src/utils/middleware';
+import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
 
 const router = Router();
 

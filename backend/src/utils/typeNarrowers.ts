@@ -7,7 +7,8 @@ import {
   ClothingItem,
   BeautyItem,
   FurnitureItem,
-  Laptop
+  Laptop,
+  ProductCategory
 } from '#src/types/types';
 
 const isString = (param: unknown) => {
@@ -52,22 +53,10 @@ const isReview = (param: unknown): param is Review => {
   );
 };
 
-const parseSpecs = (param: unknown): param is string[] | string => {
-  return isStringArray(param);
-};
-
-const parseCategory = (param: unknown): boolean => {
-  const categories = [
-    'Mobiles',
-    'Books',
-    'Clothings',
-    'Beauty',
-    'Furniture',
-    'Laptops'
-  ]
-  
-  return (isString(param) && categories.includes(param))
+const isProductCategory = (param: string): param is ProductCategory => {
+  return Object.entries(ProductCategory).map(value => value.toString()).includes(param)
 }
+
 
 const isProduct = (param: unknown): param is Product => {
   return (
@@ -117,11 +106,23 @@ const isLaptop = (product: Product): product is Laptop => {
   return product.category === 'Laptops';
 };
 
+const parseSpecs = (param: unknown): param is string[] | string => {
+  return isStringArray(param);
+};
+
+const parseProductCategory = (param: unknown): ProductCategory => {
+  if (!isString(param) || !isProductCategory(param)) {
+    throw new Error('Invalid product category')
+  }
+  
+  return param
+}
+
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
     throw new Error('Object has incorrect data for a product');
   }
-
+  
   switch (param.category) {
     case 'Mobiles': {
       if (!isMobile(param)) {
@@ -166,4 +167,4 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-export { isString, isNumber, isReview, toProduct, isUser, parseCategory };
+export { isString, isNumber, isReview, toProduct, isUser, parseProductCategory };
