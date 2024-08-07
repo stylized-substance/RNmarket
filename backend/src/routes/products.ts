@@ -10,7 +10,6 @@ router.get(
   processProductQueryParameters,
   async (req: Request, res: Response) => {
     const products = await Product.findAll(req.searchParameters);
-
     res.json(products);
   }
 );
