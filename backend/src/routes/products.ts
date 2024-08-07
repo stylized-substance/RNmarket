@@ -14,6 +14,7 @@ router.get(
   }
 );
 
+// Get single product by ID
 router.get('/:id', async (req: Request, res: Response) => {
   const product = await Product.findByPk(req.params.id);
   if (product) {

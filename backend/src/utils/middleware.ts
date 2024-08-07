@@ -12,14 +12,14 @@ const processProductQueryParameters = (
   const searchParameters: ProductSearchParameters = {};
   let where = {};
 
-  const { limit, category, withReviews, search } = req.query;
+  const { limit, category, withReviews, search, lowestPrice, highestPrice } = req.query;
 
   // Limit number of products returned
   if (limit) {
     if (isNumber(limit)) {
       searchParameters.limit = limit;
     } else {
-      res.status(400).send('Invalid product query limit');
+      return res.status(400).send('Invalid product query limit');
     }
   }
 
@@ -30,7 +30,7 @@ const processProductQueryParameters = (
         model: Review
       };
     } else {
-      res.status(400).send(`Value for 'withReviews' must be 'true' if used`);
+      return res.status(400).send(`Value for 'withReviews' must be 'true' if used`);
     }
   }
 
@@ -43,7 +43,7 @@ const processProductQueryParameters = (
         }
       };
     } else {
-      res.status(400).send('Invalid product category');
+      return res.status(400).send('Invalid product category');
     }
   }
 
@@ -57,7 +57,35 @@ const processProductQueryParameters = (
         }
       };
     } else {
-      res.status(400).send('Invalid search query');
+      return res.status(400).send('Invalid search query');
+    }
+  }
+
+  // Filter products by price
+
+  if (lowestPrice && !highestPrice) {
+    return res.status(400).send('Highest value in price range query missing');
+  }
+
+
+  if (!lowestPrice && highestPrice) {
+    return res.status(400).send('Lowest value in price range query missing');
+  }
+
+  if (lowestPrice && highestPrice) {
+    if (!(isNumber(lowestPrice) && lowestPrice >= 0 && lowestPrice <= 1000000)) {
+      return res.status(400).send('Invalid lowest price query');
+    }
+
+    if (!(isNumber(highestPrice) && highestPrice >= 0 && highestPrice <= 1000000)) {
+      return res.status(400).send('Invalid highest price query');
+    }
+
+    where = {
+      ...where,
+      price: {
+        [Op.between]: [lowestPrice, highestPrice]
+      }
     }
   }
 
@@ -66,6 +94,7 @@ const processProductQueryParameters = (
   req.searchParameters = searchParameters;
 
   next();
+  return
 };
 
 export { processProductQueryParameters };
