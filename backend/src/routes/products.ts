@@ -14,13 +14,13 @@ router.get(
   }
 );
 
-// router.get('/:id', (req, res) => {
-//   const product = products.find((product) => req.params.id === product.original_id);
-//   if (product) {
-//     res.send(product);
-//   } else {
-//     res.status(404);
-//   }
-// });
+router.get('/:id', async (req: Request, res: Response) => {
+  const product = await Product.findByPk(req.params.id);
+  if (product) {
+    res.send(product);
+  } else {
+    res.status(404).send('Product not found');
+  }
+});
 
 export default router;
