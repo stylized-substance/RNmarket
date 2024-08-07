@@ -19,7 +19,9 @@ const processProductQueryParameters = (
     search,
     lowestPrice,
     highestPrice,
-    inStock
+    inStock,
+    lowestRating,
+    highestRating
   } = req.query;
 
   // Limit number of products returned
@@ -110,12 +112,38 @@ const processProductQueryParameters = (
         instock: {
           [Op.gt]: 0
         }
-      }
+      };
+    } else {
+      return res.status(400).send(`Value for 'inStock' must be 'true' if used`);
     }
-  } else {
-    return res
-      .status(400)
-      .send(`Value for 'inStock' must be 'true' if used`);
+  }
+
+  // Filter products by rating
+  if (lowestRating && !highestRating) {
+    return res.status(400).send('Highest value in rating range query missing');
+  }
+
+  if (!lowestRating && highestRating) {
+    return res.status(400).send('Lowest value in rating range query missing');
+  }
+
+  if (lowestRating && highestRating) {
+    if (!(isNumber(lowestRating) && lowestRating >= 1 && lowestRating <= 5)) {
+      return res.status(400).send('Invalid lowest rating query');
+    }
+
+    if (
+      !(isNumber(highestRating) && highestRating >= 1 && highestRating <= 5)
+    ) {
+      return res.status(400).send('Invalid highest rating query');
+    }
+
+    where = {
+      ...where,
+      rating: {
+        [Op.between]: [lowestRating, highestRating]
+      }
+    };
   }
 
   // Add search parameters to request object
