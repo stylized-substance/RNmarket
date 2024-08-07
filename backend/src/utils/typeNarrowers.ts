@@ -65,7 +65,6 @@ const parseCategory = (param: unknown): boolean => {
     'Furniture',
     'Laptops'
   ]
-
   return (isString(param) && categories.includes(param))
 }
 
