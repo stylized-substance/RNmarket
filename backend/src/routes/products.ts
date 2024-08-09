@@ -14,7 +14,7 @@ router.get(
   }
 );
 
-// Get single product filtering by database column
+// Get single product filtering by database column. findByPk method doesn't support WHERE clauses, this allows it by adding 'id' as query paramter.
 router.get(
   '/',
   processProductQueryParameters,
