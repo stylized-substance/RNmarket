@@ -22,16 +22,16 @@ export interface User {
 }
 
 export interface BaseProduct {
-  id: string;
+  id?: string;
   title: string;
   category: string;
   price: number;
-  imgs: string[];
-  specs: string[];
-  instock: number;
-  eta: number;
-  original_id: string;
-  rating: number;
+  imgs?: string[];
+  specs: string[] | string;
+  instock?: number;
+  eta?: number;
+  original_id?: string;
+  rating?: number;
   reviews?: Review[];
 }
 
@@ -97,10 +97,11 @@ export enum ProductCategory {
 
 export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>;
 
-export type ProductWithoutId = UnionOmit<Product, 'id'>;
+export type NewProduct = UnionOmit<Product, 'id'>;
+
+//export type NewProduct = Pick<Product, 'title' | 'category' | 'price' | 'specs'>
 
 // Types for epxress controllers
-
 export interface ProductSearchParameters {
   limit?: number;
   include?: object;
