@@ -18,8 +18,9 @@ const processProductQueryParameters = (
 
   const {
     limit,
-    category,
     withReviews,
+    category,
+    id,
     search,
     lowestPrice,
     highestPrice,
@@ -63,6 +64,19 @@ const processProductQueryParameters = (
       return res.status(400).send('Invalid product category');
     }
   }
+  // Find product by ID
+  if (id) {
+    if (isString(id)) {
+      where = {
+        ...where,
+        id: {
+          [Op.eq]: id
+        }
+      };
+    } else {
+      return res.status(400).send('Invalid product ID');
+    }
+  }
 
   // Filter product titles by case insensitive search keyword
   if (search) {
@@ -79,7 +93,6 @@ const processProductQueryParameters = (
   }
 
   // Filter products by price
-
   if (lowestPrice && !highestPrice) {
     return res.status(400).send('Highest value in price range query missing');
   }

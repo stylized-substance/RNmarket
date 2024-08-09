@@ -14,14 +14,33 @@ router.get(
   }
 );
 
-// Get single product by ID
-router.get('/:id', async (req: Request, res: Response) => {
-  const product = await Product.findByPk(req.params.id);
-  if (product) {
-    res.send(product);
-  } else {
-    res.status(404).send('Product not found');
+// Get single product filtering by database column
+router.get(
+  '/',
+  processProductQueryParameters,
+  async (req: Request, res: Response) => {
+    const product = await Product.findOne(req.searchParameters)
+    if (product) {
+      res.send(product)
+    } else {
+      res.status(404).send('Product not found')
+    }
   }
-});
+)
+
+// Get single product by database primary key
+router.get(
+  '/:id',
+  processProductQueryParameters,
+  async (req: Request, res: Response) => {
+    const product = await Product.findByPk(req.params.id);
+    if (product) {
+      res.send(product);
+    } else {
+      res.status(404).send('Product not found');
+    }
+  }
+);
+
 
 export default router;
