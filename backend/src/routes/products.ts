@@ -1,6 +1,8 @@
 import { Request, Response, Router } from 'express';
 import { Product } from '#src/models';
 import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
+import { toProduct } from '#src/utils/typeNarrowers';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
@@ -41,6 +43,21 @@ router.get(
     }
   }
 );
+
+// Add new product
+router.post(
+  '/',
+  async (req: Request, res: Response) => {
+    console.log(req.body)
+    const newProduct = toProduct(req.body)
+    console.log(newProduct)
+    const addedProduct = await Product.create({
+      ...newProduct,
+      id: uuidv4()
+    })
+    res.json(addedProduct)
+  }
+)
 
 
 export default router;

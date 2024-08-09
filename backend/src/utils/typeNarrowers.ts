@@ -2,7 +2,6 @@ import {
   User,
   Review,
   Product,
-  NewProduct,
   Mobile,
   Book,
   ClothingItem,
@@ -60,7 +59,7 @@ const isProductCategory = (param: string): param is ProductCategory => {
     .includes(param);
 };
 
-const isNewProduct = (param: unknown): param is NewProduct => {
+const isProduct = (param: unknown): param is Product => {
   return (
     isObject(param) &&
     'title' in param &&
@@ -70,65 +69,57 @@ const isNewProduct = (param: unknown): param is NewProduct => {
     'price' in param &&
     isNumber(param.price) &&
     'specs' in param &&
-    (isString(param.specs) || isStringArray(param.specs)) &&
-    'instock' in param &&
-    isNumber(param.instock)
+    (isString(param.specs) || isStringArray(param.specs))
   );
 };
 
 const isProductWithId = (param: unknown): param is Product => {
-  return (
-    isNewProduct(param) &&
-    'id' in param &&
-    isString(param.id)
-  )
-}
+  return isProduct(param) && 'id' in param && isString(param.id);
+};
 
-const isMobile = (product: NewProduct): product is Mobile => {
+const isMobile = (product: Product): product is Mobile => {
   return (
     product.category === 'Mobiles' &&
     'brand' in product &&
     isString(product.brand) &&
     'ram' in product &&
     isString(product.ram)
-  )
+  );
 };
 
-const isBook = (product: NewProduct): product is Book => {
+const isBook = (product: Product): product is Book => {
   return (
     product.category === 'Books' &&
     'language' in product &&
     isString(product.language) &&
     'genre' in product &&
     isString(product.genre)
-  )
+  );
 };
 
-const isClothingItem = (product: NewProduct): product is ClothingItem => {
+const isClothingItem = (product: Product): product is ClothingItem => {
   return (
     product.category === 'Clothings' &&
     'for' in product &&
     isString(product.for)
-  )
+  );
 };
 
-const isBeautyItem = (product: NewProduct): product is BeautyItem => {
+const isBeautyItem = (product: Product): product is BeautyItem => {
   return (
-    product.category === 'Beauty' &&
-    'type' in product &&
-    isString(product.type)
-  )
+    product.category === 'Beauty' && 'type' in product && isString(product.type)
+  );
 };
 
-const isFurnitureItem = (product: NewProduct): product is FurnitureItem => {
+const isFurnitureItem = (product: Product): product is FurnitureItem => {
   return (
     product.category === 'Furniture' &&
     'type' in product &&
     isString(product.type)
-  )
+  );
 };
 
-const isLaptop = (product: NewProduct): product is Laptop => {
+const isLaptop = (product: Product): product is Laptop => {
   return (
     product.category === 'Laptops' &&
     'for' in product &&
@@ -143,7 +134,7 @@ const isLaptop = (product: NewProduct): product is Laptop => {
     isString(product.displaysize) &&
     'has_ssd' in product &&
     isString(product.has_ssd)
-  )
+  );
 };
 
 // const parseSpecs = (param: unknown): string[] | string => {
@@ -163,7 +154,7 @@ const parseProductCategory = (param: unknown): ProductCategory => {
 };
 
 const toProduct = (param: unknown): Product => {
-  if (!isProductWithId(param)) {
+  if (!isProduct(param)) {
     throw new Error('Object has incorrect data for a product');
   }
 
@@ -211,21 +202,12 @@ const toProduct = (param: unknown): Product => {
   }
 };
 
-// const toNewProduct = (param: unknown): NewProduct => {
-//   if (!isObject(param)) {
-//     throw new Error('Input must be an object');
-//   }
-
-//   const newProduct = toProduct(param)
-
-//   return newProduct
-// }
-
 export {
   isString,
   isNumber,
   isReview,
   toProduct,
   isUser,
-  parseProductCategory
+  parseProductCategory,
+  isProductWithId
 };
