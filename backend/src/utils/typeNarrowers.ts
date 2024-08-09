@@ -54,7 +54,7 @@ const isReview = (param: unknown): param is Review => {
 };
 
 const isProductCategory = (param: string): param is ProductCategory => {
-  return Object.entries(ProductCategory)
+  return Object.values(ProductCategory)
     .map((value) => value.toString())
     .includes(param);
 };
