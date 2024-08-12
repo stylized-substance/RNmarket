@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { Product } from '#src/models';
+// import productFinder from '#src/middleware/productFinder';
 import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
 import { toProduct } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,14 +22,14 @@ router.get(
   '/',
   processProductQueryParameters,
   async (req: Request, res: Response) => {
-    const product = await Product.findOne(req.searchParameters)
+    const product = await Product.findOne(req.searchParameters);
     if (product) {
-      res.send(product)
+      res.send(product);
     } else {
-      res.status(404).send('Product not found')
+      res.status(404).send('Product not found');
     }
   }
-)
+);
 
 // Get single product by database primary key
 router.get(
@@ -45,19 +46,11 @@ router.get(
 );
 
 // Add new product
-router.post(
-  '/',
-  async (req: Request, res: Response) => {
-    console.log(req.body)
-    const newProduct = toProduct(req.body)
-    console.log(newProduct)
-    const addedProduct = await Product.create({
-      ...newProduct,
-      id: uuidv4()
-    })
-    res.json(addedProduct)
-  }
-)
-
+router.post('/', async (req: Request, res: Response) => {
+  const newProduct = toProduct(req.body);
+  newProduct.id = uuidv4();
+  const addedProduct = await Product.create({ ...newProduct });
+  res.json(addedProduct);
+});
 
 export default router;

@@ -27,7 +27,7 @@ export interface BaseProduct {
   category: string;
   price: number;
   imgs?: string[];
-  specs: string[] | string;
+  specs: string[];
   instock?: number;
   eta?: number;
   original_id?: string;

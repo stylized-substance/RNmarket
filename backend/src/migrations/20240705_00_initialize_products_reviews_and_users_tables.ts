@@ -11,11 +11,12 @@ module.exports = {
       },
       original_id: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       title: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       category: {
         type: DataTypes.TEXT,
@@ -26,52 +27,65 @@ module.exports = {
         allowNull: false
       },
       imgs: {
-        type: DataTypes.ARRAY(DataTypes.TEXT)
+        type: DataTypes.ARRAY(DataTypes.TEXT),
+        allowNull: true
       },
       specs: {
-        type: DataTypes.ARRAY(DataTypes.TEXT)
+        type: DataTypes.ARRAY(DataTypes.TEXT),
+        allowNull: false
       },
       instock: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
       eta: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       rating: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       popular: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        allowNull: true
       },
       brand: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       ram: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       language: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       genre: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       for: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       type: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       processor: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       displaysize: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       has_ssd: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: true
       },
       created_at: {
         type: DataTypes.DATE,

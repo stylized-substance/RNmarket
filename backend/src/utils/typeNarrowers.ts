@@ -69,7 +69,7 @@ const isProduct = (param: unknown): param is Product => {
     'price' in param &&
     isNumber(param.price) &&
     'specs' in param &&
-    (isString(param.specs) || isStringArray(param.specs))
+    isStringArray(param.specs)
   );
 };
 

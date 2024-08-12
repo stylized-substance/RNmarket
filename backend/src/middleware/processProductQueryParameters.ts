@@ -64,7 +64,7 @@ const processProductQueryParameters = (
       return res.status(400).send('Invalid product category');
     }
   }
-  
+
   // Find product by ID
   if (id) {
     if (isString(id)) {
