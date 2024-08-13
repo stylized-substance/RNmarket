@@ -11,6 +11,14 @@ import {
   ProductCategory
 } from '#src/types/types';
 
+// Custom error class for type narrowing errors
+class TypeNarrowingError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'TypeNarrowingError'
+  }
+}
+
 const isString = (param: unknown) => {
   return typeof param === 'string';
 };
@@ -147,7 +155,7 @@ const isLaptop = (product: Product): product is Laptop => {
 
 const parseProductCategory = (param: unknown): ProductCategory => {
   if (!isString(param) || !isProductCategory(param)) {
-    throw new Error('Invalid product category');
+    throw new TypeNarrowingError('Invalid product category');
   }
 
   return param;
@@ -155,43 +163,43 @@ const parseProductCategory = (param: unknown): ProductCategory => {
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
-    throw new Error('Object has incorrect data for a product');
+    throw new TypeNarrowingError('Object has incorrect data for a product')
   }
 
   switch (param.category) {
     case 'Mobiles': {
       if (!isMobile(param)) {
-        throw new Error('Object has incorrect data for a mobile');
+        throw new TypeNarrowingError('Object has incorrect data for a mobile');
       }
       return param;
     }
     case 'Books': {
       if (!isBook(param)) {
-        throw new Error('Object has incorrect data for a book');
+        throw new TypeNarrowingError('Object has incorrect data for a book');
       }
       return param;
     }
     case 'Clothings': {
       if (!isClothingItem(param)) {
-        throw new Error('Object has incorrect data for a clothing item');
+        throw new TypeNarrowingError('Object has incorrect data for a clothing item');
       }
       return param;
     }
     case 'Beauty': {
       if (!isBeautyItem(param)) {
-        throw new Error('Object has incorrect data for a beauty item');
+        throw new TypeNarrowingError('Object has incorrect data for a beauty item');
       }
       return param;
     }
     case 'Furniture': {
       if (!isFurnitureItem(param)) {
-        throw new Error('Object has incorrect data for a furniture item');
+        throw new TypeNarrowingError('Object has incorrect data for a furniture item');
       }
       return param;
     }
     case 'Laptops': {
       if (!isLaptop(param)) {
-        throw new Error('Object has incorrect data for a laptop item');
+        throw new TypeNarrowingError('Object has incorrect data for a laptop item');
       }
       return param;
     }
@@ -209,5 +217,6 @@ export {
   toProduct,
   isUser,
   parseProductCategory,
-  isProductWithId
+  isProductWithId,
+  TypeNarrowingError
 };

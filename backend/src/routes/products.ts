@@ -53,4 +53,24 @@ router.post('/', async (req: Request, res: Response) => {
   res.json(addedProduct);
 });
 
+// Update existing product
+router.put('/:id', async (req: Request, res: Response) => {
+  let product = await Product.findByPk(req.params.id);
+  const updatedProduct = toProduct(req.body);
+
+  if (!product) {
+    res.status(404).send('Product not found');
+  } else {
+    const productWithUpdatedValues = toProduct({
+      ...product,
+      ...updatedProduct
+    });
+    const updateResult = await product.update(productWithUpdatedValues);
+    console.log(updateResult)
+    const saveResult = await product.save();
+    console.log(saveResult)
+    res.send(saveResult);
+  }
+});
+
 export default router;

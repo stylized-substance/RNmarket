@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { UniqueConstraintError } from 'sequelize';
+import { TypeNarrowingError } from './typeNarrowers';
 
 const errorHandler = (
   error: unknown,
@@ -21,6 +22,14 @@ const errorHandler = (
     const errorObject = {
       'Error name': error.name,
       'Error message': error.errors[0].message
+    };
+    return res.status(400).send(errorObject);
+  }
+
+  if (error instanceof TypeNarrowingError) {
+    const errorObject = {
+      'Error name': error.name,
+      'Error message': error.message
     };
     return res.status(400).send(errorObject);
   }
