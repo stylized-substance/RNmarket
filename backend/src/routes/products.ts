@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express';
 import { Product } from '#src/models';
-// import productFinder from '#src/middleware/productFinder';
 import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
 import { toProduct } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
@@ -55,21 +54,19 @@ router.post('/', async (req: Request, res: Response) => {
 
 // Update existing product
 router.put('/:id', async (req: Request, res: Response) => {
-  let product = await Product.findByPk(req.params.id);
+  const product = await Product.findByPk(req.params.id);
   const updatedProduct = toProduct(req.body);
 
-  if (!product) {
-    res.status(404).send('Product not found');
-  } else {
+  if (product) {
     const productWithUpdatedValues = toProduct({
       ...product,
       ...updatedProduct
     });
-    const updateResult = await product.update(productWithUpdatedValues);
-    console.log(updateResult)
+    await product.update(productWithUpdatedValues);
     const saveResult = await product.save();
-    console.log(saveResult)
     res.send(saveResult);
+  } else {
+    res.status(404).send('Product not found');
   }
 });
 

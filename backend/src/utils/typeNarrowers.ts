@@ -14,8 +14,8 @@ import {
 // Custom error class for type narrowing errors
 class TypeNarrowingError extends Error {
   constructor(message?: string) {
-    super(message)
-    this.name = 'TypeNarrowingError'
+    super(message);
+    this.name = 'TypeNarrowingError';
   }
 }
 
@@ -163,7 +163,7 @@ const parseProductCategory = (param: unknown): ProductCategory => {
 
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
-    throw new TypeNarrowingError('Object has incorrect data for a product')
+    throw new TypeNarrowingError('Object has incorrect data for a product');
   }
 
   switch (param.category) {
@@ -181,25 +181,33 @@ const toProduct = (param: unknown): Product => {
     }
     case 'Clothings': {
       if (!isClothingItem(param)) {
-        throw new TypeNarrowingError('Object has incorrect data for a clothing item');
+        throw new TypeNarrowingError(
+          'Object has incorrect data for a clothing item'
+        );
       }
       return param;
     }
     case 'Beauty': {
       if (!isBeautyItem(param)) {
-        throw new TypeNarrowingError('Object has incorrect data for a beauty item');
+        throw new TypeNarrowingError(
+          'Object has incorrect data for a beauty item'
+        );
       }
       return param;
     }
     case 'Furniture': {
       if (!isFurnitureItem(param)) {
-        throw new TypeNarrowingError('Object has incorrect data for a furniture item');
+        throw new TypeNarrowingError(
+          'Object has incorrect data for a furniture item'
+        );
       }
       return param;
     }
     case 'Laptops': {
       if (!isLaptop(param)) {
-        throw new TypeNarrowingError('Object has incorrect data for a laptop item');
+        throw new TypeNarrowingError(
+          'Object has incorrect data for a laptop item'
+        );
       }
       return param;
     }
