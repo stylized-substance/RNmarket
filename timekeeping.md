@@ -17,3 +17,4 @@
 | 07.08.2024 | 4 | Work on products router, middleware, types | 42
 | 09.08.2024 | 5 | Work on products router, type guards, types | 47
 | 12.08.2024 | 4 | Work on products router, type guards, types, db models | 51
+| 13.08.2024 | 2 | Work on products router | 53
