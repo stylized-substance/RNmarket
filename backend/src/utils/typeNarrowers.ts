@@ -1,5 +1,6 @@
 import {
   User,
+  NewUser,
   Review,
   Product,
   Mobile,
@@ -44,6 +45,18 @@ const isUser = (param: unknown): param is User => {
     isString(param.username) &&
     'name' in param &&
     isString(param.name)
+  );
+};
+
+const isNewUser = (param: unknown): param is NewUser => {
+  return (
+    isObject(param) &&
+    'username' in param &&
+    isString(param.username) &&
+    'name' in param &&
+    isString(param.name) &&
+    'password' in param &&
+    isString(param.password)
   );
 };
 
@@ -224,6 +237,7 @@ export {
   isReview,
   toProduct,
   isUser,
+  isNewUser,
   parseProductCategory,
   isProductWithId,
   TypeNarrowingError

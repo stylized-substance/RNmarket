@@ -19,7 +19,13 @@ export interface User {
   id: string;
   username: string;
   name: string;
-  passwordHash?: string
+  passwordhash?: string;
+}
+
+export interface NewUser {
+  username: string;
+  name: string;
+  password: string;
 }
 
 export interface BaseProduct {

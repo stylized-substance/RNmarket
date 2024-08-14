@@ -75,8 +75,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const product = await Product.findByPk(req.params.id);
 
   if (product) {
-    await product.destroy()
-    res.status(204).end()
+    await product.destroy();
+    res.status(204).end();
   } else {
     res.status(404).send('Product not found');
   }

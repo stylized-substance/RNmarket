@@ -10,28 +10,27 @@ const errorHandler = (
 ) => {
   console.log('errorHandler:', error);
 
-  if (error instanceof Error && error.name === 'SequelizeDatabaseError') {
-    const errorObject = {
-      'Error name': error.name,
-      'Error message': error.message
+  const errorObjectCreator = (name: string, message: string) => {
+    return {
+      'Error name': name,
+      'Error message': message
     };
-    return res.status(400).send(errorObject);
+  };
+
+  if (error instanceof Error && error.name === 'SequelizeDatabaseError') {
+    return res.status(400).send(errorObjectCreator(error.name, error.message));
+  }
+
+  if (error instanceof Error && error.name === 'SequelizeValidationError') {
+    return res.status(400).send(errorObjectCreator(error.name, error.message));
   }
 
   if (error instanceof UniqueConstraintError) {
-    const errorObject = {
-      'Error name': error.name,
-      'Error message': error.errors[0].message
-    };
-    return res.status(400).send(errorObject);
+    return res.status(400).send(errorObjectCreator(error.name, error.errors[0].message));
   }
 
   if (error instanceof TypeNarrowingError) {
-    const errorObject = {
-      'Error name': error.name,
-      'Error message': error.message
-    };
-    return res.status(400).send(errorObject);
+    return res.status(400).send(errorObjectCreator(error.name, error.message));
   }
 
   next(error);
