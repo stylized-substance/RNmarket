@@ -3,6 +3,7 @@ import 'express-async-errors';
 import path from 'path';
 import productsRouter from '#src/routes/products';
 import usersRouter from '#src/routes/users';
+import reviewsRouter from '#src/routes/reviews'
 import { connectToDatabase } from '#src/utils/database';
 import errorHandler from './utils/errorHandler';
 
@@ -15,6 +16,8 @@ app.use('/api/images', express.static(path.join(__dirname, 'data/images')));
 app.use('/api/products', productsRouter);
 
 app.use('/api/users', usersRouter);
+
+app.use('/api/reviews', reviewsRouter)
 
 app.use(errorHandler);
 
