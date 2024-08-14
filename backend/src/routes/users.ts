@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
-import { User } from '#src/models';
+import { User as UserModel } from '#src/models';
+import { User } from '#src/types/types'
 import { isNewUser } from '#src/utils/typeNarrowers';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,7 +9,7 @@ const router = Router();
 
 // Get users
 router.get('/', async (_req: Request, res: Response) => {
-  const users = await User.findAll({
+  const users = await UserModel.findAll({
     attributes: {
       exclude: ['passwordhash']
     }
@@ -17,19 +18,52 @@ router.get('/', async (_req: Request, res: Response) => {
 });
 
 // Add user
-router.post('/create', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   if (isNewUser(req.body)) {
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(req.body.password, saltRounds);
-    const userToAdd = {
+
+    const userToAdd: User = {
       ...req.body,
       id: uuidv4(),
       passwordhash: passwordHash
     };
-    const addedUser = await User.create(userToAdd);
+
+    const addedUser = await UserModel.create({ ...userToAdd });
     res.json(addedUser);
   } else {
     res.status(400).send('Invalid properties for new user');
+  }
+});
+
+// Change user password
+router.put('/:id', async (req: Request, res: Response) => {
+  const user = await UserModel.findByPk(req.params.id);
+  const saltRounds = 12;
+  const newPasswordHash = await bcrypt.hash(req.body.password, saltRounds);
+
+  if (user) {
+    const userWithNewPassword = {
+      ...user,
+      passwordhash: newPasswordHash
+    };
+    await user.update(userWithNewPassword);
+    const saveResult = await user.save();
+    res.send(saveResult);
+  } else {
+    res.status(404).send('User not found');
+  }
+});
+
+// Delete user
+router.delete('/:id', async (req: Request, res: Response) => {
+  const user = await UserModel.findByPk(req.params.id);
+
+  if (user) {
+    await user.destroy();
+    res.status(204).end();
+  } else {
+    res.status(404).send('User not found');
   }
 });
 
