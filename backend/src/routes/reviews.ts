@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import Review from '#src/models/review'
+import Review from '#src/models/review';
 import { Op } from 'sequelize';
 
 const router = Router();
@@ -13,15 +13,15 @@ router.get('/', async (req: Request, res: Response) => {
           [Op.eq]: req.query.user_id
         }
       }
-    })
+    });
     if (reviews && reviews.length > 0) {
-      res.json(reviews)
+      res.json(reviews);
     } else {
-      res.status(404).send('No reviews found')
+      res.status(404).send('No reviews found');
     }
   } else {
-    res.status(400).send('user_id query parameter missing')
+    res.status(400).send('user_id query parameter missing');
   }
-})
+});
 
 export default router;

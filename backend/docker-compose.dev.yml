@@ -11,6 +11,7 @@ services:
       - ./src:/usr/src/app/src
     environment:
       - DATABASE_URL=postgres://postgres:dbpassword@postgres:5432/postgres
+      - JSONWEBTOKENSECRET=secret
   postgres:
     container_name: rnmarket-backend-postgres
     attach: false

@@ -26,7 +26,9 @@ const errorHandler = (
   }
 
   if (error instanceof UniqueConstraintError) {
-    return res.status(400).send(errorObjectCreator(error.name, error.errors[0].message));
+    return res
+      .status(400)
+      .send(errorObjectCreator(error.name, error.errors[0].message));
   }
 
   if (error instanceof TypeNarrowingError) {

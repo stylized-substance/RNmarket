@@ -31,10 +31,10 @@ User.init(
     hooks: {
       // Omit password hash after user creation or password change so it doesn't get sent to frontend
       afterCreate: (record) => {
-        delete record.dataValues.passwordhash
+        delete record.dataValues.passwordhash;
       },
       afterUpdate: (record) => {
-        delete record.dataValues.passwordhash
+        delete record.dataValues.passwordhash;
       }
     },
     sequelize,

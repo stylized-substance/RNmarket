@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
-import { User } from '#src/types/types'
+import { User } from '#src/types/types';
 import { isNewUser } from '#src/utils/typeNarrowers';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';

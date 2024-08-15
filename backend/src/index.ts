@@ -3,7 +3,8 @@ import 'express-async-errors';
 import path from 'path';
 import productsRouter from '#src/routes/products';
 import usersRouter from '#src/routes/users';
-import reviewsRouter from '#src/routes/reviews'
+import reviewsRouter from '#src/routes/reviews';
+import loginRouter from '#src/routes/login';
 import { connectToDatabase } from '#src/utils/database';
 import errorHandler from './utils/errorHandler';
 
@@ -17,7 +18,9 @@ app.use('/api/products', productsRouter);
 
 app.use('/api/users', usersRouter);
 
-app.use('/api/reviews', reviewsRouter)
+app.use('/api/reviews', reviewsRouter);
+
+app.use('/api/login', loginRouter);
 
 app.use(errorHandler);
 
