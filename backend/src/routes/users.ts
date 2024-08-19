@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
 import { User } from '#src/types/types';
 import { isNewUser } from '#src/utils/typeNarrowers';
+import tokenExtractor from '#src/middleware/tokenExtractor';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -37,7 +38,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // Change user password
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const user = await UserModel.findByPk(req.params.id);
   const saltRounds = 12;
   const newPasswordHash = await bcrypt.hash(req.body.password, saltRounds);

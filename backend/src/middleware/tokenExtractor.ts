@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { isString } from '#src/utils/typeNarrowers'
+import { isString } from '#src/utils/typeNarrowers';
 
 const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 
@@ -12,15 +12,15 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
 
   const authorization: string | undefined = req.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    req.accessToken = authorization.substring(7)
+    req.accessToken = authorization.substring(7);
     if (!jwt.verify(req.accessToken, secret)) {
-      return res.status(401).send('Invalid access token in request')
-    } else {
-      return res.status(401).send('Access token missing from request')
+      return res.status(401).send('Invalid access token in request');
     }
+  } else {
+    return res.status(401).send('Access token missing from request');
   }
-  next()
-  return
-}
+  next();
+  return;
+};
 
-export default tokenExtractor
+export default tokenExtractor;
