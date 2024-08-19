@@ -19,11 +19,11 @@ router.post('/', async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   if (!username) {
-    return res.status(400).send('Username missing');
+    res.status(400).send('Username missing');
   }
 
   if (!password) {
-    return res.status(400).send('Password missing');
+    res.status(400).send('Password missing');
   }
 
   const user = await User.findOne({
@@ -32,27 +32,30 @@ router.post('/', async (req: Request, res: Response) => {
     }
   });
 
-  if (!user) {
-    return res.status(400).send('User not found');
+  if (user) {
+    // Convert database response data to JSON
+    const userJSON = user.toJSON();
+
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      userJSON.passwordhash
+    );
+
+    if (!passwordCorrect) {
+      res.status(400).send('Incorrect password');
+    }
+
+    const payload = {
+      username: userJSON.username,
+      id: userJSON.id
+    };
+
+    // Send JWT that expires in 1 hour
+    const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+    res.status(200).send({ token, ...payload });
+  } else {
+    res.status(400).send('User not found');
   }
-
-  // Convert database response data to JSON
-  const userJSON = user.toJSON();
-
-  const passwordCorrect = await bcrypt.compare(password, userJSON.passwordhash);
-
-  if (!passwordCorrect) {
-    return res.status(400).send('Incorrect password');
-  }
-
-  const payload = {
-    username: userJSON.username,
-    id: userJSON.id
-  };
-
-  // Send JWT that expires in 1 hour
-  const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-  return res.status(200).send({ token, ...payload });
 });
 
 export default router;
