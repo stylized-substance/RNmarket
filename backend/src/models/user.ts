@@ -25,6 +25,11 @@ User.init(
     passwordhash: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    isadmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     }
   },
   {

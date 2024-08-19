@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
-import { User } from '#src/models';
+import { User as UserModel } from '#src/models';
+import { User } from '#src/types/types';
 import { isString } from '#src/utils/typeNarrowers';
 
 const router = Router();
@@ -26,7 +27,7 @@ router.post('/', async (req: Request, res: Response) => {
     res.status(400).send('Password missing');
   }
 
-  const user = await User.findOne({
+  const user = await UserModel.findOne({
     where: {
       username: req.body.username
     }
@@ -34,7 +35,7 @@ router.post('/', async (req: Request, res: Response) => {
 
   if (user) {
     // Convert database response data to JSON
-    const userJSON = user.toJSON();
+    const userJSON: User = user.toJSON();
 
     const passwordCorrect = await bcrypt.compare(
       password,
@@ -47,7 +48,8 @@ router.post('/', async (req: Request, res: Response) => {
 
     const payload = {
       username: userJSON.username,
-      id: userJSON.id
+      id: userJSON.id,
+      isadmin: userJSON.isadmin
     };
 
     // Send JWT that expires in 1 hour

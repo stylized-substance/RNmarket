@@ -20,6 +20,10 @@ class TypeNarrowingError extends Error {
   }
 }
 
+const isBoolean = (param: unknown) => {
+  return typeof param === 'boolean';
+}
+
 const isString = (param: unknown) => {
   return typeof param === 'string';
 };
@@ -44,7 +48,9 @@ const isUser = (param: unknown): param is User => {
     'username' in param &&
     isString(param.username) &&
     'name' in param &&
-    isString(param.name)
+    isString(param.name) &&
+    'isadmin' in param &&
+    isBoolean(param)
   );
 };
 
@@ -56,7 +62,9 @@ const isNewUser = (param: unknown): param is NewUser => {
     'name' in param &&
     isString(param.name) &&
     'password' in param &&
-    isString(param.password)
+    isString(param.password) &&
+    'isadmin' in param &&
+    isBoolean(param)
   );
 };
 

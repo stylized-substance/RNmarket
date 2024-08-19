@@ -19,13 +19,15 @@ export interface User {
   id: string;
   username: string;
   name: string;
-  passwordhash?: string;
+  passwordhash: string;
+  isadmin?: boolean
 }
 
 export interface NewUser {
   username: string;
   name: string;
   password: string;
+  isadmin?: boolean
 }
 
 export interface BaseProduct {

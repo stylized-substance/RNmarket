@@ -19,4 +19,5 @@
 | 12.08.2024 | 4 | Work on products router, type guards, types, db models | 51
 | 13.08.2024 | 2 | Work on products router | 53
 | 14.08.2024 | 3 | Work on users and reviews routers | 56
-| 15.08.2024 | 2 | Work on login router
+| 15.08.2024 | 2 | Work on login router | 58
+| 19.08.2024 | 1 | Work on routers, types, db models | 59
