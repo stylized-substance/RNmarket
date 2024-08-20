@@ -64,7 +64,7 @@ const isNewUser = (param: unknown): param is NewUser => {
     'password' in param &&
     isString(param.password) &&
     'isadmin' in param &&
-    isBoolean(param)
+    isBoolean(param.isadmin)
   );
 };
 
@@ -248,5 +248,6 @@ export {
   isNewUser,
   parseProductCategory,
   isProductWithId,
-  TypeNarrowingError
+  TypeNarrowingError,
+  isBoolean
 };

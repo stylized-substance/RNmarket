@@ -28,8 +28,10 @@ router.post('/', async (req: Request, res: Response) => {
     const userToAdd: User = {
       ...req.body,
       id: uuidv4(),
-      passwordhash: passwordHash
+      passwordhash: passwordHash,
     };
+
+
 
     const addedUser = await UserModel.create({ ...userToAdd });
     res.json(addedUser);

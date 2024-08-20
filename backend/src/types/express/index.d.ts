@@ -6,7 +6,8 @@ declare global {
   namespace Express {
     export interface Request {
       searchParameters: ProductSearchParameters;
-      accessToken: string
+      accessToken: string,
+      isadmin: boolean
     }
   }
 }

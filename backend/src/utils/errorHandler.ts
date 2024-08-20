@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { TypeNarrowingError } from './typeNarrowers';
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 const errorHandler = (
   error: unknown,
@@ -32,6 +33,10 @@ const errorHandler = (
   }
 
   if (error instanceof TypeNarrowingError) {
+    return res.status(400).send(errorObjectCreator(error.name, error.message));
+  }
+
+  if (error instanceof JsonWebTokenError) {
     return res.status(400).send(errorObjectCreator(error.name, error.message));
   }
 
