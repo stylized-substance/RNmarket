@@ -1,13 +1,15 @@
 import { Request, Response, Router } from 'express';
-import Review from '#src/models/review';
+import { Review as ReviewModel } from '#src/models/';
 import { Op } from 'sequelize';
+import { parseString } from '#src/utils/typeNarrowers';
 
-const router = Router();
+const router: Router = Router();
 
 // Get reviews for user based on database primary key
 router.get('/', async (req: Request, res: Response) => {
-  if (req.query.user_id) {
-    const reviews: Review[] = await Review.findAll({
+  const user_id: string = parseString(req.query.user_id)
+  if (user_id) {
+    const reviews: ReviewModel[] | [] = await ReviewModel.findAll({
       where: {
         user_id: {
           [Op.eq]: req.query.user_id
