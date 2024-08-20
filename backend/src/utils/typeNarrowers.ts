@@ -28,6 +28,14 @@ const isString = (param: unknown) => {
   return typeof param === 'string';
 };
 
+const parseString = (param: unknown) : string => {
+  if (!isString(param)) {
+    throw new TypeNarrowingError('Input is not a string')
+  }
+
+  return param
+}
+
 const isNumber = (value: unknown): value is number => {
   return !isNaN(Number(value));
 };
@@ -241,6 +249,7 @@ const toProduct = (param: unknown): Product => {
 
 export {
   isString,
+  parseString,
   isNumber,
   isReview,
   toProduct,

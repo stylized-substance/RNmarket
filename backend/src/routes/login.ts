@@ -3,11 +3,17 @@ import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
 import { User } from '#src/types/types';
-import { isString } from '#src/utils/typeNarrowers';
+import { isString, parseString } from '#src/utils/typeNarrowers';
+
+interface Payload {
+  username: string;
+  id: string;
+  isadmin: boolean;
+}
 
 const router = Router();
 
-const secret = process.env.JSONWEBTOKENSECRET;
+const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 
 // Login user
 router.post('/', async (req: Request, res: Response) => {
@@ -17,19 +23,25 @@ router.post('/', async (req: Request, res: Response) => {
     throw new Error('JSONWEBTOKENSECRET is missing');
   }
 
-  const { username, password } = req.body;
+  const username: string | null = req.body.username
+    ? parseString(req.body.username)
+    : null;
+
+  const password: string | null = req.body.password
+    ? parseString(req.body.password)
+    : null;
 
   if (!username) {
-    res.status(400).send('Username missing');
+    return res.status(400).send('Username missing');
   }
 
   if (!password) {
-    res.status(400).send('Password missing');
+    return res.status(400).send('Password missing');
   }
 
-  const user = await UserModel.findOne({
+  const user: UserModel | null = await UserModel.findOne({
     where: {
-      username: req.body.username
+      username: username
     }
   });
 
@@ -39,29 +51,29 @@ router.post('/', async (req: Request, res: Response) => {
 
     // If passwordhash is null in database, send error. Else send access token
     if (userJSON.passwordhash !== null) {
-      const passwordCorrect = await bcrypt.compare(
+      const passwordCorrect: boolean = await bcrypt.compare(
         password,
         userJSON.passwordhash
       );
 
       if (!passwordCorrect) {
-        res.status(400).send('Incorrect password');
+        return res.status(400).send('Incorrect password');
       }
 
-      const payload = {
+      const payload: Payload = {
         username: userJSON.username,
         id: userJSON.id,
         isadmin: userJSON.isadmin
       };
 
       // Send JWT that expires in 1 hour
-      const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-      res.status(200).send({ token, ...payload });
+      const token: string = jwt.sign(payload, secret, { expiresIn: '1h' });
+      return res.status(200).send({ token, ...payload });
     } else {
-      res.status(500).send('User has no password set');
+      return res.status(500).send('User has no password set');
     }
   } else {
-    res.status(400).send('User not found');
+    return res.status(400).send('User not found');
   }
 });
 
