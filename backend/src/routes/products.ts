@@ -12,7 +12,9 @@ router.get(
   '/',
   processProductQueryParameters,
   async (req: Request, res: Response) => {
-    const products: ProductModel[] | [] = await ProductModel.findAll(req.searchParameters);
+    const products: ProductModel[] | [] = await ProductModel.findAll(
+      req.searchParameters
+    );
     res.json(products);
   }
 );
@@ -22,7 +24,7 @@ router.get(
   '/:id',
   processProductQueryParameters,
   async (req: Request, res: Response) => {
-    const id: string = parseString(req.params.id)
+    const id: string = parseString(req.params.id);
     const product: ProductModel | null = await ProductModel.findByPk(id);
     if (product) {
       res.send(product);
@@ -36,13 +38,15 @@ router.get(
 router.post('/', async (req: Request, res: Response) => {
   const newProduct: Product = toProduct(req.body);
   newProduct.id = uuidv4();
-  const addedProduct: ProductModel = await ProductModel.create({ ...newProduct });
+  const addedProduct: ProductModel = await ProductModel.create({
+    ...newProduct
+  });
   res.json(addedProduct);
 });
 
 // Update existing product
 router.put('/:id', async (req: Request, res: Response) => {
-  const id: string = parseString(req.params.id)
+  const id: string = parseString(req.params.id);
   const product: ProductModel | null = await ProductModel.findByPk(id);
   const updatedProduct: Product = toProduct(req.body);
 
@@ -61,7 +65,9 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 // Delete product
 router.delete('/:id', async (req: Request, res: Response) => {
-  const product: ProductModel | null = await ProductModel.findByPk(req.params.id);
+  const product: ProductModel | null = await ProductModel.findByPk(
+    req.params.id
+  );
 
   if (product) {
     await product.destroy();

@@ -7,7 +7,7 @@ const router: Router = Router();
 
 // Get reviews for user based on database primary key
 router.get('/', async (req: Request, res: Response) => {
-  const user_id: string = parseString(req.query.user_id)
+  const user_id: string = parseString(req.query.user_id);
   if (user_id) {
     const reviews: ReviewModel[] | [] = await ReviewModel.findAll({
       where: {

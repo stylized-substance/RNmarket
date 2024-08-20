@@ -20,14 +20,14 @@ export interface User {
   username: string;
   name: string;
   passwordhash: string | null;
-  isadmin: boolean
+  isadmin: boolean;
 }
 
 export interface NewUser {
   username: string;
   name: string;
   password: string;
-  isadmin: boolean
+  isadmin: boolean;
 }
 
 export interface BaseProduct {

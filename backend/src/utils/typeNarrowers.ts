@@ -22,19 +22,19 @@ class TypeNarrowingError extends Error {
 
 const isBoolean = (param: unknown) => {
   return typeof param === 'boolean';
-}
+};
 
 const isString = (param: unknown) => {
   return typeof param === 'string';
 };
 
-const parseString = (param: unknown) : string => {
+const parseString = (param: unknown): string => {
   if (!isString(param)) {
-    throw new TypeNarrowingError('Input is not a string')
+    throw new TypeNarrowingError('Input is not a string');
   }
 
-  return param
-}
+  return param;
+};
 
 const isNumber = (value: unknown): value is number => {
   return !isNaN(Number(value));
@@ -74,6 +74,14 @@ const isNewUser = (param: unknown): param is NewUser => {
     'isadmin' in param &&
     isBoolean(param.isadmin)
   );
+};
+
+const parseNewUser = (param: unknown): NewUser => {
+  if (!isNewUser(param)) {
+    throw new TypeNarrowingError('Input is not a valid new user');
+  }
+
+  return param;
 };
 
 const isReview = (param: unknown): param is Review => {
@@ -247,6 +255,7 @@ export {
   toProduct,
   isUser,
   isNewUser,
+  parseNewUser,
   parseProductCategory,
   isProductWithId,
   TypeNarrowingError,

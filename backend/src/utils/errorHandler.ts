@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { TypeNarrowingError } from './typeNarrowers';
-import { JsonWebTokenError } from 'jsonwebtoken'
+import { JsonWebTokenError } from 'jsonwebtoken';
 
 const errorHandler = (
   error: unknown,
