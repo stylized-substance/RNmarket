@@ -11,7 +11,7 @@ interface Payload {
   isadmin: boolean;
 }
 
-const router = Router();
+const router: Router = Router();
 
 const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 

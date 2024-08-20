@@ -31,7 +31,7 @@ export interface NewUser {
 }
 
 export interface BaseProduct {
-  id?: string;
+  id: string;
   title: string;
   category: string;
   price: number;

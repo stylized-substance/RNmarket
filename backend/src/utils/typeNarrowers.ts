@@ -174,14 +174,6 @@ const isLaptop = (product: Product): product is Laptop => {
   );
 };
 
-// const parseSpecs = (param: unknown): string[] | string => {
-//   if (!isStringArray(param) || !isString(param)) {
-//     throw new Error("Invalid specs property");
-//   }
-
-//   return param
-// };
-
 const parseProductCategory = (param: unknown): ProductCategory => {
   if (!isString(param) || !isProductCategory(param)) {
     throw new TypeNarrowingError('Invalid product category');

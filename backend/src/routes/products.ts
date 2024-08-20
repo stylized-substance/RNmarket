@@ -1,32 +1,19 @@
 import { Request, Response, Router } from 'express';
-import { Product } from '#src/models';
+import { Product as ProductModel } from '#src/models';
 import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
-import { toProduct } from '#src/utils/typeNarrowers';
+import { Product } from '#src/types/types';
+import { toProduct, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
-const router = Router();
+const router: Router = Router();
 
 // Get products
 router.get(
   '/',
   processProductQueryParameters,
   async (req: Request, res: Response) => {
-    const products = await Product.findAll(req.searchParameters);
+    const products: ProductModel[] | [] = await ProductModel.findAll(req.searchParameters);
     res.json(products);
-  }
-);
-
-// Get single product filtering by database column. findByPk method doesn't support WHERE clauses, this allows it by adding 'id' as query paramter.
-router.get(
-  '/',
-  processProductQueryParameters,
-  async (req: Request, res: Response) => {
-    const product = await Product.findOne(req.searchParameters);
-    if (product) {
-      res.send(product);
-    } else {
-      res.status(404).send('Product not found');
-    }
   }
 );
 
@@ -35,7 +22,8 @@ router.get(
   '/:id',
   processProductQueryParameters,
   async (req: Request, res: Response) => {
-    const product = await Product.findByPk(req.params.id);
+    const id: string = parseString(req.params.id)
+    const product: ProductModel | null = await ProductModel.findByPk(id);
     if (product) {
       res.send(product);
     } else {
@@ -46,24 +34,25 @@ router.get(
 
 // Add new product
 router.post('/', async (req: Request, res: Response) => {
-  const newProduct = toProduct(req.body);
+  const newProduct: Product = toProduct(req.body);
   newProduct.id = uuidv4();
-  const addedProduct = await Product.create({ ...newProduct });
+  const addedProduct: ProductModel = await ProductModel.create({ ...newProduct });
   res.json(addedProduct);
 });
 
 // Update existing product
 router.put('/:id', async (req: Request, res: Response) => {
-  const product = await Product.findByPk(req.params.id);
-  const updatedProduct = toProduct(req.body);
+  const id: string = parseString(req.params.id)
+  const product: ProductModel | null = await ProductModel.findByPk(id);
+  const updatedProduct: Product = toProduct(req.body);
 
   if (product) {
-    const productWithUpdatedValues = toProduct({
+    const productWithUpdatedValues: Product = toProduct({
       ...product,
       ...updatedProduct
     });
     await product.update(productWithUpdatedValues);
-    const saveResult = await product.save();
+    const saveResult: ProductModel = await product.save();
     res.send(saveResult);
   } else {
     res.status(404).send('Product not found');
@@ -72,7 +61,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 // Delete product
 router.delete('/:id', async (req: Request, res: Response) => {
-  const product = await Product.findByPk(req.params.id);
+  const product: ProductModel | null = await ProductModel.findByPk(req.params.id);
 
   if (product) {
     await product.destroy();

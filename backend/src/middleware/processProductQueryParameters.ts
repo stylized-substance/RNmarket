@@ -20,7 +20,6 @@ const processProductQueryParameters = (
     limit,
     withReviews,
     category,
-    id,
     search,
     lowestPrice,
     highestPrice,
@@ -62,20 +61,6 @@ const processProductQueryParameters = (
       };
     } else {
       return res.status(400).send('Invalid product category');
-    }
-  }
-
-  // Find product by ID
-  if (id) {
-    if (isString(id)) {
-      where = {
-        ...where,
-        id: {
-          [Op.eq]: id
-        }
-      };
-    } else {
-      return res.status(400).send('Invalid product ID');
     }
   }
 
