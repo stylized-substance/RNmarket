@@ -19,7 +19,6 @@ router.get('/', async (_req: Request, res: Response) => {
 });
 
 // Add user
-// TODO: prevent non-admin users from creating admin users
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   if (isNewUser(req.body)) {
     // Allow only admin users to create admin users
