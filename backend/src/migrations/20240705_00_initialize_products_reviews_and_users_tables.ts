@@ -121,6 +121,15 @@ module.exports = {
       updated_at: {
         type: DataTypes.DATE,
         defaultValue: new Date()
+      },
+      passwordhash: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      isadmin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
       }
     });
     await queryInterface.createTable('reviews', {

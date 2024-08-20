@@ -37,24 +37,29 @@ router.post('/', async (req: Request, res: Response) => {
     // Convert database response data to JSON
     const userJSON: User = user.toJSON();
 
-    const passwordCorrect = await bcrypt.compare(
-      password,
-      userJSON.passwordhash
-    );
+    // If passwordhash is null in database, send error. Else send access token
+    if (userJSON.passwordhash !== null) {
+      const passwordCorrect = await bcrypt.compare(
+        password,
+        userJSON.passwordhash
+      );
 
-    if (!passwordCorrect) {
-      res.status(400).send('Incorrect password');
+      if (!passwordCorrect) {
+        res.status(400).send('Incorrect password');
+      }
+
+      const payload = {
+        username: userJSON.username,
+        id: userJSON.id,
+        isadmin: userJSON.isadmin
+      };
+
+      // Send JWT that expires in 1 hour
+      const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+      res.status(200).send({ token, ...payload });
+    } else {
+      res.status(500).send('User has no password set');
     }
-
-    const payload = {
-      username: userJSON.username,
-      id: userJSON.id,
-      isadmin: userJSON.isadmin
-    };
-
-    // Send JWT that expires in 1 hour
-    const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-    res.status(200).send({ token, ...payload });
   } else {
     res.status(400).send('User not found');
   }

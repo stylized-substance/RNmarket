@@ -26,7 +26,9 @@ for (const product of products) {
         const user: User = {
           id: uuidv4(),
           username: `${review.name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
-          name: review.name
+          name: review.name,
+          passwordhash: null,
+          isadmin: false
         };
         userArray.push(user);
       }
