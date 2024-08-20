@@ -20,8 +20,13 @@ router.get('/', async (_req: Request, res: Response) => {
 
 // Add user
 // TODO: prevent non-admin users from creating admin users
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   if (isNewUser(req.body)) {
+    // Allow only admin users to create admin users
+    if (req.body.isadmin === true && req.isadmin === false) {
+      return res.status(400).send('Only admin users can create admin users')
+    }
+
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(req.body.password, saltRounds);
 
@@ -31,12 +36,10 @@ router.post('/', async (req: Request, res: Response) => {
       passwordhash: passwordHash,
     };
 
-
-
     const addedUser = await UserModel.create({ ...userToAdd });
-    res.json(addedUser);
+    return res.json(addedUser);
   } else {
-    res.status(400).send('Invalid properties for new user');
+    return res.status(400).send('Invalid properties for new user');
   }
 });
 

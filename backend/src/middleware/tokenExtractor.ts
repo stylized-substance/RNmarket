@@ -6,7 +6,7 @@ import { JwtPayload } from 'jsonwebtoken';
 const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
-  // Handle missing JWT secret env variable
+  // Handle missing JWT secret environment variable
   if (!secret || !isString(secret)) {
     throw new Error('tokenExtractor: JSONWEBTOKENSECRET is missing');
   }
