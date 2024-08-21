@@ -1,3 +1,5 @@
+// TODO: Fix migration
+
 import { products } from '../../data/data.json';
 import { Product, Review, User } from '#src/types/types';
 import { toProduct, isReview } from '#src/utils/typeNarrowers';

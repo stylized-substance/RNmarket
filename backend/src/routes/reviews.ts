@@ -52,7 +52,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 // Add new review
 
-router.post('/', tokenExtractor, async (req: Request, res: Response) => {
+router.post('/', tokenExtractor, async (req: Request, _res: Response) => {
   // if (!req.verifiedToken) {
   //   res.status(400).json('Only logged in users can add reviews')
   // }
