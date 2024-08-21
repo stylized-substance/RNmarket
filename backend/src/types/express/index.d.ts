@@ -7,6 +7,7 @@ declare global {
     export interface Request {
       searchParameters: ProductSearchParameters;
       accessToken: string;
+      verifiedToken: JwtPayload;
       isadmin: boolean;
     }
   }

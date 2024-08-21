@@ -22,17 +22,17 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
 
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     req.accessToken = authorization.substring(7);
-    const verifyResult: JwtPayload | string = jwt.verify(
+    const verifiedToken: JwtPayload | string = jwt.verify(
       req.accessToken,
       secret
     );
-
-    if (!verifyResult) {
+    req.verifiedToken = verifiedToken
+    if (!verifiedToken) {
       return res.status(401).send('Invalid access token in request');
     }
 
-    if (!isString(verifyResult) && isBoolean(verifyResult.isadmin)) {
-      req.isadmin = verifyResult.isadmin;
+    if (!isString(verifiedToken) && isBoolean(verifiedToken.isadmin)) {
+      req.isadmin = verifiedToken.isadmin;
     }
   } else {
     return res.status(401).send('Access token missing from request');

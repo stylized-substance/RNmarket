@@ -24,7 +24,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
   // Allow only admin users to create admin users
   if (newUser.isadmin === true && req.isadmin === false) {
-    return res.status(400).send('Only admin users can create admin users');
+    return res.status(403).send('Only admin users can create admin users');
   }
 
   const saltRounds: number = 12;
@@ -43,35 +43,47 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 // Change user password
 router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const user: UserModel | null = await UserModel.findByPk(req.params.id);
-  const saltRounds: number = 12;
-  const newPasswordHash: string = await bcrypt.hash(
-    req.body.password,
-    saltRounds
-  );
 
   if (user) {
+    const userJSON = user.toJSON(); // Convert user model to JSON to get the actual data
+
+    // Prevent users changing each others passwords
+    if (userJSON.id !== req.verifiedToken.id) {
+      return res.status(403).send('Users can only change their own password');
+    }
+    console.log('json', userJSON);
+    const saltRounds: number = 12;
+    const newPasswordHash: string = await bcrypt.hash(
+      req.body.password,
+      saltRounds
+    );
     const userWithNewPassword: User = {
-      ...user.toJSON(), // Convert user model to JSON to get the actual data
+      ...userJSON,
       passwordhash: newPasswordHash
     };
     await user.update(userWithNewPassword);
     const saveResult: UserModel = await user.save();
-    res.send(saveResult);
+    return res.send(saveResult);
   } else {
-    res.status(404).send('User not found');
+    return res.status(404).send('User not found');
   }
 });
 
 // Delete user
 router.delete('/:id', async (req: Request, res: Response) => {
+  // Allow only admin users to delete users
+  if (req.isadmin === false) {
+    return res.status(403).send('Only admin users can delete users');
+  }
+
   const id: string = parseString(req.params.id);
   const user: UserModel | null = await UserModel.findByPk(id);
 
   if (user) {
     await user.destroy();
-    res.status(204).end();
+    return res.status(204).end();
   } else {
-    res.status(404).send('User not found');
+    return res.status(404).send('User not found');
   }
 });
 

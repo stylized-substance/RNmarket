@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { Product as ProductModel } from '#src/models';
 import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
+import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Product } from '#src/types/types';
 import { toProduct, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
@@ -35,7 +36,10 @@ router.get(
 );
 
 // Add new product
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', tokenExtractor, async (req: Request, res: Response) => {
+  if (!req.isadmin) {
+    res.status(400)
+  }
   const newProduct: Product = toProduct(req.body);
   newProduct.id = uuidv4();
   const addedProduct: ProductModel = await ProductModel.create({
@@ -45,7 +49,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // Update existing product
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const id: string = parseString(req.params.id);
   const product: ProductModel | null = await ProductModel.findByPk(id);
   const updatedProduct: Product = toProduct(req.body);
@@ -64,7 +68,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 });
 
 // Delete product
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const product: ProductModel | null = await ProductModel.findByPk(
     req.params.id
   );
