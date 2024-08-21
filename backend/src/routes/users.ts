@@ -51,16 +51,18 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
     if (userJSON.id !== req.verifiedToken.id) {
       return res.status(403).send('Users can only change their own password');
     }
-    console.log('json', userJSON);
+
     const saltRounds: number = 12;
     const newPasswordHash: string = await bcrypt.hash(
       req.body.password,
       saltRounds
     );
+
     const userWithNewPassword: User = {
       ...userJSON,
       passwordhash: newPasswordHash
     };
+    
     await user.update(userWithNewPassword);
     const saveResult: UserModel = await user.save();
     return res.send(saveResult);

@@ -8,7 +8,6 @@ const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
   // Skip checking for access token if adding non-admin user to database
   if (req.originalUrl === '/api/users/' && req.body.isadmin === false) {
-    console.log('here');
     next();
     return;
   }
@@ -20,17 +19,23 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
 
   const authorization: string | undefined = req.get('authorization');
 
+  // Verify access token or send error if it's missing from request
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    // Attach access token to request
     req.accessToken = authorization.substring(7);
+
     const verifiedToken: JwtPayload | string = jwt.verify(
       req.accessToken,
       secret
     );
+
+    // Attach verified token contents to request
     req.verifiedToken = verifiedToken
     if (!verifiedToken) {
       return res.status(401).send('Invalid access token in request');
     }
 
+    // Attach isadmin property to request
     if (!isString(verifiedToken) && isBoolean(verifiedToken.isadmin)) {
       req.isadmin = verifiedToken.isadmin;
     }
