@@ -20,7 +20,6 @@ router.get('/', async (_req: Request, res: Response) => {
 
 // Add user
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
-  // TODO: figure out how to allow adding users without access token in request
   const newUser: NewUser = parseNewUser(req.body);
 
   // Allow only admin users to create admin users

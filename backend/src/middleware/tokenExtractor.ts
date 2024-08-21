@@ -6,6 +6,13 @@ import { JwtPayload } from 'jsonwebtoken';
 const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
+  // Skip checking for access token if adding non-admin user to database
+  if (req.originalUrl === '/api/users/' && req.body.isadmin === false) {
+    console.log('here');
+    next();
+    return;
+  }
+
   // Handle missing JWT secret environment variable
   if (!secret || !isString(secret)) {
     throw new Error('tokenExtractor: JSONWEBTOKENSECRET is missing');
