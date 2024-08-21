@@ -31,6 +31,7 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
 
     // Attach verified token contents to request
     req.verifiedToken = verifiedToken
+    
     if (!verifiedToken) {
       return res.status(401).json('Invalid access token in request');
     }

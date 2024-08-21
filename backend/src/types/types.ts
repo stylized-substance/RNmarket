@@ -15,6 +15,8 @@ export type Review = {
   rating: number;
 };
 
+export type NewReview = Omit<Review, 'id'>
+
 export interface User {
   id: string;
   username: string;

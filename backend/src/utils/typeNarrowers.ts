@@ -2,6 +2,7 @@ import {
   User,
   NewUser,
   Review,
+  NewReview,
   Product,
   Mobile,
   Book,
@@ -76,7 +77,7 @@ const isNewUser = (param: unknown): param is NewUser => {
   );
 };
 
-const parseNewUser = (param: unknown): NewUser => {
+const toNewUser = (param: unknown): NewUser => {
   if (!isNewUser(param)) {
     throw new TypeNarrowingError('Input is not a valid new user');
   }
@@ -84,9 +85,13 @@ const parseNewUser = (param: unknown): NewUser => {
   return param;
 };
 
-const isReview = (param: unknown): param is Review => {
+const isNewReview = (param: unknown): param is NewReview => {
   return (
     isObject(param) &&
+    'product_id' in param &&
+    isString(param.product_id) &&
+    'user_id' in param &&
+    isString(param.user_id) &&
     'name' in param &&
     isString(param.name) &&
     'title' in param &&
@@ -95,8 +100,24 @@ const isReview = (param: unknown): param is Review => {
     isString(param.title) &&
     'rating' in param &&
     isNumber(param.rating)
+  )
+}
+
+const isReview = (param: unknown): param is Review => {
+  return (
+    isNewReview(param) &&
+    'id' in param &&
+    isString(param.id)
   );
 };
+
+const toNewReview = (param: unknown): NewReview => {
+  if (!isNewReview(param)) {
+    throw new TypeNarrowingError('Input is not a valid new review');
+  }
+
+  return param;
+}
 
 const isProductCategory = (param: string): param is ProductCategory => {
   return Object.values(ProductCategory)
@@ -252,10 +273,11 @@ export {
   parseString,
   isNumber,
   isReview,
+  toNewReview,
   toProduct,
   isUser,
   isNewUser,
-  parseNewUser,
+  toNewUser,
   parseProductCategory,
   isProductWithId,
   TypeNarrowingError,

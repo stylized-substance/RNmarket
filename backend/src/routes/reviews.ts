@@ -1,14 +1,16 @@
 import { Request, Response, Router } from 'express';
 import { Review as ReviewModel } from '#src/models/';
 import { Op } from 'sequelize';
-import { parseString } from '#src/utils/typeNarrowers';
+import { parseString, toNewReview } from '#src/utils/typeNarrowers';
+import tokenExtractor from '#src/middleware/tokenExtractor';
+import { NewReview } from '#src/types/types';
 
 const router: Router = Router();
 
 // Get reviews
 router.get('/', async (req: Request, res: Response) => {
   if (Object.keys(req.query).length === 0) {
-    return res.status(400).json('Query parameter missing')
+    return res.status(400).json('Query parameter missing');
   }
 
   // Get reviews for user
@@ -47,5 +49,16 @@ router.get('/', async (req: Request, res: Response) => {
     return res.status(404).json('No reviews found');
   }
 });
+
+// Add new review
+
+router.post('/', tokenExtractor, async (req: Request, res: Response) => {
+  // if (!req.verifiedToken) {
+  //   res.status(400).json('Only logged in users can add reviews')
+  // }
+
+  const newReview: NewReview = toNewReview(req.body)
+  newReview
+})
 
 export default router;

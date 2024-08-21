@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
 import { User, NewUser } from '#src/types/types';
-import { parseNewUser, parseString } from '#src/utils/typeNarrowers';
+import { toNewUser, parseString } from '#src/utils/typeNarrowers';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,7 +20,7 @@ router.get('/', async (_req: Request, res: Response) => {
 
 // Add user
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
-  const newUser: NewUser = parseNewUser(req.body);
+  const newUser: NewUser = toNewUser(req.body);
 
   // Allow only admin users to create admin users
   if (newUser.isadmin === true && req.isadmin === false) {
