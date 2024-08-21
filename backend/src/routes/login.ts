@@ -19,7 +19,7 @@ const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
 router.post('/', async (req: Request, res: Response) => {
   // Handle missing JWT secret env variable
   if (!secret || !isString(secret)) {
-    res.status(500).send('An error occurred. Please try again later.');
+    res.status(500).json('An error occurred. Please try again later.');
     throw new Error('JSONWEBTOKENSECRET is missing');
   }
 
@@ -32,11 +32,11 @@ router.post('/', async (req: Request, res: Response) => {
     : null;
 
   if (!username) {
-    return res.status(400).send('Username missing');
+    return res.status(400).json('Username missing');
   }
 
   if (!password) {
-    return res.status(400).send('Password missing');
+    return res.status(400).json('Password missing');
   }
 
   const user: UserModel | null = await UserModel.findOne({
@@ -57,7 +57,7 @@ router.post('/', async (req: Request, res: Response) => {
       );
 
       if (!passwordCorrect) {
-        return res.status(400).send('Incorrect password');
+        return res.status(400).json('Incorrect password');
       }
 
       const payload: Payload = {
@@ -68,12 +68,12 @@ router.post('/', async (req: Request, res: Response) => {
 
       // Send JWT that expires in 1 hour
       const token: string = jwt.sign(payload, secret, { expiresIn: '1h' });
-      return res.status(200).send({ token, ...payload });
+      return res.status(200).json({ token, ...payload });
     } else {
-      return res.status(500).send('User has no password set');
+      return res.status(500).json('User has no password set');
     }
   } else {
-    return res.status(400).send('User not found');
+    return res.status(400).json('User not found');
   }
 });
 

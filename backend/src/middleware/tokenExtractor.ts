@@ -32,7 +32,7 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
     // Attach verified token contents to request
     req.verifiedToken = verifiedToken
     if (!verifiedToken) {
-      return res.status(401).send('Invalid access token in request');
+      return res.status(401).json('Invalid access token in request');
     }
 
     // Attach isadmin property to request
@@ -40,7 +40,7 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
       req.isadmin = verifiedToken.isadmin;
     }
   } else {
-    return res.status(401).send('Access token missing from request');
+    return res.status(401).json('Access token missing from request');
   }
 
   next();

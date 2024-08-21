@@ -19,25 +19,25 @@ const errorHandler = (
   };
 
   if (error instanceof Error && error.name === 'SequelizeDatabaseError') {
-    return res.status(400).send(errorObjectCreator(error.name, error.message));
+    return res.status(400).json(errorObjectCreator(error.name, error.message));
   }
 
   if (error instanceof Error && error.name === 'SequelizeValidationError') {
-    return res.status(400).send(errorObjectCreator(error.name, error.message));
+    return res.status(400).json(errorObjectCreator(error.name, error.message));
   }
 
   if (error instanceof UniqueConstraintError) {
     return res
       .status(400)
-      .send(errorObjectCreator(error.name, error.errors[0].message));
+      .json(errorObjectCreator(error.name, error.errors[0].message));
   }
 
   if (error instanceof TypeNarrowingError) {
-    return res.status(400).send(errorObjectCreator(error.name, error.message));
+    return res.status(400).json(errorObjectCreator(error.name, error.message));
   }
 
   if (error instanceof JsonWebTokenError) {
-    return res.status(400).send(errorObjectCreator(error.name, error.message));
+    return res.status(400).json(errorObjectCreator(error.name, error.message));
   }
 
   next(error);

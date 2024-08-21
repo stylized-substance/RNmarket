@@ -24,7 +24,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
   // Allow only admin users to create admin users
   if (newUser.isadmin === true && req.isadmin === false) {
-    return res.status(403).send('Only admin users can create admin users');
+    return res.status(403).json('Only admin users can create admin users');
   }
 
   const saltRounds: number = 12;
@@ -47,9 +47,9 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   if (user) {
     const userJSON = user.toJSON(); // Convert user model to JSON to get the actual data
 
-    // Prevent users changing each others passwords
+    // Prevent users from changing each others passwords
     if (userJSON.id !== req.verifiedToken.id) {
-      return res.status(403).send('Users can only change their own password');
+      return res.status(403).json('Users can only change their own password');
     }
 
     const saltRounds: number = 12;
@@ -62,12 +62,12 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
       ...userJSON,
       passwordhash: newPasswordHash
     };
-    
+
     await user.update(userWithNewPassword);
     const saveResult: UserModel = await user.save();
-    return res.send(saveResult);
+    return res.json(saveResult);
   } else {
-    return res.status(404).send('User not found');
+    return res.status(404).json('User not found');
   }
 });
 
@@ -75,7 +75,7 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   // Allow only admin users to delete users
   if (req.isadmin === false) {
-    return res.status(403).send('Only admin users can delete users');
+    return res.status(403).json('Only admin users can delete users');
   }
 
   const id: string = parseString(req.params.id);
@@ -85,7 +85,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     await user.destroy();
     return res.status(204).end();
   } else {
-    return res.status(404).send('User not found');
+    return res.status(404).json('User not found');
   }
 });
 

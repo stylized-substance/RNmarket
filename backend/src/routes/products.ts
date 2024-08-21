@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { Product as ProductModel } from '#src/models';
-import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
+import { processProductQueryParameters } from '#src/middleware/productQueryParametersProcessor';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Product } from '#src/types/types';
 import { toProduct, parseString } from '#src/utils/typeNarrowers';
@@ -28,9 +28,9 @@ router.get(
     const id: string = parseString(req.params.id);
     const product: ProductModel | null = await ProductModel.findByPk(id);
     if (product) {
-      res.send(product);
+      res.json(product);
     } else {
-      res.status(404).send('Product not found');
+      res.status(404).json('Product not found');
     }
   }
 );
@@ -61,9 +61,9 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
     });
     await product.update(productWithUpdatedValues);
     const saveResult: ProductModel = await product.save();
-    res.send(saveResult);
+    res.json(saveResult);
   } else {
-    res.status(404).send('Product not found');
+    res.status(404).json('Product not found');
   }
 });
 
@@ -77,7 +77,7 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
     await product.destroy();
     res.status(204).end();
   } else {
-    res.status(404).send('Product not found');
+    res.status(404).json('Product not found');
   }
 });
 

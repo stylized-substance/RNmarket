@@ -8,6 +8,7 @@ const router: Router = Router();
 // Get reviews for user based on database primary key
 router.get('/', async (req: Request, res: Response) => {
   const user_id: string = parseString(req.query.user_id);
+
   if (user_id) {
     const reviews: ReviewModel[] | [] = await ReviewModel.findAll({
       where: {
@@ -16,13 +17,14 @@ router.get('/', async (req: Request, res: Response) => {
         }
       }
     });
+
     if (reviews && reviews.length > 0) {
       res.json(reviews);
     } else {
-      res.status(404).send('No reviews found');
+      res.status(404).json('No reviews found');
     }
   } else {
-    res.status(400).send('user_id query parameter missing');
+    res.status(400).json('user_id query parameter missing');
   }
 });
 
