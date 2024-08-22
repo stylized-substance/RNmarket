@@ -1,8 +1,6 @@
-// TODO: Fix migration
-
 import { products } from '../../data/data.json';
 import { Product, Review, User } from '#src/types/types';
-import { toProduct, isReview } from '#src/utils/typeNarrowers';
+import { toProduct } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
 const productArray: Product[] = [];
@@ -38,17 +36,13 @@ for (const product of products) {
 
     // Add user and products ids to reviews
     for (const review of reviews) {
-      if (isReview(review)) {
-        review.product_id = productId;
-        review.id = uuidv4();
-        const reviewUser = userArray.find((user) => user.name === review.name);
-        if (reviewUser) {
-          review.user_id = reviewUser.id;
-        }
-        reviewArray.push(review);
-      } else {
-        throw new Error('Invalid data for a review');
+      review.product_id = productId;
+      review.id = uuidv4();
+      const reviewUser = userArray.find((user) => user.name === review.name);
+      if (reviewUser) {
+        review.user_id = reviewUser.id;
       }
+      reviewArray.push(review);
     }
   } else {
     productArray.push(typeCheckedProduct);
