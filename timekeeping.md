@@ -23,3 +23,4 @@
 | 19.08.2024 | 1 | Work on routers, types, db models | 59
 | 20.08.2024 | 4 | Work on routers, types, db models, etc. | 63
 | 21.08.2024 | 2 | Work on routers, types, type guards | 65
+| 22.08.2024 | 1 | Work on reviews router and types | 66
