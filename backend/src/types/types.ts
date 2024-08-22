@@ -15,7 +15,7 @@ export type Review = {
   rating: number;
 };
 
-export type NewReview = Omit<Review, 'id'>
+export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>
 
 export interface User {
   id: string;

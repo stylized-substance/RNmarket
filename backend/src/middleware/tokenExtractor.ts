@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { isString, isBoolean } from '#src/utils/typeNarrowers';
+import { isString } from '#src/utils/typeNarrowers';
 import { JwtPayload } from 'jsonwebtoken';
 
 const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
@@ -31,15 +31,11 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
 
     // Attach verified token contents to request
     req.verifiedToken = verifiedToken
-    
+
     if (!verifiedToken) {
       return res.status(401).json('Invalid access token in request');
     }
 
-    // Attach isadmin property to request
-    if (!isString(verifiedToken) && isBoolean(verifiedToken.isadmin)) {
-      req.isadmin = verifiedToken.isadmin;
-    }
   } else {
     return res.status(401).json('Access token missing from request');
   }

@@ -1,9 +1,12 @@
 import { Request, Response, Router } from 'express';
 import { Review as ReviewModel } from '#src/models/';
+import { Product as ProductModel } from '#src/models';
 import { Op } from 'sequelize';
-import { parseString, toNewReview } from '#src/utils/typeNarrowers';
+import { parseString } from '#src/utils/typeNarrowers';
 import tokenExtractor from '#src/middleware/tokenExtractor';
-import { NewReview } from '#src/types/types';
+import { NewReview, Review } from '#src/types/types';
+import { toNewReview } from '#src/utils/typeNarrowers';
+import { v4 as uuidv4 } from 'uuid';
 
 const router: Router = Router();
 
@@ -13,15 +16,18 @@ router.get('/', async (req: Request, res: Response) => {
     return res.status(400).json('Query parameter missing');
   }
 
-  // Get reviews for user
+  // Extract query parameters from request
   const user_id: string | undefined = req.query.user_id
     ? parseString(req.query.user_id)
     : undefined;
   const product_id: string | undefined = req.query.product_id
     ? parseString(req.query.product_id)
     : undefined;
+
+  // Create empty array for reviews to send to client
   let reviews: ReviewModel[] | [] = [];
 
+  // Get reviews for user
   if (user_id) {
     reviews = await ReviewModel.findAll({
       where: {
@@ -51,14 +57,26 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // Add new review
+router.post('/', tokenExtractor, async (req: Request, res: Response) => {
+  const newReview: NewReview = toNewReview(req.body);
+  const product = await ProductModel.findByPk(newReview.product_id);
 
-router.post('/', tokenExtractor, async (req: Request, _res: Response) => {
-  // if (!req.verifiedToken) {
-  //   res.status(400).json('Only logged in users can add reviews')
-  // }
+  if (!product) {
+    return res.status(400).json('Product not found')
+  }
 
-  const newReview: NewReview = toNewReview(req.body)
-  newReview
-})
+  const reviewWithIds: Review = {
+    ...newReview,
+    id: uuidv4(),
+    user_id: req.verifiedToken.id,
+    name: req.verifiedToken.name,
+  };
+
+  const addedReview = await ReviewModel.create({
+    ...reviewWithIds
+  })
+
+  return res.json(addedReview)
+});
 
 export default router;

@@ -90,10 +90,6 @@ const isNewReview = (param: unknown): param is NewReview => {
     isObject(param) &&
     'product_id' in param &&
     isString(param.product_id) &&
-    'user_id' in param &&
-    isString(param.user_id) &&
-    'name' in param &&
-    isString(param.name) &&
     'title' in param &&
     isString(param.title) &&
     'content' in param &&
@@ -107,7 +103,11 @@ const isReview = (param: unknown): param is Review => {
   return (
     isNewReview(param) &&
     'id' in param &&
-    isString(param.id)
+    isString(param.id) &&
+    'user_id' in param &&
+    isString(param.user_id) &&
+    'name' in param &&
+    isString(param.name)
   );
 };
 

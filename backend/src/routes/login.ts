@@ -7,6 +7,7 @@ import { isString, parseString } from '#src/utils/typeNarrowers';
 
 interface Payload {
   username: string;
+  name: string
   id: string;
   isadmin: boolean;
 }
@@ -62,6 +63,7 @@ router.post('/', async (req: Request, res: Response) => {
 
       const payload: Payload = {
         username: userJSON.username,
+        name: userJSON.name,
         id: userJSON.id,
         isadmin: userJSON.isadmin
       };
