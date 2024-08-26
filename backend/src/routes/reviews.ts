@@ -62,21 +62,42 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   const product = await ProductModel.findByPk(newReview.product_id);
 
   if (!product) {
-    return res.status(400).json('Product not found')
+    return res.status(400).json('Product not found');
   }
 
   const reviewWithIds: Review = {
     ...newReview,
     id: uuidv4(),
     user_id: req.verifiedToken.id,
-    name: req.verifiedToken.name,
+    name: req.verifiedToken.name
   };
 
   const addedReview = await ReviewModel.create({
     ...reviewWithIds
-  })
+  });
 
-  return res.json(addedReview)
+  return res.json(addedReview);
+});
+
+// Delete a review
+router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
+  const id: string = parseString(req.params.id);
+  const review: ReviewModel | null = await ReviewModel.findByPk(id);
+
+  if (review) {
+    // Convert database response data to JSON
+    const reviewJSON: Review = review.toJSON();
+
+    // Delete review if request came from it's creator
+    if (reviewJSON.user_id === req.verifiedToken.id) {
+      await review.destroy();
+      res.status(204).end();
+    } else {
+      res.status(400).json('Reviews can only be deleted by their creator');
+    }
+  } else {
+    res.status(404).json('Review not found in database');
+  }
 });
 
 export default router;

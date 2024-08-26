@@ -45,7 +45,8 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const user: UserModel | null = await UserModel.findByPk(req.params.id);
 
   if (user) {
-    const userJSON = user.toJSON(); // Convert user model to JSON to get the actual data
+    // Convert database response data to JSON
+    const userJSON = user.toJSON();
 
     // Prevent users from changing each others passwords
     if (userJSON.id !== req.verifiedToken.id) {
