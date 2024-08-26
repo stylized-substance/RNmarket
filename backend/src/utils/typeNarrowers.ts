@@ -10,7 +10,8 @@ import {
   BeautyItem,
   FurnitureItem,
   Laptop,
-  ProductCategory
+  ProductCategory,
+  EditedReview
 } from '#src/types/types';
 
 // Custom error class for type narrowing errors
@@ -99,6 +100,18 @@ const isNewReview = (param: unknown): param is NewReview => {
   )
 }
 
+const isEditedReview = (param: unknown): param is EditedReview => {
+  return (
+    isObject(param) &&
+    'title' in param &&
+    isString(param.title) &&
+    'content' in param &&
+    isString(param.title) &&
+    'rating' in param &&
+    isNumber(param.rating)
+  )
+}
+
 const isReview = (param: unknown): param is Review => {
   return (
     isNewReview(param) &&
@@ -117,6 +130,15 @@ const toNewReview = (param: unknown): NewReview => {
   }
 
   return param;
+}
+
+const toEditedReview = (param: unknown): EditedReview => {
+  if (!isEditedReview(param)) {
+    throw new TypeNarrowingError('Input is not a valid edited review');
+  }
+
+  return param;
+  
 }
 
 const isProductCategory = (param: string): param is ProductCategory => {
@@ -274,6 +296,7 @@ export {
   isNumber,
   isReview,
   toNewReview,
+  toEditedReview,
   toProduct,
   isUser,
   isNewUser,

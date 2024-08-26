@@ -4,8 +4,8 @@ import { Product as ProductModel } from '#src/models';
 import { Op } from 'sequelize';
 import { parseString } from '#src/utils/typeNarrowers';
 import tokenExtractor from '#src/middleware/tokenExtractor';
-import { NewReview, Review } from '#src/types/types';
-import { toNewReview } from '#src/utils/typeNarrowers';
+import { NewReview, EditedReview, Review } from '#src/types/types';
+import { toNewReview, toEditedReview } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
 const router: Router = Router();
@@ -77,6 +77,26 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   });
 
   return res.json(addedReview);
+});
+
+router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
+  const id: string = parseString(req.params.id);
+  const review: ReviewModel | null = await ReviewModel.findByPk(id);
+
+  if (review) {
+    // Convert database response data to JSON
+    const reviewJSON: Review = review.toJSON();
+
+    // Save edited review if request came from it's creator
+    if (reviewJSON.user_id === req.verifiedToken.id) {
+      const editedReview: EditedReview = toEditedReview(req.body);
+      await review.update(editedReview);
+      const saveResult = await review.save();
+      res.json(saveResult);
+    }
+  } else {
+    res.status(404).json('Review not found in database');
+  }
 });
 
 // Delete a review

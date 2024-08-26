@@ -17,6 +17,8 @@ export type Review = {
 
 export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>
 
+export type EditedReview = Pick<Review, 'title' | 'content' | 'rating'>
+
 export interface User {
   id: string;
   username: string;
