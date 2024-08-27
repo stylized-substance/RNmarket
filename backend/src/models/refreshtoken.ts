@@ -6,17 +6,22 @@ class RefreshToken extends Model {}
 
 RefreshToken.init(
   {
-    token: {
+    id: {
       type: DataTypes.UUID,
       primaryKey: true
     },
-    expiryDate: {
+    token: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    expiry_date: {
       type: DataTypes.DATE,
       allowNull: false
     },
     user_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      unique: true,
       references: { model: 'users', key: 'id' }
     }
   },

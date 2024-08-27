@@ -3,8 +3,10 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
-import { User } from '#src/types/types';
+import { RefreshToken as RefreshTokenModel } from '#src/models';
+import { User, RefreshToken } from '#src/types/types';
 import { parseString } from '#src/utils/typeNarrowers';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Payload {
   username: string;
@@ -18,14 +20,15 @@ interface Payload {
 const router: Router = Router();
 
 // Import JWT secrets from config file
-const jwtAccessTokenSecret: string = parseString( authConfig.jwtAccessTokenSecret)
-const jwtRefreshTokenSecret: string = parseString( authConfig.jwtRefreshTokenSecret)
+const jwtAccessTokenSecret: string = parseString(
+  authConfig.jwtAccessTokenSecret
+);
+const jwtRefreshTokenSecret: string = parseString(
+  authConfig.jwtRefreshTokenSecret
+);
 
 // Handle missing JWT secrets
-if (
-  !jwtAccessTokenSecret ||
-  !jwtRefreshTokenSecret
-) {
+if (!jwtAccessTokenSecret || !jwtRefreshTokenSecret) {
   throw new Error('Missing JWT secret');
 }
 
@@ -69,16 +72,37 @@ router.post('/login', async (req: Request, res: Response) => {
       }
 
       // Create JWT tokens
-      const accessToken: string = jwt.sign(
-        userJSON,
-        jwtAccessTokenSecret,
-        { expiresIn: authConfig.jwtAccessTokenExpiration }
-      );
-      const refreshToken: string = jwt.sign(
-        userJSON,
-        jwtRefreshTokenSecret,
-        { expiresIn: authConfig.jwtRefreshTokenExpiration }
-      );
+      const accessToken: string = jwt.sign(userJSON, jwtAccessTokenSecret, {
+        expiresIn: authConfig.jwtAccessTokenExpiration
+      });
+      const refreshToken: string = jwt.sign(userJSON, jwtRefreshTokenSecret, {
+        expiresIn: authConfig.jwtRefreshTokenExpiration
+      });
+
+      const expiryTime: number =
+        new Date().getTime() + authConfig.jwtRefreshTokenExpiration * 1000; // Convert seconds to milliseconds
+
+      const tokenToSave: RefreshToken = {
+        id: uuidv4(),
+        token: refreshToken,
+        expiry_date: expiryTime,
+        user_id: userJSON.id
+      };
+
+      // Check if user already has refresh token in database, delete it if true
+      const refreshTokenInDatabase: RefreshTokenModel | null =
+        await RefreshTokenModel.findOne({
+          where: {
+            user_id: userJSON.id
+          }
+        });
+
+      if (refreshTokenInDatabase) {
+        await refreshTokenInDatabase.destroy();
+      }
+
+      // Save refresh token to database
+      await RefreshTokenModel.create(tokenToSave);
 
       // Create response payload to send to client
       const payload: Payload = {

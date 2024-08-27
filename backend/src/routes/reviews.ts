@@ -113,7 +113,9 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
       await review.destroy();
       res.status(204).end();
     } else {
-      res.status(400).json({ Error: 'Reviews can only be deleted by their creator' });
+      res
+        .status(400)
+        .json({ Error: 'Reviews can only be deleted by their creator' });
     }
   } else {
     res.status(404).json({ Error: 'Review not found in database' });

@@ -97,8 +97,8 @@ const isNewReview = (param: unknown): param is NewReview => {
     isString(param.title) &&
     'rating' in param &&
     isNumber(param.rating)
-  )
-}
+  );
+};
 
 const isEditedReview = (param: unknown): param is EditedReview => {
   return (
@@ -109,8 +109,8 @@ const isEditedReview = (param: unknown): param is EditedReview => {
     isString(param.title) &&
     'rating' in param &&
     isNumber(param.rating)
-  )
-}
+  );
+};
 
 const isReview = (param: unknown): param is Review => {
   return (
@@ -130,7 +130,7 @@ const toNewReview = (param: unknown): NewReview => {
   }
 
   return param;
-}
+};
 
 const toEditedReview = (param: unknown): EditedReview => {
   if (!isEditedReview(param)) {
@@ -138,8 +138,7 @@ const toEditedReview = (param: unknown): EditedReview => {
   }
 
   return param;
-  
-}
+};
 
 const isProductCategory = (param: string): param is ProductCategory => {
   return Object.values(ProductCategory)

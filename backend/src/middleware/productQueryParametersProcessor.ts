@@ -80,11 +80,15 @@ const processProductQueryParameters = (
 
   // Filter products by price
   if (lowestPrice && !highestPrice) {
-    return res.status(400).json({ Error: 'Highest value in price range query missing' });
+    return res
+      .status(400)
+      .json({ Error: 'Highest value in price range query missing' });
   }
 
   if (!lowestPrice && highestPrice) {
-    return res.status(400).json({ Error: 'Lowest value in price range query missing' });
+    return res
+      .status(400)
+      .json({ Error: 'Lowest value in price range query missing' });
   }
 
   if (lowestPrice && highestPrice) {
@@ -118,17 +122,23 @@ const processProductQueryParameters = (
         }
       };
     } else {
-      return res.status(400).json({ Error: `Value for 'inStock' must be 'true' if used` });
+      return res
+        .status(400)
+        .json({ Error: `Value for 'inStock' must be 'true' if used` });
     }
   }
 
   // Filter products by rating
   if (lowestRating && !highestRating) {
-    return res.status(400).json({ Error: 'Highest value in rating range query missing' });
+    return res
+      .status(400)
+      .json({ Error: 'Highest value in rating range query missing' });
   }
 
   if (!lowestRating && highestRating) {
-    return res.status(400).json({ Error: 'Lowest value in rating range query missing' });
+    return res
+      .status(400)
+      .json({ Error: 'Lowest value in rating range query missing' });
   }
 
   if (lowestRating && highestRating) {

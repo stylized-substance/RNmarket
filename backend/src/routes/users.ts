@@ -24,7 +24,9 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
   // Allow only admin users to create admin users
   if (newUser.isadmin === true && req.isadmin === false) {
-    return res.status(403).json({ Error: 'Only admin users can create admin users' });
+    return res
+      .status(403)
+      .json({ Error: 'Only admin users can create admin users' });
   }
 
   const saltRounds: number = 12;
@@ -50,7 +52,9 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
 
     // Prevent users from changing each others passwords
     if (userJSON.id !== req.verifiedToken.id) {
-      return res.status(403).json({ Error: 'Users can only change their own password' });
+      return res
+        .status(403)
+        .json({ Error: 'Users can only change their own password' });
     }
 
     const saltRounds: number = 12;

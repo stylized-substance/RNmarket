@@ -3,6 +3,13 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never;
 
+export type RefreshToken = {
+  id: string;
+  token: string;
+  expiry_date: number;
+  user_id: string;
+};
+
 // Types for reviews, products and users
 
 export type Review = {
@@ -15,9 +22,9 @@ export type Review = {
   rating: number;
 };
 
-export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>
+export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>;
 
-export type EditedReview = Pick<Review, 'title' | 'content' | 'rating'>
+export type EditedReview = Pick<Review, 'title' | 'content' | 'rating'>;
 
 export interface User {
   id: string;

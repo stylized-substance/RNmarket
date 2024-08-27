@@ -38,7 +38,7 @@ router.get(
 // Add new product
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.isadmin) {
-    res.status(400).json({ Error: 'Only admin users can add products' })
+    res.status(400).json({ Error: 'Only admin users can add products' });
   }
   const newProduct: Product = toProduct(req.body);
   newProduct.id = uuidv4();

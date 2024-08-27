@@ -25,3 +25,4 @@
 | 21.08.2024 | 2 | Work on routers, types, type guards | 65
 | 22.08.2024 | 1 | Work on reviews router and types | 66
 | 26.08.2024 | 1 | Work on reviews router and types | 67
+| 27.08.2024 | 2 | Implemented JWT refresh tokens | 69
