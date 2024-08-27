@@ -16,7 +16,7 @@ router.get(
     const products: ProductModel[] | [] = await ProductModel.findAll(
       req.searchParameters
     );
-    res.json(products);
+    res.json({ products });
   }
 );
 
@@ -28,9 +28,9 @@ router.get(
     const id: string = parseString(req.params.id);
     const product: ProductModel | null = await ProductModel.findByPk(id);
     if (product) {
-      res.json(product);
+      res.json({ product });
     } else {
-      res.status(404).json('Product not found');
+      res.status(404).json({ Error: 'Product not found' });
     }
   }
 );
@@ -38,14 +38,14 @@ router.get(
 // Add new product
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.isadmin) {
-    res.status(400).json('Only admin users can add products')
+    res.status(400).json({ Error: 'Only admin users can add products' })
   }
   const newProduct: Product = toProduct(req.body);
   newProduct.id = uuidv4();
   const addedProduct: ProductModel = await ProductModel.create({
     ...newProduct
   });
-  res.json(addedProduct);
+  res.json({ addedProduct });
 });
 
 // Update existing product
@@ -61,9 +61,9 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
     });
     await product.update(productWithUpdatedValues);
     const saveResult: ProductModel = await product.save();
-    res.json(saveResult);
+    res.json({ saveResult });
   } else {
-    res.status(404).json('Product not found');
+    res.status(404).json({ Error: 'Product not found' });
   }
 });
 
@@ -77,7 +77,7 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
     await product.destroy();
     res.status(204).end();
   } else {
-    res.status(404).json('Product not found');
+    res.status(404).json({ Error: 'Product not found' });
   }
 });
 

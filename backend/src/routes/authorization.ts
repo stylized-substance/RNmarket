@@ -40,11 +40,11 @@ router.post('/login', async (req: Request, res: Response) => {
     : null;
 
   if (!username) {
-    return res.status(400).json('Username missing');
+    return res.status(400).json({ Error: 'Username missing' });
   }
 
   if (!password) {
-    return res.status(400).json('Password missing');
+    return res.status(400).json({ Error: 'Password missing' });
   }
 
   const user: UserModel | null = await UserModel.findOne({
@@ -65,9 +65,9 @@ router.post('/login', async (req: Request, res: Response) => {
       );
 
       if (!passwordCorrect) {
-        return res.status(400).json('Incorrect password');
+        return res.status(400).json({ Error: 'Incorrect password' });
       }
-      
+
       // Create JWT tokens
       const accessToken: string = jwt.sign(
         userJSON,
@@ -93,10 +93,10 @@ router.post('/login', async (req: Request, res: Response) => {
       // Send payload to client
       return res.status(200).json({ payload });
     } else {
-      return res.status(500).json('User has no password set');
+      return res.status(500).json({ Error: 'User has no password set' });
     }
   } else {
-    return res.status(400).json('User not found');
+    return res.status(400).json({ Error: 'User not found' });
   }
 });
 

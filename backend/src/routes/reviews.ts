@@ -13,7 +13,7 @@ const router: Router = Router();
 // Get reviews
 router.get('/', async (req: Request, res: Response) => {
   if (Object.keys(req.query).length === 0) {
-    return res.status(400).json('Query parameter missing');
+    return res.status(400).json({ Error: 'Query parameter missing' });
   }
 
   // Extract query parameters from request
@@ -50,9 +50,9 @@ router.get('/', async (req: Request, res: Response) => {
   }
 
   if (reviews && reviews.length > 0) {
-    return res.json(reviews);
+    return res.json({ reviews });
   } else {
-    return res.status(404).json('No reviews found');
+    return res.status(404).json({ Error: 'No reviews found' });
   }
 });
 
@@ -62,7 +62,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   const product = await ProductModel.findByPk(newReview.product_id);
 
   if (!product) {
-    return res.status(400).json('Product not found');
+    return res.status(400).json({ Error: 'Product not found' });
   }
 
   const reviewWithIds: Review = {
@@ -76,7 +76,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
     ...reviewWithIds
   });
 
-  return res.json(addedReview);
+  return res.json({ addedReview });
 });
 
 router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
@@ -92,10 +92,10 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
       const editedReview: EditedReview = toEditedReview(req.body);
       await review.update(editedReview);
       const saveResult = await review.save();
-      res.json(saveResult);
+      res.json({ saveResult });
     }
   } else {
-    res.status(404).json('Review not found in database');
+    res.status(404).json({ Error: 'Review not found in database' });
   }
 });
 
@@ -113,10 +113,10 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
       await review.destroy();
       res.status(204).end();
     } else {
-      res.status(400).json('Reviews can only be deleted by their creator');
+      res.status(400).json({ Error: 'Reviews can only be deleted by their creator' });
     }
   } else {
-    res.status(404).json('Review not found in database');
+    res.status(404).json({ Error: 'Review not found in database' });
   }
 });
 
