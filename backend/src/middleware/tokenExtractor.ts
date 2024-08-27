@@ -1,20 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { isString } from '#src/utils/typeNarrowers';
+import authConfig from '#src/config/authConfig';
 import { JwtPayload } from 'jsonwebtoken';
+import { parseString } from '#src/utils/typeNarrowers';
 
-const secret: string | undefined = process.env.JSONWEBTOKENSECRET;
+// Import JWT secrets from config file
+const jwtAccessTokenSecret: string = parseString(
+  authConfig.jwtAccessTokenSecret
+);
+const jwtRefreshTokenSecret: string = parseString(
+  authConfig.jwtRefreshTokenSecret
+);
+jwtRefreshTokenSecret;
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
   // Skip checking for access token if adding non-admin user to database
   if (req.originalUrl === '/api/users/' && req.body.isadmin === false) {
     next();
     return;
-  }
-
-  // Handle missing JWT secret environment variable
-  if (!secret || !isString(secret)) {
-    throw new Error('tokenExtractor: JSONWEBTOKENSECRET is missing');
   }
 
   const authorization: string | undefined = req.get('authorization');
@@ -24,18 +27,18 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
     // Attach access token to request
     req.accessToken = authorization.substring(7);
 
+    // Verify access token
     const verifiedToken: JwtPayload | string = jwt.verify(
       req.accessToken,
-      secret
+      jwtAccessTokenSecret
     );
 
     // Attach verified token contents to request
-    req.verifiedToken = verifiedToken
+    req.verifiedToken = verifiedToken;
 
     if (!verifiedToken) {
       return res.status(401).json('Invalid access token in request');
     }
-
   } else {
     return res.status(401).json('Access token missing from request');
   }

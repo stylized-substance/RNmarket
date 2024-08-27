@@ -4,7 +4,7 @@ import path from 'path';
 import productsRouter from '#src/routes/products';
 import usersRouter from '#src/routes/users';
 import reviewsRouter from '#src/routes/reviews';
-import loginRouter from '#src/routes/login';
+import authorizationRouter from '#src/routes/authorization';
 import { connectToDatabase } from '#src/utils/database';
 import errorHandler from './utils/errorHandler';
 
@@ -20,7 +20,7 @@ app.use('/api/users', usersRouter);
 
 app.use('/api/reviews', reviewsRouter);
 
-app.use('/api/login', loginRouter);
+app.use('/api/authorization', authorizationRouter);
 
 app.use(errorHandler);
 

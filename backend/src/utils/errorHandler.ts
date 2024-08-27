@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { TypeNarrowingError } from './typeNarrowers';
-import { JsonWebTokenError } from 'jsonwebtoken';
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 const errorHandler = (
   error: unknown,
@@ -38,6 +38,10 @@ const errorHandler = (
 
   if (error instanceof JsonWebTokenError) {
     return res.status(400).json(errorObjectCreator(error.name, error.message));
+  }
+
+  if (error instanceof TokenExpiredError) {
+    return res.status(401).json(errorObjectCreator(error.name, error.message));
   }
 
   next(error);
