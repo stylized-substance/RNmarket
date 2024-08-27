@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
 import { User } from '#src/types/types';
-import { isString, parseString } from '#src/utils/typeNarrowers';
+import { parseString } from '#src/utils/typeNarrowers';
 
 interface Payload {
   username: string;
@@ -24,11 +24,9 @@ const jwtRefreshTokenSecret: string = parseString( authConfig.jwtRefreshTokenSec
 // Handle missing JWT secrets
 if (
   !jwtAccessTokenSecret ||
-  !isString(jwtAccessTokenSecret) ||
-  !jwtRefreshTokenSecret ||
-  !isString(jwtRefreshTokenSecret)
+  !jwtRefreshTokenSecret
 ) {
-  throw new Error('Missin JWT secret');
+  throw new Error('Missing JWT secret');
 }
 
 // Login user
@@ -69,17 +67,17 @@ router.post('/login', async (req: Request, res: Response) => {
       if (!passwordCorrect) {
         return res.status(400).json('Incorrect password');
       }
-
+      
       // Create JWT tokens
       const accessToken: string = jwt.sign(
-        userJSON.username,
+        userJSON,
         jwtAccessTokenSecret,
-        { expiresIn: `${authConfig.jwtAccessTokenExpiration}` }
+        { expiresIn: authConfig.jwtAccessTokenExpiration }
       );
       const refreshToken: string = jwt.sign(
-        userJSON.username,
+        userJSON,
         jwtRefreshTokenSecret,
-        { expiresIn: 'authConfig.jwtRefreshTokenExpiration' }
+        { expiresIn: authConfig.jwtRefreshTokenExpiration }
       );
 
       // Create response payload to send to client

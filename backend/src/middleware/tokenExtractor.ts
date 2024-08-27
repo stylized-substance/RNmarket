@@ -11,7 +11,14 @@ const jwtAccessTokenSecret: string = parseString(
 const jwtRefreshTokenSecret: string = parseString(
   authConfig.jwtRefreshTokenSecret
 );
-jwtRefreshTokenSecret;
+
+// Handle missing JWT secrets
+if (
+  !jwtAccessTokenSecret ||
+  !jwtRefreshTokenSecret
+) {
+  throw new Error('Missing JWT secret');
+}
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
   // Skip checking for access token if adding non-admin user to database
