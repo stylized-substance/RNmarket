@@ -7,6 +7,5 @@ Product.hasMany(Review);
 User.hasMany(Review);
 Review.belongsTo(User);
 RefreshToken.belongsTo(User);
-User.hasOne(RefreshToken);
 
 export { Product, Review, User, RefreshToken };
