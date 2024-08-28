@@ -33,25 +33,32 @@ interface Payload {
   refreshToken: string;
 }
 
-// Function for creating refresh tokens
-const createRefreshToken = (user: User): RefreshToken => {
+// Function for creating JWT tokens
+const createJWTTokens = (user: User): { refreshTokenForDb: RefreshToken, accessToken: string } => {
+  // Create access token
+  const accessToken: string = jwt.sign(user, jwtAccessTokenSecret, {
+    expiresIn: authConfig.jwtAccessTokenExpiration
+  });
+
+  // Create refresh token
   const refreshToken: string = jwt.sign(user, jwtRefreshTokenSecret, {
     expiresIn: authConfig.jwtRefreshTokenExpiration
   });
 
-  const expiryTime: number =
+  // Set expiry time for refresh token
+  const refreshTokenExpiryTime: number =
     new Date().getTime() + authConfig.jwtRefreshTokenExpiration * 1000; // Convert seconds to milliseconds
 
-  // Create object for saving to databasew
-  const objectForDb: RefreshToken = {
+  // Create refresh token object for saving to databasew
+  const refreshTokenForDb: RefreshToken = {
     id: uuidv4(),
     token: refreshToken,
-    expiry_date: expiryTime,
+    expiry_date: refreshTokenExpiryTime,
     user_id: user.id
   };
 
-  return objectForDb
-}
+  return { refreshTokenForDb, accessToken }
+};
 
 // Login user
 router.post('/login', async (req: Request, res: Response) => {
@@ -64,11 +71,11 @@ router.post('/login', async (req: Request, res: Response) => {
     : null;
 
   if (!username) {
-    return res.status(400).json({ Error: 'Username missing' });
+    return res.status(400).json({ Error: 'Username missing from request' });
   }
 
   if (!password) {
-    return res.status(400).json({ Error: 'Password missing' });
+    return res.status(400).json({ Error: 'Password missing from request' });
   }
 
   // Get user from database
@@ -90,16 +97,12 @@ router.post('/login', async (req: Request, res: Response) => {
       );
 
       if (!passwordCorrect) {
-        return res.status(400).json({ Error: 'Incorrect password' });
+        return res.status(401).json({ Error: 'Incorrect password' });
       }
 
       // Create JWT tokens
-      const accessToken: string = jwt.sign(userJSON, jwtAccessTokenSecret, {
-        expiresIn: authConfig.jwtAccessTokenExpiration
-      });
-
-      const refreshTokenObject = createRefreshToken(userJSON)
-      
+      const accessToken = createJWTTokens(userJSON).accessToken;
+      const refreshTokenObject = createJWTTokens(userJSON).refreshTokenForDb;
 
       // TODO: move this to 'refresh' endpoint
       // Check if user already has refresh token in database, delete it if true
@@ -123,7 +126,7 @@ router.post('/login', async (req: Request, res: Response) => {
         name: userJSON.name,
         id: userJSON.id,
         isadmin: userJSON.isadmin,
-        accessToken,
+        accessToken: accessToken,
         refreshToken: refreshTokenObject.token
       };
 
@@ -135,6 +138,50 @@ router.post('/login', async (req: Request, res: Response) => {
   } else {
     return res.status(400).json({ Error: 'User not found' });
   }
+});
+
+router.post('/refresh', async (req: Request, res: Response) => {
+  // Refresh access token for user
+  const refreshToken: string = parseString(req.body.refreshToken);
+
+  if (!refreshToken) {
+    return res
+      .status(400)
+      .json({ Error: 'Refresh token missing from request' });
+  }
+
+  // Find existing refresh token in database, send error if not found
+  const tokenInDb: RefreshTokenModel | null = await RefreshTokenModel.findOne({
+    where: {
+      token: refreshToken
+    }
+  });
+
+  if (!tokenInDb) {
+    return res
+      .status(400)
+      .json({ Error: 'Refresh token not found in database' });
+  }
+
+  // Check if refresh token has expired, delete it and send error if true
+  const currentDate = new Date();
+  if (tokenInDb.dataValues.expiry_date.getTime() < currentDate.getTime()) {
+    await tokenInDb.destroy();
+    return res
+      .status(400)
+      .json({ Error: 'Refresh token has expired, login again' });
+  }
+
+  // Send error if user corresponding to refresh token not found in database
+  const userInDb: UserModel | null = await UserModel.findByPk(tokenInDb.dataValues.user_id)
+  
+  if (!userInDb) {
+    return res.status(400).json({ Error: `User doesn't exist in database` })
+  }
+
+  // Create new access token and send to client
+  const newAccessToken = createJWTTokens(userInDb.dataValues).accessToken
+  return res.status(201).json({ accessToken: newAccessToken })
 });
 
 export default router;

@@ -41,10 +41,10 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
     req.verifiedToken = verifiedToken;
 
     if (!verifiedToken) {
-      return res.status(401).json({ Error: 'Invalid access token in request' });
+      return res.status(400).json({ Error: 'Invalid access token in request' });
     }
   } else {
-    return res.status(401).json({ Error: 'Access token missing from request' });
+    return res.status(400).json({ Error: 'Access token missing from request' });
   }
 
   next();
