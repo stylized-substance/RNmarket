@@ -34,7 +34,9 @@ interface Payload {
 }
 
 // Function for creating JWT tokens
-const createJWTTokens = (user: User): { refreshTokenForDb: RefreshToken, accessToken: string } => {
+const createJWTTokens = (
+  user: User
+): { refreshTokenForDb: RefreshToken; accessToken: string } => {
   // Create access token
   const accessToken: string = jwt.sign(user, jwtAccessTokenSecret, {
     expiresIn: authConfig.jwtAccessTokenExpiration
@@ -57,7 +59,7 @@ const createJWTTokens = (user: User): { refreshTokenForDb: RefreshToken, accessT
     user_id: user.id
   };
 
-  return { refreshTokenForDb, accessToken }
+  return { refreshTokenForDb, accessToken };
 };
 
 // Login user
@@ -85,59 +87,43 @@ router.post('/login', async (req: Request, res: Response) => {
     }
   });
 
-  if (user) {
-    // Convert database response data to JSON
-    const userJSON: User = user.toJSON();
-
-    // If passwordhash is null in database, send error. Else send access token and refresh token
-    if (userJSON.passwordhash !== null) {
-      const passwordCorrect: boolean = await bcrypt.compare(
-        password,
-        userJSON.passwordhash
-      );
-
-      if (!passwordCorrect) {
-        return res.status(401).json({ Error: 'Incorrect password' });
-      }
-
-      // Create JWT tokens
-      const accessToken = createJWTTokens(userJSON).accessToken;
-      const refreshTokenObject = createJWTTokens(userJSON).refreshTokenForDb;
-
-      // TODO: move this to 'refresh' endpoint
-      // Check if user already has refresh token in database, delete it if true
-      // const refreshTokenInDatabase: RefreshTokenModel | null =
-      //   await RefreshTokenModel.findOne({
-      //     where: {
-      //       user_id: userJSON.id
-      //     }
-      //   });
-
-      // if (refreshTokenInDatabase) {
-      //   await refreshTokenInDatabase.destroy();
-      // }
-
-      // Save refresh token to database
-      await RefreshTokenModel.create(refreshTokenObject);
-
-      // Create response payload to send to client
-      const payload: Payload = {
-        username: userJSON.username,
-        name: userJSON.name,
-        id: userJSON.id,
-        isadmin: userJSON.isadmin,
-        accessToken: accessToken,
-        refreshToken: refreshTokenObject.token
-      };
-
-      // Send payload to client
-      return res.status(200).json({ payload });
-    } else {
-      return res.status(500).json({ Error: 'User has no password set' });
-    }
-  } else {
-    return res.status(400).json({ Error: 'User not found' });
+  if (!user) {
+    return res.status(400).json({ Error: 'User not found in database' });
   }
+
+  // If password hash is null in database, send error. Else send access token and refresh token
+  if (user.dataValues.passwordhash === null) {
+    return res.status(500).json({ Error: 'User has no password set' });
+  }
+
+  const passwordCorrect: boolean = await bcrypt.compare(
+    password,
+    user.dataValues.passwordhash
+  );
+
+  if (!passwordCorrect) {
+    return res.status(401).json({ Error: 'Incorrect password' });
+  }
+
+  // Create JWT tokens
+  const accessToken = createJWTTokens(user.dataValues).accessToken;
+  const refreshTokenObject = createJWTTokens(user.dataValues).refreshTokenForDb;
+
+  // Save refresh token to database
+  await RefreshTokenModel.create(refreshTokenObject);
+
+  // Create response payload to send to client
+  const payload: Payload = {
+    username: user.dataValues.username,
+    name: user.dataValues.name,
+    id: user.dataValues.id,
+    isadmin: user.dataValues.isadmin,
+    accessToken: accessToken,
+    refreshToken: refreshTokenObject.token
+  };
+
+  // Send payload to client
+  return res.status(200).json({ payload });
 });
 
 router.post('/refresh', async (req: Request, res: Response) => {
@@ -173,15 +159,17 @@ router.post('/refresh', async (req: Request, res: Response) => {
   }
 
   // Send error if user corresponding to refresh token not found in database
-  const userInDb: UserModel | null = await UserModel.findByPk(tokenInDb.dataValues.user_id)
-  
+  const userInDb: UserModel | null = await UserModel.findByPk(
+    tokenInDb.dataValues.user_id
+  );
+
   if (!userInDb) {
-    return res.status(400).json({ Error: `User doesn't exist in database` })
+    return res.status(400).json({ Error: `User doesn't exist in database` });
   }
 
   // Create new access token and send to client
-  const newAccessToken = createJWTTokens(userInDb.dataValues).accessToken
-  return res.status(201).json({ accessToken: newAccessToken })
+  const newAccessToken = createJWTTokens(userInDb.dataValues).accessToken;
+  return res.status(201).json({ accessToken: newAccessToken });
 });
 
 export default router;
