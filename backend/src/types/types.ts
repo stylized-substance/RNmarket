@@ -10,6 +10,15 @@ export type RefreshToken = {
   user_id: string;
 };
 
+export type Order = {
+  id: string;
+  product_ids: string[];
+  name: string;
+  address: string;
+}
+
+export type NewOrder = Omit<Order, 'id'>;
+
 // Types for reviews, products and users
 
 export type Review = {

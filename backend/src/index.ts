@@ -5,6 +5,7 @@ import productsRouter from '#src/routes/products';
 import usersRouter from '#src/routes/users';
 import reviewsRouter from '#src/routes/reviews';
 import authorizationRouter from '#src/routes/authorization';
+import ordersRouter from '#src/routes/orders'
 import { connectToDatabase } from '#src/utils/database';
 import errorHandler from './utils/errorHandler';
 
@@ -21,6 +22,8 @@ app.use('/api/users', usersRouter);
 app.use('/api/reviews', reviewsRouter);
 
 app.use('/api/authorization', authorizationRouter);
+
+app.use('/api/orders', ordersRouter);
 
 app.use(errorHandler);
 

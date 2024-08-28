@@ -1,4 +1,6 @@
 import {
+  Order,
+  NewOrder,
   User,
   NewUser,
   Review,
@@ -50,6 +52,26 @@ const isStringArray = (param: unknown): param is string[] => {
   return Array.isArray(param) && param.every((item) => isString(item));
 };
 
+const isNewOrder = (param: unknown): param is NewOrder => {
+  return (
+    isObject(param) &&
+    'product_ids' in param &&
+    isStringArray(param.product_ids) &&
+    'name' in param &&
+    isString(param.name) &&
+    'address' in param &&
+    isString(param.address)
+  )
+}
+
+const isOrder = (param: unknown): param is Order => {
+  return (
+    isNewOrder(param) &&
+    'id' in param &&
+    isString(param.id)
+  )
+}
+
 const isUser = (param: unknown): param is User => {
   return (
     isObject(param) &&
@@ -77,6 +99,14 @@ const isNewUser = (param: unknown): param is NewUser => {
     isBoolean(param.isadmin)
   );
 };
+
+const toNewOrder = (param: unknown): NewOrder => {
+  if (!isNewOrder(param)) {
+    throw new TypeNarrowingError('Input is not a valid order');
+  }
+
+  return param;
+}
 
 const toNewUser = (param: unknown): NewUser => {
   if (!isNewUser(param)) {
@@ -293,6 +323,8 @@ export {
   isString,
   parseString,
   isNumber,
+  isOrder,
+  toNewOrder,
   isReview,
   toNewReview,
   toEditedReview,
