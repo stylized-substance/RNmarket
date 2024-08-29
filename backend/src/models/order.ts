@@ -11,7 +11,7 @@ Order.init(
       primaryKey: true
     },
     product_ids: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
+      type: DataTypes.UUID,
       allowNull: false,
       references: { model: 'products', key: 'id' }
     },

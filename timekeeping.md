@@ -27,3 +27,4 @@
 | 26.08.2024 | 1 | Work on reviews router and types | 67
 | 27.08.2024 | 2 | Implemented JWT refresh tokens | 69
 | 28.08.2024 | 2 | Work on authorization and orders routers, types | 71
+| 29.08.2024 | 2 | Work on orders router, types, database | 73

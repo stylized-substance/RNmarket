@@ -13,7 +13,7 @@ Review.belongsTo(User);
 User.hasMany(RefreshToken);
 RefreshToken.belongsTo(User);
 
-Order.hasMany(Product);
-Product.belongsToMany(Order, { through: 'OrderTable'} );
+Product.belongsToMany(Order, { through: 'ProductOrders'} );
+Order.belongsToMany(Product, { through: 'ProductOrders' });
 
 export { Product, Review, User, RefreshToken, Order };

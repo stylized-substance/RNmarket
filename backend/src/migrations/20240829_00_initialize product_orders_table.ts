@@ -4,23 +4,16 @@ import { DataTypes } from 'sequelize';
 module.exports = {
   // @ts-expect-error - no type available for queryInterface
   up: async ({ context: queryInterface }) => {
-    await queryInterface.createTable('orders', {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true
-      },
-      product_ids: {
+    await queryInterface.createTable('product_orders', {
+      product_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: { model: 'products', key: 'id' }
       },
-      name: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
-      address: {
-        type: DataTypes.TEXT,
-        allowNull: false
+      order_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: { model: 'orders', key: 'id' }
       },
       created_at: {
         type: DataTypes.DATE,
@@ -34,6 +27,6 @@ module.exports = {
   },
   // @ts-expect-error - no type available for queryInterface
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable('orders');
+    await queryInterface.dropTable('product_orders');
   }
 };

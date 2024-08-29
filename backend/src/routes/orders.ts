@@ -18,21 +18,28 @@ router.get('/', async (_req: Request, res: Response) => {
 })
 
 router.post('/', async (req: Request, res: Response) => {
+  // Create new order object
   const newOrder: NewOrder = toNewOrder(req.body)
-  const orderWithId: Order = {
-    ...newOrder,
-    id: uuidv4()
-  }
-
-  // Test each product ID for a corresponding product in database
+  
+  // Test each product ID in new  order for a corresponding product in database and add products to order. Send error if client is trying to add non-existent product to order.
   for (const product_id of newOrder.product_ids) {
     const productInDb: ProductModel | null = await ProductModel.findByPk(product_id)
     if (!productInDb) {
       return res.status(400).json({ Error: `Product for id ${product_id} not found in database, order failed.` })
     }
   }
+  
+  // Add Id to order
+  const orderWithId: Order = {
+    ...newOrder,
+    id: uuidv4()
+  }
 
-  console.log('here')
+  const model: OrderModel = await OrderModel.create({ orderWithId })
+  if (model instanceof OrderModel) {
+    model.getProducts()
+  }
+
 
   await OrderModel.create(orderWithId)
   return res.status(201).end
