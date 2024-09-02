@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
 import { NewOrder } from '#src/types/types';
@@ -8,7 +9,11 @@ import { v4 as uuidv4 } from 'uuid';
 const router: Router = Router();
 
 // Get all orders, including their products
-router.get('/', async (_req: Request, res: Response) => {
+router.get('/', tokenExtractor, async (req: Request, res: Response) => {
+  if (!req.isadmin) {
+    res.status(400).json({ Error: 'Only admin users can list orders' });
+  }
+
   const orders: OrderModel[] = await OrderModel.findAll({
     include: ProductModel
   });

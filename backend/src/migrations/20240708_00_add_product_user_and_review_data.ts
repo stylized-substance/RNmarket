@@ -2,60 +2,85 @@ import { products } from '../../data/data.json';
 import { Product, Review, User } from '#src/types/types';
 import { toProduct } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
 
-const productArray: Product[] = [];
-const reviewArray: Review[] = [];
-const userArray: User[] = [];
+// Migration in up direction is wrapped in an async function because we need to make an await call for admin user password hash
+// @ts-expect-error - no type available for queryInterface
+const migrateUp = async (queryInterface) => {
+  const productArray: Product[] = [];
+  const reviewArray: Review[] = [];
+  const userArray: User[] = [];
 
-for (const product of products) {
-  const typeCheckedProduct: Product = toProduct(product);
+  // Add admin user for testing purposes
+  const password = 'password';
+  const saltRounds: number = 12;
+  const passwordHash: string = await bcrypt.hash(password, saltRounds);
+  console.log('hash', passwordHash);
 
-  const productId = uuidv4();
+  const adminUser: User = {
+    id: uuidv4(),
+    username: 'admin@example.org',
+    name: 'admin',
+    passwordhash: passwordHash,
+    isadmin: true
+  };
 
-  typeCheckedProduct.id = productId;
+  userArray.push(adminUser);
+  console.log('arraylength line 26', userArray.length);
 
-  if (typeCheckedProduct.reviews) {
-    const { reviews, ...productWithoutReviews } = typeCheckedProduct;
+  // Loop thorugh products
+  for (const product of products) {
+    const typeCheckedProduct: Product = toProduct(product);
 
-    productArray.push(productWithoutReviews);
+    const productId = uuidv4();
 
-    // Loop through reviews and find all unique users
-    for (const review of reviews) {
-      // Create user object and save to array
-      if (!userArray.find((user) => user.name === review.name)) {
-        const user: User = {
-          id: uuidv4(),
-          username: `${review.name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
-          name: review.name,
-          passwordhash: null,
-          isadmin: false
-        };
-        userArray.push(user);
+    typeCheckedProduct.id = productId;
+
+    if (typeCheckedProduct.reviews) {
+      const { reviews, ...productWithoutReviews } = typeCheckedProduct;
+
+      productArray.push(productWithoutReviews);
+
+      // Loop through reviews and find all unique users
+      for (const review of reviews) {
+        // Create user object and save to array
+        if (!userArray.find((user) => user.name === review.name)) {
+          const user: User = {
+            id: uuidv4(),
+            username: `${review.name.replace(/\s/g, '')}@example.org`, // Remove whitespace from name
+            name: review.name,
+            passwordhash: null,
+            isadmin: false
+          };
+          userArray.push(user);
+        }
       }
-    }
 
-    // Add user and products ids to reviews
-    for (const review of reviews) {
-      review.product_id = productId;
-      review.id = uuidv4();
-      const reviewUser = userArray.find((user) => user.name === review.name);
-      if (reviewUser) {
-        review.user_id = reviewUser.id;
+      // Add user and products ids to reviews
+      for (const review of reviews) {
+        review.product_id = productId;
+        review.id = uuidv4();
+        const reviewUser = userArray.find((user) => user.name === review.name);
+        if (reviewUser) {
+          review.user_id = reviewUser.id;
+        }
+        reviewArray.push(review);
       }
-      reviewArray.push(review);
+    } else {
+      productArray.push(typeCheckedProduct);
     }
-  } else {
-    productArray.push(typeCheckedProduct);
   }
-}
+
+  await queryInterface.bulkInsert('users', userArray);
+  await queryInterface.bulkInsert('products', productArray);
+  await queryInterface.bulkInsert('reviews', reviewArray);
+};
 
 // Using ES5 export so Umzug can work with it
 module.exports = {
   // @ts-expect-error - no type available for queryInterface
   up: async ({ context: queryInterface }) => {
-    await queryInterface.bulkInsert('users', userArray);
-    await queryInterface.bulkInsert('products', productArray);
-    await queryInterface.bulkInsert('reviews', reviewArray);
+    await migrateUp(queryInterface);
   },
   // @ts-expect-error - no type available for queryInterface
   down: async ({ context: queryInterface }) => {
