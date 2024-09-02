@@ -10,11 +10,6 @@ Order.init(
       type: DataTypes.UUID,
       primaryKey: true
     },
-    product_ids: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: { model: 'products', key: 'id' }
-    },
     name: {
       type: DataTypes.TEXT,
       allowNull: false
