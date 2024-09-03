@@ -10,8 +10,8 @@ const router: Router = Router();
 
 // Get all orders, including their products
 router.get('/', tokenExtractor, async (req: Request, res: Response) => {
-  if (!req.isadmin) {
-    res.status(400).json({ Error: 'Only admin users can list orders' });
+  if (!req.verifiedToken.isadmin) {
+    return res.status(400).json({ Error: 'Only admin users can list orders' });
   }
 
   const orders: OrderModel[] = await OrderModel.findAll({

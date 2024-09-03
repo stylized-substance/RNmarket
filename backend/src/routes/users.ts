@@ -23,7 +23,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   const newUser: NewUser = toNewUser(req.body);
 
   // Allow only admin users to create admin users
-  if (newUser.isadmin === true && req.isadmin === false) {
+  if (newUser.isadmin === true && req.verifiedToken.isadmin === false) {
     return res
       .status(403)
       .json({ Error: 'Only admin users can create admin users' });
@@ -79,7 +79,7 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
 // Delete user
 router.delete('/:id', async (req: Request, res: Response) => {
   // Allow only admin users to delete users
-  if (req.isadmin === false) {
+  if (req.verifiedToken.isadmin === false) {
     return res.status(403).json({ Error: 'Only admin users can delete users' });
   }
 

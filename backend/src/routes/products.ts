@@ -37,7 +37,7 @@ router.get(
 
 // Add new product
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
-  if (!req.isadmin) {
+  if (!req.verifiedToken.isadmin) {
     res.status(400).json({ Error: 'Only admin users can add products' });
   }
   const newProduct: Product = toProduct(req.body);
