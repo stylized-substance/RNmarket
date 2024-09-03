@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
-import { NewOrder } from '#src/types/types';
+import { Order, NewOrder } from '#src/types/types';
 import { toNewOrder } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,9 +31,9 @@ router.post('/', async (req: Request, res: Response) => {
   const newOrder: NewOrder = toNewOrder(req.body);
 
   // Test each product ID in new  order for a corresponding product in database. Send error if client is trying to add non-existent product to order.
-  const productIds = newOrder.product_ids;
+  const productIds: string[] = newOrder.product_ids;
 
-  const productsInDb = await ProductModel.findAll({
+  const productsInDb: ProductModel[] = await ProductModel.findAll({
     where: {
       id: productIds
     }
@@ -46,11 +46,11 @@ router.post('/', async (req: Request, res: Response) => {
   }
 
   // Add Id to order
-  const orderWithId = {
+  const orderWithId: Order = {
+    id: uuidv4(),
+    product_ids: productsInDb[0].dataValues.id,
     name: newOrder.name,
     address: newOrder.address,
-    id: uuidv4(),
-    product_ids: productsInDb[0].dataValues.id
   };
 
   // Create order in database
