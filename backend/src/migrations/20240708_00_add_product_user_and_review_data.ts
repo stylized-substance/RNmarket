@@ -12,10 +12,9 @@ const migrateUp = async (queryInterface) => {
   const userArray: User[] = [];
 
   // Add admin user for testing purposes
-  const password = 'password';
+  const password: string = 'password';
   const saltRounds: number = 12;
   const passwordHash: string = await bcrypt.hash(password, saltRounds);
-  console.log('hash', passwordHash);
 
   const adminUser: User = {
     id: uuidv4(),
@@ -32,7 +31,7 @@ const migrateUp = async (queryInterface) => {
   for (const product of products) {
     const typeCheckedProduct: Product = toProduct(product);
 
-    const productId = uuidv4();
+    const productId: string = uuidv4();
 
     typeCheckedProduct.id = productId;
 
