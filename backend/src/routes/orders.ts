@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
-import { Order, NewOrder } from '#src/types/types';
+import { NewOrder, OrderInDb } from '#src/types/types';
 import { toNewOrder } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -58,9 +58,8 @@ router.post('/', async (req: Request, res: Response) => {
   // TODO: handle product quantitites
 
   // Add Id to order
-  const orderWithId: Order = {
+  const orderWithId: OrderInDb = {
     id: uuidv4(),
-    product_ids: productsInDb[0].dataValues.id,
     name: newOrder.name,
     address: newOrder.address,
   };
@@ -70,7 +69,7 @@ router.post('/', async (req: Request, res: Response) => {
 
   // Add products to order in database
   // @ts-expect-error - addProducts method doesn't seem to work with Typescript
-  await orderInDb.addProducts(productsInDb);
+  await orderInDb.addProducts(productsInDb, { through: { quantity: 1 } });
 
   return res.status(201).json({ orderInDb: orderInDb });
 });

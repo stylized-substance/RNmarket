@@ -15,6 +15,10 @@ module.exports = {
         allowNull: false,
         references: { model: 'orders', key: 'id' }
       },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: new Date()

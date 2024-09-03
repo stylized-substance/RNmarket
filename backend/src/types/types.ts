@@ -19,6 +19,8 @@ export type Order = {
 
 export type NewOrder = Omit<Order, 'id'>;
 
+export type OrderInDb = Omit<Order, 'product_ids'>
+
 // Types for reviews, products and users
 
 export type Review = {
