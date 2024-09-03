@@ -29,3 +29,4 @@
 | 28.08.2024 | 2 | Work on authorization and orders routers, types | 71
 | 29.08.2024 | 2 | Work on orders router, types, database | 73
 | 02.09.2024 | 2 | Work on orders router, database migration | 75
+| 03.09.2024 | 1 | Work on orders router | 76

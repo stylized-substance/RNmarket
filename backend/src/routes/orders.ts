@@ -45,6 +45,18 @@ router.post('/', async (req: Request, res: Response) => {
     });
   }
 
+  // Check that all products are in stock, send error if not
+  productsInDb.forEach((product) => {
+    if (product.dataValues.instock < 1) {
+      const id = product.dataValues.id
+      return res.status(400).json({ Error: `Product ${id} not in stock, order failed`})
+    } else {
+      return
+    }
+  })
+
+  // TODO: handle product quantitites
+
   // Add Id to order
   const orderWithId: Order = {
     id: uuidv4(),
