@@ -29,9 +29,16 @@ router.get('/', tokenExtractor, async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   // Create new order object
   const newOrder: NewOrder = toNewOrder(req.body);
+  
+  // Senf error if quantity of any product is '0'
+  for (const product of newOrder.products) {
+    if (product.quantity < 1) {
+      return res.status(400).json({ Error: `You're trying to order product ${product.id} with quantity '0', order failed` })
+    }
+  }
 
   // Test each product ID in new  order for a corresponding product in database. Send error if client is trying to add non-existent product to order.
-  const productIds: string[] = newOrder.product_ids;
+  const productIds: string[] = newOrder.products.map((product) => product.id);
 
   const productsInDb: ProductModel[] = await ProductModel.findAll({
     where: {
@@ -39,7 +46,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
   });
 
-  if ((productsInDb.length !== productIds.length) || productsInDb.length === 0) {
+  if (productsInDb.length !== productIds.length || productsInDb.length === 0) {
     return res.status(400).json({
       Error: `One or more products not found in database, order failed.`
     });
@@ -48,28 +55,56 @@ router.post('/', async (req: Request, res: Response) => {
   // Check that all products are in stock, send error if not
   productsInDb.forEach((product) => {
     if (product.dataValues.instock < 1) {
-      const id = product.dataValues.id
-      return res.status(400).json({ Error: `Product ${id} not in stock, order failed`})
+      const id = product.dataValues.id;
+      return res
+        .status(400)
+        .json({ Error: `Product ${id} not in stock, order failed` });
     } else {
-      return
+      return;
     }
-  })
-
-  // TODO: handle product quantitites
+  });
 
   // Add Id to order
   const orderWithId: OrderInDb = {
     id: uuidv4(),
     name: newOrder.name,
-    address: newOrder.address,
+    address: newOrder.address
   };
 
   // Create order in database
   const orderInDb: OrderModel = await OrderModel.create(orderWithId);
 
-  // Add products to order in database
-  // @ts-expect-error - addProducts method doesn't seem to work with Typescript
-  await orderInDb.addProducts(productsInDb, { through: { quantity: 1 } });
+  // Add products to order in database. Save quantity of each product to junction table. Subtract that amount from 'instock' property of product and update product in database
+  for (const product of productsInDb) {
+    // Find product in 'newOrder' array and extract quantity of product
+    const orderProduct = newOrder.products.find(
+      (orderProduct) => orderProduct.id === product.dataValues.id
+    );
+    if (!orderProduct) {
+      return res.status(500).json({
+        Error: `Product ${product.dataValues.id}: No match found between product in database and product in new order`
+      });
+    }
+    const productQuantity: number = orderProduct.quantity;
+
+    // Send error if there's not enough product in stock
+    if (productQuantity > product.dataValues.instock) {
+      return res.status(400).json({
+        Error: `Product ${product.dataValues.id}: Not enough product in stock, order failed`
+      });
+    }
+
+    // Add products to order in database
+    // @ts-expect-error - addProduct method doesn't seem to work with Typescript
+    await orderInDb.addProduct(product, {
+      through: { quantity: productQuantity }
+    });
+
+    // Subtract amount ordered from product 'instock' value and update in database
+    await product.update({
+      instock: product.dataValues.instock - orderProduct.quantity
+    });
+  }
 
   return res.status(201).json({ orderInDb: orderInDb });
 });

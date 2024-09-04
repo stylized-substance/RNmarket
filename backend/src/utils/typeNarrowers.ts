@@ -1,5 +1,4 @@
 import {
-  Order,
   NewOrder,
   User,
   NewUser,
@@ -55,20 +54,21 @@ const isStringArray = (param: unknown): param is string[] => {
 const isNewOrder = (param: unknown): param is NewOrder => {
   return (
     isObject(param) &&
-    'product_ids' in param &&
-    isStringArray(param.product_ids) &&
+    'products' in param &&
+    Array.isArray(param.products) &&
+    param.products.every((product) => {
+      return (
+        isObject(product) &&
+        'id' in product &&
+        isString(product.id) &&
+        'quantity' in product &&
+        isNumber(product.quantity)
+      )
+    }) &&
     'name' in param &&
     isString(param.name) &&
     'address' in param &&
     isString(param.address)
-  )
-}
-
-const isOrder = (param: unknown): param is Order => {
-  return (
-    isNewOrder(param) &&
-    'id' in param &&
-    isString(param.id)
   )
 }
 
@@ -323,7 +323,6 @@ export {
   isString,
   parseString,
   isNumber,
-  isOrder,
   toNewOrder,
   isReview,
   toNewReview,

@@ -10,19 +10,20 @@ export type RefreshToken = {
   user_id: string;
 };
 
-export type Order = {
-  id: string;
-  product_ids: string[];
+export interface NewOrder {
+  products: {
+    id: string;
+    quantity: number
+  }[]
   name: string;
   address: string;
 }
 
-export type NewOrder = Omit<Order, 'id'>;
-
-export type OrderInDb = Omit<Order, 'product_ids'>
+export type OrderInDb = Omit<NewOrder, 'products'> & {
+  id: string;
+}
 
 // Types for reviews, products and users
-
 export type Review = {
   id: string;
   product_id: string;
