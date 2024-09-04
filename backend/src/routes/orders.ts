@@ -3,7 +3,7 @@ import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
 import { NewOrder, OrderInDb } from '#src/types/types';
-import { toNewOrder } from '#src/utils/typeNarrowers';
+import { toNewOrder, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
 const router: Router = Router();
@@ -29,11 +29,15 @@ router.get('/', tokenExtractor, async (req: Request, res: Response) => {
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   // Create new order object
   const newOrder: NewOrder = toNewOrder(req.body);
-  
+
   // Senf error if quantity of any product is '0'
   for (const product of newOrder.products) {
     if (product.quantity < 1) {
-      return res.status(400).json({ Error: `You're trying to order product ${product.id} with quantity '0', order failed` })
+      return res
+        .status(400)
+        .json({
+          Error: `You're trying to order product ${product.id} with quantity '0', order failed`
+        });
     }
   }
 
@@ -108,5 +112,22 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
   return res.status(201).json({ orderInDb: orderInDb });
 });
+
+// Delete order
+router.delete('/', tokenExtractor, async (req: Request, res: Response) => {
+  if (!req.verifiedToken.isadmin) {
+    return res.status(400).json({ Error: 'Only admin users can delete orders' });
+  }
+
+  const id: string = parseString(req.params.id);
+  const order: OrderModel | null = await OrderModel.findByPk(id)
+
+  if (order) {
+    await order.destroy();
+    res.status(204).end();
+  } else {
+    res.status(404).json({ Error: 'Order not found' });
+  }
+})
 
 export default router;
