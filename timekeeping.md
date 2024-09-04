@@ -30,3 +30,4 @@
 | 29.08.2024 | 2 | Work on orders router, types, database | 73
 | 02.09.2024 | 2 | Work on orders router, database migration | 75
 | 03.09.2024 | 1 | Work on orders router | 76
+| 04.09.2024 | 2 | Work on orders router | 78
