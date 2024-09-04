@@ -99,7 +99,8 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
     }
 
     // Add products to order in database
-    // @ts-expect-error - addProduct method doesn't seem to work with Typescript
+    // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
+
     await orderInDb.addProduct(product, {
       through: { quantity: productQuantity }
     });
@@ -114,20 +115,24 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 });
 
 // Delete order
-router.delete('/', tokenExtractor, async (req: Request, res: Response) => {
+router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.verifiedToken.isadmin) {
     return res.status(400).json({ Error: 'Only admin users can delete orders' });
   }
-
+  
+  // Find order in database
   const id: string = parseString(req.params.id);
   const order: OrderModel | null = await OrderModel.findByPk(id)
 
-  if (order) {
-    await order.destroy();
-    res.status(204).end();
-  } else {
-    res.status(404).json({ Error: 'Order not found' });
+  // If order was found, remove product-order associations from junction table and finally the order from orders table
+  if (!order) {
+    return res.status(404).json({ Error: 'Order not found' });
   }
+
+  // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
+  await order.setProducts([])
+  await order.destroy();
+  return res.status(204).end();
 })
 
 export default router;

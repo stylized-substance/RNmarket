@@ -69,8 +69,9 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
 
 // Delete product
 router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
+  const id: string = parseString(req.params.id);
   const product: ProductModel | null = await ProductModel.findByPk(
-    req.params.id
+    id
   );
 
   if (product) {

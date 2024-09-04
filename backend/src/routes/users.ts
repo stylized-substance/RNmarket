@@ -44,7 +44,8 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
 // Change user password
 router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
-  const user: UserModel | null = await UserModel.findByPk(req.params.id);
+  const id: string = parseString(req.params.id);
+  const user: UserModel | null = await UserModel.findByPk(id);
 
   if (user) {
     // Convert database response data to JSON
