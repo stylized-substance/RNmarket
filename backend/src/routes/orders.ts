@@ -26,7 +26,7 @@ router.get('/', tokenExtractor, async (req: Request, res: Response) => {
 });
 
 // Add new order
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   // Create new order object
   const newOrder: NewOrder = toNewOrder(req.body);
   
