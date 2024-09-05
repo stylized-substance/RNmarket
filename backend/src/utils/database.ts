@@ -1,10 +1,12 @@
 import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
+import { DATABASE_URL } from '#src/config/envConfig';
 
-const DATABASE_URL = process.env.DATABASE_URL;
-console.log('URL', DATABASE_URL);
+const dbUrl = DATABASE_URL;
 
-const sequelize = new Sequelize(`${DATABASE_URL}`);
+console.log('Database URL:', dbUrl);
+
+const sequelize = new Sequelize(`${dbUrl}`);
 
 const migrationConfig = {
   migrations: {
@@ -29,6 +31,11 @@ const rollbackMigration = async () => {
   await migrator.down();
 };
 
+const dropAllTables = async () => {
+  await sequelize.authenticate();
+  await sequelize.dropAllSchemas({})
+}
+
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
@@ -41,4 +48,4 @@ const connectToDatabase = async () => {
   return null;
 };
 
-export { connectToDatabase, rollbackMigration, sequelize };
+export { connectToDatabase, rollbackMigration, sequelize, dropAllTables };

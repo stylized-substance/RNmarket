@@ -5,3 +5,5 @@ coverage
 data
 *.json
 postgresql/
+coverage
+ .env

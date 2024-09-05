@@ -23,11 +23,11 @@ class TypeNarrowingError extends Error {
   }
 }
 
-const isBoolean = (param: unknown) => {
+const isBoolean = (param: unknown): param is boolean => {
   return typeof param === 'boolean';
 };
 
-const isString = (param: unknown) => {
+const isString = (param: unknown): param is string => {
   return typeof param === 'string';
 };
 
@@ -39,9 +39,17 @@ const parseString = (param: unknown): string => {
   return param;
 };
 
-const isNumber = (value: unknown): value is number => {
-  return !isNaN(Number(value));
+const isNumber = (param: unknown): param is number => {
+  return !isNaN(Number(param));
 };
+
+const parseNumber = (param: unknown): number => {
+  if (!isNumber(param)) {
+    throw new TypeNarrowingError('Input is not a number');
+  }
+
+  return param;
+}
 
 const isObject = (param: unknown): param is object => {
   return param !== null && typeof param === 'object';
@@ -323,6 +331,7 @@ export {
   isString,
   parseString,
   isNumber,
+  parseNumber,
   toNewOrder,
   isReview,
   toNewReview,

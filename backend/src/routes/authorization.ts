@@ -1,4 +1,4 @@
-import authConfig from '#src/config/authConfig';
+import { authConfig } from '#src/config/envConfig';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
@@ -49,7 +49,7 @@ const createJWTTokens = (
 
   // Set expiry time for refresh token
   const refreshTokenExpiryTime: number =
-    new Date().getTime() + authConfig.jwtRefreshTokenExpiration * 1000; // Convert seconds to milliseconds
+    (new Date().getTime() + authConfig.jwtRefreshTokenExpiration) * 1000; // Convert seconds to milliseconds
 
   // Create refresh token object for saving to databasew
   const refreshTokenForDb: RefreshToken = {

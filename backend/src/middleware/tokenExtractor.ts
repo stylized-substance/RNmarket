@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import authConfig from '#src/config/authConfig';
+import { authConfig } from '#src/config/envConfig';
 import { JwtPayload } from 'jsonwebtoken';
 import { parseString } from '#src/utils/typeNarrowers';
 
