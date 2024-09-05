@@ -1,4 +1,4 @@
-import { authConfig } from '#src/config/envConfig';
+import envVariables from '#src/config/envConfig';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
@@ -11,17 +11,8 @@ import { v4 as uuidv4 } from 'uuid';
 const router: Router = Router();
 
 // Import JWT secrets from config file
-const jwtAccessTokenSecret: string = parseString(
-  authConfig.jwtAccessTokenSecret
-);
-const jwtRefreshTokenSecret: string = parseString(
-  authConfig.jwtRefreshTokenSecret
-);
-
-// Handle missing JWT secrets
-if (!jwtAccessTokenSecret || !jwtRefreshTokenSecret) {
-  throw new Error('Missing JWT secret');
-}
+const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET
+const jwtRefreshTokenSecret = envVariables.JWTREFRESHTOKENSECRET
 
 // Interface for payload to send to client when logging in
 interface Payload {
@@ -39,17 +30,17 @@ const createJWTTokens = (
 ): { refreshTokenForDb: RefreshToken; accessToken: string } => {
   // Create access token
   const accessToken: string = jwt.sign(user, jwtAccessTokenSecret, {
-    expiresIn: authConfig.jwtAccessTokenExpiration
+    expiresIn: envVariables.JWTACCESSTOKENEXPIRATION
   });
 
   // Create refresh token
   const refreshToken: string = jwt.sign(user, jwtRefreshTokenSecret, {
-    expiresIn: authConfig.jwtRefreshTokenExpiration
+    expiresIn: envVariables.JWTREFRESHTOKENEXPIRATION
   });
 
   // Set expiry time for refresh token
   const refreshTokenExpiryTime: number =
-    (new Date().getTime() + authConfig.jwtRefreshTokenExpiration) * 1000; // Convert seconds to milliseconds
+    (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION) * 1000; // Convert seconds to milliseconds
 
   // Create refresh token object for saving to databasew
   const refreshTokenForDb: RefreshToken = {

@@ -1,21 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { authConfig } from '#src/config/envConfig';
+import envVariables from '#src/config/envConfig';
 import { JwtPayload } from 'jsonwebtoken';
-import { parseString } from '#src/utils/typeNarrowers';
 
-// Import JWT secrets from config file
-const jwtAccessTokenSecret: string = parseString(
-  authConfig.jwtAccessTokenSecret
-);
-const jwtRefreshTokenSecret: string = parseString(
-  authConfig.jwtRefreshTokenSecret
-);
-
-// Handle missing JWT secrets
-if (!jwtAccessTokenSecret || !jwtRefreshTokenSecret) {
-  throw new Error('Missing JWT secret');
-}
+// Import JWT secret from config file
+const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
   // Skip checking for access token if adding non-admin user to database

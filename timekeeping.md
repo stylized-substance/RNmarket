@@ -31,3 +31,4 @@
 | 02.09.2024 | 2 | Work on orders router, database migration | 75
 | 03.09.2024 | 1 | Work on orders router | 76
 | 04.09.2024 | 2 | Work on orders router | 78
+| 05.09.2024 | 4 | Initialized test setup, changes to env variable handling, project structure and type guards | 82

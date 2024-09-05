@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
-import { DATABASE_URL } from '#src/config/envConfig';
+import envVariables from '#src/config/envConfig';
 
-const dbUrl = DATABASE_URL;
+const dbUrl = envVariables.DATABASE_URL;
 
 console.log('Database URL:', dbUrl);
 

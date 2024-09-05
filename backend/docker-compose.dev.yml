@@ -14,7 +14,7 @@ services:
       - DATABASE_URL=postgres://postgres:dbpassword@postgres:5432/postgres
       - JSONWEBTOKENSECRET=secret
       - JWTACCESSTOKENSECRET=accesssecret
-      - JWTREFRESHSECRET=refreshsecret
+      - JWTREFRESHTOKENSECRET=refreshsecret
       - JWTACCESSTOKENEXPIRATION=3600
       - JWTREFRESHTOKENEXPIRATION=86400
   postgres:
