@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { isString, parseString, parseNumber } from '#src/utils/typeNarrowers';
+import { parseString, parseNumber } from '#src/utils/typeNarrowers';
 
 // Use dotenv to set environment variables if they aren't already defined
 const envVariables = {
@@ -8,27 +8,22 @@ const envVariables = {
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION,
   JWTREFRESHTOKENEXPIRATION: process.env.JWTREFRESHTOKENEXPIRATION,
   JWTACCESSTOKENSECRET: process.env.JWTACCESSTOKENSECRET,
-  JWTREFRESHSECRET: process.env.JWTREFRESHSECRET,
+  JWTREFRESHSECRET: process.env.JWTREFRESHSECRET
 };
 
-const allVariablesDefined = Object.values(envVariables).every((variable) => {
-  return variable !== undefined && isString(variable);
-});
+const allVariablesDefined: boolean = Object.values(envVariables).every((variable) => variable !== undefined);
 
 if (!allVariablesDefined) {
   dotenv.config();
 }
 
-for (const variable of Object.keys(envVariables)) {
-  if (variable === undefined || !isString(variable)) {
-    console.log(
-      `Environment variable ${variable} missing or not a string, exiting.`
-    );
+for (const variable of Object.values(envVariables)) {
+  if (variable === undefined) {
+    console.log(`Environment variable ${variable} missing, exiting.`);
     process.exit();
-  } else {
-    variable
   }
 }
+
 const authConfig = {
   jwtAccessTokenExpiration: parseNumber(process.env.JWTACCESSTOKENEXPIRATION),
   jwtRefreshTokenExpiration: parseNumber(process.env.JWTREFRESHTOKENEXPIRATION),
@@ -36,7 +31,7 @@ const authConfig = {
   jwtRefreshTokenSecret: parseString(process.env.JWTREFRESHSECRET)
 };
 
-const PORT = process.env.PORT
+const PORT: number = parseNumber(process.env.PORT);
 
 const DATABASE_URL: string = parseString(process.env.DATABASE_URL);
 
