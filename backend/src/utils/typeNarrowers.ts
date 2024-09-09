@@ -33,19 +33,19 @@ const isString = (param: unknown): param is string => {
 
 const parseString = (param: unknown): string => {
   if (!isString(param)) {
-    throw new TypeNarrowingError('Input is not a string');
+    throw new TypeNarrowingError(`Input (${param}) is not a string`);
   }
 
   return param;
 };
 
 const isNumber = (param: unknown): param is number => {
-  return !isNaN(Number(param));
+  return !(!param) && !isNaN(Number(param));
 };
 
 const parseNumber = (param: unknown): number => {
   if (!isNumber(param)) {
-    throw new TypeNarrowingError('Input is not a number');
+    throw new TypeNarrowingError(`Input (${param}) is not a number`);
   }
 
   return param;
