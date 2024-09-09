@@ -10,7 +10,6 @@ const productFinder = async (product: Product) => {
       }
     }
   });
-  // console.log(productInDatabase)
   return productInDatabase;
 };
 

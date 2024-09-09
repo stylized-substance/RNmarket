@@ -32,8 +32,9 @@ const rollbackMigration = async () => {
 };
 
 const dropAllTables = async () => {
+  console.log('Dropping all DB tables');
   await sequelize.authenticate();
-  await sequelize.dropAllSchemas({})
+  await sequelize.drop()
 }
 
 const connectToDatabase = async () => {
@@ -48,4 +49,4 @@ const connectToDatabase = async () => {
   return null;
 };
 
-export { connectToDatabase, rollbackMigration, sequelize, dropAllTables };
+export { connectToDatabase, rollbackMigration, sequelize, dropAllTables, runMigrations };

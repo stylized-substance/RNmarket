@@ -25,7 +25,6 @@ const migrateUp = async (queryInterface) => {
   };
 
   userArray.push(adminUser);
-  console.log('arraylength line 26', userArray.length);
 
   // Loop thorugh products
   for (const product of products) {

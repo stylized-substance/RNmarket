@@ -51,4 +51,3 @@ const findProductsByProperty = (property: string, include: boolean) => {
   return result;
 };
 
-console.log(findProductsByProperty('popular', false));

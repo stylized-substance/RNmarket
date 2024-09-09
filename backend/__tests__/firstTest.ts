@@ -1,17 +1,19 @@
-import { beforeEach } from 'node:test'
-import supertest from 'supertest'
-import app from '#src/app'
-// import { dropAllTables } from '#src/utils/database'
+// import { beforeEach } from 'node:test';
+import supertest from 'supertest';
+import app from '#src/app';
+import { connectToDatabase, dropAllTables } from '#src/utils/database';
 
-const api = supertest(app)
+const api = supertest(app);
 
-beforeEach(async () => {
-  // await dropAllTables()
-})
+console.log('node_env', process.env.NODE_ENV)
+
+beforeAll(async () => {
+  await dropAllTables();
+  await connectToDatabase();
+});
 
 test('GET /api/products', async () => {
-  await api
-    .get('/api/products')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-})
+  const response = await api.get('/api/products');
+  expect(response.status).toBe(200);
+  expect(response.headers['content-type']).toMatch(/application\/json/)
+});
