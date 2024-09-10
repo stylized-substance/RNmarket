@@ -16,6 +16,9 @@ router.get(
     const products: ProductModel[] | [] = await ProductModel.findAll(
       req.searchParameters
     );
+    console.log(
+      products.map(product => product.dataValues)
+    )
     res.json({ products });
   }
 );

@@ -342,6 +342,7 @@ export {
   toNewUser,
   parseProductCategory,
   isProductWithId,
+  isProduct,
   TypeNarrowingError,
   isBoolean
 };

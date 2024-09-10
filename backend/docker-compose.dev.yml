@@ -10,7 +10,7 @@ services:
     volumes:
       - ./src:/usr/src/app/src
     environment:
-      - PORT=3000
+      - PORT=3003
       - DATABASE_URL=postgres://postgres:dbpassword@postgres:5432/postgres
       - JSONWEBTOKENSECRET=secret
       - JWTACCESSTOKENSECRET=accesssecret
