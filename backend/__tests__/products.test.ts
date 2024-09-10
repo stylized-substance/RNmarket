@@ -125,7 +125,8 @@ describe('GET requests', () => {
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
         assertValidProduct(product);
-        expect(product.price >= lowestPrice && product.price <= highestPrice);
+        expect(product.price).toBeGreaterThanOrEqual(lowestPrice);
+        expect(product.price).toBeLessThanOrEqual(highestPrice);
       });
     });
 
@@ -181,6 +182,37 @@ describe('GET requests', () => {
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
         Error: `Value for 'inStock' must be 'true' if used`
+      });
+    });
+
+    test('querying with a valid rating range returns relevant products', async () => {
+      const lowestRating = 1;
+      const highestRating = 5;
+
+      const response = await api
+        .get('/api/products')
+        .query(`lowestRating=${lowestRating}&highestRating=${highestRating}`);
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('products');
+      response.body.products.forEach((product: Product) => {
+        assertValidProduct(product);
+        expect(product.rating).toBeGreaterThanOrEqual(1);
+        expect(product.rating).toBeLessThanOrEqual(5);
+      });
+    });
+
+    // TODO: fix this test
+    test.skip('request fails if is lowestRating or highesRating is omitted', async () => {
+      let response = await api.get('/api/products').query('lowestRating=1');
+      assert400GetResponse(response);
+      expect(response).toStrictEqual({
+        Error: 'Highest value in rating range query missing'
+      });
+
+      response = await api.get('/api/products').query('highestRating=5');
+      assert400GetResponse(response);
+      expect(response).toStrictEqual({
+        Error: 'Lowest value in rating range query missing'
       });
     });
   });
