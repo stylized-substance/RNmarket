@@ -59,8 +59,6 @@ const processProductQueryParameters = (
           [Op.eq]: category
         }
       };
-    } else {
-      return res.status(400).json({ Error: 'Invalid product category' });
     }
   }
 

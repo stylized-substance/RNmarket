@@ -10,6 +10,7 @@ import {
   assertValidProduct,
   assertValidReview
 } from '#src/utils/testHelpers';
+import { ProductCategory } from '#src/types/types';
 
 const api = supertest(app);
 
@@ -62,9 +63,32 @@ describe('GET requests', () => {
 
     test(`request fails if value of withReviews is not 'true'`, async () => {
       const response = await api.get('/api/products').query('withReviews=asd');
-      expect(response.status).toBe(400)
+      expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({
         Error: `Value for 'withReviews' must be 'true' if used`
+      });
+    });
+
+    test('all valid product categories return corresponding products', async () => {
+      for (const category of Object.keys(ProductCategory)) {
+        const response = await api
+          .get('/api/products')
+          .query(`category=${category}`);
+        assertGetResponse(response);
+        expect(response.body.products).toBeDefined();
+        for (const product of response.body.products) {
+          assertValidProduct(product);
+          expect(product.category).toBe(category);
+        }
+      }
+    });
+
+    test('request fails when querying with invalid product category', async () => {
+      const response = await api.get('/api/products').query('category=asd')
+      expect(response.status).toBe(400)
+      expect(response.body).toStrictEqual({
+        'Error name': 'TypeNarrowingError',
+        'Error message': 'Invalid product category'
       })
     })
   });
