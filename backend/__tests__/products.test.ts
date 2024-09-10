@@ -137,6 +137,9 @@ describe('GET requests', () => {
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
       assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Invalid highest price query'
+      });
 
       lowestPrice = -1;
       highestPrice = 50000;
@@ -145,6 +148,9 @@ describe('GET requests', () => {
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
       assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Invalid lowest price query'
+      });
     });
 
     test('request fails if lowestPrice or highestPrice is omitted', async () => {
@@ -157,6 +163,24 @@ describe('GET requests', () => {
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
         Error: 'Lowest value in price range query missing'
+      });
+    });
+
+    test('inStock=true returns products that are in stock', async () => {
+      const response = await api.get('/api/products').query('inStock=true');
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('products');
+      response.body.products.forEach((product: Product) => {
+        assertValidProduct(product);
+        expect(product.instock).toBeGreaterThan(0);
+      });
+    });
+
+    test('request fails if value of inStock is not true', async () => {
+      const response = await api.get('/api/products').query('inStock=asd');
+      assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: `Value for 'inStock' must be 'true' if used`
       });
     });
   });
