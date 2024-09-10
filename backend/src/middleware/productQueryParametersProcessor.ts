@@ -38,16 +38,16 @@ const processProductQueryParameters = (
   }
 
   // Include product reviews if requested
-  if (withReviews) {
-    if (withReviews === 'true') {
-      searchParameters.include = {
-        model: Review
-      };
-    } else {
-      return res
-        .status(400)
-        .json({ Error: `Value for 'withReviews' must be 'true' if used` });
-    }
+  if (withReviews && withReviews === 'true') {
+    searchParameters.include = {
+      model: Review
+    };
+  }
+
+  if (withReviews && withReviews !== 'true') {
+    return res
+      .status(400)
+      .json({ Error: `Value for 'withReviews' must be 'true' if used` });
   }
 
   // Filter products by category

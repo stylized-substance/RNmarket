@@ -41,7 +41,7 @@ describe('GET requests', () => {
       );
     });
 
-    test('limit fails if value is not a number', async () => {
+    test('request fails if value of limit is not a number', async () => {
       const response = await api.get('/api/products').query('limit=asd');
       expect(response.status).toBe(400);
       expect(response.body).toStrictEqual({
@@ -59,6 +59,14 @@ describe('GET requests', () => {
         product.Reviews.forEach((review: unknown) => assertValidReview(review));
       }
     });
+
+    test(`request fails if value of withReviews is not 'true'`, async () => {
+      const response = await api.get('/api/products').query('withReviews=asd');
+      expect(response.status).toBe(400)
+      expect(response.body).toStrictEqual({
+        Error: `Value for 'withReviews' must be 'true' if used`
+      })
+    })
   });
 });
 
