@@ -6,11 +6,12 @@ import {
   dropAllTables
 } from '#src/utils/database';
 import {
-  assertGetResponse,
+  assert200GetResponse,
+  assert400GetResponse,
   assertValidProduct,
   assertValidReview
 } from '#src/utils/testHelpers';
-import { ProductCategory } from '#src/types/types';
+import { ProductCategory, Product } from '#src/types/types';
 
 const api = supertest(app);
 
@@ -23,8 +24,8 @@ beforeAll(async () => {
 describe('GET requests', () => {
   test('GET /api/products returns all products from database', async () => {
     const response = await api.get('/api/products');
-    assertGetResponse(response);
-    expect(response.body.products).toBeDefined();
+    assert200GetResponse(response);
+    expect(response.body).toHaveProperty('products');
     expect(response.body.products).toHaveLength(50);
     response.body.products.forEach((product: unknown) =>
       assertValidProduct(product)
@@ -34,8 +35,8 @@ describe('GET requests', () => {
   describe('With query parameters', () => {
     test('limit=1 returns one product', async () => {
       const response = await api.get('/api/products').query('limit=1');
-      assertGetResponse(response);
-      expect(response.body.products).toBeDefined();
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('products');
       expect(response.body.products).toHaveLength(1);
       response.body.products.forEach((product: unknown) =>
         assertValidProduct(product)
@@ -44,7 +45,7 @@ describe('GET requests', () => {
 
     test('request fails if value of limit is not a number', async () => {
       const response = await api.get('/api/products').query('limit=asd');
-      expect(response.status).toBe(400);
+      assert400GetResponse(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid product query limit'
       });
@@ -52,18 +53,18 @@ describe('GET requests', () => {
 
     test('withReviews=true returns reviews with products', async () => {
       const response = await api.get('/api/products').query('withReviews=true');
-      assertGetResponse(response);
-      expect(response.body.products).toBeDefined();
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('products');
       for (const product of response.body.products) {
         assertValidProduct(product);
-        expect(product.Reviews).toBeDefined();
+        expect(product).toHaveProperty('Reviews');
         product.Reviews.forEach((review: unknown) => assertValidReview(review));
       }
     });
 
     test(`request fails if value of withReviews is not 'true'`, async () => {
       const response = await api.get('/api/products').query('withReviews=asd');
-      expect(response.status).toBe(400);
+      assert400GetResponse(response);
       expect(response.body).toStrictEqual({
         Error: `Value for 'withReviews' must be 'true' if used`
       });
@@ -74,8 +75,8 @@ describe('GET requests', () => {
         const response = await api
           .get('/api/products')
           .query(`category=${category}`);
-        assertGetResponse(response);
-        expect(response.body.products).toBeDefined();
+        assert200GetResponse(response);
+        expect(response.body).toHaveProperty('products');
         for (const product of response.body.products) {
           assertValidProduct(product);
           expect(product.category).toBe(category);
@@ -84,13 +85,34 @@ describe('GET requests', () => {
     });
 
     test('request fails when querying with invalid product category', async () => {
-      const response = await api.get('/api/products').query('category=asd')
-      expect(response.status).toBe(400)
+      const response = await api.get('/api/products').query('category=asd');
+      assert400GetResponse(response);
       expect(response.body).toStrictEqual({
         'Error name': 'TypeNarrowingError',
         'Error message': 'Invalid product category'
-      })
-    })
+      });
+    });
+
+    test('search returns relevant products', async () => {
+      const response = await api.get('/api/products').query('search=Apple');
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('products');
+      expect(response.body.products.length).toBeGreaterThan(0);
+      response.body.products.forEach((product: Product) => {
+        assertValidProduct(product);
+        expect(product.title).toMatch(/Apple/);
+      });
+    });
+
+    test('request fails if search query is longer than 15 characters', async () => {
+      const response = await api
+        .get('/api/products')
+        .query('search=searchquerylongerthanfifteen');
+      assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Invalid search query'
+      });
+    });
   });
 });
 

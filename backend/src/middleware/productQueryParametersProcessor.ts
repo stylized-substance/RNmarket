@@ -63,8 +63,8 @@ const processProductQueryParameters = (
   }
 
   // Filter product titles by case insensitive search keyword
-  if (search) {
-    if (isString(search) && search.length <= 15) {
+  if (search && isString(search)) {
+    if (search.length <= 15) {
       where = {
         ...where,
         title: {
