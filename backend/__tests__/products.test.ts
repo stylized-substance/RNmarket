@@ -113,6 +113,52 @@ describe('GET requests', () => {
         Error: 'Invalid search query'
       });
     });
+
+    test('querying with a valid price range returns relevant products', async () => {
+      const lowestPrice = 10;
+      const highestPrice = 50000;
+
+      const response = await api
+        .get('/api/products')
+        .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('products');
+      response.body.products.forEach((product: Product) => {
+        assertValidProduct(product);
+        expect(product.price >= lowestPrice && product.price <= highestPrice);
+      });
+    });
+
+    test('request fails with an invalid price range', async () => {
+      let lowestPrice = 10;
+      let highestPrice = 10000000;
+
+      let response = await api
+        .get('/api/products')
+        .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
+      assert400GetResponse(response);
+
+      lowestPrice = -1;
+      highestPrice = 50000;
+
+      response = await api
+        .get('/api/products')
+        .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
+      assert400GetResponse(response);
+    });
+
+    test('request fails if lowestPrice or highestPrice is omitted', async () => {
+      let response = await api.get('/api/products').query('lowestPrice=10');
+      assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Highest value in price range query missing'
+      });
+      response = await api.get('/api/products').query('highestPrice=10');
+      assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Lowest value in price range query missing'
+      });
+    });
   });
 });
 
