@@ -129,11 +129,7 @@ export enum ProductCategory {
 
 export type ProductWithoutReviews = UnionOmit<Product, 'reviews'>;
 
-//export type NewProduct = UnionOmit<Product, 'id'>;
-
-//export type NewProduct = Pick<Product, 'title' | 'category' | 'price' | 'specs'>
-
-// Types for epxress controllers
+// Types for Express controllers
 export interface ProductSearchParameters {
   limit?: number;
   include?: object;

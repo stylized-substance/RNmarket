@@ -56,7 +56,7 @@ describe('GET requests', () => {
       );
     });
 
-    test('request fails if value of limit is not a number', async () => {
+    test('Request fails if value of limit is not a number', async () => {
       const response = await api.get('/api/products').query('limit=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -75,7 +75,7 @@ describe('GET requests', () => {
       }
     });
 
-    test(`request fails if value of withReviews is not 'true'`, async () => {
+    test(`Request fails if value of withReviews is not 'true'`, async () => {
       const response = await api.get('/api/products').query('withReviews=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -83,7 +83,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('all valid product categories return corresponding products', async () => {
+    test('All valid product categories return corresponding products', async () => {
       for (const category of Object.keys(ProductCategory)) {
         const response = await api
           .get('/api/products')
@@ -97,7 +97,7 @@ describe('GET requests', () => {
       }
     });
 
-    test('request fails when querying with invalid product category', async () => {
+    test('Request fails when querying with invalid product category', async () => {
       const response = await api.get('/api/products').query('category=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -106,7 +106,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('search returns relevant products', async () => {
+    test('Search returns relevant products', async () => {
       const response = await api.get('/api/products').query('search=Apple');
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('products');
@@ -117,7 +117,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('request fails if search query is longer than 15 characters', async () => {
+    test('Request fails if search query is longer than 15 characters', async () => {
       const response = await api
         .get('/api/products')
         .query('search=searchquerylongerthanfifteen');
@@ -127,7 +127,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('querying with a valid price range returns relevant products', async () => {
+    test('Querying with a valid price range returns relevant products', async () => {
       const lowestPrice = 10;
       const highestPrice = 50000;
 
@@ -143,7 +143,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('request fails with an invalid price range', async () => {
+    test('Request fails with an invalid price range', async () => {
       let lowestPrice = 10;
       let highestPrice = 10000000;
 
@@ -167,7 +167,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('request fails if lowestPrice or highestPrice is omitted', async () => {
+    test('Request fails if lowestPrice or highestPrice is omitted', async () => {
       let response = await api.get('/api/products').query('lowestPrice=10');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -190,7 +190,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('request fails if value of inStock is not true', async () => {
+    test('Request fails if value of inStock is not true', async () => {
       const response = await api.get('/api/products').query('inStock=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -198,7 +198,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('querying with a valid rating range returns relevant products', async () => {
+    test('Querying with a valid rating range returns relevant products', async () => {
       const lowestRating = 1;
       const highestRating = 5;
 
@@ -214,7 +214,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('request fails if lowestRating or highesRating is omitted', async () => {
+    test('Request fails if lowestRating or highesRating is omitted', async () => {
       let response = await api.get('/api/products').query('lowestRating=1');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -228,7 +228,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('request fails with invalid rating range', async () => {
+    test('Request fails with invalid rating range', async () => {
       let response = await api
         .get('/api/products')
         .query('lowestRating=-1&highestRating=5');
@@ -249,7 +249,59 @@ describe('GET requests', () => {
 });
 
 describe('POST requests', () => {
-  test('', () => {});
+  describe('Adding products', () => {
+    const adminUser = {
+      username: 'admin@example.org',
+      password: 'password'
+    };
+
+    const user = {
+      username: 'test_user@example.org',
+      password: 'password'
+    };
+
+    const productToAdd = {
+      title: 'test_title',
+      category: 'Mobiles',
+      price: 10,
+      specs: ['test_specs'],
+      brand: 'test_brand',
+      ram: '8GB'
+    };
+
+    test('Logged in admin user can add products', async () => {
+      const loginResponse = await api
+        .post('/api/authorization/login')
+        .send(adminUser);
+      const accessToken = loginResponse.body.payload.accessToken;
+
+      const productAddResponse = await api
+        .post('/api/products')
+        .send(productToAdd)
+        .set('Authorization', `Bearer ${accessToken}`);
+
+      assert200GetResponse(productAddResponse);
+      expect(productAddResponse.body).toHaveProperty('addedProduct');
+      assertValidProduct(productAddResponse.body.addedProduct);
+    });
+
+    test('Non-admin user cannot add products', async () => {
+      const loginResponse = await api
+        .post('/api/authorization/login')
+        .send(user);
+      const accessToken = loginResponse.body.payload.accessToken;
+
+      const productAddResponse = await api
+        .post('/api/products')
+        .send(productToAdd)
+        .set('Authorization', `Bearer ${accessToken}`);
+
+      assert400GetResponse(productAddResponse);
+      expect(productAddResponse.body).toStrictEqual({
+        Error: 'Only admin users can add products'
+      });
+    });
+  });
 });
 
 afterAll(async () => {

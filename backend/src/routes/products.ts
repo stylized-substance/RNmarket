@@ -41,14 +41,14 @@ router.get(
 // Add new product
 router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.verifiedToken.isadmin) {
-    res.status(400).json({ Error: 'Only admin users can add products' });
+    return res.status(400).json({ Error: 'Only admin users can add products' });
   }
   const newProduct: Product = toProduct(req.body);
   newProduct.id = uuidv4();
   const addedProduct: ProductModel = await ProductModel.create({
     ...newProduct
   });
-  res.json({ addedProduct });
+  return res.json({ addedProduct });
 });
 
 // Update existing product
@@ -72,6 +72,9 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
 
 // Delete product
 router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
+  if (!req.verifiedToken.isadmin) {
+    return res.status(400).json({ Error: 'Only admin users can add products' });
+  }
   const id: string = parseString(req.params.id);
   const product: ProductModel | null = await ProductModel.findByPk(
     id
@@ -79,9 +82,9 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
 
   if (product) {
     await product.destroy();
-    res.status(204).end();
+    return res.status(204).end();
   } else {
-    res.status(404).json({ Error: 'Product not found' });
+    return res.status(404).json({ Error: 'Product not found' });
   }
 });
 

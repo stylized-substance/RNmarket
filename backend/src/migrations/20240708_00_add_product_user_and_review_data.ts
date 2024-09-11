@@ -26,6 +26,17 @@ const migrateUp = async (queryInterface) => {
 
   userArray.push(adminUser);
 
+  // Add regular user for testing purposes
+  const testUser: User = {
+    id: uuidv4(),
+    username: 'test_user@example.org',
+    name: 'test_user',
+    passwordhash: await bcrypt.hash(password, saltRounds),
+    isadmin: false
+  };
+
+  userArray.push(testUser);
+
   // Loop thorugh products
   for (const product of products) {
     const typeCheckedProduct: Product = toProduct(product);

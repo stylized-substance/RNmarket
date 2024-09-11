@@ -191,6 +191,7 @@ const isProduct = (param: unknown): param is Product => {
     isString(param.title) &&
     'category' in param &&
     isString(param.category) &&
+    isProductCategory(param.category) &&
     'price' in param &&
     isNumber(param.price) &&
     'specs' in param &&
