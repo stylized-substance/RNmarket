@@ -201,17 +201,16 @@ describe('GET requests', () => {
       });
     });
 
-    // TODO: fix this test
-    test.skip('request fails if is lowestRating or highesRating is omitted', async () => {
+    test('request fails if lowestRating or highesRating is omitted', async () => {
       let response = await api.get('/api/products').query('lowestRating=1');
       assert400GetResponse(response);
-      expect(response).toStrictEqual({
+      expect(response.body).toStrictEqual({
         Error: 'Highest value in rating range query missing'
       });
 
       response = await api.get('/api/products').query('highestRating=5');
       assert400GetResponse(response);
-      expect(response).toStrictEqual({
+      expect(response.body).toStrictEqual({
         Error: 'Lowest value in rating range query missing'
       });
     });
