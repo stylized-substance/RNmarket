@@ -34,3 +34,4 @@
 | 05.09.2024 | 4 | Initialized test setup, changes to env variable handling, project structure and type guards | 82
 | 09.09.2024 | 1 | Fixed env variable handling. Started writing tests for products router | 83
 | 10.09.2024 | 4 | Wrote tests for products router | 87
+| 11.09.2024 | 3 | Wrote tests for products and reviews routers | 90
