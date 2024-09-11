@@ -9,10 +9,11 @@ import {
   assert200GetResponse,
   assert400GetResponse,
   assertValidProduct,
-  assertValidReview
+  assertValidReview,
+  getToken
 } from '#src/utils/testHelpers';
 import { ProductCategory, Product } from '#src/types/types';
-import { Product as ProductModel } from '#src/models';
+import { Product as ProductModel, Review } from '#src/models';
 
 const api = supertest(app);
 
@@ -21,6 +22,17 @@ beforeAll(async () => {
   await dropAllTables();
   await connectToDatabase();
 });
+
+// Test users for tests that perform a login to authorization  endpoint
+const adminUser = {
+  username: 'admin@example.org',
+  password: 'password'
+};
+
+const user = {
+  username: 'test_user@example.org',
+  password: 'password'
+};
 
 describe('GET requests', () => {
   test('GET /api/products returns all products from database', async () => {
@@ -250,16 +262,6 @@ describe('GET requests', () => {
 
 describe('POST requests', () => {
   describe('Adding products', () => {
-    const adminUser = {
-      username: 'admin@example.org',
-      password: 'password'
-    };
-
-    const user = {
-      username: 'test_user@example.org',
-      password: 'password'
-    };
-
     const productToAdd = {
       title: 'test_title',
       category: 'Mobiles',
@@ -270,10 +272,7 @@ describe('POST requests', () => {
     };
 
     test('Logged in admin user can add products', async () => {
-      const loginResponse = await api
-        .post('/api/authorization/login')
-        .send(adminUser);
-      const accessToken = loginResponse.body.payload.accessToken;
+      const accessToken = await getToken(adminUser);
 
       const productAddResponse = await api
         .post('/api/products')
@@ -286,10 +285,7 @@ describe('POST requests', () => {
     });
 
     test('Non-admin user cannot add products', async () => {
-      const loginResponse = await api
-        .post('/api/authorization/login')
-        .send(user);
-      const accessToken = loginResponse.body.payload.accessToken;
+      const accessToken = await getToken(user);
 
       const productAddResponse = await api
         .post('/api/products')
@@ -299,6 +295,101 @@ describe('POST requests', () => {
       assert400GetResponse(productAddResponse);
       expect(productAddResponse.body).toStrictEqual({
         Error: 'Only admin users can add products'
+      });
+    });
+  });
+
+  describe('PUT requests', () => {
+    test('Admin user can update products', async () => {
+      const accessToken = await getToken(adminUser);
+      const productToTestWith: ProductModel | null = await ProductModel.findOne(
+        {}
+      );
+      if (productToTestWith) {
+        const updatedProduct = {
+          ...productToTestWith.dataValues,
+          price: 1000
+        };
+        const id = productToTestWith?.dataValues.id;
+
+        const updateResponse = await api
+          .put(`/api/products/${id}`)
+          .send(updatedProduct)
+          .set('Authorization', `Bearer ${accessToken}`);
+        assert200GetResponse(updateResponse);
+        expect(updateResponse.body).toHaveProperty('saveResult');
+        assertValidProduct(updateResponse.body.saveResult);
+      }
+    });
+
+    test('Non-admin user cannot update products', async () => {
+      const accessToken = await getToken(user);
+      const productToTestWith: ProductModel | null = await ProductModel.findOne(
+        {}
+      );
+      if (productToTestWith) {
+        const updatedProduct = {
+          ...productToTestWith.dataValues,
+          price: 1000
+        };
+        const id = productToTestWith?.dataValues.id;
+
+        const updateResponse = await api
+          .put(`/api/products/${id}`)
+          .send(updatedProduct)
+          .set('Authorization', `Bearer ${accessToken}`);
+        assert400GetResponse(updateResponse);
+        expect(updateResponse.body).toStrictEqual({
+          Error: 'Only admin users can update products'
+        });
+      }
+    });
+    describe('DELETE requests', () => {
+      test('Admin user can delete products. Product reviews are automatically deleted', async () => {
+        const accessToken = await getToken(adminUser);
+        const productToTestWith: ProductModel | null =
+          await ProductModel.findOne({
+            include: {
+              model: Review
+            }
+          });
+
+        if (productToTestWith) {
+          const productId: string = productToTestWith.dataValues.id;
+
+          const deleteResponse = await api
+            .delete(`/api/products/${productId}`)
+            .set('Authorization', `Bearer ${accessToken}`);
+
+          // Check that product's reviews were deleted in addition to the product
+          const reviews: Review[] | [] = await Review.findAll({
+            where: {
+              product_id: productId
+            }
+          });
+
+          expect(deleteResponse.status).toBe(204);
+          expect(reviews).toHaveLength(0);
+        }
+      });
+
+      test('Non-admin user cannot delete products', async () => {
+        const accessToken = await getToken(user);
+        const productToTestWith: ProductModel | null =
+          await ProductModel.findOne({});
+
+        if (productToTestWith) {
+          const productId: string = productToTestWith.dataValues.id;
+
+          const deleteResponse = await api
+            .delete(`/api/products/${productId}`)
+            .set('Authorization', `Bearer ${accessToken}`);
+
+          assert400GetResponse(deleteResponse);
+          expect(deleteResponse.body).toStrictEqual({
+            Error: 'Only admin users can delete products'
+          });
+        }
       });
     });
   });

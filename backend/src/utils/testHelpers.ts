@@ -1,6 +1,9 @@
 import Response from 'superagent/lib/node/response';
 import { isReview, isProduct } from '#src/utils/typeNarrowers';
+import supertest from 'supertest';
+import app from '#src/app';
 
+const api = supertest(app);
 
 // Custom assert functions for JSON responses
 export const assert200GetResponse = (response: Response) => {
@@ -22,4 +25,14 @@ export const assertValidProduct = (product: unknown) => {
 export const assertValidReview = (review: unknown) => {
   const typeCheck = isReview(review);
   expect(typeCheck).toEqual(true);
-}
+};
+
+// Login user and return accessToken
+
+export const getToken = async (user: {
+  username: string;
+  password: string;
+}): Promise<string> => {
+  const loginResponse = await api.post('/api/authorization/login').send(user);
+  return loginResponse.body.payload.accessToken;
+};

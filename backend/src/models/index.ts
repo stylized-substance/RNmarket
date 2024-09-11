@@ -5,13 +5,22 @@ import RefreshToken from './refreshtoken';
 import Order from './order';
 import ProductOrder from './productorder';
 
-Product.hasMany(Review);
+Product.hasMany(Review, {
+  // Automatically delete reviews when product is deleted
+  onDelete: 'CASCADE'
+});
 Review.belongsTo(Product);
 
-User.hasMany(Review);
+User.hasMany(Review, {
+  // Automatically delete reviews when user is deleted
+  onDelete: 'CASCADE'
+});
 Review.belongsTo(User);
 
-User.hasMany(RefreshToken);
+User.hasMany(RefreshToken,  {
+  // Automatically delete refresh tokens when user is deleted
+  onDelete: 'CASCADE'
+});
 RefreshToken.belongsTo(User);
 
 Product.belongsToMany(Order, { through: ProductOrder} );

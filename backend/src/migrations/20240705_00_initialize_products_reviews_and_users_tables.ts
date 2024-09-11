@@ -140,12 +140,14 @@ module.exports = {
       product_id: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: { model: 'products', key: 'id' }
+        references: { model: 'products', key: 'id' },
+        onDelete: 'CASCADE'
       },
       user_id: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: { model: 'users', key: 'id' }
+        references: { model: 'users', key: 'id' },
+        onDelete: 'CASCADE'
       },
       name: {
         type: DataTypes.TEXT

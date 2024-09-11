@@ -20,7 +20,8 @@ module.exports = {
       user_id: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: { model: 'users', key: 'id' }
+        references: { model: 'users', key: 'id' },
+        onDelete: 'CASCADE'
       },
       created_at: {
         type: DataTypes.DATE,

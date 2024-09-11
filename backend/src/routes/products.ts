@@ -53,6 +53,9 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
 // Update existing product
 router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
+  if (!req.verifiedToken.isadmin) {
+    return res.status(400).json({ Error: 'Only admin users can update products' });
+  }
   const id: string = parseString(req.params.id);
   const product: ProductModel | null = await ProductModel.findByPk(id);
   const updatedProduct: Product = toProduct(req.body);
@@ -64,16 +67,16 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
     });
     await product.update(productWithUpdatedValues);
     const saveResult: ProductModel = await product.save();
-    res.json({ saveResult });
+    return res.json({ saveResult });
   } else {
-    res.status(404).json({ Error: 'Product not found' });
+    return res.status(404).json({ Error: 'Product not found' });
   }
 });
 
 // Delete product
 router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.verifiedToken.isadmin) {
-    return res.status(400).json({ Error: 'Only admin users can add products' });
+    return res.status(400).json({ Error: 'Only admin users can delete products' });
   }
   const id: string = parseString(req.params.id);
   const product: ProductModel | null = await ProductModel.findByPk(
