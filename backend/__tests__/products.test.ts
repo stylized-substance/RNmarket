@@ -12,6 +12,7 @@ import {
   assertValidReview
 } from '#src/utils/testHelpers';
 import { ProductCategory, Product } from '#src/types/types';
+import { Product as ProductModel } from '#src/models';
 
 const api = supertest(app);
 
@@ -30,6 +31,18 @@ describe('GET requests', () => {
     response.body.products.forEach((product: unknown) =>
       assertValidProduct(product)
     );
+  });
+
+  test('GET /api/products/:id returns single product', async () => {
+    const productToTestWith: ProductModel | null = await ProductModel.findOne(
+      {}
+    );
+    const id = productToTestWith?.dataValues.id;
+
+    const response = await api.get(`/api/products/${id}`);
+    assert200GetResponse(response);
+    expect(response.body).toHaveProperty('product');
+    assertValidProduct(response.body.product);
   });
 
   describe('With query parameters', () => {
@@ -233,6 +246,10 @@ describe('GET requests', () => {
       });
     });
   });
+});
+
+describe('POST requests', () => {
+  test('', () => {});
 });
 
 afterAll(async () => {
