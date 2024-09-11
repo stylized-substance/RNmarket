@@ -214,6 +214,24 @@ describe('GET requests', () => {
         Error: 'Lowest value in rating range query missing'
       });
     });
+
+    test('request fails with invalid rating range', async () => {
+      let response = await api
+        .get('/api/products')
+        .query('lowestRating=-1&highestRating=5');
+      assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Invalid lowest rating query'
+      });
+
+      response = await api
+        .get('/api/products')
+        .query('lowestRating=1&highestRating=6');
+      assert400GetResponse(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Invalid highest rating query'
+      });
+    });
   });
 });
 
