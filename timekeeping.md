@@ -35,3 +35,4 @@
 | 09.09.2024 | 1 | Fixed env variable handling. Started writing tests for products router | 83
 | 10.09.2024 | 4 | Wrote tests for products router | 87
 | 11.09.2024 | 3 | Wrote tests for products and reviews routers | 90
+| 14.09.2024 | 1 | Wrote tests for reviews router | 91
