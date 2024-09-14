@@ -7,6 +7,7 @@ import {
 } from '#src/utils/database';
 import {
   assert200GetResponse,
+  assert400GetResponse,
   assertValidReview
 } from '#src/utils/testHelpers';
 import { Review as ReviewModel } from '#src/models';
@@ -61,6 +62,13 @@ describe('GET requests', () => {
       );
     }
   });
+  test('Request fails without query parameters', async () => {
+    const response = await api.get('/api/reviews')
+    assert400GetResponse(response)
+    expect(response.body).toStrictEqual({
+      Error: 'Query parameter missing'
+    })
+  })
 });
 
 afterAll(async () => {
