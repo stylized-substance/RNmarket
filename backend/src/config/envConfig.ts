@@ -29,12 +29,17 @@ let envVariables: EnvVariables = {
     : ''
 };
 
-const allVariablesDefined: boolean = Object.values(envVariables).every(
-  (variable) =>
+const variableDefined = (variable: unknown): boolean => {
+  return (
     variable !== undefined &&
     variable !== 'NaN' &&
     variable !== '' &&
     variable !== 0
+  );
+};
+
+const allVariablesDefined: boolean = Object.values(envVariables).every(
+  (variable) => variableDefined(variable)
 );
 
 const reassign = (): EnvVariables => {
@@ -54,17 +59,18 @@ const reassign = (): EnvVariables => {
 
 // Use dotenv to set environment variables if they aren't already defined
 if (!allVariablesDefined) {
-  dotenv.config();
+  dotenv.config()
+  for (const variable of Object.keys(envVariables)) {
+    if (!variableDefined(process.env[variable])) {
+      console.log(
+        `Environment variable ${variable} missing, exiting. Are you missing an .env file at project root or did you forget to set some variable?`
+      );
+      process.exit();
+    }
+  }
   envVariables = reassign();
 }
 
 console.log('Environment variables:\n', envVariables);
-
-for (const [key, value] of Object.entries(envVariables)) {
-  if (value === 'undefined' || value === 'NaN' || value === '' || value === 0) {
-    console.log(`Environment variable ${key} missing, exiting.`);
-    process.exit();
-  }
-}
 
 export default envVariables;
