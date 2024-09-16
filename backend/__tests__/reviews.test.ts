@@ -22,7 +22,7 @@ beforeAll(async () => {
 });
 
 describe('GET requests', () => {
-  test('Request with query parameter user_id returns reviews for single user', async () => {
+  test('GET /api/reviews with query parameter user_id returns reviews for single user', async () => {
     // Get user that has at least one review
     const user: UserModel | null = await UserModel.findOne({
       include: [
@@ -42,7 +42,7 @@ describe('GET requests', () => {
       assertValidReview(review)
     );
   });
-  test('Request with query parameter product_id returns reviews for single product', async () => {
+  test('GET /api/reviews with query parameter product_id returns reviews for single product', async () => {
     // Get product that has at least one review
     const product: ProductModel | null = await ProductModel.findOne({
       include: {
@@ -62,7 +62,7 @@ describe('GET requests', () => {
       );
     }
   });
-  test('Request fails without query parameters', async () => {
+  test('GET /api/reviews fails without query parameters', async () => {
     const response = await api.get('/api/reviews')
     assert400GetResponse(response)
     expect(response.body).toStrictEqual({

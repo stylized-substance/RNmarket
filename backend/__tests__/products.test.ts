@@ -58,7 +58,7 @@ describe('GET requests', () => {
   });
 
   describe('With query parameters', () => {
-    test('limit=1 returns one product', async () => {
+    test('GET /api/products with query limit=1 returns one product', async () => {
       const response = await api.get('/api/products').query('limit=1');
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('products');
@@ -68,7 +68,7 @@ describe('GET requests', () => {
       );
     });
 
-    test('Request fails if value of limit is not a number', async () => {
+    test('GET /api/products fails if value of limit is not a number', async () => {
       const response = await api.get('/api/products').query('limit=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -76,7 +76,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('withReviews=true returns reviews with products', async () => {
+    test('GET /api/products with query withReviews=true returns reviews with products', async () => {
       const response = await api.get('/api/products').query('withReviews=true');
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('products');
@@ -87,7 +87,7 @@ describe('GET requests', () => {
       }
     });
 
-    test(`Request fails if value of withReviews is not 'true'`, async () => {
+    test(`GET /api/products fails if value of withReviews is not 'true'`, async () => {
       const response = await api.get('/api/products').query('withReviews=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -95,7 +95,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('All valid product categories return corresponding products', async () => {
+    test('GET /api/products - All valid product categories return corresponding products', async () => {
       for (const category of Object.keys(ProductCategory)) {
         const response = await api
           .get('/api/products')
@@ -109,7 +109,7 @@ describe('GET requests', () => {
       }
     });
 
-    test('Request fails when querying with invalid product category', async () => {
+    test('GET /api/products fails when querying with invalid product category', async () => {
       const response = await api.get('/api/products').query('category=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -118,7 +118,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Search returns relevant products', async () => {
+    test('GET /api/products - Search returns relevant products', async () => {
       const response = await api.get('/api/products').query('search=Apple');
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('products');
@@ -129,7 +129,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Request fails if search query is longer than 15 characters', async () => {
+    test('GET /api/products fails if search query is longer than 15 characters', async () => {
       const response = await api
         .get('/api/products')
         .query('search=searchquerylongerthanfifteen');
@@ -139,7 +139,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Querying with a valid price range returns relevant products', async () => {
+    test('GET /api/products - Querying with a valid price range returns relevant products', async () => {
       const lowestPrice = 10;
       const highestPrice = 50000;
 
@@ -155,7 +155,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Request fails with an invalid price range', async () => {
+    test('GET /api/products fails with an invalid price range', async () => {
       let lowestPrice = 10;
       let highestPrice = 10000000;
 
@@ -179,7 +179,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Request fails if lowestPrice or highestPrice is omitted', async () => {
+    test('GET /api/products fails if lowestPrice or highestPrice is omitted', async () => {
       let response = await api.get('/api/products').query('lowestPrice=10');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -192,7 +192,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('inStock=true returns products that are in stock', async () => {
+    test('GET /api/products with query inStock=true returns products that are in stock', async () => {
       const response = await api.get('/api/products').query('inStock=true');
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('products');
@@ -202,7 +202,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Request fails if value of inStock is not true', async () => {
+    test('GET /api/products fails if value of inStock is not true', async () => {
       const response = await api.get('/api/products').query('inStock=asd');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -210,7 +210,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Querying with a valid rating range returns relevant products', async () => {
+    test('GET /api/products - Querying with a valid rating range returns relevant products', async () => {
       const lowestRating = 1;
       const highestRating = 5;
 
@@ -226,7 +226,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Request fails if lowestRating or highesRating is omitted', async () => {
+    test('GET /api/products fails if lowestRating or highestRating is omitted', async () => {
       let response = await api.get('/api/products').query('lowestRating=1');
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
@@ -240,7 +240,7 @@ describe('GET requests', () => {
       });
     });
 
-    test('Request fails with invalid rating range', async () => {
+    test('GET /api/products fails with invalid rating range', async () => {
       let response = await api
         .get('/api/products')
         .query('lowestRating=-1&highestRating=5');
