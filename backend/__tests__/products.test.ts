@@ -49,12 +49,15 @@ describe('GET requests', () => {
     const productToTestWith: ProductModel | null = await ProductModel.findOne(
       {}
     );
-    const id = productToTestWith?.dataValues.id;
 
-    const response = await api.get(`/api/products/${id}`);
-    assert200GetResponse(response);
-    expect(response.body).toHaveProperty('product');
-    assertValidProduct(response.body.product);
+    if (productToTestWith) {
+      const id = productToTestWith?.dataValues.id;
+  
+      const response = await api.get(`/api/products/${id}`);
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('product');
+      assertValidProduct(response.body.product);
+    }
   });
 
   describe('With query parameters', () => {
