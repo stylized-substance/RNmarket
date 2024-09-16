@@ -1,15 +1,13 @@
 import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
 import envVariables from '#src/config/envConfig';
+import logger from '#src/utils/logger';
 
 const dbUrl = envVariables.DATABASE_URL;
 
-console.log('Database URL:', dbUrl);
+logger('Database URL:', dbUrl);
 
-//Disable Sequelize and Umzug logging while running tests
-const logging = process.env.NODE_ENV === 'test' ? false : console.log;
-
-const sequelize = new Sequelize(`${dbUrl}`, { logging });
+const sequelize = new Sequelize(`${dbUrl}`, { logging: msg => logger(msg) });
 
 
 const migrationConfig = {
@@ -25,11 +23,9 @@ const migrationConfig = {
 const runMigrations = async () => {
   const migrator = new Umzug(migrationConfig);
   const migrations = await migrator.up();
-  if (process.env.NODE_ENV !== 'test') {
-    console.log('Database migrations done', {
+    logger('Database migrations done', {
       files: migrations.map((migration) => migration.name)
     });
-  }
 };
 
 // Revert all migrations
@@ -40,7 +36,7 @@ const rollbackMigration = async () => {
 };
 
 const dropAllTables = async () => {
-  console.log('Dropping all DB tables');
+  logger('Dropping all DB tables');
   await sequelize.authenticate();
   await sequelize.drop();
 };
@@ -49,9 +45,9 @@ const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
     await runMigrations();
-    console.log('Connected to PostgreSQL');
+    logger('Connected to PostgreSQL');
   } catch (error) {
-    console.log('Failed to connect to PostgreSQL, error:', error);
+    logger('Failed to connect to PostgreSQL, error:', error);
   }
 
   return null;

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { parseString, parseNumber } from '#src/utils/typeNarrowers';
+import logger from '#src/utils/logger'
 
 interface EnvVariables {
   PORT: number;
@@ -62,7 +63,7 @@ if (!allVariablesDefined) {
   dotenv.config()
   for (const variable of Object.keys(envVariables)) {
     if (!variableDefined(process.env[variable])) {
-      console.log(
+      logger(
         `Environment variable ${variable} missing, exiting. Are you missing an .env file at project root or did you forget to set some variable?`
       );
       process.exit();
@@ -71,6 +72,6 @@ if (!allVariablesDefined) {
   envVariables = reassign();
 }
 
-console.log('Environment variables:\n', envVariables);
+logger('Environment variables:\n', envVariables);
 
 export default envVariables;
