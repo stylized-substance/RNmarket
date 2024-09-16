@@ -265,7 +265,7 @@ const isLaptop = (product: Product): product is Laptop => {
 
 const parseProductCategory = (param: unknown): ProductCategory => {
   if (!isString(param) || !isProductCategory(param)) {
-    throw new TypeNarrowingError('Invalid product category');
+    throw new TypeNarrowingError(`Invalid product category (${param})`);
   }
 
   return param;

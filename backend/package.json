@@ -10,7 +10,7 @@
     "start": "ts-node ./src/index.ts",
     "startprod": "node build/index.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --files ./src/index.ts",
-    "test": "NODE_ENV=test jest --watchAll",
+    "test": "NODE_ENV=test jest --watchAll --runInBand",
     "lint": "eslint .",
     "prettier": "prettier . '!./postgresql' --write",
     "tsc": "tsc"

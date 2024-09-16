@@ -3,7 +3,7 @@ import app from '#src/app';
 import {
   connectToDatabase,
   closeDatabaseConnection,
-  dropAllTables
+  dropAllTables,
 } from '#src/utils/database';
 import {
   assert200GetResponse,
@@ -21,6 +21,10 @@ beforeAll(async () => {
   // Empty database and run migrations
   await dropAllTables();
   await connectToDatabase();
+});
+
+afterAll(async () => {
+  await closeDatabaseConnection();
 });
 
 // Test users for tests that perform a login to authorization  endpoint
@@ -117,7 +121,7 @@ describe('GET requests', () => {
       assert400GetResponse(response);
       expect(response.body).toStrictEqual({
         'Error name': 'TypeNarrowingError',
-        'Error message': 'Invalid product category'
+        'Error message': 'Invalid product category (asd)'
       });
     });
 
@@ -398,6 +402,4 @@ describe('POST requests', () => {
   });
 });
 
-afterAll(async () => {
-  await closeDatabaseConnection();
-});
+

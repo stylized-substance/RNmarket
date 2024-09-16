@@ -3,7 +3,7 @@ import app from '#src/app';
 import {
   connectToDatabase,
   closeDatabaseConnection,
-  dropAllTables
+  dropAllTables,
 } from '#src/utils/database';
 import {
   assert200GetResponse,
@@ -19,6 +19,10 @@ beforeAll(async () => {
   // Empty database and run migrations
   await dropAllTables();
   await connectToDatabase();
+});
+
+afterAll(async () => {
+  await closeDatabaseConnection();
 });
 
 describe('GET requests', () => {
@@ -71,6 +75,3 @@ describe('GET requests', () => {
   })
 });
 
-afterAll(async () => {
-  await closeDatabaseConnection();
-});
