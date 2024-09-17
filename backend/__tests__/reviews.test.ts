@@ -143,6 +143,34 @@ describe('POST requests', () => {
       assertValidReview(response.body.addedReview);
     }
   });
+  test('POST - adding review fails if product is not found', async () => {
+    const review: Review = {
+      id: uuidv4(),
+      product_id: uuidv4(),
+      user_id: uuidv4(),
+      name: 'test_name',
+      title: 'test_title',
+      content: 'test_content',
+      rating: 1
+    };
+
+    const user = {
+      username: 'test_user@example.org',
+      password: 'password'
+    };
+
+    const accessToken: string = await getToken(user);
+
+    const response = await api
+      .post('/api/reviews')
+      .send(review)
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    assert400GetResponse(response)
+    expect(response.body).toStrictEqual({
+      Error: 'Product not found'
+    })
+  })
 });
 describe('PUT requests', () => {
   test('PUT - Logged in user can edit own review', async () => {
