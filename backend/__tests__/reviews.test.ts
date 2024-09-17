@@ -8,6 +8,7 @@ import {
 import {
   assert200GetResponse,
   assert400GetResponse,
+  assert404GetResponse,
   assertValidReview,
   getToken
 } from '#src/utils/testHelpers';
@@ -75,6 +76,39 @@ describe('GET requests', () => {
       Error: 'Query parameter missing'
     });
   });
+  test('GET /api/reviews with product_id query returns 404 if product has no reviews', async () => {
+    // Add a test product that has no reviews
+    const productToAdd = {
+      title: 'test_title',
+      category: 'Mobiles',
+      price: 10,
+      specs: ['test_specs'],
+      brand: 'test_brand',
+      ram: '8GB'
+    };
+
+    const adminUser = {
+      username: 'admin@example.org',
+      password: 'password'
+    };
+
+    const accessToken = await getToken(adminUser);
+
+    const productAddResponse = await api
+    .post('/api/products')
+    .send(productToAdd)
+    .set('Authorization', `Bearer ${accessToken}`);
+    
+    // Try to get product reviews
+    const response = await api
+      .get('/api/reviews')
+      .query(`product_id=${productAddResponse.body.addedProduct.id}`)
+
+    assert404GetResponse(response)
+    expect(response.body).toStrictEqual({
+      Error: 'No reviews found'
+    })
+  });
 });
 describe('POST requests', () => {
   test('Logged in user can add a review', async () => {
@@ -129,14 +163,14 @@ describe('PUT requests', () => {
         content: 'test_content',
         rating: 1
       };
-      
+
       const accessToken: string = await getToken(user);
-      
+
       const reviewAddResponse = await api
-      .post('/api/reviews/')
-      .send(review)
-      .set('Authorization', `Bearer ${accessToken}`);
-      
+        .post('/api/reviews/')
+        .send(review)
+        .set('Authorization', `Bearer ${accessToken}`);
+
       // Try to edit the review
       if (reviewAddResponse.body.addedReview) {
         const review = reviewAddResponse.body.addedReview;
