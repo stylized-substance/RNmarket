@@ -11,6 +11,7 @@ import {
   assertValidReview,
   getToken
 } from '#src/utils/testHelpers';
+import { Review, NewReview } from '#src/types/types';
 import { Review as ReviewModel } from '#src/models';
 import { User as UserModel, Product as ProductModel } from '#src/models';
 
@@ -88,23 +89,72 @@ describe('POST requests', () => {
     );
 
     if (productToTestWith) {
-      const review = {
+      const review: NewReview = {
         product_id: productToTestWith.dataValues.id,
         title: 'test_title',
         content: 'test_content',
         rating: 1
       };
 
-      const accessToken = await getToken(user);
+      const accessToken: string = await getToken(user);
 
-      const reviewAddResponse = await api
+      const response = await api
         .post('/api/reviews/')
         .send(review)
         .set('Authorization', `Bearer ${accessToken}`);
 
-      assert200GetResponse(reviewAddResponse);
-      expect(reviewAddResponse.body).toHaveProperty('addedReview');
-      assertValidReview(reviewAddResponse.body.addedReview);
+      assert200GetResponse(response);
+      expect(response.body).toHaveProperty('addedReview');
+      assertValidReview(response.body.addedReview);
+    }
+  });
+});
+describe('PUT requests', () => {
+  test('Logged in user can edit own review', async () => {
+    // Save a review and try to edit it
+    const user = {
+      username: 'test_user@example.org',
+      password: 'password'
+    };
+
+    // Get valid product to add review to
+    const productToTestWith: ProductModel | null = await ProductModel.findOne(
+      {}
+    );
+
+    if (productToTestWith) {
+      const review: NewReview = {
+        product_id: productToTestWith.dataValues.id,
+        title: 'test_title',
+        content: 'test_content',
+        rating: 1
+      };
+      
+      const accessToken: string = await getToken(user);
+      
+      const reviewAddResponse = await api
+      .post('/api/reviews/')
+      .send(review)
+      .set('Authorization', `Bearer ${accessToken}`);
+      
+      // Try to edit the review
+      if (reviewAddResponse.body.addedReview) {
+        const review = reviewAddResponse.body.addedReview;
+
+        const editedReview: Review = {
+          ...review,
+          content: 'new_test_content'
+        };
+
+        const reviewEditResponse = await api
+          .put(`/api/reviews/${review.id}`)
+          .send(editedReview)
+          .set('Authorization', `Bearer ${accessToken}`);
+
+        assert200GetResponse(reviewEditResponse);
+        expect(reviewEditResponse.body).toHaveProperty('saveResult');
+        assertValidReview(reviewEditResponse.body.saveResult);
+      }
     }
   });
 });

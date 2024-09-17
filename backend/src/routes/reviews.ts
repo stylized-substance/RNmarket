@@ -72,13 +72,14 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
     name: req.verifiedToken.name
   };
 
-  const addedReview = await ReviewModel.create({
+  const addedReview: ReviewModel = await ReviewModel.create({
     ...reviewWithIds
   });
 
   return res.json({ addedReview });
 });
 
+// Edit a review
 router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const id: string = parseString(req.params.id);
   const review: ReviewModel | null = await ReviewModel.findByPk(id);
