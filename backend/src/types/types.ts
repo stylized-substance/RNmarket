@@ -13,15 +13,15 @@ export type RefreshToken = {
 export interface NewOrder {
   products: {
     id: string;
-    quantity: number
-  }[]
+    quantity: number;
+  }[];
   name: string;
   address: string;
 }
 
 export type OrderInDb = Omit<NewOrder, 'products'> & {
   id: string;
-}
+};
 
 // Types for reviews, products and users
 export type Review = {

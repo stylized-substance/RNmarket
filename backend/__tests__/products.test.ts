@@ -3,7 +3,7 @@ import app from '#src/app';
 import {
   connectToDatabase,
   closeDatabaseConnection,
-  dropAllTables,
+  dropAllTables
 } from '#src/utils/database';
 import {
   assert200GetResponse,
@@ -56,7 +56,7 @@ describe('GET requests', () => {
 
     if (productToTestWith) {
       const id = productToTestWith?.dataValues.id;
-  
+
       const response = await api.get(`/api/products/${id}`);
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('product');
@@ -401,5 +401,3 @@ describe('POST requests', () => {
     });
   });
 });
-
-

@@ -7,8 +7,7 @@ const dbUrl = envVariables.DATABASE_URL;
 
 logger('Database URL:', dbUrl);
 
-const sequelize = new Sequelize(`${dbUrl}`, { logging: msg => logger(msg) });
-
+const sequelize = new Sequelize(`${dbUrl}`, { logging: (msg) => logger(msg) });
 
 const migrationConfig = {
   migrations: {
@@ -23,16 +22,16 @@ const migrationConfig = {
 const runMigrations = async () => {
   const migrator = new Umzug(migrationConfig);
   const migrations = await migrator.up();
-    logger('Database migrations done', {
-      files: migrations.map((migration) => migration.name)
-    });
+  logger('Database migrations done', {
+    files: migrations.map((migration) => migration.name)
+  });
 };
 
 // Revert all migrations
 const rollbackMigration = async () => {
   await sequelize.authenticate();
   const migrator = new Umzug(migrationConfig);
-  await migrator.down({ to: 0});
+  await migrator.down({ to: 0 });
 };
 
 const dropAllTables = async () => {

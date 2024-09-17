@@ -33,11 +33,9 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   // Senf error if quantity of any product is '0'
   for (const product of newOrder.products) {
     if (product.quantity < 1) {
-      return res
-        .status(400)
-        .json({
-          Error: `You're trying to order product ${product.id} with quantity '0', order failed`
-        });
+      return res.status(400).json({
+        Error: `You're trying to order product ${product.id} with quantity '0', order failed`
+      });
     }
   }
 
@@ -117,12 +115,14 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 // Delete order
 router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.verifiedToken.isadmin) {
-    return res.status(400).json({ Error: 'Only admin users can delete orders' });
+    return res
+      .status(400)
+      .json({ Error: 'Only admin users can delete orders' });
   }
-  
+
   // Find order in database
   const id: string = parseString(req.params.id);
-  const order: OrderModel | null = await OrderModel.findByPk(id)
+  const order: OrderModel | null = await OrderModel.findByPk(id);
 
   // If order was found, remove product-order associations from junction table and finally the order from orders table
   if (!order) {
@@ -130,9 +130,9 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   }
 
   // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
-  await order.setProducts([])
+  await order.setProducts([]);
   await order.destroy();
   return res.status(204).end();
-})
+});
 
 export default router;

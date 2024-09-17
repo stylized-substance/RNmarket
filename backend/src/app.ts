@@ -5,7 +5,7 @@ import productsRouter from '#src/routes/products';
 import usersRouter from '#src/routes/users';
 import reviewsRouter from '#src/routes/reviews';
 import authorizationRouter from '#src/routes/authorization';
-import ordersRouter from '#src/routes/orders'
+import ordersRouter from '#src/routes/orders';
 import errorHandler from './utils/errorHandler';
 
 const app = express();
@@ -26,4 +26,4 @@ app.use('/api/orders', ordersRouter);
 
 app.use(errorHandler);
 
-export default app
+export default app;

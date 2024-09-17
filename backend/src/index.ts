@@ -1,9 +1,9 @@
 import app from './app';
 import { connectToDatabase } from '#src/utils/database';
 import envVariables from '#src/config/envConfig';
-import logger from '#src/utils/logger'
+import logger from '#src/utils/logger';
 
-const listeningPort = envVariables.PORT
+const listeningPort = envVariables.PORT;
 
 const start = async () => {
   await connectToDatabase();

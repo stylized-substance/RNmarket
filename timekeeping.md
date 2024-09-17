@@ -37,3 +37,4 @@
 | 11.09.2024 | 3 | Wrote tests for products and reviews routers | 90
 | 14.09.2024 | 1 | Wrote tests for reviews router | 91
 | 16.09.2024 | 2 | Fixed broken test environment, implemented custom looger function | 93
+| 17.09.2024 | 2 | Wrote tests for reviews router | 95

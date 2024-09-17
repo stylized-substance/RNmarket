@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { TypeNarrowingError } from './typeNarrowers';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import logger from '#src/utils/logger'
+import logger from '#src/utils/logger';
 
 const errorHandler = (
   error: unknown,

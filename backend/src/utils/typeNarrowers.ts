@@ -40,7 +40,7 @@ const parseString = (param: unknown): string => {
 };
 
 const isNumber = (param: unknown): param is number => {
-  return !(!param) && !isNaN(Number(param));
+  return !!param && !isNaN(Number(param));
 };
 
 const parseNumber = (param: unknown): number => {
@@ -49,7 +49,7 @@ const parseNumber = (param: unknown): number => {
   }
 
   return param;
-}
+};
 
 const isObject = (param: unknown): param is object => {
   return param !== null && typeof param === 'object';
@@ -71,14 +71,14 @@ const isNewOrder = (param: unknown): param is NewOrder => {
         isString(product.id) &&
         'quantity' in product &&
         isNumber(product.quantity)
-      )
+      );
     }) &&
     'name' in param &&
     isString(param.name) &&
     'address' in param &&
     isString(param.address)
-  )
-}
+  );
+};
 
 const isUser = (param: unknown): param is User => {
   return (
@@ -114,7 +114,7 @@ const toNewOrder = (param: unknown): NewOrder => {
   }
 
   return param;
-}
+};
 
 const toNewUser = (param: unknown): NewUser => {
   if (!isNewUser(param)) {

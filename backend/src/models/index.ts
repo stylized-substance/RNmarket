@@ -17,13 +17,13 @@ User.hasMany(Review, {
 });
 Review.belongsTo(User);
 
-User.hasMany(RefreshToken,  {
+User.hasMany(RefreshToken, {
   // Automatically delete refresh tokens when user is deleted
   onDelete: 'CASCADE'
 });
 RefreshToken.belongsTo(User);
 
-Product.belongsToMany(Order, { through: ProductOrder} );
+Product.belongsToMany(Order, { through: ProductOrder });
 Order.belongsToMany(Product, { through: ProductOrder });
 
 export { Product, Review, User, RefreshToken, Order };

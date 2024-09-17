@@ -102,7 +102,7 @@ const config = {
 
   // A preset that is used as a base for Jest's configuration
   // preset: undefined,
-  preset: "ts-jest",
+  preset: 'ts-jest',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -190,7 +190,7 @@ const config = {
   // verbose: undefined,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
-  watchPathIgnorePatterns: ['<rootDir>/postgresql'],
+  watchPathIgnorePatterns: ['<rootDir>/postgresql']
 
   // Whether to use watchman for file crawling
   // watchman: true,

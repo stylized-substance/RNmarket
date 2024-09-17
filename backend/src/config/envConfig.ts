@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { parseString, parseNumber } from '#src/utils/typeNarrowers';
-import logger from '#src/utils/logger'
+import logger from '#src/utils/logger';
 
 interface EnvVariables {
   PORT: number;
@@ -60,7 +60,7 @@ const reassign = (): EnvVariables => {
 
 // Use dotenv to set environment variables if they aren't already defined
 if (!allVariablesDefined) {
-  dotenv.config()
+  dotenv.config();
   for (const variable of Object.keys(envVariables)) {
     if (!variableDefined(process.env[variable])) {
       logger(

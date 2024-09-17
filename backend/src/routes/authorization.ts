@@ -11,8 +11,8 @@ import { v4 as uuidv4 } from 'uuid';
 const router: Router = Router();
 
 // Import JWT secrets from config file
-const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET
-const jwtRefreshTokenSecret = envVariables.JWTREFRESHTOKENSECRET
+const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET;
+const jwtRefreshTokenSecret = envVariables.JWTREFRESHTOKENSECRET;
 
 // Interface for payload to send to client when logging in
 interface Payload {

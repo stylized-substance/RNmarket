@@ -17,9 +17,9 @@ export const assert400GetResponse = (response: Response) => {
 };
 
 export const assert404GetResponse = (response: Response) => {
-  expect(response.status).toBe(404)
+  expect(response.status).toBe(404);
   expect(response.headers['content-type']).toMatch(/application\/json/);
-}
+};
 
 // Custom assert functions for type checking products and reviews
 export const assertValidProduct = (product: unknown) => {

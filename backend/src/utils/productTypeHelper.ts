@@ -51,4 +51,4 @@ const findProductsByProperty = (property: string, include: boolean) => {
   return result;
 };
 
-export { findProductsByProperty }
+export { findProductsByProperty };

@@ -166,11 +166,11 @@ describe('POST requests', () => {
       .send(review)
       .set('Authorization', `Bearer ${accessToken}`);
 
-    assert400GetResponse(response)
+    assert400GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'Product not found'
-    })
-  })
+    });
+  });
 });
 describe('PUT requests', () => {
   test('PUT - Logged in user can edit own review', async () => {
@@ -246,9 +246,42 @@ describe('PUT requests', () => {
       .send(review)
       .set('Authorization', `Bearer ${accessToken}`);
 
-    assert404GetResponse(response)
+    assert404GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'Review not found in database'
-    })
+    });
+  });
+});
+describe('DELETE requests', () => {
+  test('DELETE - logged in user can delete own reviews', async () => {
+    const user = {
+      username: 'test_user@example.org',
+      password: 'password'
+    };
+
+    // Get valid product to add review to
+    const productToTestWith: ProductModel | null = await ProductModel.findOne(
+      {}
+    );
+
+    const review: NewReview = {
+      product_id: productToTestWith?.dataValues.id,
+      title: 'test_title',
+      content: 'test_content',
+      rating: 1
+    };
+
+    const accessToken: string = await getToken(user);
+
+    const addResponse = await api
+      .post('/api/reviews/')
+      .send(review)
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    const deleteResponse = await api
+      .delete(`/api/reviews/${addResponse.body.addedReview.id}`)
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    expect(deleteResponse.status).toBe(204);
   });
 });
