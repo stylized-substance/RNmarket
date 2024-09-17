@@ -15,6 +15,7 @@ import {
 import { Review, NewReview } from '#src/types/types';
 import { Review as ReviewModel } from '#src/models';
 import { User as UserModel, Product as ProductModel } from '#src/models';
+import { v4 as uuidv4 } from 'uuid';
 
 const api = supertest(app);
 
@@ -76,7 +77,7 @@ describe('GET requests', () => {
       Error: 'Query parameter missing'
     });
   });
-  test('GET /api/reviews with product_id query returns 404 if product has no reviews', async () => {
+  test('GET /api/reviews with product_id query fails if product has no reviews', async () => {
     // Add a test product that has no reviews
     const productToAdd = {
       title: 'test_title',
@@ -95,23 +96,23 @@ describe('GET requests', () => {
     const accessToken = await getToken(adminUser);
 
     const productAddResponse = await api
-    .post('/api/products')
-    .send(productToAdd)
-    .set('Authorization', `Bearer ${accessToken}`);
-    
+      .post('/api/products')
+      .send(productToAdd)
+      .set('Authorization', `Bearer ${accessToken}`);
+
     // Try to get product reviews
     const response = await api
       .get('/api/reviews')
-      .query(`product_id=${productAddResponse.body.addedProduct.id}`)
+      .query(`product_id=${productAddResponse.body.addedProduct.id}`);
 
-    assert404GetResponse(response)
+    assert404GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'No reviews found'
-    })
+    });
   });
 });
 describe('POST requests', () => {
-  test('Logged in user can add a review', async () => {
+  test('POST - Logged in user can add a review', async () => {
     const user = {
       username: 'test_user@example.org',
       password: 'password'
@@ -144,7 +145,7 @@ describe('POST requests', () => {
   });
 });
 describe('PUT requests', () => {
-  test('Logged in user can edit own review', async () => {
+  test('PUT - Logged in user can edit own review', async () => {
     // Save a review and try to edit it
     const user = {
       username: 'test_user@example.org',
@@ -190,5 +191,36 @@ describe('PUT requests', () => {
         assertValidReview(reviewEditResponse.body.saveResult);
       }
     }
+  });
+  test('PUT - Editing review fails if review is not found in database', async () => {
+    const fakeId: string = uuidv4();
+
+    const productToTestWith: ProductModel | null = await ProductModel.findOne(
+      {}
+    );
+
+    const review: NewReview = {
+      product_id: productToTestWith?.dataValues.id,
+      title: 'test_title',
+      content: 'test_content',
+      rating: 1
+    };
+
+    const user = {
+      username: 'test_user@example.org',
+      password: 'password'
+    };
+
+    const accessToken: string = await getToken(user);
+
+    const response = await api
+      .put(`/api/reviews/${fakeId}`)
+      .send(review)
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    assert404GetResponse(response)
+    expect(response.body).toStrictEqual({
+      Error: 'Review not found in database'
+    })
   });
 });
