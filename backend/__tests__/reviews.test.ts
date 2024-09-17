@@ -3,12 +3,13 @@ import app from '#src/app';
 import {
   connectToDatabase,
   closeDatabaseConnection,
-  dropAllTables,
+  dropAllTables
 } from '#src/utils/database';
 import {
   assert200GetResponse,
   assert400GetResponse,
-  assertValidReview
+  assertValidReview,
+  getToken
 } from '#src/utils/testHelpers';
 import { Review as ReviewModel } from '#src/models';
 import { User as UserModel, Product as ProductModel } from '#src/models';
@@ -67,11 +68,43 @@ describe('GET requests', () => {
     }
   });
   test('GET /api/reviews fails without query parameters', async () => {
-    const response = await api.get('/api/reviews')
-    assert400GetResponse(response)
+    const response = await api.get('/api/reviews');
+    assert400GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'Query parameter missing'
-    })
-  })
+    });
+  });
 });
+describe('POST requests', () => {
+  test('Logged in user can add a review', async () => {
+    const user = {
+      username: 'test_user@example.org',
+      password: 'password'
+    };
 
+    // Get valid product to add review to
+    const productToTestWith: ProductModel | null = await ProductModel.findOne(
+      {}
+    );
+
+    if (productToTestWith) {
+      const review = {
+        product_id: productToTestWith.dataValues.id,
+        title: 'test_title',
+        content: 'test_content',
+        rating: 1
+      };
+
+      const accessToken = await getToken(user);
+
+      const reviewAddResponse = await api
+        .post('/api/reviews/')
+        .send(review)
+        .set('Authorization', `Bearer ${accessToken}`);
+
+      assert200GetResponse(reviewAddResponse);
+      expect(reviewAddResponse.body).toHaveProperty('addedReview');
+      assertValidReview(reviewAddResponse.body.addedReview);
+    }
+  });
+});
