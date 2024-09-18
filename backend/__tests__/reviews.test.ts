@@ -19,10 +19,28 @@ import { v4 as uuidv4 } from 'uuid';
 
 const api = supertest(app);
 
+// Declare variables for access tokens
+let userAccessToken: string
+let adminAccessToken: string
+
 beforeAll(async () => {
   // Empty database and run migrations
   await dropAllTables();
   await connectToDatabase();
+
+  // Define regular and admin users and get access tokens for them
+  const user = {
+    username: 'test_user@example.org',
+    password: 'password'
+  };
+  const adminUser = {
+    username: 'admin@example.org',
+    password: 'password'
+  };
+
+  // Assign access tokens to global variables
+  userAccessToken = await getToken(user);
+  adminAccessToken = await getToken(adminUser);
 });
 
 afterAll(async () => {
@@ -88,17 +106,10 @@ describe('GET requests', () => {
       ram: '8GB'
     };
 
-    const adminUser = {
-      username: 'admin@example.org',
-      password: 'password'
-    };
-
-    const accessToken = await getToken(adminUser);
-
     const productAddResponse = await api
       .post('/api/products')
       .send(productToAdd)
-      .set('Authorization', `Bearer ${accessToken}`);
+      .set('Authorization', `Bearer ${adminAccessToken}`);
 
     // Try to get product reviews
     const response = await api
@@ -113,11 +124,6 @@ describe('GET requests', () => {
 });
 describe('POST requests', () => {
   test('POST - Logged in user can add a review', async () => {
-    const user = {
-      username: 'test_user@example.org',
-      password: 'password'
-    };
-
     // Get valid product to add review to
     const productToTestWith: ProductModel | null = await ProductModel.findOne(
       {}
@@ -131,12 +137,10 @@ describe('POST requests', () => {
         rating: 1
       };
 
-      const accessToken: string = await getToken(user);
-
       const response = await api
         .post('/api/reviews/')
         .send(review)
-        .set('Authorization', `Bearer ${accessToken}`);
+        .set('Authorization', `Bearer ${userAccessToken}`);
 
       assert200GetResponse(response);
       expect(response.body).toHaveProperty('addedReview');
@@ -154,17 +158,10 @@ describe('POST requests', () => {
       rating: 1
     };
 
-    const user = {
-      username: 'test_user@example.org',
-      password: 'password'
-    };
-
-    const accessToken: string = await getToken(user);
-
     const response = await api
       .post('/api/reviews')
       .send(review)
-      .set('Authorization', `Bearer ${accessToken}`);
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     assert400GetResponse(response);
     expect(response.body).toStrictEqual({
@@ -174,17 +171,12 @@ describe('POST requests', () => {
 });
 describe('PUT requests', () => {
   test('PUT - Logged in user can edit own review', async () => {
-    // Save a review and try to edit it
-    const user = {
-      username: 'test_user@example.org',
-      password: 'password'
-    };
-
     // Get valid product to add review to
     const productToTestWith: ProductModel | null = await ProductModel.findOne(
       {}
     );
-
+    
+    // Save a review and try to edit it
     if (productToTestWith) {
       const review: NewReview = {
         product_id: productToTestWith.dataValues.id,
@@ -192,13 +184,11 @@ describe('PUT requests', () => {
         content: 'test_content',
         rating: 1
       };
-
-      const accessToken: string = await getToken(user);
-
+      
       const reviewAddResponse = await api
         .post('/api/reviews/')
         .send(review)
-        .set('Authorization', `Bearer ${accessToken}`);
+        .set('Authorization', `Bearer ${userAccessToken}`);
 
       // Try to edit the review
       if (reviewAddResponse.body.addedReview) {
@@ -212,7 +202,7 @@ describe('PUT requests', () => {
         const reviewEditResponse = await api
           .put(`/api/reviews/${review.id}`)
           .send(editedReview)
-          .set('Authorization', `Bearer ${accessToken}`);
+          .set('Authorization', `Bearer ${userAccessToken}`);
 
         assert200GetResponse(reviewEditResponse);
         expect(reviewEditResponse.body).toHaveProperty('saveResult');
@@ -221,30 +211,12 @@ describe('PUT requests', () => {
     }
   });
   test('PUT - Editing review fails if review is not found in database', async () => {
+    // Create UUID that doesn't exist in database
     const fakeId: string = uuidv4();
-
-    const productToTestWith: ProductModel | null = await ProductModel.findOne(
-      {}
-    );
-
-    const review: NewReview = {
-      product_id: productToTestWith?.dataValues.id,
-      title: 'test_title',
-      content: 'test_content',
-      rating: 1
-    };
-
-    const user = {
-      username: 'test_user@example.org',
-      password: 'password'
-    };
-
-    const accessToken: string = await getToken(user);
 
     const response = await api
       .put(`/api/reviews/${fakeId}`)
-      .send(review)
-      .set('Authorization', `Bearer ${accessToken}`);
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     assert404GetResponse(response);
     expect(response.body).toStrictEqual({
@@ -254,11 +226,6 @@ describe('PUT requests', () => {
 });
 describe('DELETE requests', () => {
   test('DELETE - logged in user can delete own reviews', async () => {
-    const user = {
-      username: 'test_user@example.org',
-      password: 'password'
-    };
-
     // Get valid product to add review to
     const productToTestWith: ProductModel | null = await ProductModel.findOne(
       {}
@@ -271,16 +238,14 @@ describe('DELETE requests', () => {
       rating: 1
     };
 
-    const accessToken: string = await getToken(user);
-
     const addResponse = await api
       .post('/api/reviews/')
       .send(review)
-      .set('Authorization', `Bearer ${accessToken}`);
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     const deleteResponse = await api
       .delete(`/api/reviews/${addResponse.body.addedReview.id}`)
-      .set('Authorization', `Bearer ${accessToken}`);
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(deleteResponse.status).toBe(204);
   });
