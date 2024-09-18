@@ -90,7 +90,7 @@ const isUser = (param: unknown): param is User => {
     'name' in param &&
     isString(param.name) &&
     'isadmin' in param &&
-    isBoolean(param)
+    isBoolean(param.isadmin)
   );
 };
 

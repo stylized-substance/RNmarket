@@ -8,7 +8,7 @@ const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET;
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
   // Skip checking for access token if adding non-admin user to database
-  if (req.originalUrl === '/api/users/' && req.body.isadmin === false) {
+  if (req.originalUrl === '/api/users' && req.body.isadmin === false) {
     next();
     return;
   }

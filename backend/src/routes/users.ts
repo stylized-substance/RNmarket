@@ -9,13 +9,21 @@ import { v4 as uuidv4 } from 'uuid';
 const router: Router = Router();
 
 // Get users
-router.get('/', async (_req: Request, res: Response) => {
+router.get('/', tokenExtractor, async (req: Request, res: Response) => {
+  // Allow only admin users to get users
+  if (req.verifiedToken.isadmin === false) {
+    return res
+      .status(403)
+      .json({ Error: 'Only admin users can get users' });
+  }
+
   const users: UserModel[] | [] = await UserModel.findAll({
     attributes: {
       exclude: ['passwordhash']
     }
   });
-  res.json({ users });
+
+  return res.json({ users });
 });
 
 // Add user
@@ -46,7 +54,6 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
   const id: string = parseString(req.params.id);
   const user: UserModel | null = await UserModel.findByPk(id);
-
   if (user) {
     // Convert database response data to JSON
     const userJSON = user.toJSON();

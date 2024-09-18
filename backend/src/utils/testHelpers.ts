@@ -1,5 +1,5 @@
 import Response from 'superagent/lib/node/response';
-import { isReview, isProduct } from '#src/utils/typeNarrowers';
+import { isReview, isProduct, isUser } from '#src/utils/typeNarrowers';
 import supertest from 'supertest';
 import app from '#src/app';
 
@@ -16,6 +16,12 @@ export const assert400GetResponse = (response: Response) => {
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
+export const assert403GetResponse = (response: Response) => {
+  expect(response.status).toBe(403);
+  expect(response.headers['content-type']).toMatch(/application\/json/);
+};
+
+
 export const assert404GetResponse = (response: Response) => {
   expect(response.status).toBe(404);
   expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -31,6 +37,12 @@ export const assertValidReview = (review: unknown) => {
   const typeCheck = isReview(review);
   expect(typeCheck).toEqual(true);
 };
+
+export const assertValidUser = (user: unknown) => {
+  const typeCheck = isUser(user);
+  expect(typeCheck).toEqual(true);
+};
+
 
 // Login user and return accessToken
 
