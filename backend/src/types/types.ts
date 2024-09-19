@@ -3,6 +3,15 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never;
 
+export interface LoginPayload {
+  username: string;
+  name: string;
+  id: string;
+  isadmin: boolean;
+  accessToken: string;
+  refreshToken: string;
+}
+
 export type RefreshToken = {
   id: string;
   token: string;

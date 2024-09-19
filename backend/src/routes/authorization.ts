@@ -4,18 +4,12 @@ import { User as UserModel } from '#src/models';
 import { RefreshToken as RefreshTokenModel } from '#src/models';
 import { parseString } from '#src/utils/typeNarrowers';
 import createJWTTokens from '#src/utils/createJWTTokens';
+import { LoginPayload } from '#src/types/types'
 
 const router: Router = Router();
 
 // Interface for payload to send to client when logging in
-interface Payload {
-  username: string;
-  name: string;
-  id: string;
-  isadmin: boolean;
-  accessToken: string;
-  refreshToken: string;
-}
+
 
 // Login user
 router.post('/login', async (req: Request, res: Response) => {
@@ -68,7 +62,7 @@ router.post('/login', async (req: Request, res: Response) => {
   await RefreshTokenModel.create(refreshTokenObject);
 
   // Create response payload to send to client
-  const payload: Payload = {
+  const payload: LoginPayload = {
     username: user.dataValues.username,
     name: user.dataValues.name,
     id: user.dataValues.id,

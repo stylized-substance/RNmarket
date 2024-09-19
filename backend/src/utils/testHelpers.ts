@@ -1,5 +1,5 @@
 import Response from 'superagent/lib/node/response';
-import { isReview, isProduct, isUser } from '#src/utils/typeNarrowers';
+import { isReview, isProduct, isUser, isLoginPayload } from '#src/utils/typeNarrowers';
 import supertest from 'supertest';
 import app from '#src/app';
 
@@ -42,6 +42,11 @@ export const assertValidUser = (user: unknown) => {
   const typeCheck = isUser(user);
   expect(typeCheck).toEqual(true);
 };
+
+export const assertValidLoginPayload = (payload: unknown) => {
+  const typeCheck = isLoginPayload(payload)
+  expect(typeCheck).toEqual(true)
+}
 
 
 // Login user and return accessToken

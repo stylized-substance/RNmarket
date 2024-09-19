@@ -1,4 +1,5 @@
 import {
+  LoginPayload,
   NewOrder,
   User,
   NewUser,
@@ -58,6 +59,24 @@ const isObject = (param: unknown): param is object => {
 const isStringArray = (param: unknown): param is string[] => {
   return Array.isArray(param) && param.every((item) => isString(item));
 };
+
+const isLoginPayload = (param: unknown): param is LoginPayload => {
+  return (
+    isObject(param) &&
+    'username' in param &&
+    isString(param.username) &&
+    'name' in param &&
+    isString(param.name) &&
+    'id' in param &&
+    isString(param.id) &&
+    'isadmin' in param &&
+    isBoolean(param.isadmin) &&
+    'accessToken' in param &&
+    isString(param.accessToken) &&
+    'refreshToken' in param &&
+    isString(param.refreshToken)
+  )
+}
 
 const isNewOrder = (param: unknown): param is NewOrder => {
   return (
@@ -333,6 +352,7 @@ export {
   parseString,
   isNumber,
   parseNumber,
+  isLoginPayload,
   toNewOrder,
   isReview,
   toNewReview,
