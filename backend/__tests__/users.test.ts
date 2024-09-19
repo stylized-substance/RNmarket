@@ -157,7 +157,7 @@ describe('PUT requests', () => {
   });
 });
 describe('DELETE requests', () => {
-  test('Admin users can delete other users', async () => {
+  test('DELETE - Admin users can delete other users', async () => {
     // Find test user in database
     const userInDb: UserModel | null = await UserModel.findOne({
       where: {
@@ -171,7 +171,7 @@ describe('DELETE requests', () => {
 
     expect(response.status).toBe(204);
   });
-  test.only('Regular user cannot delete other users', async () => {
+  test('DELETE - Regular user cannot delete other users', async () => {
     // Find user in database other than the test user
     const userInDb: UserModel | null = await UserModel.findOne({
       where: {
@@ -188,6 +188,19 @@ describe('DELETE requests', () => {
     assert403GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'Only admin users can delete users'
+    });
+  });
+  test(`DELETE - Trying to delete non-existent user returns 404`, async () => {
+    // Create UUID that doesn't exist in database
+    const fakeId: string = uuidv4();
+
+    const response = await api
+      .delete(`/api/users/${fakeId}`)
+      .set('Authorization', `Bearer ${adminAccessToken}`);
+
+    assert404GetResponse(response);
+    expect(response.body).toStrictEqual({
+      Error: 'User not found'
     });
   });
 });
