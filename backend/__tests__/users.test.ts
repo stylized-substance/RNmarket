@@ -8,11 +8,13 @@ import {
 import {
   assert200GetResponse,
   assert403GetResponse,
+  assert404GetResponse,
   assertValidUser,
   getToken
 } from '#src/utils/testHelpers';
 import { User as UserModel } from '#src/models';
 import { Op } from 'sequelize';
+import { v4 as uuidv4 } from 'uuid';
 
 const api = supertest(app);
 
@@ -137,6 +139,20 @@ describe('PUT requests', () => {
     assert403GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'Users can only change their own password'
+    });
+  });
+  test(`PUT - Trying to change non-existent user's password returns 404`, async () => {
+    // Create UUID that doesn't exist in database
+    const fakeId: string = uuidv4();
+
+    const response = await api
+      .put(`/api/users/${fakeId}`)
+      .send({ password: 'newpassword' })
+      .set('Authorization', `Bearer ${userAccessToken}`);
+
+    assert404GetResponse(response);
+    expect(response.body).toStrictEqual({
+      Error: 'User not found'
     });
   });
 });
