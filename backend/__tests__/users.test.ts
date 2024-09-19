@@ -157,7 +157,7 @@ describe('PUT requests', () => {
   });
 });
 describe('DELETE requests', () => {
-  test.only('Admin users can delete other users', async () => {
+  test('Admin users can delete other users', async () => {
     // Find test user in database
     const userInDb: UserModel | null = await UserModel.findOne({
       where: {
@@ -168,7 +168,26 @@ describe('DELETE requests', () => {
     const response = await api
       .delete(`/api/users/${userInDb?.toJSON().id}`)
       .set('Authorization', `Bearer ${adminAccessToken}`);
-      
-    expect(response.status).toBe(204)
+
+    expect(response.status).toBe(204);
+  });
+  test.only('Regular user cannot delete other users', async () => {
+    // Find user in database other than the test user
+    const userInDb: UserModel | null = await UserModel.findOne({
+      where: {
+        username: {
+          [Op.ne]: 'test_user@example.org'
+        }
+      }
+    });
+
+    const response = await api
+      .delete(`/api/users/${userInDb?.toJSON().id}`)
+      .set('Authorization', `Bearer ${userAccessToken}`);
+
+    assert403GetResponse(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Only admin users can delete users'
+    });
   });
 });
