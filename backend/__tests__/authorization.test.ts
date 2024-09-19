@@ -5,8 +5,14 @@ import {
   closeDatabaseConnection,
   dropAllTables
 } from '#src/utils/database';
-import { assert200GetResponse, assertValidLoginPayload } from '#src/utils/testHelpers';
-// import assertValidLoginPayload from '#src/utils/testHelpers';
+import {
+  assert200Response,
+  assert400Response,
+  assert401Response,
+  assert500Response,
+  assertValidLoginPayload
+} from '#src/utils/testHelpers';
+import { User as UserModel } from '#src/models';
 
 const api = supertest(app);
 
@@ -30,7 +36,73 @@ describe('POST requests', () => {
   test('POST - Login works with username and password', async () => {
     const response = await api.post('/api/authorization/login').send(user);
 
-    assert200GetResponse(response)
-    assertValidLoginPayload(response.body.payload)
+    assert200Response(response);
+    assertValidLoginPayload(response.body.payload);
+  });
+  test('POST - Login fails with wrong password', async () => {
+    const wrongPasswordUser = {
+      username: user.username,
+      password: 'wrongpassword'
+    };
+
+    const response = await api
+      .post('/api/authorization/login')
+      .send(wrongPasswordUser);
+
+    assert401Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Incorrect password'
+    });
+  });
+  test('POST - Login fails if username or password is missing from request body', async () => {
+    let response = await api
+      .post('/api/authorization/login')
+      .send({ username: user.username });
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Password missing from request'
+    });
+
+    response = await api
+      .post('/api/authorization/login')
+      .send({ password: user.password });
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Username missing from request'
+    });
+  });
+  test(`POST - Login fails if user doesn't have a password set`, async () => {
+    const userInDb: UserModel | null = await UserModel.findOne({
+      where: {
+        passwordhash: null
+      }
+    });
+
+    const response = await api.post('/api/authorization/login').send({
+      username: userInDb?.dataValues.username,
+      password: 'password'
+    });
+
+    assert500Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'User has no password set'
+    });
+  });
+  test('POST - Login fails with non-existent user', async () => {
+    const nonExistingUser = {
+      username: 'non-existing@example.org',
+      password: 'password'
+    };
+
+    const response = await api
+      .post('/api/authorization/login')
+      .send(nonExistingUser);
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'User not found in database'
+    });
   });
 });

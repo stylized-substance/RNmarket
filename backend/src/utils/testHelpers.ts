@@ -6,24 +6,34 @@ import app from '#src/app';
 const api = supertest(app);
 
 // Custom assert functions for JSON responses
-export const assert200GetResponse = (response: Response) => {
+export const assert200Response = (response: Response) => {
   expect(response.status).toBe(200);
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
-export const assert400GetResponse = (response: Response) => {
+export const assert400Response = (response: Response) => {
   expect(response.status).toBe(400);
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
-export const assert403GetResponse = (response: Response) => {
+export const assert401Response = (response: Response) => {
+  expect(response.status).toBe(401);
+  expect(response.headers['content-type']).toMatch(/application\/json/);
+};
+
+export const assert403Response = (response: Response) => {
   expect(response.status).toBe(403);
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
 
-export const assert404GetResponse = (response: Response) => {
+export const assert404Response = (response: Response) => {
   expect(response.status).toBe(404);
+  expect(response.headers['content-type']).toMatch(/application\/json/);
+};
+
+export const assert500Response = (response: Response) => {
+  expect(response.status).toBe(500);
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 

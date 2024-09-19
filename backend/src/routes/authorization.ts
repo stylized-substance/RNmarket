@@ -39,7 +39,6 @@ router.post('/login', async (req: Request, res: Response) => {
   if (!user) {
     return res.status(400).json({ Error: 'User not found in database' });
   }
-
   // If password hash is null in database, send error. Else send access token and refresh token
   if (user.dataValues.passwordhash === null) {
     return res.status(500).json({ Error: 'User has no password set' });

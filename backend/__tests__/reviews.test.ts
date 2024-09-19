@@ -6,9 +6,9 @@ import {
   dropAllTables
 } from '#src/utils/database';
 import {
-  assert200GetResponse,
-  assert400GetResponse,
-  assert404GetResponse,
+  assert200Response,
+  assert400Response,
+  assert404Response,
   assertValidReview,
   getToken
 } from '#src/utils/testHelpers';
@@ -62,7 +62,7 @@ describe('GET requests', () => {
     const userId: string = user?.dataValues.id;
 
     const response = await api.get('/api/reviews').query(`user_id=${userId}`);
-    assert200GetResponse(response);
+    assert200Response(response);
     expect(response.body).toHaveProperty('reviews');
     response.body.reviews.forEach((review: unknown) =>
       assertValidReview(review)
@@ -81,7 +81,7 @@ describe('GET requests', () => {
       const response = await api
         .get('/api/reviews')
         .query(`product_id=${product.dataValues.id}`);
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('reviews');
       response.body.reviews.forEach((review: unknown) =>
         assertValidReview(review)
@@ -90,7 +90,7 @@ describe('GET requests', () => {
   });
   test('GET /api/reviews fails without query parameters', async () => {
     const response = await api.get('/api/reviews');
-    assert400GetResponse(response);
+    assert400Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Query parameter missing'
     });
@@ -116,7 +116,7 @@ describe('GET requests', () => {
       .get('/api/reviews')
       .query(`product_id=${productAddResponse.body.addedProduct.id}`);
 
-    assert404GetResponse(response);
+    assert404Response(response);
     expect(response.body).toStrictEqual({
       Error: 'No reviews found'
     });
@@ -142,7 +142,7 @@ describe('POST requests', () => {
         .send(review)
         .set('Authorization', `Bearer ${userAccessToken}`);
 
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('addedReview');
       assertValidReview(response.body.addedReview);
     }
@@ -163,7 +163,7 @@ describe('POST requests', () => {
       .send(review)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert400GetResponse(response);
+    assert400Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Product not found'
     });
@@ -204,7 +204,7 @@ describe('PUT requests', () => {
           .send(editedReview)
           .set('Authorization', `Bearer ${userAccessToken}`);
 
-        assert200GetResponse(reviewEditResponse);
+        assert200Response(reviewEditResponse);
         expect(reviewEditResponse.body).toHaveProperty('saveResult');
         assertValidReview(reviewEditResponse.body.saveResult);
       }
@@ -218,7 +218,7 @@ describe('PUT requests', () => {
       .put(`/api/reviews/${fakeId}`)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert404GetResponse(response);
+    assert404Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Review not found in database'
     });

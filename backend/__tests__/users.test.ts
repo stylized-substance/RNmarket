@@ -6,9 +6,9 @@ import {
   dropAllTables
 } from '#src/utils/database';
 import {
-  assert200GetResponse,
-  assert403GetResponse,
-  assert404GetResponse,
+  assert200Response,
+  assert403Response,
+  assert404Response,
   assertValidUser,
   getToken
 } from '#src/utils/testHelpers';
@@ -52,7 +52,7 @@ describe('GET requests', () => {
       .get('/api/users')
       .set('Authorization', `Bearer ${adminAccessToken}`);
 
-    assert200GetResponse(response);
+    assert200Response(response);
     expect(response.body).toHaveProperty('users');
     response.body.users.forEach((user: unknown) => {
       assertValidUser(user);
@@ -63,7 +63,7 @@ describe('GET requests', () => {
       .get('/api/users')
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert403GetResponse(response);
+    assert403Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Only admin users can get users'
     });
@@ -80,7 +80,7 @@ describe('POST requests', () => {
 
     const response = await api.post('/api/users').send(user);
 
-    assert200GetResponse(response);
+    assert200Response(response);
     expect(response.body).toHaveProperty('addedUser');
     assertValidUser(response.body.addedUser);
   });
@@ -97,7 +97,7 @@ describe('POST requests', () => {
       .send(user)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert403GetResponse(response);
+    assert403Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Only admin users can create admin users'
     });
@@ -117,7 +117,7 @@ describe('PUT requests', () => {
       .send({ password: 'newpassword' })
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert200GetResponse(response);
+    assert200Response(response);
     expect(response.body).toHaveProperty('saveResult');
     assertValidUser(response.body.saveResult);
   });
@@ -136,7 +136,7 @@ describe('PUT requests', () => {
       .send({ password: 'newpassword' })
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert403GetResponse(response);
+    assert403Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Users can only change their own password'
     });
@@ -150,7 +150,7 @@ describe('PUT requests', () => {
       .send({ password: 'newpassword' })
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert404GetResponse(response);
+    assert404Response(response);
     expect(response.body).toStrictEqual({
       Error: 'User not found'
     });
@@ -185,7 +185,7 @@ describe('DELETE requests', () => {
       .delete(`/api/users/${userInDb?.toJSON().id}`)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    assert403GetResponse(response);
+    assert403Response(response);
     expect(response.body).toStrictEqual({
       Error: 'Only admin users can delete users'
     });
@@ -198,7 +198,7 @@ describe('DELETE requests', () => {
       .delete(`/api/users/${fakeId}`)
       .set('Authorization', `Bearer ${adminAccessToken}`);
 
-    assert404GetResponse(response);
+    assert404Response(response);
     expect(response.body).toStrictEqual({
       Error: 'User not found'
     });
