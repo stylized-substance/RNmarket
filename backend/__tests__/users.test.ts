@@ -12,6 +12,7 @@ import {
   getToken
 } from '#src/utils/testHelpers';
 import { User as UserModel } from '#src/models';
+import { Op } from 'sequelize';
 
 const api = supertest(app);
 
@@ -117,5 +118,25 @@ describe('PUT requests', () => {
     assert200GetResponse(response);
     expect(response.body).toHaveProperty('saveResult');
     assertValidUser(response.body.saveResult);
+  });
+  test(`PUT - User cannot change other user's password`, async () => {
+    // Find user in database other than the test user
+    const userInDb: UserModel | null = await UserModel.findOne({
+      where: {
+        username: {
+          [Op.ne]: 'test_user@example.org'
+        }
+      }
+    });
+
+    const response = await api
+      .put(`/api/users/${userInDb?.toJSON().id}`)
+      .send({ password: 'newpassword' })
+      .set('Authorization', `Bearer ${userAccessToken}`);
+
+    assert403GetResponse(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Users can only change their own password'
+    });
   });
 });
