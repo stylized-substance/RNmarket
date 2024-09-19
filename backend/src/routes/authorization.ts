@@ -76,13 +76,13 @@ router.post('/login', async (req: Request, res: Response) => {
 
 router.post('/refresh', async (req: Request, res: Response) => {
   // Refresh access token for user
-  const refreshToken: string = parseString(req.body.refreshToken);
-
-  if (!refreshToken) {
+  if (!req.body.refreshToken) {
     return res
-      .status(400)
-      .json({ Error: 'Refresh token missing from request' });
+    .status(400)
+    .json({ Error: 'Refresh token missing from request' });
   }
+  
+  const refreshToken: string = parseString(req.body.refreshToken);
 
   // Find existing refresh token in database, send error if not found
   const tokenInDb: RefreshTokenModel | null = await RefreshTokenModel.findOne({

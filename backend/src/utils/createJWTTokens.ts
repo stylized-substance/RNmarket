@@ -11,7 +11,15 @@ const jwtRefreshTokenSecret = envVariables.JWTREFRESHTOKENSECRET;
 // Function for creating JWT tokens
 const createJWTTokens = (
   user: User
-): { refreshTokenForDb: RefreshToken; accessToken: string } => {
+): {
+  refreshTokenForDb: RefreshToken;
+  expiredRefreshTokenForDb: RefreshToken;
+  accessToken: string;
+} => {
+  // Set expiry time for refresh token
+  const refreshTokenExpiryTime: number =
+    (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION) * 1000; // Convert seconds to milliseconds
+
   // Create access token
   const accessToken: string = jwt.sign(user, jwtAccessTokenSecret, {
     expiresIn: envVariables.JWTACCESSTOKENEXPIRATION
@@ -22,9 +30,10 @@ const createJWTTokens = (
     expiresIn: envVariables.JWTREFRESHTOKENEXPIRATION
   });
 
-  // Set expiry time for refresh token
-  const refreshTokenExpiryTime: number =
-    (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION) * 1000; // Convert seconds to milliseconds
+  // Create expired refresh token for testing purposes
+  const expiredRefreshToken: string = jwt.sign(user, jwtRefreshTokenSecret, {
+    expiresIn: '-1h'
+  });
 
   // Create refresh token object for saving to databasew
   const refreshTokenForDb: RefreshToken = {
@@ -34,7 +43,15 @@ const createJWTTokens = (
     user_id: user.id
   };
 
-  return { refreshTokenForDb, accessToken };
+  // Create expired refresh token object for saving to database
+  const expiredRefreshTokenForDb: RefreshToken = {
+    id: uuidv4(),
+    token: expiredRefreshToken,
+    expiry_date: 0,
+    user_id: user.id
+  };
+
+  return { refreshTokenForDb, expiredRefreshTokenForDb, accessToken };
 };
 
-export default createJWTTokens
+export default createJWTTokens;

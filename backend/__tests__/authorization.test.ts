@@ -7,12 +7,19 @@ import {
 } from '#src/utils/database';
 import {
   assert200Response,
+  assert201Response,
   assert400Response,
   assert401Response,
   assert500Response,
   assertValidLoginPayload
 } from '#src/utils/testHelpers';
-import { User as UserModel } from '#src/models';
+import {
+  User as UserModel,
+  RefreshToken as RefreshTokenModel
+} from '#src/models';
+import { isString } from '#src/utils/typeNarrowers';
+import createJWTTokens from '#src/utils/createJWTTokens';
+import { v4 as uuidv4 } from 'uuid';
 
 const api = supertest(app);
 
@@ -105,4 +112,84 @@ describe('POST requests', () => {
       Error: 'User not found in database'
     });
   });
+  test('POST - Logged in user can get a new refresh token', async () => {
+    const loginResponse = await api.post('/api/authorization/login').send(user);
+    const refreshToken: string = loginResponse.body.payload.refreshToken;
+
+    const response = await api
+      .post('/api/authorization/refresh')
+      .send({ refreshToken: refreshToken });
+
+    assert201Response(response);
+    expect(response.body).toHaveProperty('accessToken');
+    expect(isString(response.body.accessToken)).toBe(true);
+  });
+  test('POST - Getting a new refresh token fails if old one is not included in request body', async () => {
+    const response = await api.post('/api/authorization/refresh');
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Refresh token missing from request'
+    });
+  });
+  test('POST - Getting a new refresh token fails if sending refresh token that does not exist in database', async () => {
+    const fakeToken = uuidv4();
+    const response = await api
+      .post('/api/authorization/refresh')
+      .send({ refreshToken: fakeToken });
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Refresh token not found in database'
+    });
+  });
+  test('POST - Getting a new refresh token fails if sending expired refresh token', async () => {
+    // Get test user from database and generate expired refresh token
+    const userInDb: UserModel | null = await UserModel.findOne({
+      where: {
+        username: user.username
+      }
+    });
+
+    const expiredToken = createJWTTokens(
+      userInDb?.dataValues
+    ).expiredRefreshTokenForDb;
+
+    // Save expired token to database
+    await RefreshTokenModel.create(expiredToken);
+
+    const response = await api
+      .post('/api/authorization/refresh')
+      .send({ refreshToken: expiredToken.token });
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Refresh token has expired, login again'
+    });
+  });
+  // TODO: finish writing test
+  // test('POST - Getting a new refresh token fails if user corresponding to refresh token not found in database', async () => {
+  //   // Get test user from database and generate expired refresh token
+  //   const userInDb: UserModel | null = await UserModel.findOne({
+  //     where: {
+  //       username: user.username
+  //     }
+  //   });
+
+  //   const expiredToken = createJWTTokens(
+  //     userInDb?.dataValues
+  //   ).expiredRefreshTokenForDb;
+
+  //   // Save expired token to database
+  //   await RefreshTokenModel.create(expiredToken);
+
+  //   const response = await api
+  //     .post('/api/authorization/refresh')
+  //     .send({ refreshToken: expiredToken.token });
+
+  //   assert400Response(response);
+  //   expect(response.body).toStrictEqual({
+  //     Error: 'Refresh token has expired, login again'
+  //   });
+  // });
 });

@@ -39,3 +39,4 @@
 | 16.09.2024 | 2 | Fixed broken test environment, implemented custom looger function | 93
 | 17.09.2024 | 2 | Wrote tests for reviews router | 95
 | 18.09.2024 | 2 | Wrote tests for users router, refactored other tests, worked on utils | 97
+| 19.09.2024 | 2 | Wrote tests for users router, worked on utils and types | 99

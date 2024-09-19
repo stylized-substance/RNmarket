@@ -11,6 +11,11 @@ export const assert200Response = (response: Response) => {
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
+export const assert201Response = (response: Response) => {
+  expect(response.status).toBe(201);
+  expect(response.headers['content-type']).toMatch(/application\/json/);
+};
+
 export const assert400Response = (response: Response) => {
   expect(response.status).toBe(400);
   expect(response.headers['content-type']).toMatch(/application\/json/);
