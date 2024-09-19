@@ -11,7 +11,7 @@ import {
   assertValidUser,
   getToken
 } from '#src/utils/testHelpers';
-import { User as UserModel } from '#src/models'
+import { User as UserModel } from '#src/models';
 
 const api = supertest(app);
 
@@ -55,6 +55,16 @@ describe('GET requests', () => {
       assertValidUser(user);
     });
   });
+  test('GET - Regular user cannot get users from database', async () => {
+    const response = await api
+      .get('/api/users')
+      .set('Authorization', `Bearer ${userAccessToken}`);
+
+    assert403GetResponse(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Only admin users can get users'
+    });
+  });
 });
 describe('POST requests', () => {
   test('POST - Regular user can be added to database without access token in request', async () => {
@@ -78,34 +88,34 @@ describe('POST requests', () => {
       password: 'test_password',
       isadmin: true
     };
-    
+
     const response = await api
-    .post('/api/users')
-    .send(user)
-    .set('Authorization', `Bearer ${userAccessToken}`);
+      .post('/api/users')
+      .send(user)
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     assert403GetResponse(response);
     expect(response.body).toStrictEqual({
       Error: 'Only admin users can create admin users'
-    })
-  })
+    });
+  });
 });
 describe('PUT requests', () => {
   test('PUT - User can change their own password', async () => {
     // Find test user in database
     const userInDb: UserModel | null = await UserModel.findOne({
       where: {
-        username: 'test_user@example.org'    
+        username: 'test_user@example.org'
       }
-    })
+    });
 
     const response = await api
       .put(`/api/users/${userInDb?.toJSON().id}`)
-      .send({ password: 'newpassword'})
-      .set('Authorization', `Bearer ${userAccessToken}`)
+      .send({ password: 'newpassword' })
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     assert200GetResponse(response);
     expect(response.body).toHaveProperty('saveResult');
     assertValidUser(response.body.saveResult);
-  })
-})
+  });
+});
