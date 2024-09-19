@@ -85,7 +85,7 @@ router.put('/:id', tokenExtractor, async (req: Request, res: Response) => {
 });
 
 // Delete user
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   // Allow only admin users to delete users
   if (req.verifiedToken.isadmin === false) {
     return res.status(403).json({ Error: 'Only admin users can delete users' });

@@ -156,3 +156,19 @@ describe('PUT requests', () => {
     });
   });
 });
+describe('DELETE requests', () => {
+  test.only('Admin users can delete other users', async () => {
+    // Find test user in database
+    const userInDb: UserModel | null = await UserModel.findOne({
+      where: {
+        username: 'test_user@example.org'
+      }
+    });
+
+    const response = await api
+      .delete(`/api/users/${userInDb?.toJSON().id}`)
+      .set('Authorization', `Bearer ${adminAccessToken}`);
+      
+    expect(response.status).toBe(204)
+  });
+});
