@@ -1,5 +1,11 @@
 import Response from 'superagent/lib/node/response';
-import { isReview, isProduct, isUser, isLoginPayload } from '#src/utils/typeNarrowers';
+import {
+  isReview,
+  isProduct,
+  isUser,
+  isLoginPayload,
+  isNewOrder
+} from '#src/utils/typeNarrowers';
 import supertest from 'supertest';
 import app from '#src/app';
 
@@ -31,7 +37,6 @@ export const assert403Response = (response: Response) => {
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
-
 export const assert404Response = (response: Response) => {
   expect(response.status).toBe(404);
   expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -42,27 +47,34 @@ export const assert500Response = (response: Response) => {
   expect(response.headers['content-type']).toMatch(/application\/json/);
 };
 
-// Custom assert functions for type checking products and reviews
-export const assertValidProduct = (product: unknown) => {
-  const typeCheck = isProduct(product);
+// Custom assert functions for type checking
+
+// Assertion template function
+export const assertValidType = (type: string, item: unknown): void => {
+  let typeCheck;
+
+  switch (type) {
+    case 'product':
+      typeCheck = isProduct(item);
+      break;
+    case 'review':
+      typeCheck = isReview(item);
+      break;
+    case 'user':
+      typeCheck = isUser(item);
+      break;
+    case 'loginpayload':
+      typeCheck = isLoginPayload(item);
+      break;
+    case 'order':
+      typeCheck = isNewOrder(item);
+      break;
+    default:
+      break;
+  }
+
   expect(typeCheck).toEqual(true);
 };
-
-export const assertValidReview = (review: unknown) => {
-  const typeCheck = isReview(review);
-  expect(typeCheck).toEqual(true);
-};
-
-export const assertValidUser = (user: unknown) => {
-  const typeCheck = isUser(user);
-  expect(typeCheck).toEqual(true);
-};
-
-export const assertValidLoginPayload = (payload: unknown) => {
-  const typeCheck = isLoginPayload(payload)
-  expect(typeCheck).toEqual(true)
-}
-
 
 // Login user and return accessToken
 

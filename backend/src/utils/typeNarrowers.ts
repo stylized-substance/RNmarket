@@ -353,6 +353,7 @@ export {
   isNumber,
   parseNumber,
   isLoginPayload,
+  isNewOrder,
   toNewOrder,
   isReview,
   toNewReview,

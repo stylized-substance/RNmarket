@@ -11,7 +11,7 @@ import {
   assert400Response,
   assert401Response,
   assert500Response,
-  assertValidLoginPayload
+  assertValidType
 } from '#src/utils/testHelpers';
 import {
   User as UserModel,
@@ -44,7 +44,7 @@ describe('POST requests', () => {
     const response = await api.post('/api/authorization/login').send(user);
 
     assert200Response(response);
-    assertValidLoginPayload(response.body.payload);
+    assertValidType('loginpayload', response.body.payload);
   });
   test('POST - Login fails with wrong password', async () => {
     const wrongPasswordUser = {

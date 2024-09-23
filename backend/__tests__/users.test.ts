@@ -9,7 +9,7 @@ import {
   assert200Response,
   assert403Response,
   assert404Response,
-  assertValidUser,
+  assertValidType,
   getToken
 } from '#src/utils/testHelpers';
 import { User as UserModel } from '#src/models';
@@ -55,7 +55,7 @@ describe('GET requests', () => {
     assert200Response(response);
     expect(response.body).toHaveProperty('users');
     response.body.users.forEach((user: unknown) => {
-      assertValidUser(user);
+      assertValidType('user', user);
     });
   });
   test('GET - Regular user cannot get users from database', async () => {
@@ -82,7 +82,7 @@ describe('POST requests', () => {
 
     assert200Response(response);
     expect(response.body).toHaveProperty('addedUser');
-    assertValidUser(response.body.addedUser);
+    assertValidType('user', response.body.addedUser);
   });
   test('POST - Regular user cannot add an admin user', async () => {
     const user = {
@@ -119,7 +119,7 @@ describe('PUT requests', () => {
 
     assert200Response(response);
     expect(response.body).toHaveProperty('saveResult');
-    assertValidUser(response.body.saveResult);
+    assertValidType('user', response.body.saveResult);
   });
   test(`PUT - User cannot change other user's password`, async () => {
     // Find user in database other than the test user

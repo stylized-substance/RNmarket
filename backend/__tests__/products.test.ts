@@ -8,8 +8,7 @@ import {
 import {
   assert200Response,
   assert400Response,
-  assertValidProduct,
-  assertValidReview,
+  assertValidType,
   getToken
 } from '#src/utils/testHelpers';
 import { ProductCategory, Product } from '#src/types/types';
@@ -52,7 +51,7 @@ describe('GET requests', () => {
     expect(response.body).toHaveProperty('products');
     expect(response.body.products).toHaveLength(50);
     response.body.products.forEach((product: unknown) =>
-      assertValidProduct(product)
+      assertValidType('product', product)
     );
   });
 
@@ -67,7 +66,7 @@ describe('GET requests', () => {
       const response = await api.get(`/api/products/${id}`);
       assert200Response(response);
       expect(response.body).toHaveProperty('product');
-      assertValidProduct(response.body.product);
+      assertValidType('product', response.body.product);
     }
   });
 
@@ -78,7 +77,7 @@ describe('GET requests', () => {
       expect(response.body).toHaveProperty('products');
       expect(response.body.products).toHaveLength(1);
       response.body.products.forEach((product: unknown) =>
-        assertValidProduct(product)
+        assertValidType('product', product)
       );
     });
 
@@ -95,9 +94,9 @@ describe('GET requests', () => {
       assert200Response(response);
       expect(response.body).toHaveProperty('products');
       for (const product of response.body.products) {
-        assertValidProduct(product);
+        assertValidType('product', product);
         expect(product).toHaveProperty('Reviews');
-        product.Reviews.forEach((review: unknown) => assertValidReview(review));
+        product.Reviews.forEach((review: unknown) => assertValidType('review', review));
       }
     });
 
@@ -117,7 +116,7 @@ describe('GET requests', () => {
         assert200Response(response);
         expect(response.body).toHaveProperty('products');
         for (const product of response.body.products) {
-          assertValidProduct(product);
+          assertValidType('product', product);
           expect(product.category).toBe(category);
         }
       }
@@ -138,7 +137,7 @@ describe('GET requests', () => {
       expect(response.body).toHaveProperty('products');
       expect(response.body.products.length).toBeGreaterThan(0);
       response.body.products.forEach((product: Product) => {
-        assertValidProduct(product);
+        assertValidType('product', product);
         expect(product.title).toMatch(/Apple/);
       });
     });
@@ -163,7 +162,7 @@ describe('GET requests', () => {
       assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
-        assertValidProduct(product);
+        assertValidType('product', product);
         expect(product.price).toBeGreaterThanOrEqual(lowestPrice);
         expect(product.price).toBeLessThanOrEqual(highestPrice);
       });
@@ -211,7 +210,7 @@ describe('GET requests', () => {
       assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
-        assertValidProduct(product);
+        assertValidType('product', product);
         expect(product.instock).toBeGreaterThan(0);
       });
     });
@@ -234,7 +233,7 @@ describe('GET requests', () => {
       assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
-        assertValidProduct(product);
+        assertValidType('product', product);
         expect(product.rating).toBeGreaterThanOrEqual(1);
         expect(product.rating).toBeLessThanOrEqual(5);
       });
@@ -293,7 +292,7 @@ describe('POST requests', () => {
 
       assert200Response(productAddResponse);
       expect(productAddResponse.body).toHaveProperty('addedProduct');
-      assertValidProduct(productAddResponse.body.addedProduct);
+      assertValidType('product', productAddResponse.body.addedProduct);
     });
 
     test('Non-admin user cannot add products', async () => {
@@ -327,7 +326,7 @@ describe('POST requests', () => {
           .set('Authorization', `Bearer ${adminAccessToken}`);
         assert200Response(updateResponse);
         expect(updateResponse.body).toHaveProperty('saveResult');
-        assertValidProduct(updateResponse.body.saveResult);
+        assertValidType('product', updateResponse.body.saveResult);
       }
     });
 

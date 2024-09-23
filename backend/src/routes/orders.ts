@@ -98,7 +98,6 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
     // Add products to order in database
     // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
-
     await orderInDb.addProduct(product, {
       through: { quantity: productQuantity }
     });

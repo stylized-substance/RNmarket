@@ -9,7 +9,7 @@ import {
   assert200Response,
   assert400Response,
   assert404Response,
-  assertValidReview,
+  assertValidType,
   getToken
 } from '#src/utils/testHelpers';
 import { Review, NewReview } from '#src/types/types';
@@ -65,7 +65,7 @@ describe('GET requests', () => {
     assert200Response(response);
     expect(response.body).toHaveProperty('reviews');
     response.body.reviews.forEach((review: unknown) =>
-      assertValidReview(review)
+      assertValidType('review', review)
     );
   });
   test('GET /api/reviews with query parameter product_id returns reviews for single product', async () => {
@@ -84,7 +84,7 @@ describe('GET requests', () => {
       assert200Response(response);
       expect(response.body).toHaveProperty('reviews');
       response.body.reviews.forEach((review: unknown) =>
-        assertValidReview(review)
+        assertValidType('review', review)
       );
     }
   });
@@ -144,7 +144,7 @@ describe('POST requests', () => {
 
       assert200Response(response);
       expect(response.body).toHaveProperty('addedReview');
-      assertValidReview(response.body.addedReview);
+      assertValidType('review', response.body.addedReview);
     }
   });
   test('POST - adding review fails if product is not found', async () => {
@@ -206,7 +206,7 @@ describe('PUT requests', () => {
 
         assert200Response(reviewEditResponse);
         expect(reviewEditResponse.body).toHaveProperty('saveResult');
-        assertValidReview(reviewEditResponse.body.saveResult);
+        assertValidType('review', reviewEditResponse.body.saveResult);
       }
     }
   });
