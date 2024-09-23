@@ -167,29 +167,4 @@ describe('POST requests', () => {
       Error: 'Refresh token has expired, login again'
     });
   });
-  // TODO: finish writing test
-  // test('POST - Getting a new refresh token fails if user corresponding to refresh token not found in database', async () => {
-  //   // Get test user from database and generate expired refresh token
-  //   const userInDb: UserModel | null = await UserModel.findOne({
-  //     where: {
-  //       username: user.username
-  //     }
-  //   });
-
-  //   const expiredToken = createJWTTokens(
-  //     userInDb?.dataValues
-  //   ).expiredRefreshTokenForDb;
-
-  //   // Save expired token to database
-  //   await RefreshTokenModel.create(expiredToken);
-
-  //   const response = await api
-  //     .post('/api/authorization/refresh')
-  //     .send({ refreshToken: expiredToken.token });
-
-  //   assert400Response(response);
-  //   expect(response.body).toStrictEqual({
-  //     Error: 'Refresh token has expired, login again'
-  //   });
-  // });
 });

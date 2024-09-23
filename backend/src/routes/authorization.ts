@@ -106,17 +106,12 @@ router.post('/refresh', async (req: Request, res: Response) => {
       .json({ Error: 'Refresh token has expired, login again' });
   }
 
-  // Send error if user corresponding to refresh token not found in database
   const userInDb: UserModel | null = await UserModel.findByPk(
     tokenInDb.dataValues.user_id
   );
 
-  if (!userInDb) {
-    return res.status(400).json({ Error: `User doesn't exist in database` });
-  }
-
   // Create new access token and send to client
-  const newAccessToken = createJWTTokens(userInDb.dataValues).accessToken;
+  const newAccessToken = createJWTTokens(userInDb?.dataValues).accessToken;
   return res.status(201).json({ accessToken: newAccessToken });
 });
 

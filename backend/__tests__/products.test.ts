@@ -6,8 +6,8 @@ import {
   dropAllTables
 } from '#src/utils/database';
 import {
-  assert200GetResponse,
-  assert400GetResponse,
+  assert200Response,
+  assert400Response,
   assertValidProduct,
   assertValidReview,
   getToken
@@ -48,7 +48,7 @@ afterAll(async () => {
 describe('GET requests', () => {
   test('GET /api/products returns all products from database', async () => {
     const response = await api.get('/api/products');
-    assert200GetResponse(response);
+    assert200Response(response);
     expect(response.body).toHaveProperty('products');
     expect(response.body.products).toHaveLength(50);
     response.body.products.forEach((product: unknown) =>
@@ -65,7 +65,7 @@ describe('GET requests', () => {
       const id = productToTestWith?.dataValues.id;
 
       const response = await api.get(`/api/products/${id}`);
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('product');
       assertValidProduct(response.body.product);
     }
@@ -74,7 +74,7 @@ describe('GET requests', () => {
   describe('With query parameters', () => {
     test('GET /api/products with query limit=1 returns one product', async () => {
       const response = await api.get('/api/products').query('limit=1');
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('products');
       expect(response.body.products).toHaveLength(1);
       response.body.products.forEach((product: unknown) =>
@@ -84,7 +84,7 @@ describe('GET requests', () => {
 
     test('GET /api/products fails if value of limit is not a number', async () => {
       const response = await api.get('/api/products').query('limit=asd');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid product query limit'
       });
@@ -92,7 +92,7 @@ describe('GET requests', () => {
 
     test('GET /api/products with query withReviews=true returns reviews with products', async () => {
       const response = await api.get('/api/products').query('withReviews=true');
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('products');
       for (const product of response.body.products) {
         assertValidProduct(product);
@@ -103,7 +103,7 @@ describe('GET requests', () => {
 
     test(`GET /api/products fails if value of withReviews is not 'true'`, async () => {
       const response = await api.get('/api/products').query('withReviews=asd');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: `Value for 'withReviews' must be 'true' if used`
       });
@@ -114,7 +114,7 @@ describe('GET requests', () => {
         const response = await api
           .get('/api/products')
           .query(`category=${category}`);
-        assert200GetResponse(response);
+        assert200Response(response);
         expect(response.body).toHaveProperty('products');
         for (const product of response.body.products) {
           assertValidProduct(product);
@@ -125,7 +125,7 @@ describe('GET requests', () => {
 
     test('GET /api/products fails when querying with invalid product category', async () => {
       const response = await api.get('/api/products').query('category=asd');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         'Error name': 'TypeNarrowingError',
         'Error message': 'Invalid product category (asd)'
@@ -134,7 +134,7 @@ describe('GET requests', () => {
 
     test('GET /api/products - Search returns relevant products', async () => {
       const response = await api.get('/api/products').query('search=Apple');
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('products');
       expect(response.body.products.length).toBeGreaterThan(0);
       response.body.products.forEach((product: Product) => {
@@ -147,7 +147,7 @@ describe('GET requests', () => {
       const response = await api
         .get('/api/products')
         .query('search=searchquerylongerthanfifteen');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid search query'
       });
@@ -160,7 +160,7 @@ describe('GET requests', () => {
       const response = await api
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
         assertValidProduct(product);
@@ -176,7 +176,7 @@ describe('GET requests', () => {
       let response = await api
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid highest price query'
       });
@@ -187,7 +187,7 @@ describe('GET requests', () => {
       response = await api
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid lowest price query'
       });
@@ -195,12 +195,12 @@ describe('GET requests', () => {
 
     test('GET /api/products fails if lowestPrice or highestPrice is omitted', async () => {
       let response = await api.get('/api/products').query('lowestPrice=10');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Highest value in price range query missing'
       });
       response = await api.get('/api/products').query('highestPrice=10');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Lowest value in price range query missing'
       });
@@ -208,7 +208,7 @@ describe('GET requests', () => {
 
     test('GET /api/products with query inStock=true returns products that are in stock', async () => {
       const response = await api.get('/api/products').query('inStock=true');
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
         assertValidProduct(product);
@@ -218,7 +218,7 @@ describe('GET requests', () => {
 
     test('GET /api/products fails if value of inStock is not true', async () => {
       const response = await api.get('/api/products').query('inStock=asd');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: `Value for 'inStock' must be 'true' if used`
       });
@@ -231,7 +231,7 @@ describe('GET requests', () => {
       const response = await api
         .get('/api/products')
         .query(`lowestRating=${lowestRating}&highestRating=${highestRating}`);
-      assert200GetResponse(response);
+      assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
         assertValidProduct(product);
@@ -242,13 +242,13 @@ describe('GET requests', () => {
 
     test('GET /api/products fails if lowestRating or highestRating is omitted', async () => {
       let response = await api.get('/api/products').query('lowestRating=1');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Highest value in rating range query missing'
       });
 
       response = await api.get('/api/products').query('highestRating=5');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Lowest value in rating range query missing'
       });
@@ -258,7 +258,7 @@ describe('GET requests', () => {
       let response = await api
         .get('/api/products')
         .query('lowestRating=-1&highestRating=5');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid lowest rating query'
       });
@@ -266,7 +266,7 @@ describe('GET requests', () => {
       response = await api
         .get('/api/products')
         .query('lowestRating=1&highestRating=6');
-      assert400GetResponse(response);
+      assert400Response(response);
       expect(response.body).toStrictEqual({
         Error: 'Invalid highest rating query'
       });
@@ -291,7 +291,7 @@ describe('POST requests', () => {
         .send(productToAdd)
         .set('Authorization', `Bearer ${adminAccessToken}`);
 
-      assert200GetResponse(productAddResponse);
+      assert200Response(productAddResponse);
       expect(productAddResponse.body).toHaveProperty('addedProduct');
       assertValidProduct(productAddResponse.body.addedProduct);
     });
@@ -302,7 +302,7 @@ describe('POST requests', () => {
         .send(productToAdd)
         .set('Authorization', `Bearer ${userAccessToken}`);
 
-      assert400GetResponse(productAddResponse);
+      assert400Response(productAddResponse);
       expect(productAddResponse.body).toStrictEqual({
         Error: 'Only admin users can add products'
       });
@@ -325,7 +325,7 @@ describe('POST requests', () => {
           .put(`/api/products/${id}`)
           .send(updatedProduct)
           .set('Authorization', `Bearer ${adminAccessToken}`);
-        assert200GetResponse(updateResponse);
+        assert200Response(updateResponse);
         expect(updateResponse.body).toHaveProperty('saveResult');
         assertValidProduct(updateResponse.body.saveResult);
       }
@@ -346,7 +346,7 @@ describe('POST requests', () => {
           .put(`/api/products/${id}`)
           .send(updatedProduct)
           .set('Authorization', `Bearer ${userAccessToken}`);
-        assert400GetResponse(updateResponse);
+        assert400Response(updateResponse);
         expect(updateResponse.body).toStrictEqual({
           Error: 'Only admin users can update products'
         });
@@ -391,7 +391,7 @@ describe('POST requests', () => {
             .delete(`/api/products/${productId}`)
             .set('Authorization', `Bearer ${userAccessToken}`);
 
-          assert400GetResponse(deleteResponse);
+          assert400Response(deleteResponse);
           expect(deleteResponse.body).toStrictEqual({
             Error: 'Only admin users can delete products'
           });
