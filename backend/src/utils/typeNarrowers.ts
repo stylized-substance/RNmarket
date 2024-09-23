@@ -75,8 +75,8 @@ const isLoginPayload = (param: unknown): param is LoginPayload => {
     isString(param.accessToken) &&
     'refreshToken' in param &&
     isString(param.refreshToken)
-  )
-}
+  );
+};
 
 const isNewOrder = (param: unknown): param is NewOrder => {
   return (

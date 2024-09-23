@@ -20,8 +20,8 @@ import { v4 as uuidv4 } from 'uuid';
 const api = supertest(app);
 
 // Declare variables for access tokens
-let userAccessToken: string
-let adminAccessToken: string
+let userAccessToken: string;
+let adminAccessToken: string;
 
 beforeAll(async () => {
   // Empty database and run migrations
@@ -175,7 +175,7 @@ describe('PUT requests', () => {
     const productToTestWith: ProductModel | null = await ProductModel.findOne(
       {}
     );
-    
+
     // Save a review and try to edit it
     if (productToTestWith) {
       const review: NewReview = {
@@ -184,7 +184,7 @@ describe('PUT requests', () => {
         content: 'test_content',
         rating: 1
       };
-      
+
       const reviewAddResponse = await api
         .post('/api/reviews/')
         .send(review)

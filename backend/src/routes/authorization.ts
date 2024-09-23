@@ -4,12 +4,11 @@ import { User as UserModel } from '#src/models';
 import { RefreshToken as RefreshTokenModel } from '#src/models';
 import { parseString } from '#src/utils/typeNarrowers';
 import createJWTTokens from '#src/utils/createJWTTokens';
-import { LoginPayload } from '#src/types/types'
+import { LoginPayload } from '#src/types/types';
 
 const router: Router = Router();
 
 // Interface for payload to send to client when logging in
-
 
 // Login user
 router.post('/login', async (req: Request, res: Response) => {
@@ -78,10 +77,10 @@ router.post('/refresh', async (req: Request, res: Response) => {
   // Refresh access token for user
   if (!req.body.refreshToken) {
     return res
-    .status(400)
-    .json({ Error: 'Refresh token missing from request' });
+      .status(400)
+      .json({ Error: 'Refresh token missing from request' });
   }
-  
+
   const refreshToken: string = parseString(req.body.refreshToken);
 
   // Find existing refresh token in database, send error if not found

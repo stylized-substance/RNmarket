@@ -17,8 +17,8 @@ import { Product as ProductModel, Review } from '#src/models';
 const api = supertest(app);
 
 // Declare variables for access tokens
-let userAccessToken: string
-let adminAccessToken: string
+let userAccessToken: string;
+let adminAccessToken: string;
 
 beforeAll(async () => {
   // Empty database and run migrations
@@ -96,7 +96,9 @@ describe('GET requests', () => {
       for (const product of response.body.products) {
         assertValidType('product', product);
         expect(product).toHaveProperty('Reviews');
-        product.Reviews.forEach((review: unknown) => assertValidType('review', review));
+        product.Reviews.forEach((review: unknown) =>
+          assertValidType('review', review)
+        );
       }
     });
 

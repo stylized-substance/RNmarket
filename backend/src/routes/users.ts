@@ -12,9 +12,7 @@ const router: Router = Router();
 router.get('/', tokenExtractor, async (req: Request, res: Response) => {
   // Allow only admin users to get users
   if (req.verifiedToken.isadmin === false) {
-    return res
-      .status(403)
-      .json({ Error: 'Only admin users can get users' });
+    return res.status(403).json({ Error: 'Only admin users can get users' });
   }
 
   const users: UserModel[] | [] = await UserModel.findAll({
