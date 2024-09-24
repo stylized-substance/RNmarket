@@ -106,6 +106,7 @@ describe('GET requests', () => {
       await order.destroy();
     }
 
+    // Get orders from database
     const response = await api
       .get('/api/orders')
       .set('Authorization', `Bearer ${adminAccessToken}`);
@@ -157,7 +158,8 @@ describe('POST requests', () => {
     assert201Response(response);
     expect(response.body).toHaveProperty('orderInDb');
   });
-  test.only('POST - Request fails if trying to order a product with zero quantity', async () => {
+  test('POST - Request fails if trying to order a product with zero quantity', async () => {
+    // Get an in stock product from database for order
     const product: ProductModel | null = await ProductModel.findOne({
       where: {
         instock: {
@@ -177,18 +179,45 @@ describe('POST requests', () => {
       address: 'test_address'
     };
 
+    // Create new order
     const response = await api
       .post('/api/orders')
       .send(order)
-      .set('Authorization', `Bearer ${temporaryAccessToken}`)
+      .set('Authorization', `Bearer ${temporaryAccessToken}`);
 
-    assert400Response(response)
+    assert400Response(response);
     expect(response.body).toStrictEqual({
       Error: `You're trying to order product ${product?.dataValues.id} with quantity '0', order failed`
-    })
-    
-  })
+    });
+  });
+  test('POST - Request fails if trying to order inexistent product', async () => {
+    // Create nonexistent product id
+    const fakeId = uuidv4();
+
+    const order = {
+      products: [
+        {
+          id: fakeId,
+          quantity: 1
+        }
+      ],
+      name: 'test_name',
+      address: 'test_address'
+    };
+
+    // Create new order
+    const response = await api
+      .post('/api/orders')
+      .send(order)
+      .set('Authorization', `Bearer ${temporaryAccessToken}`);
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: `One or more products not found in database, order failed.`
+    });
+  });
   test('POST - Request fails if any products are not in stock', async () => {
+    // Get a not in stock product from database
     const notInStockProduct: ProductModel | null = await ProductModel.findOne({
       where: {
         instock: 0
@@ -215,6 +244,77 @@ describe('POST requests', () => {
     assert400Response(response);
     expect(response.body).toStrictEqual({
       Error: `Product ${notInStockProduct?.dataValues.id} not in stock, order failed`
-    })
+    });
+  });
+  test('POST - Request fails if trying to order a larger quantity of product than there is in stock', async () => {
+    // Get an in stock product from database for order
+    const product: ProductModel | null = await ProductModel.findOne({
+      where: {
+        instock: {
+          [Op.gt]: 0
+        }
+      }
+    });
+
+    const order = {
+      products: [
+        {
+          id: product?.dataValues.id,
+          quantity: product?.dataValues.instock + 1
+        }
+      ],
+      name: 'test_name',
+      address: 'test_address'
+    };
+
+    // Create new order
+    const response = await api
+      .post('/api/orders')
+      .send(order)
+      .set('Authorization', `Bearer ${temporaryAccessToken}`);
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: `Product ${product?.dataValues.id}: Not enough product in stock, order failed`
+    });
+  });
+});
+describe('DELETE queries', () => {
+  test('DELETE - Admin user can delete an order', async () => {
+    const order: OrderModel | null = await OrderModel.findOne();
+
+    const response = await api
+      .delete(`/api/orders/${order?.dataValues.id}`)
+      .set('Authorization', `Bearer ${adminAccessToken}`);
+
+    expect(response.status).toBe(204);
+
+    // Check that order was deleted from database
+    const deletedOrder: OrderModel | null = await OrderModel.findByPk(
+      `${order?.dataValues.id}`
+    );
+    expect(deletedOrder).toBeNull();
+  });
+  test('DELETE - Request fails for regular user', async () => {
+    const order: OrderModel | null = await OrderModel.findOne();
+
+    const response = await api
+      .delete(`/api/orders/${order?.dataValues.id}`)
+      .set('Authorization', `Bearer ${userAccessToken}`);
+
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: 'Only admin users can delete orders'
+    });
+  });
+  test('DELETE - Request fails if order is not found in database', async () => {
+    const response = await api
+      .delete(`/api/orders/${uuidv4()}`)
+      .set('Authorization', `Bearer ${adminAccessToken}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toStrictEqual({
+      Error: 'Order not found'
+    });
   });
 });
