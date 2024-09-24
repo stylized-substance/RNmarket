@@ -41,3 +41,4 @@
 | 18.09.2024 | 2 | Wrote tests for users router, refactored other tests, worked on utils | 97
 | 19.09.2024 | 2 | Wrote tests for users router, worked on utils and types | 99
 | 23.09.2024 | 2 | Wrote tests for orders router, refactored code | 101
+| 24.09.2024 | 2 | Wrote tests for orders and checkout routers, refactored code | 103
