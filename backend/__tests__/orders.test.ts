@@ -22,6 +22,7 @@ const api = supertest(app);
 // Declare variables for access tokens
 let userAccessToken: string;
 let adminAccessToken: string;
+let temporaryAccessToken: string;
 
 beforeEach(async () => {
   // Empty database and run migrations
@@ -29,7 +30,7 @@ beforeEach(async () => {
   await connectToDatabase();
 
   // Add test order to database
-  const order = {
+  const testOrder = {
     id: uuidv4(),
     name: 'test name',
     address: 'test address'
@@ -37,7 +38,7 @@ beforeEach(async () => {
 
   const product: ProductModel | null = await ProductModel.findOne({});
 
-  const orderInDb: OrderModel | null = await OrderModel.create(order);
+  const orderInDb: OrderModel | null = await OrderModel.create(testOrder);
 
   // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
   await orderInDb.addProduct(product, {
@@ -57,6 +58,22 @@ beforeEach(async () => {
   // Assign access tokens to global variables
   userAccessToken = await getToken(user);
   adminAccessToken = await getToken(adminUser);
+
+  // Get a temporary access token for making order
+  // Mock order for getting temporary access token
+  const mockOrder = {
+    products: [
+      {
+        id: 'id',
+        quantity: 1
+      }
+    ],
+    name: 'test_name',
+    address: 'test_address'
+  };
+  const checkoutResponse = await api.post('/api/checkout').send(mockOrder);
+
+  temporaryAccessToken = checkoutResponse.body.accessToken;
 });
 
 afterAll(async () => {
@@ -110,7 +127,7 @@ describe('GET requests', () => {
   });
 });
 describe('POST requests', () => {
-  test.only('POST - A valid order can be added', async () => {
+  test('POST - A valid order can be added', async () => {
     // Get an in stock product from database for order
     const product: ProductModel | null = await ProductModel.findOne({
       where: {
@@ -131,18 +148,73 @@ describe('POST requests', () => {
       address: 'test_address'
     };
 
-    // Get a temporary access token for making order
-    const checkoutResponse = await api.post('/api/checkout').send(order);
+    // Create new order
+    const response = await api
+      .post('/api/orders')
+      .send(order)
+      .set('Authorization', `Bearer ${temporaryAccessToken}`);
 
-    const accessToken = checkoutResponse.body.accessToken;
+    assert201Response(response);
+    expect(response.body).toHaveProperty('orderInDb');
+  });
+  test.only('POST - Request fails if trying to order a product with zero quantity', async () => {
+    const product: ProductModel | null = await ProductModel.findOne({
+      where: {
+        instock: {
+          [Op.gt]: 0
+        }
+      }
+    });
+
+    const order = {
+      products: [
+        {
+          id: product?.dataValues.id,
+          quantity: 0
+        }
+      ],
+      name: 'test_name',
+      address: 'test_address'
+    };
+
+    const response = await api
+      .post('/api/orders')
+      .send(order)
+      .set('Authorization', `Bearer ${temporaryAccessToken}`)
+
+    assert400Response(response)
+    expect(response.body).toStrictEqual({
+      Error: `You're trying to order product ${product?.dataValues.id} with quantity '0', order failed`
+    })
+    
+  })
+  test('POST - Request fails if any products are not in stock', async () => {
+    const notInStockProduct: ProductModel | null = await ProductModel.findOne({
+      where: {
+        instock: 0
+      }
+    });
+
+    const order = {
+      products: [
+        {
+          id: notInStockProduct?.dataValues.id,
+          quantity: 1
+        }
+      ],
+      name: 'test_name',
+      address: 'test_address'
+    };
 
     // Create new order
     const response = await api
       .post('/api/orders')
       .send(order)
-      .set('Authorization', `Bearer ${accessToken}`);
+      .set('Authorization', `Bearer ${temporaryAccessToken}`);
 
-    assert201Response(response)
-    expect(response.body).toHaveProperty('orderInDb')
+    assert400Response(response);
+    expect(response.body).toStrictEqual({
+      Error: `Product ${notInStockProduct?.dataValues.id} not in stock, order failed`
+    })
   });
 });

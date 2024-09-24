@@ -42,7 +42,15 @@ const parseString = (param: unknown): string => {
 };
 
 const isNumber = (param: unknown): param is number => {
-  return !!param && !isNaN(Number(param));
+  let value
+
+  if (typeof param === 'string') {
+    value = Number(param)
+  } else {
+    value = param
+  }
+  
+  return typeof value === 'number' && !isNaN(value);
 };
 
 const parseNumber = (param: unknown): number => {
