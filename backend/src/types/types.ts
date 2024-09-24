@@ -32,7 +32,7 @@ export type OrderInDb = Omit<NewOrder, 'products'> & {
   id: string;
 };
 
-export type CartItems = Pick<NewOrder, 'products'>
+export type CartItems = Pick<NewOrder, 'products'>;
 
 // Types for reviews, products and users
 export type Review = {

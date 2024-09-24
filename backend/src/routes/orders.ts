@@ -126,7 +126,7 @@ router.delete('/:id', tokenExtractor, async (req: Request, res: Response) => {
   if (!order) {
     return res.status(404).json({ Error: 'Order not found' });
   }
-  
+
   // If order was found, remove product-order associations from junction table and finally the order from orders table
   // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
   await order.setProducts([]);

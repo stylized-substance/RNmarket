@@ -60,7 +60,7 @@ const createTemporaryToken = (cartItems: CartItems): string => {
     expiresIn: '15m'
   });
 
-  return accessToken
-}
+  return accessToken;
+};
 
-export { createJWTTokens, createTemporaryToken }
+export { createJWTTokens, createTemporaryToken };

@@ -18,7 +18,7 @@ import {
   RefreshToken as RefreshTokenModel
 } from '#src/models';
 import { isString } from '#src/utils/typeNarrowers';
-import createJWTTokens from '#src/utils/createJWTTokens';
+import { createJWTTokens } from '#src/utils/createJWTTokens';
 import { v4 as uuidv4 } from 'uuid';
 
 const api = supertest(app);

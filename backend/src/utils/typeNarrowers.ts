@@ -42,14 +42,14 @@ const parseString = (param: unknown): string => {
 };
 
 const isNumber = (param: unknown): param is number => {
-  let value
+  let value;
 
   if (typeof param === 'string') {
-    value = Number(param)
+    value = Number(param);
   } else {
-    value = param
+    value = param;
   }
-  
+
   return typeof value === 'number' && !isNaN(value);
 };
 
@@ -131,7 +131,7 @@ const toCartItems = (param: unknown): CartItems => {
   }
 
   return param;
-}
+};
 
 const isUser = (param: unknown): param is User => {
   return (
@@ -161,7 +161,6 @@ const isNewUser = (param: unknown): param is NewUser => {
   );
 };
 const toNewOrder = (param: unknown): NewOrder => {
-
   if (!isNewOrder(param)) {
     throw new TypeNarrowingError('Input is not a valid order');
   }
