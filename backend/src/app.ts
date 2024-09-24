@@ -6,6 +6,7 @@ import usersRouter from '#src/routes/users';
 import reviewsRouter from '#src/routes/reviews';
 import authorizationRouter from '#src/routes/authorization';
 import ordersRouter from '#src/routes/orders';
+import checkoutRouter from '#src/routes/checkout'
 import errorHandler from './utils/errorHandler';
 
 const app = express();
@@ -23,6 +24,8 @@ app.use('/api/reviews', reviewsRouter);
 app.use('/api/authorization', authorizationRouter);
 
 app.use('/api/orders', ordersRouter);
+
+app.use('/api/checkout', checkoutRouter)
 
 app.use(errorHandler);
 

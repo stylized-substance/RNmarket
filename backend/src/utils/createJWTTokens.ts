@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User, RefreshToken } from '#src/types/types';
+import { User, RefreshToken, CartItems } from '#src/types/types';
 import { v4 as uuidv4 } from 'uuid';
 
 // Import JWT secrets from config file
@@ -35,7 +35,7 @@ const createJWTTokens = (
     expiresIn: '-1h'
   });
 
-  // Create refresh token object for saving to databasew
+  // Create refresh token object for saving to database
   const refreshTokenForDb: RefreshToken = {
     id: uuidv4(),
     token: refreshToken,
@@ -54,4 +54,13 @@ const createJWTTokens = (
   return { refreshTokenForDb, expiredRefreshTokenForDb, accessToken };
 };
 
-export default createJWTTokens;
+const createTemporaryToken = (cartItems: CartItems): string => {
+  // Create temporary access token for making orders without logging in
+  const accessToken: string = jwt.sign(cartItems, jwtAccessTokenSecret, {
+    expiresIn: '15m'
+  });
+
+  return accessToken
+}
+
+export { createJWTTokens, createTemporaryToken }

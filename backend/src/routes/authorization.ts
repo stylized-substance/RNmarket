@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
 import { RefreshToken as RefreshTokenModel } from '#src/models';
 import { parseString } from '#src/utils/typeNarrowers';
-import createJWTTokens from '#src/utils/createJWTTokens';
+import { createJWTTokens } from '#src/utils/createJWTTokens';
 import { LoginPayload } from '#src/types/types';
 
 const router: Router = Router();

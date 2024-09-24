@@ -9,11 +9,13 @@ import {
   assert200Response,
   assert400Response,
   getToken,
-  assertValidType
+  assertValidType,
+  assert201Response
 } from '#src/utils/testHelpers';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
 import { v4 as uuidv4 } from 'uuid';
+import { Op } from 'sequelize';
 
 const api = supertest(app);
 
@@ -27,14 +29,13 @@ beforeEach(async () => {
   await connectToDatabase();
 
   // Add test order to database
-  // Get a product from database
-  const product: ProductModel | null = await ProductModel.findOne({});
-
   const order = {
     id: uuidv4(),
     name: 'test name',
     address: 'test address'
   };
+
+  const product: ProductModel | null = await ProductModel.findOne({});
 
   const orderInDb: OrderModel | null = await OrderModel.create(order);
 
@@ -106,5 +107,42 @@ describe('GET requests', () => {
     expect(response.body).toStrictEqual({
       Error: 'Only admin users can list orders'
     });
+  });
+});
+describe('POST requests', () => {
+  test.only('POST - A valid order can be added', async () => {
+    // Get an in stock product from database for order
+    const product: ProductModel | null = await ProductModel.findOne({
+      where: {
+        instock: {
+          [Op.gt]: 0
+        }
+      }
+    });
+
+    const order = {
+      products: [
+        {
+          id: product?.dataValues.id,
+          quantity: 1
+        }
+      ],
+      name: 'test_name',
+      address: 'test_address'
+    };
+
+    // Get a temporary access token for making order
+    const checkoutResponse = await api.post('/api/checkout').send(order);
+
+    const accessToken = checkoutResponse.body.accessToken;
+
+    // Create new order
+    const response = await api
+      .post('/api/orders')
+      .send(order)
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    assert201Response(response)
+    expect(response.body).toHaveProperty('orderInDb')
   });
 });

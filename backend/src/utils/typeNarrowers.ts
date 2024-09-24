@@ -13,7 +13,8 @@ import {
   FurnitureItem,
   Laptop,
   ProductCategory,
-  EditedReview
+  EditedReview,
+  CartItems
 } from '#src/types/types';
 
 // Custom error class for type narrowing errors
@@ -99,6 +100,31 @@ const isNewOrder = (param: unknown): param is NewOrder => {
   );
 };
 
+const isCartItems = (param: unknown): param is CartItems => {
+  return (
+    isObject(param) &&
+    'products' in param &&
+    Array.isArray(param.products) &&
+    param.products.every((product) => {
+      return (
+        isObject(product) &&
+        'id' in product &&
+        isString(product.id) &&
+        'quantity' in product &&
+        isNumber(product.quantity)
+      );
+    })
+  );
+};
+
+const toCartItems = (param: unknown): CartItems => {
+  if (!isCartItems(param)) {
+    throw new TypeNarrowingError('Input is not a valid shopping cart');
+  }
+
+  return param;
+}
+
 const isUser = (param: unknown): param is User => {
   return (
     isObject(param) &&
@@ -126,8 +152,8 @@ const isNewUser = (param: unknown): param is NewUser => {
     isBoolean(param.isadmin)
   );
 };
-
 const toNewOrder = (param: unknown): NewOrder => {
+
   if (!isNewOrder(param)) {
     throw new TypeNarrowingError('Input is not a valid order');
   }
@@ -355,6 +381,7 @@ export {
   isLoginPayload,
   isNewOrder,
   toNewOrder,
+  toCartItems,
   isReview,
   toNewReview,
   toEditedReview,

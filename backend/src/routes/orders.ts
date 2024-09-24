@@ -30,7 +30,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   // Create new order object
   const newOrder: NewOrder = toNewOrder(req.body);
 
-  // Senf error if quantity of any product is '0'
+  // Send error if quantity of any product is '0'
   for (const product of newOrder.products) {
     if (product.quantity < 1) {
       return res.status(400).json({
