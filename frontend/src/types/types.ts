@@ -7,7 +7,7 @@ export interface Review {
   title: string;
   content: string;
   rating: number;
-};
+}
 
 export interface BaseProduct {
   id: string;

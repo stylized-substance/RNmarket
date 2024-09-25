@@ -6,7 +6,7 @@ import {
   ClothingItem,
   BeautyItem,
   FurnitureItem,
-  Laptop,
+  Laptop
 } from '#src/types/types';
 
 const isProduct = (param: unknown): param is Product => {
@@ -84,7 +84,6 @@ const isLaptop = (product: Product): product is Laptop => {
   );
 };
 
-
 const toProduct = (param: unknown): Product => {
   if (!isProduct(param)) {
     throw new TypeNarrowingError('Object has incorrect data for a product');
@@ -140,4 +139,4 @@ const toProduct = (param: unknown): Product => {
       return _exhaustiveCheck;
     }
   }
-}
+};
