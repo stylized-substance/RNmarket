@@ -42,3 +42,4 @@
 | 19.09.2024 | 2 | Wrote tests for users router, worked on utils and types | 99
 | 23.09.2024 | 2 | Wrote tests for orders router, refactored code | 101
 | 24.09.2024 | 2 | Wrote tests for orders and checkout routers, refactored code | 103
+| 25.09.2024 | 1 | Initialized frontend and started working on frontend - backend communication | 104

@@ -8,9 +8,11 @@ import authorizationRouter from '#src/routes/authorization';
 import ordersRouter from '#src/routes/orders';
 import checkoutRouter from '#src/routes/checkout';
 import errorHandler from './utils/errorHandler';
+import cors from "cors";
 
 const app = express();
 
+app.use(cors())
 app.use(express.json());
 
 app.use('/api/images', express.static(path.join(__dirname, 'data/images')));
