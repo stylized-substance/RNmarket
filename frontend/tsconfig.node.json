@@ -18,5 +18,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"],
+  "paths": {
+    "#src/*": ["./src/*"]
+  },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+
 }
