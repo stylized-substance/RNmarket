@@ -50,7 +50,10 @@ export const assert500Response = (response: Response) => {
 // Custom assert functions for type checking
 
 // Assertion template function
-export const assertValidType = (type: string, item: unknown): void => {
+export const assertValidType = (
+  type: 'product' | 'review' | 'user' | 'loginpayload' | 'order',
+  item: unknown
+): void => {
   let typeCheck;
 
   switch (type) {
@@ -69,8 +72,10 @@ export const assertValidType = (type: string, item: unknown): void => {
     case 'order':
       typeCheck = isNewOrder(item);
       break;
-    default:
-      break;
+    default: {
+      const _exhaustiveCheck: never = type;
+      return _exhaustiveCheck;
+    }
   }
 
   expect(typeCheck).toEqual(true);
