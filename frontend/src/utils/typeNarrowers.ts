@@ -29,7 +29,6 @@ const isStringArray = (param: unknown): param is string[] => {
 };
 
 const isProductCategory = (param: string): param is ProductCategory => {
-  console.log(typeof param)
   return Object.values(ProductCategory)
     .map((value) => value.toString())
     .includes(param);
@@ -50,4 +49,4 @@ const isProduct = (param: unknown): param is Product => {
   );
 };
 
-export { isProduct, isObject }
+export { isProduct, isObject, isString }

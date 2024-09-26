@@ -9,6 +9,7 @@ const App = () => {
     const getProducts = async () => {
       const products: Product[] = await productsService.getAll();
       setProducts(products);
+      await productsService.getOne(products[0].id)
     };
 
     void getProducts();
