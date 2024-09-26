@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Product } from './types/types';
 import productsService from './services/products';
+import '#src/styles/allproducts.css'
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,30 +16,36 @@ const App = () => {
   }, []);
 
   const productsMapped = products.map((product) => {
-
-    let imageUrl = ''
-    if (product.imgs !== null &&  product.imgs !== undefined) {
-      imageUrl = `http://localhost:3003${product.imgs[0]}`
+    let imageUrl = '';
+    if (product.imgs !== null && product.imgs !== undefined) {
+      imageUrl = `http://localhost:3003${product.imgs[0]}`;
     }
-    
+
     return (
-      <>
-        <div key={product.id}>
-          {product.title}
-          <br />
-          Price: {product.price}
-          <br />
-          In stock: {product.instock}
-          <br />
-          Rating: {product.rating}
+      <div key={product.id} className="product-card">
+        <div className="product-image">
+          <img src={imageUrl}></img>
         </div>
-        <img src={imageUrl}></img>
-        <br />
-      </>
+        <div  className="product-info">
+          <h5>
+            {product.title}
+          </h5>
+          <h6>
+            Price: {product.price}
+          </h6>
+        </div>
+      </div>
     );
   });
 
-  return <>{productsMapped}</>;
+  return (
+    <div className="product-container">
+      <h1>
+        All products
+      </h1>
+      {productsMapped}
+    </div>
+  )
 };
 
 export default App;
