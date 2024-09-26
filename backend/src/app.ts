@@ -15,7 +15,9 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-app.use('/api/images', express.static(path.join(__dirname, 'data/images')));
+app.use('/data/images', express.static('data/images'));
+
+console.log(path.join(__dirname, '..data/images'))
 
 app.use('/api/products', productsRouter);
 

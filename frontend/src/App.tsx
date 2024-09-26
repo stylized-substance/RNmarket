@@ -9,23 +9,36 @@ const App = () => {
     const getProducts = async () => {
       const products: Product[] = await productsService.getAll();
       setProducts(products);
-      await productsService.getOne(products[0].id)
     };
 
     void getProducts();
   }, []);
 
-  const productsMapped = products.map((product) => (
-    <li key={product.id}>{product.title}</li>
-  ));
+  const productsMapped = products.map((product) => {
 
-  return (
-    <>
-      <div>
-        <ul>{productsMapped}</ul>
-      </div>
-    </>
-  );
+    let imageUrl = ''
+    if (product.imgs !== null &&  product.imgs !== undefined) {
+      imageUrl = `http://localhost:3003${product.imgs[0]}`
+    }
+    
+    return (
+      <>
+        <div key={product.id}>
+          {product.title}
+          <br />
+          Price: {product.price}
+          <br />
+          In stock: {product.instock}
+          <br />
+          Rating: {product.rating}
+        </div>
+        <img src={imageUrl}></img>
+        <br />
+      </>
+    );
+  });
+
+  return <>{productsMapped}</>;
 };
 
 export default App;
