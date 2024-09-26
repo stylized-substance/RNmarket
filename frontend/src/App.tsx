@@ -7,17 +7,22 @@ const App = () => {
 
   useEffect(() => {
     const getProducts = async () => {
-      const products = await productsService.getAll();
+      const products: Product[] = await productsService.getAll();
       setProducts(products);
     };
 
-    getProducts();
+    void getProducts();
   }, []);
 
-  console.log(products);
+  const productsMapped = products.map((product) => (
+    <li key={product.id}>{product.title}</li>
+  ));
+
   return (
     <>
-      <div></div>
+      <div>
+        <ul>{productsMapped}</ul>
+      </div>
     </>
   );
 };
