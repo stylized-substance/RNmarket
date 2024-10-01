@@ -38,7 +38,7 @@ const App = () => {
   });
 
   return (
-    <div className="product-container">
+    <div className="container">
       <h1>
         All products
       </h1>
