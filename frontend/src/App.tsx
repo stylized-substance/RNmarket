@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Product } from './types/types';
 import productsService from './services/products';
-import '#src/styles/allproducts.css'
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
