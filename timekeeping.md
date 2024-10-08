@@ -44,3 +44,4 @@
 | 24.09.2024 | 2 | Wrote tests for orders and checkout routers, refactored code | 103
 | 25.09.2024 | 1 | Initialized frontend and started working on frontend - backend communication | 104
 | 26.09.2024 | 2 | Wrote services, JSX, CSS | 106
+| 08.10.2024 | 2 | Worked on products view, dockerized frontend | 108

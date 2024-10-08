@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import { Product } from './types/types';
 import productsService from './services/products';
 
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Image from 'react-bootstrap/Image';
+
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -14,37 +20,36 @@ const App = () => {
     void getProducts();
   }, []);
 
-  const productsMapped = products.map((product) => {
+  const productsToCards = products.map((product) => {
     let imageUrl = '';
     if (product.imgs !== null && product.imgs !== undefined) {
       imageUrl = `http://localhost:3003${product.imgs[0]}`;
     }
 
     return (
-      <div key={product.id} className="product-card">
-        <div className="product-image">
-          <img src={imageUrl}></img>
-        </div>
-        <div  className="product-info">
-          <h5>
-            {product.title}
-          </h5>
-          <h6>
-            Price: {product.price}
-          </h6>
-        </div>
-      </div>
+      <Card key={product.id}>
+        <Card.Img variant="top" src={imageUrl} style={{ height: 200, width: 'auto' }} />
+        <Card.Body>
+          <Card.Title>{product.title}</Card.Title>
+          <Card.Subtitle>{product.price}</Card.Subtitle>
+          <Card.Text>{product.specs[0].substring(0, 20)}</Card.Text>
+        </Card.Body>
+      </Card>
     );
   });
 
   return (
-    <div className="container">
-      <h1>
-        All products
-      </h1>
-      {productsMapped}
-    </div>
-  )
+    <Container >
+      <h1>All products</h1>
+      <Row lg={6}>
+        {productsToCards.map(card =>
+            <Col key={card.key}>
+              {card}
+            </Col>
+        )}
+      </Row>
+    </Container>
+  );
 };
 
 export default App;
