@@ -72,6 +72,6 @@ if (!allVariablesDefined) {
   envVariables = reassign();
 }
 
-logger('Environment variables:\n', envVariables);
+logger('Environment variables:\n', JSON.stringify(envVariables, null, 2));
 
 export default envVariables;
