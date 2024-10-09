@@ -6,7 +6,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import Image from 'react-bootstrap/Image';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Form from 'react-bootstrap/Form';
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -28,7 +31,11 @@ const App = () => {
 
     return (
       <Card key={product.id}>
-        <Card.Img variant="top" src={imageUrl} style={{ height: 200, width: 'auto' }} />
+        <Card.Img
+          variant="top"
+          src={imageUrl}
+          style={{ height: 200, width: 'auto' }}
+        />
         <Card.Body>
           <Card.Title>{product.title}</Card.Title>
           <Card.Subtitle>{product.price}</Card.Subtitle>
@@ -39,14 +46,25 @@ const App = () => {
   });
 
   return (
-    <Container >
+    <Container>
+      <Navbar>
+        <Container>
+          <Navbar.Brand>RNmarket</Navbar.Brand>
+          <Navbar.Collapse>
+            <Nav>
+              <Nav.Link>Home</Nav.Link>
+            </Nav>
+            <Form className='w-100'>
+              <Form.Control type="search" placeholder="Search" />
+            </Form>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
       <h1>All products</h1>
       <Row lg={6}>
-        {productsToCards.map(card =>
-            <Col key={card.key}>
-              {card}
-            </Col>
-        )}
+        {productsToCards.map((card) => (
+          <Col key={card.key}>{card}</Col>
+        ))}
       </Row>
     </Container>
   );
