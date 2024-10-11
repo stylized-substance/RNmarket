@@ -1,4 +1,5 @@
-import './styles/custom.css'
+import './styles/custom.css';
+
 import { useState, useEffect } from 'react';
 import { Product } from './types/types';
 import productsService from './services/products';
@@ -9,7 +10,6 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -48,20 +48,28 @@ const App = () => {
   });
 
   return (
-    <Container style={{ marginTop: "60px" }}>
-      <Navbar fixed="top" expand="sm" className="navbar">
-        <Navbar.Brand>RNmarket</Navbar.Brand>
-        <Navbar.Collapse>
-          <Nav>
-            <Nav.Link style={{ color:"white" }}>Home</Nav.Link>
-          </Nav>
-          <Form className="w-100 ms-2 me-2">
-            <Form.Control type="search" placeholder="Search" />
-          </Form>
-          <Button variant="light">
-            Login
-          </Button>
-        </Navbar.Collapse>
+    <Container style={{ marginTop: '60px' }}>
+      <Navbar fixed="top" expand="lg" className="navbar">
+        <Container fluid>
+          <Navbar.Brand href="#" className="me-4">
+            <b>RNmarket</b>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="justify-content-between"
+          >
+            <Nav className="me-auto">
+              <Nav.Link className="navbar-brand">Home</Nav.Link>
+            </Nav>
+            <Form className="mx-auto" style={{ width: '600px' }}>
+              <Form.Control type="search" placeholder="Search" />
+            </Form>
+            <Button variant="light" className="ms-auto">
+              Login <i className="bi bi-box-arrow-in-right"></i>
+            </Button>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
       <h1>All products</h1>
       <Row lg={6}>
