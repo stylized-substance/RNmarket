@@ -47,3 +47,4 @@
 | 08.10.2024 | 2 | Worked on products view, dockerized frontend | 108
 | 09.10.2024 | 1 | Worked on frontpage | 109
 | 11.10.2024 | 1 | Worked on frontpage | 110
+| 14.10.2024 | 2 | Worked on frontpage, styles | 112

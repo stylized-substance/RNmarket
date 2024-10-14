@@ -8,10 +8,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import NavBar from './components/NavBar';
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -49,28 +46,7 @@ const App = () => {
 
   return (
     <Container style={{ marginTop: '60px' }}>
-      <Navbar fixed="top" expand="lg" className="navbar">
-        <Container fluid>
-          <Navbar.Brand href="#" className="me-4">
-            <b>RNmarket</b>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className="justify-content-between"
-          >
-            <Nav className="me-auto">
-              <Nav.Link className="navbar-brand">Home</Nav.Link>
-            </Nav>
-            <Form className="mx-auto" style={{ width: '600px' }}>
-              <Form.Control type="search" placeholder="Search" />
-            </Form>
-            <Button variant="light" className="ms-auto">
-              Login <i className="bi bi-box-arrow-in-right"></i>
-            </Button>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <NavBar />      
       <h1>All products</h1>
       <Row lg={6}>
         {productsToCards.map((card) => (
