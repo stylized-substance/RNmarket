@@ -19,7 +19,7 @@ const NavBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto fs-5">
+          <Nav className="fs-5">
             <Nav.Link className="text-light">Home</Nav.Link>
             <NavDropdown
               title="Products"
@@ -53,10 +53,10 @@ const NavBar = () => {
               </Button>
             </InputGroup>
           </Form>
-          <Nav.Link className="text-light m-0 fs-5">
+          <Nav.Link className="text-light fs-5 me-4">
             Admin <i className="bi bi-gear"></i>
           </Nav.Link>
-          <Button variant="light" className="ms-auto">
+          <Button variant="light">
             Login <i className="bi bi-box-arrow-in-right"></i>
           </Button>
         </Navbar.Collapse>
