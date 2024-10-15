@@ -38,6 +38,7 @@ router.post('/login', async (req: Request, res: Response) => {
   if (!user) {
     return res.status(400).json({ Error: 'User not found in database' });
   }
+
   // If password hash is null in database, send error. Else send access token and refresh token
   if (user.dataValues.passwordhash === null) {
     return res.status(500).json({ Error: 'User has no password set' });
@@ -97,8 +98,8 @@ router.post('/refresh', async (req: Request, res: Response) => {
   }
 
   // Check if refresh token has expired, delete it and send error if true
-  const currentDate = new Date();
-  if (tokenInDb.dataValues.expiry_date.getTime() < currentDate.getTime()) {
+  const currentDate: Date = new Date();
+  if (Date.parse(tokenInDb.dataValues.expiry_date) < currentDate.getTime()) {
     await tokenInDb.destroy();
     return res
       .status(400)

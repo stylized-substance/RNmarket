@@ -49,7 +49,7 @@ describe('GET requests', () => {
     const response = await api.get('/api/products');
     assert200Response(response);
     expect(response.body).toHaveProperty('products');
-    expect(response.body.products).toHaveLength(50);
+    expect(response.body.products.length).toBeGreaterThan(0);
     response.body.products.forEach((product: unknown) =>
       assertValidType('product', product)
     );

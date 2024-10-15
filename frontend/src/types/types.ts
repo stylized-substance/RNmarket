@@ -30,25 +30,6 @@ export interface Mobile extends BaseProduct {
   ram: string;
 }
 
-export interface Book extends BaseProduct {
-  category: 'Books';
-  popular?: boolean;
-  language: string;
-  genre: string;
-}
-
-export interface ClothingItem extends BaseProduct {
-  category: 'Clothings';
-  popular?: boolean;
-  for: string;
-}
-
-export interface BeautyItem extends BaseProduct {
-  category: 'Beauty';
-  popular?: boolean;
-  type: string;
-}
-
 export interface FurnitureItem extends BaseProduct {
   category: 'Furniture';
   popular?: boolean;
@@ -68,17 +49,11 @@ export interface Laptop extends BaseProduct {
 
 export type Product =
   | Mobile
-  | Book
-  | ClothingItem
-  | BeautyItem
   | FurnitureItem
   | Laptop;
 
 export enum ProductCategory {
   Mobiles = 'Mobiles',
-  Books = 'Books',
-  Clothings = 'Clothings',
-  Beauty = 'Beauty',
   Furniture = 'Furniture',
   Laptops = 'Laptops'
 }

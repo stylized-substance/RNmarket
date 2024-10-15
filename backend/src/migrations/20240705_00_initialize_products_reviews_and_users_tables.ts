@@ -59,14 +59,6 @@ module.exports = {
         type: DataTypes.TEXT,
         allowNull: true
       },
-      language: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      genre: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
       for: {
         type: DataTypes.TEXT,
         allowNull: true

@@ -38,7 +38,14 @@ const migrateUp = async (queryInterface) => {
   userArray.push(testUser);
 
   // Loop thorugh products
+  // Pick products categories out of the data
+  const categoriesToPick = ['Mobiles', 'Furniture', 'Laptops'];
+
   for (const product of products) {
+    if (!(categoriesToPick.includes(product.category))) {
+      continue
+    }
+
     const typeCheckedProduct: Product = toProduct(product);
 
     const productId: string = uuidv4();

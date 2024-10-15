@@ -7,9 +7,6 @@ import {
   NewReview,
   Product,
   Mobile,
-  Book,
-  ClothingItem,
-  BeautyItem,
   FurnitureItem,
   Laptop,
   ProductCategory,
@@ -265,30 +262,6 @@ const isMobile = (product: Product): product is Mobile => {
   );
 };
 
-const isBook = (product: Product): product is Book => {
-  return (
-    product.category === 'Books' &&
-    'language' in product &&
-    isString(product.language) &&
-    'genre' in product &&
-    isString(product.genre)
-  );
-};
-
-const isClothingItem = (product: Product): product is ClothingItem => {
-  return (
-    product.category === 'Clothings' &&
-    'for' in product &&
-    isString(product.for)
-  );
-};
-
-const isBeautyItem = (product: Product): product is BeautyItem => {
-  return (
-    product.category === 'Beauty' && 'type' in product && isString(product.type)
-  );
-};
-
 const isFurnitureItem = (product: Product): product is FurnitureItem => {
   return (
     product.category === 'Furniture' &&
@@ -332,28 +305,6 @@ const toProduct = (param: unknown): Product => {
     case 'Mobiles': {
       if (!isMobile(param)) {
         throw new TypeNarrowingError('Object has incorrect data for a mobile');
-      }
-      return param;
-    }
-    case 'Books': {
-      if (!isBook(param)) {
-        throw new TypeNarrowingError('Object has incorrect data for a book');
-      }
-      return param;
-    }
-    case 'Clothings': {
-      if (!isClothingItem(param)) {
-        throw new TypeNarrowingError(
-          'Object has incorrect data for a clothing item'
-        );
-      }
-      return param;
-    }
-    case 'Beauty': {
-      if (!isBeautyItem(param)) {
-        throw new TypeNarrowingError(
-          'Object has incorrect data for a beauty item'
-        );
       }
       return param;
     }

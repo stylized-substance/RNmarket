@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false
       },
       expiry_date: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
         allowNull: false
       },
       user_id: {

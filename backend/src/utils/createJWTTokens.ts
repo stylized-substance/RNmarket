@@ -17,8 +17,9 @@ const createJWTTokens = (
   accessToken: string;
 } => {
   // Set expiry time for refresh token
-  const refreshTokenExpiryTime: number =
-    (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION) * 1000; // Convert seconds to milliseconds
+  const refreshTokenExpiryTime: string =
+    // Convert seconds to milliseconds -- Unix timestamps are too large for JS Number primitive, using string type instead
+    ((new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION) * 1000).toString();
 
   // Create access token
   const accessToken: string = jwt.sign(user, jwtAccessTokenSecret, {
@@ -47,7 +48,7 @@ const createJWTTokens = (
   const expiredRefreshTokenForDb: RefreshToken = {
     id: uuidv4(),
     token: expiredRefreshToken,
-    expiry_date: 0,
+    expiry_date: '0',
     user_id: user.id
   };
 

@@ -11,7 +11,7 @@ services:
       - ./src:/usr/src/app/src
       - ./__tests__:/usr/src/app/__tests__
     environment:
-      - PORT=3000
+      - PORT=3003
       - DATABASE_URL=postgres://postgres:dbpassword@postgres:5432/postgres
       - JSONWEBTOKENSECRET=secret
       - JWTACCESSTOKENSECRET=accesssecret

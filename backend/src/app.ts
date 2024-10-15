@@ -1,6 +1,5 @@
 import express from 'express';
 import 'express-async-errors';
-import path from 'path';
 import productsRouter from '#src/routes/products';
 import usersRouter from '#src/routes/users';
 import reviewsRouter from '#src/routes/reviews';
@@ -13,11 +12,10 @@ import cors from "cors";
 const app = express();
 
 app.use(cors())
+
 app.use(express.json());
 
 app.use('/data/images', express.static('data/images'));
-
-console.log(path.join(__dirname, '..data/images'))
 
 app.use('/api/products', productsRouter);
 
