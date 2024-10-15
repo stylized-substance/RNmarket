@@ -48,3 +48,4 @@
 | 09.10.2024 | 1 | Worked on frontpage | 109
 | 11.10.2024 | 1 | Worked on frontpage | 110
 | 14.10.2024 | 2 | Worked on frontpage, styles | 112
+| 15.10.2024 | 3 | Worked on frontpage, styles. Trimmed product categories, fixed Docker test env in backend | 115

@@ -102,10 +102,7 @@ export interface Laptop extends BaseProduct {
   has_ssd: string;
 }
 
-export type Product =
-  | Mobile
-  | FurnitureItem
-  | Laptop;
+export type Product = Mobile | FurnitureItem | Laptop;
 
 export enum ProductCategory {
   Mobiles = 'Mobiles',

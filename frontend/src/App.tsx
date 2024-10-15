@@ -1,4 +1,4 @@
-import './styles/custom.css';
+import '#src/styles/custom.css';
 
 import { useState, useEffect } from 'react';
 import { Product } from './types/types';
@@ -12,6 +12,8 @@ import NavBar from './components/NavBar';
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [adminLoggedIn, setAdminLoggedIn] = useState<boolean>(false);
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -46,7 +48,12 @@ const App = () => {
 
   return (
     <Container style={{ marginTop: '60px' }}>
-      <NavBar />      
+      <NavBar
+        adminLoggedIn={adminLoggedIn}
+        setAdminLoggedIn={setAdminLoggedIn}
+        userLoggedIn={userLoggedIn}
+        setUserLoggedIn={setUserLoggedIn}
+      />
       <h1>All products</h1>
       <Row lg={6}>
         {productsToCards.map((card) => (

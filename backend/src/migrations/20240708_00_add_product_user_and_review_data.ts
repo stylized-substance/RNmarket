@@ -42,8 +42,8 @@ const migrateUp = async (queryInterface) => {
   const categoriesToPick = ['Mobiles', 'Furniture', 'Laptops'];
 
   for (const product of products) {
-    if (!(categoriesToPick.includes(product.category))) {
-      continue
+    if (!categoriesToPick.includes(product.category)) {
+      continue;
     }
 
     const typeCheckedProduct: Product = toProduct(product);
