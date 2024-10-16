@@ -72,8 +72,7 @@ const NavBar = (props: NavBarProps) => {
               Admin <i className="bi bi-gear"></i>
             </Nav.Link>
           )}
-          {/*TODO: condititonally render login/logout buttton*/}
-          {!props.userLoggedIn && (
+          {!props.userLoggedIn ? (
             <>
               <Button
                 variant="primary"
@@ -116,6 +115,10 @@ const NavBar = (props: NavBarProps) => {
                 </Dropdown.Menu>
               </Dropdown>
             </>
+          ) : (
+            <Button variant="primary">
+              Logout <i className="bi bi-box-arrow-left"></i>
+            </Button>
           )}
         </Navbar.Collapse>
       </Container>
