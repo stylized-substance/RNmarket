@@ -12,7 +12,7 @@ import NavBar from './components/NavBar';
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [adminLoggedIn, setAdminLoggedIn] = useState<boolean>(false);
+  const [adminLoggedIn, setAdminLoggedIn] = useState<boolean>(true);
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {

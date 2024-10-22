@@ -23,4 +23,9 @@ body {
   .navbar-loginform-form-control::placeholder {
     color: black;
   }
+
+  .navbar-button {
+    display: flex;
+    align-items: center;
+  }
 }

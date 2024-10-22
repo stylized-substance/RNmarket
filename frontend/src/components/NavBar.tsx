@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 interface NavBarProps {
   adminLoggedIn: boolean;
@@ -17,11 +18,55 @@ interface NavBarProps {
   setUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const LoginButton = () => {
+  const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
+
+  return (
+    <>
+      <Button
+        variant="primary"
+        onMouseEnter={() => setLoginDropdownOpen(true)}
+        className="navbar-button "
+      >
+        Login <i className="bi bi-box-arrow-in-right ms-2"></i>
+      </Button>
+      <Dropdown align="end" show={loginDropdownOpen}>
+        <Dropdown.Menu
+          className="p-3 mt-5"
+          onMouseLeave={() => setLoginDropdownOpen(false)}
+        >
+          <Form>
+            <Form.Group controlId="loginform">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email address"
+                className="navbar-loginform-form-control"
+              ></Form.Control>
+              <Form.Label className="mt-3">Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                className="navbar-loginform-form-control"
+              ></Form.Control>
+              <Container>
+                <Row>
+                  <Button variant="primary" type="submit" className="mt-4">
+                    Send
+                  </Button>
+                </Row>
+              </Container>
+            </Form.Group>
+          </Form>
+        </Dropdown.Menu>
+      </Dropdown>
+    </>
+  );
+};
+
 const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
-
-  const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
   return (
     <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
@@ -30,7 +75,10 @@ const NavBar = (props: NavBarProps) => {
           <b>RNmarket</b>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="justify-content-between"
+        >
           <Nav className="fs-5">
             <Nav.Link href="/" className="text-light">
               Home
@@ -55,7 +103,7 @@ const NavBar = (props: NavBarProps) => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <Form className="mx-auto" style={{ width: '600px' }}>
+          <Form style={{ width: '600px' }}>
             <InputGroup>
               <Form.Control
                 type="search"
@@ -67,59 +115,33 @@ const NavBar = (props: NavBarProps) => {
               </Button>
             </InputGroup>
           </Form>
-          {props.adminLoggedIn && (
-            <Nav.Link href="/admin" className="text-light fs-5 me-4">
-              Admin <i className="bi bi-gear"></i>
-            </Nav.Link>
-          )}
-          {!props.userLoggedIn ? (
-            <>
-              <Button
-                variant="primary"
-                onMouseEnter={() => setLoginDropdownOpen(true)}
-              >
-                Login <i className="bi bi-box-arrow-in-right"></i>
-              </Button>
-              <Dropdown align="end" show={loginDropdownOpen}>
-                <Dropdown.Menu
-                  className="p-3 mt-5"
-                  onMouseLeave={() => setLoginDropdownOpen(false)}
+          <Row>
+            {props.adminLoggedIn && (
+              <Col>
+                <Button
+                  href="/admin"
+                  variant="primary"
+                  className="navbar-button"
                 >
-                  <Form>
-                    <Form.Group controlId="loginform">
-                      <Form.Label>Email address</Form.Label>
-                      <Form.Control
-                        type="email"
-                        placeholder="Enter email address"
-                        className="navbar-loginform-form-control"
-                      ></Form.Control>
-                      <Form.Label className="mt-3">Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Enter password"
-                        className="navbar-loginform-form-control"
-                      ></Form.Control>
-                      <Container>
-                        <Row>
-                          <Button
-                            variant="primary"
-                            type="submit"
-                            className="mt-4"
-                          >
-                            Send
-                          </Button>
-                        </Row>
-                      </Container>
-                    </Form.Group>
-                  </Form>
-                </Dropdown.Menu>
-              </Dropdown>
-            </>
-          ) : (
-            <Button variant="primary">
-              Logout <i className="bi bi-box-arrow-left"></i>
-            </Button>
-          )}
+                  Admin <i className="bi bi-gear ms-2"></i>
+                </Button>
+              </Col>
+            )}
+            <Col>
+              {!props.userLoggedIn ? (
+                <LoginButton />
+              ) : (
+                <Button variant="primary">
+                  Logout <i className="bi bi-box-arrow-left ms-2"></i>
+                </Button>
+              )}
+            </Col>
+            <Col>
+              <Button variant="primary" className="navbar-button">
+                Cart <i className="bi bi-cart4 ms-2"></i>
+              </Button>
+            </Col>
+          </Row>
         </Navbar.Collapse>
       </Container>
     </Navbar>
