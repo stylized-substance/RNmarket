@@ -27,5 +27,7 @@ body {
   .navbar-button {
     display: flex;
     align-items: center;
+    background: rgb(55,60,121);
+    background: linear-gradient(90deg, rgba(55,60,121,1) 0%, rgba(0,18,161,1) 100%); 
   }
 }

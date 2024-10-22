@@ -110,7 +110,7 @@ const NavBar = (props: NavBarProps) => {
                 placeholder="Search products"
                 className="border-0 bg-light navbar-search-placeholder"
               />
-              <Button type="submit" variant="light">
+              <Button type="submit" className="navbar-button">
                 <i className="bi bi-search"></i>
               </Button>
             </InputGroup>
