@@ -10,6 +10,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 interface NavBarProps {
   adminLoggedIn: boolean;
@@ -21,20 +22,23 @@ interface NavBarProps {
 const LoginButton = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
+  console.log(loginDropdownOpen);
+
   return (
     <>
       <Button
         variant="primary"
-        onMouseEnter={() => setLoginDropdownOpen(true)}
+        onClick={() => setLoginDropdownOpen(!(loginDropdownOpen))}
         className="navbar-button "
       >
         Login <i className="bi bi-box-arrow-in-right ms-2"></i>
       </Button>
       <Dropdown align="end" show={loginDropdownOpen}>
-        <Dropdown.Menu
-          className="p-3 mt-5"
-          onMouseLeave={() => setLoginDropdownOpen(false)}
-        >
+        <Dropdown.Menu className="d-flex flex-column p-3 mt-3">
+          <CloseButton
+            onClick={() => setLoginDropdownOpen(false)}
+            className="align-self-end"
+          />
           <Form>
             <Form.Group controlId="loginform">
               <Form.Label>Email address</Form.Label>
@@ -51,7 +55,11 @@ const LoginButton = () => {
               ></Form.Control>
               <Container>
                 <Row>
-                  <Button variant="primary" type="submit" className="mt-4">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className="navbar-button mt-4"
+                  >
                     Send
                   </Button>
                 </Row>
