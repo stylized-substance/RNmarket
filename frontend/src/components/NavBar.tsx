@@ -19,27 +19,38 @@ interface NavBarProps {
   setUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginButton = () => {
+const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  console.log(loginDropdownOpen);
-
-  return (
-    <>
+  const LoginButton = () => {
+    return (
       <Button
         variant="primary"
-        onClick={() => setLoginDropdownOpen(!(loginDropdownOpen))}
+        onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
         className="navbar-button "
       >
         Login <i className="bi bi-box-arrow-in-right ms-2"></i>
       </Button>
-      <Dropdown align="end" show={loginDropdownOpen}>
-        <Dropdown.Menu className="d-flex flex-column p-3 mt-3">
-          <CloseButton
-            onClick={() => setLoginDropdownOpen(false)}
-            className="align-self-end"
-          />
-          <Form>
+    );
+  };
+
+  return (
+    <>
+      <Dropdown
+        align="end"
+        show={loginDropdownOpen}
+        onToggle={() => setLoginDropdownOpen(!loginDropdownOpen)}
+      >
+        <Dropdown.Toggle as={LoginButton} id="dropdown-basic">
+          Login <i className="bi bi-box-arrow-in-right ms-2"></i>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Container>
+            <Row className="justify-content-end me-2 mt-2">
+              <CloseButton onClick={() => setLoginDropdownOpen(false)} />
+            </Row>
+          </Container>
+          <Form className="d-flex flex-column ps-3 pe-3 mt-3">
             <Form.Group controlId="loginform">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -137,7 +148,7 @@ const NavBar = (props: NavBarProps) => {
             )}
             <Col>
               {!props.userLoggedIn ? (
-                <LoginButton />
+                <LoginMenu />
               ) : (
                 <Button variant="primary">
                   Logout <i className="bi bi-box-arrow-left ms-2"></i>
