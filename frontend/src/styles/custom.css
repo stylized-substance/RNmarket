@@ -16,6 +16,7 @@ body {
   }
 
   .navbar-loginform-form-control {
+    color: black;
     background-color: white;
     width: 400px;
   }

@@ -41,10 +41,10 @@ const LoginMenu = () => {
         show={loginDropdownOpen}
         onToggle={() => setLoginDropdownOpen(!loginDropdownOpen)}
       >
-        <Dropdown.Toggle as={LoginButton} id="dropdown-basic">
+        <Dropdown.Toggle as={LoginButton}>
           Login <i className="bi bi-box-arrow-in-right ms-2"></i>
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <Dropdown.Menu className="mt-2">
           <Container>
             <Row className="justify-content-end me-2 mt-2">
               <CloseButton onClick={() => setLoginDropdownOpen(false)} />
@@ -69,7 +69,7 @@ const LoginMenu = () => {
                   <Button
                     variant="primary"
                     type="submit"
-                    className="navbar-button mt-4"
+                    className="navbar-button mt-4 mb-2"
                   >
                     Send
                   </Button>
