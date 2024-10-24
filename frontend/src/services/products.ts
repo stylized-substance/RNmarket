@@ -5,7 +5,12 @@ import errorHandler from '#src/utils/errorHandler';
 
 const apiUrl = 'http://localhost:3003/api';
 
-const getAll = async (): Promise<Product[] | []> => {
+interface ProductFilter {
+  productCategory?: string
+}
+
+const getAll = async (productFilter?: ProductFilter): Promise<Product[] | []> => {
+  // Validate API response
   const responseIsValid = (response: unknown): boolean => {
     return (
       isObject(response) &&
@@ -15,8 +20,16 @@ const getAll = async (): Promise<Product[] | []> => {
     );
   };
 
+  let query = ''
+
+  if (productFilter) {
+    if (productFilter.productCategory) {
+      query = `category=${productFilter.productCategory}`
+    }
+  }
+  
   try {
-    const response = await axios.get<{ products: Product[] }>(`${apiUrl}/products`);
+    const response = await axios.get<{ products: Product[] }>(`${apiUrl}/products?${query}`);
     if (responseIsValid(response.data)) {
       return response.data.products;
     } else {
