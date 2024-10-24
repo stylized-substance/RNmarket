@@ -88,7 +88,7 @@ const NavBar = (props: NavBarProps) => {
     useState<boolean>(false);
 
   return (
-    <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
+    <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark" >
       <Container fluid>
         <Navbar.Brand href="/" className="me-4 fs-4" id="navbar-brand">
           <b>RNmarket</b>
@@ -156,7 +156,7 @@ const NavBar = (props: NavBarProps) => {
               )}
             </Col>
             <Col>
-              <Button variant="primary" className="navbar-button">
+              <Button href="/cart" variant="primary" className="navbar-button">
                 Cart <i className="bi bi-cart4 ms-2"></i>
               </Button>
             </Col>
