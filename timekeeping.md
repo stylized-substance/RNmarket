@@ -51,3 +51,4 @@
 | 15.10.2024 | 3 | Worked on frontpage, styles. Trimmed product categories, fixed Docker test env in backend | 115
 | 22.10.2024 | 2 | Worked on frontpage, styles. | 117
 | 23.10.2024 | 1 | Worked on frontpage, styles. | 118
+| 24.10.2024 | 2 | Worked on navbar, react router, product pages | 120
