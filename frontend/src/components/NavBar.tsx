@@ -86,10 +86,11 @@ const NavBar = (props: NavBarProps) => {
     <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
       <Container fluid>
         <Navbar.Brand
-          href="/"
-          className="me-4 fs-4"
+          as="span"
+          style={{ cursor: 'pointer' }}
           id="navbar-brand"
           onClick={() => navigate('/')}
+          className="me-4 fs-4"
         >
           <b>RNmarket</b>
         </Navbar.Brand>
@@ -99,7 +100,7 @@ const NavBar = (props: NavBarProps) => {
           className="justify-content-between"
         >
           <Nav className="fs-5">
-            <Nav.Link href="/" className="text-light">
+            <Nav.Link onClick={() => navigate('/')} className="text-light">
               Home
             </Nav.Link>
             <NavDropdown
@@ -109,15 +110,24 @@ const NavBar = (props: NavBarProps) => {
               onMouseLeave={() => setProductsDropdownOpen(false)}
               show={productsDropdownOpen}
             >
-              <NavDropdown.Item href="/mobiles" className="text-light">
+              <NavDropdown.Item
+                onClick={() => navigate('/mobiles')}
+                className="text-light"
+              >
                 Mobile phones
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="/furniture" className="text-light">
+              <NavDropdown.Item
+                onClick={() => navigate('/furniture')}
+                className="text-light"
+              >
                 Furniture
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="/laptops" className="text-light">
+              <NavDropdown.Item
+                onClick={() => navigate('/laptops')}
+                className="text-light"
+              >
                 Laptops
               </NavDropdown.Item>
             </NavDropdown>
@@ -138,8 +148,8 @@ const NavBar = (props: NavBarProps) => {
             {props.adminLoggedIn && (
               <Col>
                 <Button
-                  href="/admin"
                   variant="primary"
+                  onClick={() => navigate('/admin')}
                   className="navbar-button"
                 >
                   Admin <i className="bi bi-gear ms-2"></i>
@@ -156,7 +166,11 @@ const NavBar = (props: NavBarProps) => {
               )}
             </Col>
             <Col>
-              <Button href="/cart" variant="primary" className="navbar-button">
+              <Button
+                variant="primary"
+                onClick={() => navigate('/cart')}
+                className="navbar-button"
+              >
                 Cart <i className="bi bi-cart4 ms-2"></i>
               </Button>
             </Col>
