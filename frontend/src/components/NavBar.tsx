@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -22,18 +23,6 @@ interface NavBarProps {
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  const LoginButton = () => {
-    return (
-      <Button
-        variant="primary"
-        onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
-        className="navbar-button "
-      >
-        Login <i className="bi bi-box-arrow-in-right ms-2"></i>
-      </Button>
-    );
-  };
-
   return (
     <>
       <Dropdown
@@ -41,9 +30,13 @@ const LoginMenu = () => {
         show={loginDropdownOpen}
         onToggle={() => setLoginDropdownOpen(!loginDropdownOpen)}
       >
-        <Dropdown.Toggle as={LoginButton}>
+        <Button
+          variant="primary"
+          onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
+          className="navbar-button "
+        >
           Login <i className="bi bi-box-arrow-in-right ms-2"></i>
-        </Dropdown.Toggle>
+        </Button>
         <Dropdown.Menu className="mt-2">
           <Container>
             <Row className="justify-content-end me-2 mt-2">
@@ -87,10 +80,17 @@ const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   return (
-    <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark" >
+    <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
       <Container fluid>
-        <Navbar.Brand href="/" className="me-4 fs-4" id="navbar-brand">
+        <Navbar.Brand
+          href="/"
+          className="me-4 fs-4"
+          id="navbar-brand"
+          onClick={() => navigate('/')}
+        >
           <b>RNmarket</b>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
