@@ -7,7 +7,7 @@ body {
     color: coral;
   }
 
-  .navbar-search-placeholder::placeholder {
+  .navbar-search-placeholder {
     color: black;
   }
 
