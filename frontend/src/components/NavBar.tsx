@@ -94,7 +94,6 @@ const NavBar = (props: NavBarProps) => {
         >
           <b>RNmarket</b>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse
           id="basic-navbar-nav"
           className="justify-content-between"
