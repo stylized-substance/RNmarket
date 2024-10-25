@@ -52,3 +52,4 @@
 | 22.10.2024 | 2 | Worked on frontpage, styles. | 117
 | 23.10.2024 | 1 | Worked on frontpage, styles. | 118
 | 24.10.2024 | 2 | Worked on navbar, react router, product pages | 120
+| 25.10.2024 | 1 | Worked on navbar, react router, search page | 121
