@@ -6,13 +6,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from '#src/components/Home';
 import NavBar from '#src/components/NavBar';
 import Products from '#src/components/Products';
+import SearchResults from '#src/components/SearchResults';
 
 import Container from 'react-bootstrap/Container';
 
 const App = () => {
   const [adminLoggedIn, setAdminLoggedIn] = useState<boolean>(true);
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
-
 
   return (
     <BrowserRouter>
@@ -26,12 +26,19 @@ const App = () => {
       </Container>
       <Routes>
         <Route path="/" element=<Home /> />
-        <Route path="/mobiles" element=<Products productCategory="Mobiles" /> />
         <Route
-          path="/furniture"
+          path="/products/mobiles"
+          element=<Products productCategory="Mobiles" />
+        />
+        <Route
+          path="/products/furniture"
           element=<Products productCategory="Furniture" />
         />
-        <Route path="/laptops" element=<Products productCategory="Laptops" /> />
+        <Route
+          path="/products/laptops"
+          element=<Products productCategory="Laptops" />
+        />
+        <Route path="/search/:searchTerm" element=<SearchResults /> />
         <Route path="/admin" element=<Home /> />
         <Route path="/cart" element=<Home /> />
       </Routes>

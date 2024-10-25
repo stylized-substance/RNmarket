@@ -80,7 +80,14 @@ const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
 
+  const [searchTerm, setSearchTerm] = useState<string>('')
+
   const navigate = useNavigate();
+
+  const handleSearchSubmit = () => {
+    event?.preventDefault()
+    navigate(`/search/${searchTerm}`)
+  }
 
   return (
     <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
@@ -110,32 +117,34 @@ const NavBar = (props: NavBarProps) => {
               show={productsDropdownOpen}
             >
               <NavDropdown.Item
-                onClick={() => navigate('/mobiles')}
+                onClick={() => navigate('/products/mobiles')}
                 className="text-light"
               >
                 Mobile phones
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
-                onClick={() => navigate('/furniture')}
+                onClick={() => navigate('/products/furniture')}
                 className="text-light"
               >
                 Furniture
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
-                onClick={() => navigate('/laptops')}
+                onClick={() => navigate('/products/laptops')}
                 className="text-light"
               >
                 Laptops
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <Form style={{ width: '600px' }}>
+          <Form style={{ width: '600px' }} onSubmit={handleSearchSubmit}>
             <InputGroup>
               <Form.Control
                 type="search"
                 placeholder="Search products"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
                 className="border-0 bg-light navbar-search-placeholder"
               />
               <Button type="submit" className="navbar-button">
