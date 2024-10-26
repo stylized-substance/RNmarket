@@ -10,7 +10,7 @@ const SearchResults = () => {
   return (
     <Container>
       <Row>
-        <Col className="text-center mt-4">
+        <Col className="text-center m-4">
           <h1>Search results for: {searchTerm}</h1>
         </Col>
       </Row>
