@@ -6,10 +6,13 @@ import errorHandler from '#src/utils/errorHandler';
 const apiUrl = 'http://localhost:3003/api';
 
 interface ProductFilter {
-  productCategory?: string
+  productCategory?: string;
+  searchTerm?: string
 }
 
-const getAll = async (productFilter?: ProductFilter): Promise<Product[] | []> => {
+const getAll = async (
+  productFilter?: ProductFilter
+): Promise<Product[] | []> => {
   // Validate API response
   const responseIsValid = (response: unknown): boolean => {
     return (
@@ -19,17 +22,23 @@ const getAll = async (productFilter?: ProductFilter): Promise<Product[] | []> =>
       response.products.every((product) => isProduct(product))
     );
   };
-
-  let query = ''
-
+  
+  let query = '';
+  
   if (productFilter) {
     if (productFilter.productCategory) {
-      query = `category=${productFilter.productCategory}`
+      query = `category=${productFilter.productCategory}`;
+    }
+    
+    if (productFilter.searchTerm) {
+      query=`search=${productFilter.searchTerm}`
     }
   }
   
   try {
-    const response = await axios.get<{ products: Product[] }>(`${apiUrl}/products?${query}`);
+    const response = await axios.get<{ products: Product[] }>(
+      `${apiUrl}/products?${query}`
+    );
     if (responseIsValid(response.data)) {
       return response.data.products;
     } else {
@@ -38,7 +47,9 @@ const getAll = async (productFilter?: ProductFilter): Promise<Product[] | []> =>
       );
     }
   } catch (error) {
-    console.error(errorHandler(error));
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 
   return [];
@@ -47,16 +58,18 @@ const getAll = async (productFilter?: ProductFilter): Promise<Product[] | []> =>
 const getOne = async (id: string): Promise<Product | null> => {
   if (isString(id)) {
     try {
-      const response = await axios.get<{ product:  Product }>(`${apiUrl}/products/${id}`)
-      return response.data.product
+      const response = await axios.get<{ product: Product }>(
+        `${apiUrl}/products/${id}`
+      );
+      return response.data.product;
     } catch (error) {
-      console.error(errorHandler(error))
+      console.error(errorHandler(error));
     }
   } else {
-    console.error(errorHandler('Invalid input id for getOne function'))
+    console.error(errorHandler('Invalid input id for getOne function'));
   }
 
-  return null
-}
+  return null;
+};
 
 export default { getAll, getOne };

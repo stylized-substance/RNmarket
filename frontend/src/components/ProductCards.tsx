@@ -10,8 +10,6 @@ interface ProductCardsProps {
 
 
 const ProductCards = (props: ProductCardsProps) => {
-  console.log('products', props)
-
   const productsToCards = props.products.map((product) => {
     let imageUrl = '';
     if (product.imgs !== null && product.imgs !== undefined) {

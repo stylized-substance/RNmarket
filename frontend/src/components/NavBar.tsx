@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -84,7 +85,7 @@ const NavBar = (props: NavBarProps) => {
 
   const navigate = useNavigate();
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = async () => {
     event?.preventDefault()
     navigate(`/search/${searchTerm}`)
   }
