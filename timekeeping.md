@@ -53,3 +53,4 @@
 | 23.10.2024 | 1 | Worked on frontpage, styles. | 118
 | 24.10.2024 | 2 | Worked on navbar, react router, product pages | 120
 | 25.10.2024 | 1 | Worked on navbar, react router, search page | 121
+| 28.10.2024 | 2 | Implemented tanstack-query, built a working search bar | 123
