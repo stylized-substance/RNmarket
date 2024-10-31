@@ -3,6 +3,7 @@ import { Product } from '#src/types/types';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { Link } from 'react-router-dom'
 
 interface ProductCardsProps {
   products: Product[];
@@ -16,8 +17,8 @@ const ProductCards = (props: ProductCardsProps) => {
     }
 
     return (
-      <a href={`/products/${product.id}`} key={product.id}>
-        <Card key={product.id}>
+      <Link to={`/products/${product.id}`} key={product.id}>
+        <Card>
           <Card.Img
             variant="top"
             src={imageUrl}
@@ -29,7 +30,7 @@ const ProductCards = (props: ProductCardsProps) => {
             <Card.Text>{product.specs[0].substring(0, 20)}</Card.Text>
           </Card.Body>
         </Card>
-      </a>
+      </Link>
     );
   });
 
