@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from '#src/components/Home';
 import NavBar from '#src/components/NavBar';
 import Products from '#src/components/Products';
+import SingleProduct from '#src/components/SingleProduct';
 
 import Container from 'react-bootstrap/Container';
 
@@ -37,7 +38,11 @@ const App = () => {
           path="/products/laptops"
           element=<Products productCategory="Laptops" />
         />
-        <Route path="/search/:searchTerm" element=<Products isSearchResults={true} /> />
+        <Route path="/products/:id" element=<SingleProduct /> />
+        <Route
+          path="/search/:searchTerm"
+          element=<Products isSearchResults={true} />
+        />
         <Route path="/admin" element=<Home /> />
         <Route path="/cart" element=<Home /> />
       </Routes>
