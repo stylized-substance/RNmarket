@@ -54,4 +54,3 @@
 | 24.10.2024 | 2 | Worked on navbar, react router, product pages | 120
 | 25.10.2024 | 1 | Worked on navbar, react router, search page | 121
 | 28.10.2024 | 2 | Implemented tanstack-query, built a working search bar | 123
-| 30.10.2024 | 2 | Started implementing React Context and building single product page | 125
