@@ -1,3 +1,5 @@
+import { backendAddress } from '#src/utils/config'
+
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
@@ -35,16 +37,20 @@ const SingleProduct = () => {
     return null;
   }
 
-  console.log(product)
+  // console.log(`${backendAddress}/${[product.imgs[0]]}`)
+
+  const firstImage = product.imgs ? product.imgs[0] : ''
+
+  const imageUrl = `${backendAddress}${firstImage}`
 
   return (
     <Container>
-      <Image src=[product.imgs[0]] />
       <Row>
         <Col>
           <h1>{product.title}</h1>
         </Col>
       </Row>
+      <Image src={imageUrl} />
     </Container>
   );
 };

@@ -1,10 +1,10 @@
+import { backendAddress } from '#src/utils/config'
 import axios from 'axios';
 import { Product } from '../types/types';
 import { isProduct, isObject, isString } from '#src/utils/typeNarrowers';
 import errorHandler from '#src/utils/errorHandler';
 
-const apiUrl = 'http://localhost:3003/api';
-
+const apiUrl = `${backendAddress}/api`
 interface ProductFilter {
   productCategory?: string;
   searchTerm?: string

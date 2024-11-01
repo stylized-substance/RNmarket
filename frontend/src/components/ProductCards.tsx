@@ -1,3 +1,5 @@
+import { backendAddress } from '#src/utils/config.ts';
+
 import { Product } from '#src/types/types';
 
 import Card from 'react-bootstrap/Card';
@@ -13,7 +15,7 @@ const ProductCards = (props: ProductCardsProps) => {
   const productsToCards = props.products.map((product) => {
     let imageUrl = '';
     if (product.imgs !== null && product.imgs !== undefined) {
-      imageUrl = `http://localhost:3003${product.imgs[0]}`;
+      imageUrl = `${backendAddress}${product.imgs[0]}`;
     }
 
     return (
