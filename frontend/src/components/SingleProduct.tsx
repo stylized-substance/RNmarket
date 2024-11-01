@@ -1,4 +1,5 @@
-import { backendAddress } from '#src/utils/config'
+import '#src/styles/custom.css';
+import { backendAddress } from '#src/utils/config';
 
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -8,7 +9,8 @@ import productsService from '#src/services/products';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image'
+import Image from 'react-bootstrap/Image';
+import Button from 'react-bootstrap/Button';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
@@ -37,20 +39,29 @@ const SingleProduct = () => {
     return null;
   }
 
-  // console.log(`${backendAddress}/${[product.imgs[0]]}`)
+  console.log(product);
 
-  const firstImage = product.imgs ? product.imgs[0] : ''
+  const firstImage = product.imgs ? product.imgs[0] : '';
 
-  const imageUrl = `${backendAddress}${firstImage}`
+  const imageUrl = `${backendAddress}${firstImage}`;
 
   return (
     <Container>
       <Row>
         <Col>
+          <Image src={imageUrl} fluid />
+        </Col>
+        <Col>
           <h1>{product.title}</h1>
+          <p style={{ fontSize: '2.5rem', color: 'coral' }}>{product.price}</p>
+          {product.specs.map((spec, index) => (
+            <p key={index}>{spec}</p>
+          ))}
+          <Button className="navbar-button">
+            Add to cart
+          </Button>
         </Col>
       </Row>
-      <Image src={imageUrl} />
     </Container>
   );
 };

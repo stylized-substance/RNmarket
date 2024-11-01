@@ -31,9 +31,8 @@ const LoginMenu = () => {
         onToggle={() => setLoginDropdownOpen(!loginDropdownOpen)}
       >
         <Button
-          variant="primary"
           onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
-          className="navbar-button "
+          className="navbar-button"
         >
           Login <i className="bi bi-box-arrow-in-right ms-2"></i>
         </Button>
@@ -60,7 +59,6 @@ const LoginMenu = () => {
               <Container>
                 <Row>
                   <Button
-                    variant="primary"
                     type="submit"
                     className="navbar-button mt-4 mb-2"
                   >
@@ -157,7 +155,6 @@ const NavBar = (props: NavBarProps) => {
             {props.adminLoggedIn && (
               <Col>
                 <Button
-                  variant="primary"
                   onClick={() => navigate('/admin')}
                   className="navbar-button"
                 >
@@ -169,14 +166,13 @@ const NavBar = (props: NavBarProps) => {
               {!props.userLoggedIn ? (
                 <LoginMenu />
               ) : (
-                <Button variant="primary">
+                <Button className="navbar-button">
                   Logout <i className="bi bi-box-arrow-left ms-2"></i>
                 </Button>
               )}
             </Col>
             <Col>
               <Button
-                variant="primary"
                 onClick={() => navigate('/cart')}
                 className="navbar-button"
               >
