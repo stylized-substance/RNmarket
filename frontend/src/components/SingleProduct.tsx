@@ -6,6 +6,7 @@ import productsService from '#src/services/products';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image'
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
@@ -18,11 +19,11 @@ const SingleProduct = () => {
     queryKey: ['products'],
     queryFn: () => productsService.getAll()
   });
-  
+
   if (isPending) {
     return <ProductsPending />;
   }
-  
+
   if (isError) {
     return <ProductsError error={error} />;
   }
@@ -31,11 +32,14 @@ const SingleProduct = () => {
   const product = data.find((product) => product.id === id);
 
   if (!product) {
-    return null
+    return null;
   }
+
+  console.log(product)
 
   return (
     <Container>
+      <Image src=[product.imgs[0]] />
       <Row>
         <Col>
           <h1>{product.title}</h1>
