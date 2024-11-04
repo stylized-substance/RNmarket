@@ -53,7 +53,7 @@ const SingleProduct = () => {
         </Col>
         <Col>
           <h1>{product.title}</h1>
-          <p style={{ fontSize: '2.5rem', color: 'coral' }}>{product.price}</p>
+          <p style={{ color: 'coral' }} className="fs-1">{product.price}</p>
           {product.specs.map((spec, index) => (
             <p key={index}>{spec}</p>
           ))}
