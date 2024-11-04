@@ -8,10 +8,32 @@ import productsService from '#src/services/products';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
+import Carousel from 'react-bootstrap/Carousel';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
+
+interface ImageCarouselProps {
+  images: string[];
+}
+
+const ImageCarousel = ({ images }: ImageCarouselProps) => {
+  const imageUrls: string[] = images.map(
+    (image) => `${backendAddress}${image}`
+  );
+
+  return (
+    <Carousel interval={null} data-bs-theme="dark" className="imagecarousel">
+      {imageUrls.map((imageUrl) => (
+        <Carousel.Item key={imageUrl}>
+          <div className="imagecarousel-imagecontainer">
+            <img src={imageUrl} className="imagecarousel-image" />
+          </div>
+        </Carousel.Item>
+      ))}
+    </Carousel>
+  );
+};
 
 const SingleProduct = () => {
   // Read product id from current URI
@@ -41,16 +63,10 @@ const SingleProduct = () => {
     return <h1 className="text-center">Product not found</h1>;
   }
 
-  const firstImage = data.imgs ? data.imgs[0] : '';
-
-  const imageUrl = `${backendAddress}${firstImage}`;
-
   return (
     <Container>
       <Row>
-        <Col>
-          <Image src={imageUrl} fluid />
-        </Col>
+        <Col className="d-flex align-items-center">{data.imgs && <ImageCarousel images={data.imgs} />}</Col>
         <Col>
           <h1>{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
