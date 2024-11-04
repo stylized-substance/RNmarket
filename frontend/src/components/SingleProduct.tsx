@@ -19,8 +19,14 @@ const SingleProduct = () => {
 
   // Fetch products with Tanstack Query
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['products'],
-    queryFn: () => productsService.getAll()
+    queryKey: ['singleProduct'],
+    queryFn: () => {
+      if (!id) {
+        throw new Error('Product Id missing from URI');
+      }
+
+      return productsService.getOne(id);
+    }
   });
 
   if (isPending) {
@@ -31,16 +37,11 @@ const SingleProduct = () => {
     return <ProductsError error={error} />;
   }
 
-  // Filter single product from query results based on current URI
-  const product = data.find((product) => product.id === id);
-
-  if (!product) {
-    return null;
+  if (!data) {
+    return <h1 className="text-center">Product not found</h1>;
   }
 
-  console.log(product);
-
-  const firstImage = product.imgs ? product.imgs[0] : '';
+  const firstImage = data.imgs ? data.imgs[0] : '';
 
   const imageUrl = `${backendAddress}${firstImage}`;
 
@@ -51,9 +52,11 @@ const SingleProduct = () => {
           <Image src={imageUrl} fluid />
         </Col>
         <Col>
-          <h1>{product.title}</h1>
-          <p style={{ color: 'coral' }} className="fs-1">{product.price}</p>
-          {product.specs.map((spec, index) => (
+          <h1>{data.title}</h1>
+          <p style={{ color: 'coral' }} className="fs-1">
+            {data.price}
+          </p>
+          {data.specs.map((spec, index) => (
             <p key={index}>{spec}</p>
           ))}
           <Button size="lg" className="custom-button">
