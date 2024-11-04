@@ -32,7 +32,7 @@ const LoginMenu = () => {
       >
         <Button
           onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
-          className="navbar-button"
+          className="custom-button"
         >
           Login <i className="bi bi-box-arrow-in-right ms-2"></i>
         </Button>
@@ -60,7 +60,7 @@ const LoginMenu = () => {
                 <Row>
                   <Button
                     type="submit"
-                    className="navbar-button mt-4 mb-2"
+                    className="custom-button mt-4 mb-2"
                   >
                     Send
                   </Button>
@@ -146,7 +146,7 @@ const NavBar = (props: NavBarProps) => {
                 onChange={(event) => setSearchTerm(event.target.value)}
                 className="border-0 bg-light navbar-search-placeholder"
               />
-              <Button type="submit" className="navbar-button">
+              <Button type="submit" className="custom-button">
                 <i className="bi bi-search"></i>
               </Button>
             </InputGroup>
@@ -156,7 +156,7 @@ const NavBar = (props: NavBarProps) => {
               <Col>
                 <Button
                   onClick={() => navigate('/admin')}
-                  className="navbar-button"
+                  className="custom-button"
                 >
                   Admin <i className="bi bi-gear ms-2"></i>
                 </Button>
@@ -166,7 +166,7 @@ const NavBar = (props: NavBarProps) => {
               {!props.userLoggedIn ? (
                 <LoginMenu />
               ) : (
-                <Button className="navbar-button">
+                <Button className="custom-button">
                   Logout <i className="bi bi-box-arrow-left ms-2"></i>
                 </Button>
               )}
@@ -174,7 +174,7 @@ const NavBar = (props: NavBarProps) => {
             <Col>
               <Button
                 onClick={() => navigate('/cart')}
-                className="navbar-button"
+                className="custom-button"
               >
                 Cart <i className="bi bi-cart4 ms-2"></i>
               </Button>

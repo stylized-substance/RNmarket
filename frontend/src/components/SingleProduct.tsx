@@ -1,4 +1,3 @@
-import '#src/styles/custom.css';
 import { backendAddress } from '#src/utils/config';
 
 import { useQuery } from '@tanstack/react-query';
@@ -57,7 +56,7 @@ const SingleProduct = () => {
           {product.specs.map((spec, index) => (
             <p key={index}>{spec}</p>
           ))}
-          <Button className="navbar-button">
+          <Button size="lg" className="custom-button">
             Add to cart
           </Button>
         </Col>
