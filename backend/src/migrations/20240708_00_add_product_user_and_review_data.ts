@@ -38,15 +38,20 @@ const migrateUp = async (queryInterface) => {
   userArray.push(testUser);
 
   // Loop thorugh products
-  // Pick products categories out of the data
+  // Pick product categories out of the data
   const categoriesToPick = ['Mobiles', 'Furniture', 'Laptops'];
 
   for (const product of products) {
+    // Skip unwanted product categories
     if (!categoriesToPick.includes(product.category)) {
       continue;
     }
 
+    
     const typeCheckedProduct: Product = toProduct(product);
+    
+    // Convert product price from Indian rupees to euros
+    typeCheckedProduct.price = Math.round(typeCheckedProduct.price * 0.01 * 100) / 100
 
     const productId: string = uuidv4();
 
