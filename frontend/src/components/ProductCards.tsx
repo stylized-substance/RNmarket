@@ -30,7 +30,7 @@ const ProductCards = (props: ProductCardsProps) => {
           />
           <Card.Body>
             <Card.Title>{product.title}</Card.Title>
-            <Card.Subtitle>{padPrice(product.price)}</Card.Subtitle>
+            <Card.Subtitle>{padPrice(product.price)}€</Card.Subtitle>
             <Card.Text>{product.specs[0].substring(0, 20)}</Card.Text>
           </Card.Body>
         </Card>

@@ -89,7 +89,7 @@ const SingleProduct = () => {
         <Col>
           <h1>{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
-            {padPrice(data.price)}
+            {padPrice(data.price)}€
           </p>
           {data.rating && (
             <Row className="mb-4">
