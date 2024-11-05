@@ -83,7 +83,7 @@ const SingleProduct = () => {
   return (
     <Container>
       <Row>
-        <Col className="d-flex align-items-center">
+        <Col>
           {data.imgs && <ImageCarousel images={data.imgs} />}
         </Col>
         <Col>
