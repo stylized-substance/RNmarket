@@ -2,6 +2,8 @@ import { backendAddress } from '#src/utils/config.ts';
 
 import { Product } from '#src/types/types';
 
+import { padPrice } from '#src/utils/padPrice.ts';
+
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -28,7 +30,7 @@ const ProductCards = (props: ProductCardsProps) => {
           />
           <Card.Body>
             <Card.Title>{product.title}</Card.Title>
-            <Card.Subtitle>{product.price}</Card.Subtitle>
+            <Card.Subtitle>{padPrice(product.price)}</Card.Subtitle>
             <Card.Text>{product.specs[0].substring(0, 20)}</Card.Text>
           </Card.Body>
         </Card>

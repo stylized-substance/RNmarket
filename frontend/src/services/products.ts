@@ -1,13 +1,13 @@
-import { backendAddress } from '#src/utils/config'
+import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 import { Product } from '../types/types';
 import { isProduct, isObject, isString } from '#src/utils/typeNarrowers';
 import errorHandler from '#src/utils/errorHandler';
 
-const apiUrl = `${backendAddress}/api`
+const apiUrl = `${backendAddress}/api`;
 interface ProductFilter {
   productCategory?: string;
-  searchTerm?: string
+  searchTerm?: string;
 }
 
 const getAll = async (
@@ -22,19 +22,19 @@ const getAll = async (
       response.products.every((product) => isProduct(product))
     );
   };
-  
+
   let query = '';
-  
+
   if (productFilter) {
     if (productFilter.productCategory) {
       query = `category=${productFilter.productCategory}`;
     }
-    
+
     if (productFilter.searchTerm) {
-      query=`search=${productFilter.searchTerm}`
+      query = `search=${productFilter.searchTerm}`;
     }
   }
-  
+
   try {
     const response = await axios.get<{ products: Product[] }>(
       `${apiUrl}/products?${query}`
@@ -61,7 +61,14 @@ const getOne = async (id: string): Promise<Product | null> => {
       const response = await axios.get<{ product: Product }>(
         `${apiUrl}/products/${id}`
       );
-      return response.data.product;
+
+      if (isProduct(response.data.product)) {
+        return response.data.product;
+      } else {
+        throw new Error(
+          `Invalid API response while getting single product: ${JSON.stringify(response.data)}`
+        );
+      }
     } catch (error) {
       console.error(errorHandler(error));
     }

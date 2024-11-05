@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import productsService from '#src/services/products';
+import { padPrice } from '#src/utils/padPrice.ts';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -88,7 +89,7 @@ const SingleProduct = () => {
         <Col>
           <h1>{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
-            {data.price}
+            {padPrice(data.price)}
           </p>
           {data.rating && (
             <Row className="mb-4">
