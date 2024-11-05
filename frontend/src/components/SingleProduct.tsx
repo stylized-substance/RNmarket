@@ -96,9 +96,11 @@ const SingleProduct = () => {
               <StarRating rating={data.rating} />
             </Row>
           )}
-          {data.specs.map((spec, index) => (
-            <p key={index}>{spec}</p>
-          ))}
+          <Col className="mb-4">
+            {data.specs.map((spec, index) => (
+              <p key={index}>{spec}</p>
+            ))}
+          </Col>
           <Button size="lg" className="custom-button">
             Add to cart
           </Button>
