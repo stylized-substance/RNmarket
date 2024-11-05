@@ -35,6 +35,22 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
   );
 };
 
+const StarRating = ({ rating }: { rating: number }) => {
+  // Define star rating icons
+  const emptyStar = <i className="bi bi-star text-warning fs-5"></i>;
+  const fillStar = <i className="bi bi-star-fill text-warning fs-5"></i>;
+
+  const stars = Array(5)
+    .fill(null)
+    .map((_, index) => {
+      const starIsFilled = index < rating;
+
+      return starIsFilled ? fillStar : emptyStar;
+    });
+
+  return <div>{stars}</div>;
+};
+
 const SingleProduct = () => {
   // Read product id from current URI
   const { id } = useParams();
@@ -66,12 +82,19 @@ const SingleProduct = () => {
   return (
     <Container>
       <Row>
-        <Col className="d-flex align-items-center">{data.imgs && <ImageCarousel images={data.imgs} />}</Col>
+        <Col className="d-flex align-items-center">
+          {data.imgs && <ImageCarousel images={data.imgs} />}
+        </Col>
         <Col>
           <h1>{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
             {data.price}
           </p>
+          {data.rating && (
+            <Row className="mb-4">
+              <StarRating rating={data.rating} />
+            </Row>
+          )}
           {data.specs.map((spec, index) => (
             <p key={index}>{spec}</p>
           ))}
