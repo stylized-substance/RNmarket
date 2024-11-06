@@ -9,9 +9,10 @@ import { padPrice } from '#src/utils/padPrice.ts';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import Carousel from 'react-bootstrap/Carousel';
-import BreadCrumb from 'react-bootstrap/Breadcrumb'
+import BreadCrumb from 'react-bootstrap/Breadcrumb';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
@@ -54,7 +55,7 @@ const StarRating = ({ rating }: { rating: number }) => {
 };
 
 const SingleProduct = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Read product id from current URI
   const { id } = useParams();
@@ -83,17 +84,21 @@ const SingleProduct = () => {
     return <h1 className="text-center">Product not found</h1>;
   }
 
+  console.log(data.Reviews);
+
   return (
     <Container>
       <BreadCrumb className="fs-5 ms-5">
         <BreadCrumb.Item onClick={() => navigate('/')}>Home</BreadCrumb.Item>
-        <BreadCrumb.Item onClick={() => navigate('/')}>Products</BreadCrumb.Item>
-        <BreadCrumb.Item onClick={() => navigate(`/products/${data.category}`)}>{data.category}</BreadCrumb.Item>
+        <BreadCrumb.Item onClick={() => navigate('/')}>
+          Products
+        </BreadCrumb.Item>
+        <BreadCrumb.Item onClick={() => navigate(`/products/${data.category}`)}>
+          {data.category}
+        </BreadCrumb.Item>
       </BreadCrumb>
       <Row>
-        <Col>
-          {data.imgs && <ImageCarousel images={data.imgs} />}
-        </Col>
+        <Col>{data.imgs && <ImageCarousel images={data.imgs} />}</Col>
         <Col className="product-info">
           <h1>{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
@@ -114,6 +119,22 @@ const SingleProduct = () => {
           </Button>
         </Col>
       </Row>
+      <Stack gap={5} className="mt-5 mb-5">
+        <h2 className="text-center">Product Reviews</h2>
+        {data.Reviews?.map((review) => (
+          <Stack key={review.id}>
+            <b>
+              <u>{review.title}</u>
+            </b>
+            <p className="border  rounded p-3 mt-2 mb-2">
+              <em>{review.content}</em>
+            </p>
+            <div>
+              Sent by: <b> {review.name}</b>
+            </div>
+          </Stack>
+        ))}
+      </Stack>
     </Container>
   );
 };

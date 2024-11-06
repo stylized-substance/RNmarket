@@ -59,9 +59,8 @@ const getOne = async (id: string): Promise<Product | null> => {
   if (isString(id)) {
     try {
       const response = await axios.get<{ product: Product }>(
-        `${apiUrl}/products/${id}`
+        `${apiUrl}/products/${id}?withReviews=true`
       );
-
       if (isProduct(response.data.product)) {
         return response.data.product;
       } else {

@@ -20,7 +20,7 @@ export interface BaseProduct {
   eta?: number;
   original_id?: string;
   rating?: number;
-  reviews?: Review[];
+  Reviews?: Review[];
 }
 
 export interface Mobile extends BaseProduct {
