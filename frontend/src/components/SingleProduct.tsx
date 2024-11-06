@@ -28,7 +28,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
       {imageUrls.map((imageUrl) => (
         <Carousel.Item key={imageUrl}>
           <div className="imagecarousel-imagecontainer">
-            <img src={imageUrl} className="imagecarousel-image" />
+            <img src={imageUrl} />
           </div>
         </Carousel.Item>
       ))}

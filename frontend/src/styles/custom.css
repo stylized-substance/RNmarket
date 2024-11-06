@@ -39,17 +39,13 @@ body {
 }
 
 .imagecarousel {
-  height: 750px;
-  width: 900px;
+  display: flex;
+  align-items: center;
+  height:  800px;
+  width: 900px; 
 }
 
 .imagecarousel-imagecontainer {
   display: flex;
   justify-content: center;
-  align-items: center;
-}
-
-.imagecarousel-image {
-  max-height: 679px;
-  max-width: 100%;
 }
