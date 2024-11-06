@@ -86,7 +86,7 @@ const SingleProduct = () => {
         <Col>
           {data.imgs && <ImageCarousel images={data.imgs} />}
         </Col>
-        <Col>
+        <Col className="product-info">
           <h1>{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
             {padPrice(data.price)}€
