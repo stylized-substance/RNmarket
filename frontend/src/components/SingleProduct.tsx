@@ -1,7 +1,7 @@
 import { backendAddress } from '#src/utils/config';
 
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import productsService from '#src/services/products';
 import { padPrice } from '#src/utils/padPrice.ts';
@@ -11,6 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Carousel from 'react-bootstrap/Carousel';
+import BreadCrumb from 'react-bootstrap/Breadcrumb'
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
@@ -53,6 +54,8 @@ const StarRating = ({ rating }: { rating: number }) => {
 };
 
 const SingleProduct = () => {
+  const navigate = useNavigate()
+
   // Read product id from current URI
   const { id } = useParams();
 
@@ -82,6 +85,11 @@ const SingleProduct = () => {
 
   return (
     <Container>
+      <BreadCrumb className="fs-5 ms-5">
+        <BreadCrumb.Item onClick={() => navigate('/')}>Home</BreadCrumb.Item>
+        <BreadCrumb.Item onClick={() => navigate('/')}>Products</BreadCrumb.Item>
+        <BreadCrumb.Item onClick={() => navigate(`/products/${data.category}`)}>{data.category}</BreadCrumb.Item>
+      </BreadCrumb>
       <Row>
         <Col>
           {data.imgs && <ImageCarousel images={data.imgs} />}
