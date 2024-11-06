@@ -34,6 +34,22 @@ const isProductCategory = (param: string): param is ProductCategory => {
     .includes(param);
 };
 
+
+const isNewReview = (param: unknown): param is NewReview => {
+  return (
+    isObject(param) &&
+    'product_id' in param &&
+    isString(param.product_id) &&
+    'title' in param &&
+    isString(param.title) &&
+    'content' in param &&
+    isString(param.title) &&
+    'rating' in param &&
+    isNumber(param.rating)
+  );
+};
+
+
 const isProduct = (param: unknown): param is Product => {
   return (
     isObject(param) &&
@@ -49,4 +65,4 @@ const isProduct = (param: unknown): param is Product => {
   );
 };
 
-export { isProduct, isObject, isString }
+export { isProduct, isObject, isString, isNewReview }

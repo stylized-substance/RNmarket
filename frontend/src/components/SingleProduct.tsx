@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import productsService from '#src/services/products';
+import reviewsService from '#src/services/reviews'
 import { padPrice } from '#src/utils/padPrice.ts';
 
 import Container from 'react-bootstrap/Container';
@@ -57,6 +58,10 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 const SingleProduct = () => {
   const navigate = useNavigate();
+
+  const handleReviewSend = (productId) => {
+    reviewsService.getAllForProduct(productId)
+  }
 
   // Read product id from current URI
   const { id } = useParams();
@@ -140,7 +145,7 @@ const SingleProduct = () => {
           <Form.Group className="mb-3">
             <Form.Control as="textarea" rows={5} placeholder="Write a review"></Form.Control>
           </Form.Group>
-          <Button size="lg" className="custom-button">
+          <Button size="lg" onClick={() => handleReviewSend(id)} className="custom-button">
             Send
           </Button>
         </Form>

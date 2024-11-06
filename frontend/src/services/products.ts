@@ -4,7 +4,7 @@ import { Product } from '../types/types';
 import { isProduct, isObject, isString } from '#src/utils/typeNarrowers';
 import errorHandler from '#src/utils/errorHandler';
 
-const apiUrl = `${backendAddress}/api`;
+const baseUrl = `${backendAddress}/api/products`;
 interface ProductFilter {
   productCategory?: string;
   searchTerm?: string;
@@ -37,7 +37,7 @@ const getAll = async (
 
   try {
     const response = await axios.get<{ products: Product[] }>(
-      `${apiUrl}/products?${query}`
+      `${baseUrl}?${query}`
     );
     if (responseIsValid(response.data)) {
       return response.data.products;
@@ -59,7 +59,7 @@ const getOne = async (id: string): Promise<Product | null> => {
   if (isString(id)) {
     try {
       const response = await axios.get<{ product: Product }>(
-        `${apiUrl}/products/${id}?withReviews=true`
+        `${baseUrl}/${id}?withReviews=true`
       );
       if (isProduct(response.data.product)) {
         return response.data.product;

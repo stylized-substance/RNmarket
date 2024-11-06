@@ -9,6 +9,8 @@ export interface Review {
   rating: number;
 }
 
+export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>;
+
 export interface BaseProduct {
   id: string;
   title: string;
