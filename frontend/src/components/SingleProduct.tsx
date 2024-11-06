@@ -13,6 +13,7 @@ import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import Carousel from 'react-bootstrap/Carousel';
 import BreadCrumb from 'react-bootstrap/Breadcrumb';
+import Form from 'react-bootstrap/Form';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
@@ -134,6 +135,15 @@ const SingleProduct = () => {
             </div>
           </Stack>
         ))}
+          <hr className="border-2" />
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Control as="textarea" rows={5} placeholder="Write a review"></Form.Control>
+          </Form.Group>
+          <Button size="lg" className="custom-button">
+            Send
+          </Button>
+        </Form>
       </Stack>
     </Container>
   );
