@@ -59,3 +59,4 @@
 | 01.11.2024 | 2 | Worked on single product page | 126
 | 04.11.2024 | 2 | Worked on single product page | 128
 | 05.11.2024 | 3 | Worked on single product page and backend | 131
+| 065.11.2024 | 2 | Worked on single product page and backend | 133
