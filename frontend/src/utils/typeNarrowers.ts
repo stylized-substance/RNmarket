@@ -1,7 +1,7 @@
-// import { Product } from "../types/types";
 import {
   Product,
-  ProductCategory
+  ProductCategory,
+  NewReview
 } from '#src/types/types';
 
 const isString = (param: unknown): param is string => {

@@ -1,7 +1,7 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 import { Review } from '#src/types/types';
-// import { isReview } from '#src/utils/typeNarrowers';
+import { isNewReview } from '#src/utils/typeNarrowers';
 import errorHandler from '#src/utils/errorHandler';
 
 const baseUrl = `${backendAddress}/api/reviews`;
