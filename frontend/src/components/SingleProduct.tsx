@@ -16,6 +16,7 @@ import Button from 'react-bootstrap/Button';
 import Carousel from 'react-bootstrap/Carousel';
 import BreadCrumb from 'react-bootstrap/Breadcrumb';
 import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
@@ -70,7 +71,7 @@ const NewReviewForm = ({ productId }: { productId: string | undefined }) => {
       event.stopPropagation();
     }
 
-    setValidated(true);
+    // setValidated(true);
     console.log('validated');
     // await reviewsService.getAllForProduct(productId);
   };
@@ -78,49 +79,49 @@ const NewReviewForm = ({ productId }: { productId: string | undefined }) => {
   return (
     <>
       <h2>Leave a review</h2>
-      <Form
-        onSubmit={handleSubmit}
-        novalidate
-        validated={validated}
-        className="mb-5"
-      >
-        <Form.Group className="mb-3">
+      <Form noValidate onSubmit={handleSubmit} validated={validated} className="mb-5">
+        <Form.Group controlId="validationReviewTitle" className="mb-3">
           <Form.Label>
             <b>Title</b>
           </Form.Label>
-          <InputGroup
-          <Form.Control
-            required
-            placeholder="Enter a review title"
-            className="mb-3"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          ></Form.Control>
-          <Form.Control.Feedback type="invalid">
-            Enter a title
-          </Form.Control.Feedback>
-          <Form.Label>
-            <b>Rating</b>
-          </Form.Label>
-          <Form.Select
-            value={rating}
-            onChange={(event) => setRating(Number(event.target.value))}
-            className="mb-3"
-          >
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </Form.Select>
-          <Form.Control
-            as="textarea"
-            rows={5}
-            placeholder="Write a review"
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
-          ></Form.Control>
+          <InputGroup hasValidation>
+            <Form.Control
+              required
+              isInvalid
+              type="text"
+              placeholder="Enter a review title"
+              className="mb-3"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            ></Form.Control>
+            <Form.Control.Feedback type="invalid">
+              Enter a title
+            </Form.Control.Feedback>
+          </InputGroup>
         </Form.Group>
+        <Form.Label>
+          <b>Rating</b>
+        </Form.Label>
+        <Form.Select
+          value={rating}
+          onChange={(event) => setRating(Number(event.target.value))}
+          className="mb-3"
+        >
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </Form.Select>
+        <Form.Control
+          required
+          as="textarea"
+          rows={5}
+          placeholder="Write a review"
+          value={content}
+          onChange={(event) => setContent(event.target.value)}
+        ></Form.Control>
+
         <Button
           type="submit"
           size="lg"
