@@ -138,6 +138,7 @@ const SingleProduct = () => {
             <div>
               Sent by: <b> {review.name}</b>
             </div>
+            <StarRating rating={review.rating} />
           </Stack>
         ))}
           <hr className="border-2" />

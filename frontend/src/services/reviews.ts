@@ -19,7 +19,7 @@ const getAllForProduct = async (productId: string): Promise<Review[] | []> => {
   return [];
 };
 
-const sendNew = async (id: string, review: Review) => {
+const postNew = async (id: string, review: Review) => {
   try {
   } catch (error) {
     console.error(errorHandler(error));
