@@ -61,3 +61,4 @@
 | 05.11.2024 | 3 | Worked on single product page and backend | 131
 | 06.11.2024 | 2 | Worked on single product page and backend | 133
 | 07.11.2024 | 2 | Worked on single product page and review form | 135
+| 11.11.2024 | 1 | Worked on review form | 136
