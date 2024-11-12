@@ -1,8 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
+
+import reviewsService from '#src/services/reviews';
+
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { NewReview } from '#src/types/types';
 
 interface ReviewFormValues {
   title: string;
@@ -10,18 +15,21 @@ interface ReviewFormValues {
   content: string;
 }
 
-const ReviewForm = ({ productId }: { productId: string | undefined }) => {
-  const handleSubmit = (input: unknown) => {
-    // event.preventDefault();
-    // const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    // }
+const ReviewForm = ({ productId }: { productId: string }) => {
+  // Post new review using Tanstack Query
+  const reviewMutation = useMutation({
+    mutationFn: (newReview: NewReview) => {
+      return reviewsService.postNew(newReview);
+    }
+  });
 
-    // setValidated(true);
-    console.log(input);
-    // await reviewsService.getAllForProduct(productId);
+  const handleSubmit = (formValues: ReviewFormValues) => {
+    const newReview: NewReview = {
+      product_id: productId,
+      ...formValues
+    };
+
+    reviewMutation.mutate(newReview);
   };
 
   const formSchema = yup.object().shape({
@@ -99,13 +107,12 @@ const ReviewForm = ({ productId }: { productId: string | undefined }) => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            <Button
-              type="submit"
-              size="lg"
-              className="custom-button mt-3"
-            >
+            <Button type="submit" size="lg" className="custom-button mt-3">
               Send
             </Button>
+            {reviewMutation.isError && (
+              <div>{reviewMutation.error.message}</div>
+            )}
           </Form>
         )}
       </Formik>

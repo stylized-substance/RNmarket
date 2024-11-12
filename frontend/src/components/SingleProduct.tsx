@@ -16,6 +16,7 @@ import BreadCrumb from 'react-bootstrap/Breadcrumb';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 import ReviewForm from '#src/components/ReviewForm';
+import { parseString } from '#src/utils/typeNarrowers';
 
 const ImageCarousel = ({ images }: { images: string[] }) => {
   const imageUrls: string[] = images.map(
@@ -53,8 +54,9 @@ const StarRating = ({ rating }: { rating: number }) => {
 const SingleProduct = () => {
   const navigate = useNavigate();
 
-  // Read product id from current URI
-  const { id } = useParams();
+  // Read product id from current URI and parse it
+  let { id } = useParams();
+  id = parseString(id)
 
   // Fetch products with Tanstack Query
   const { isPending, isError, data, error } = useQuery({

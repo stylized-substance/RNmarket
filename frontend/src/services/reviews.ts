@@ -1,8 +1,8 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { Review } from '#src/types/types';
-import { isNewReview } from '#src/utils/typeNarrowers';
+import { Review, NewReview } from '#src/types/types';
 import errorHandler from '#src/utils/errorHandler';
+import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/reviews`;
 
@@ -19,11 +19,15 @@ const getAllForProduct = async (productId: string): Promise<Review[] | []> => {
   return [];
 };
 
-const postNew = async (id: string, review: Review) => {
+const postNew = async (review: NewReview) => {
   try {
-  } catch (error) {
-    console.error(errorHandler(error));
+    const response = await axios.post(`${baseUrl}`, review);
+    console.log(response);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    }
   }
 };
 
-export default { getAllForProduct };
+export default { getAllForProduct, postNew };

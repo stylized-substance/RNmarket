@@ -1,11 +1,20 @@
 import {
   Product,
   ProductCategory,
-  NewReview
+  NewReview,
+  ApiErrorResponse
 } from '#src/types/types';
 
 const isString = (param: unknown): param is string => {
   return typeof param === 'string';
+};
+
+const parseString = (param: unknown): string => {
+  if (!isString(param)) {
+    throw new Error(`Type error: Input is not a string`);
+  }
+
+  return param;
 };
 
 const isNumber = (param: unknown): param is number => {
@@ -49,7 +58,6 @@ const isNewReview = (param: unknown): param is NewReview => {
   );
 };
 
-
 const isProduct = (param: unknown): param is Product => {
   return (
     isObject(param) &&
@@ -65,4 +73,12 @@ const isProduct = (param: unknown): param is Product => {
   );
 };
 
-export { isProduct, isObject, isString, isNewReview }
+const isApiErrorResponse = (param: unknown): param is ApiErrorResponse => {
+  return (
+    isObject(param) &&
+    'Error' in param &&
+    isString(param.Error)
+  );
+}
+
+export { isProduct, isObject, isString, parseString, isNewReview, isApiErrorResponse }
