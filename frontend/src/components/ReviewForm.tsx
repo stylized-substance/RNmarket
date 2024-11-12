@@ -102,7 +102,6 @@ const ReviewForm = ({ productId }: { productId: string | undefined }) => {
             <Button
               type="submit"
               size="lg"
-              // onClick={void handleReviewSend(productId)}
               className="custom-button mt-3"
             >
               Send
