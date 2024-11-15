@@ -107,6 +107,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
+            {/*TODO: Disable sending review if not logged in. Handle successful posting of review*/}
             <Button type="submit" size="lg" className="custom-button mt-3">
               Send
             </Button>
