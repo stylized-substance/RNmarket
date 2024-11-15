@@ -21,7 +21,7 @@ const getAllForProduct = async (productId: string): Promise<Review[] | []> => {
 
 const postNew = async (review: NewReview) => {
   try {
-    const response = await axios.post(`${baseUrl}`, review);
+    const response = await axios.post(baseUrl, review);
     console.log(response);
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {

@@ -5,6 +5,21 @@ export interface ApiErrorResponse extends AxiosError {
   Error: string
 }
 
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+// Type for API response for successful login
+export interface LoginPayload {
+  username: string;
+  name: string;
+  id: string;
+  isadmin: boolean;
+  accessToken: string;
+  refreshToken: string;
+}
+
 // Types for reviews, products and users
 export interface Review {
   id: string;

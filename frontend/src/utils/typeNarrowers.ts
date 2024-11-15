@@ -2,7 +2,8 @@ import {
   Product,
   ProductCategory,
   NewReview,
-  ApiErrorResponse
+  ApiErrorResponse,
+  LoginPayload
 } from '#src/types/types';
 
 const isString = (param: unknown): param is string => {
@@ -27,6 +28,10 @@ const isNumber = (param: unknown): param is number => {
   }
 
   return typeof value === 'number' && !isNaN(value);
+};
+
+const isBoolean = (param: unknown): param is boolean => {
+  return typeof param === 'boolean';
 };
 
 const isObject = (param: unknown): param is object => {
@@ -81,4 +86,22 @@ const isApiErrorResponse = (param: unknown): param is ApiErrorResponse => {
   );
 }
 
-export { isProduct, isObject, isString, parseString, isNewReview, isApiErrorResponse }
+const isLoginPayload = (param: unknown): param is LoginPayload => {
+  return (
+    isObject(param) &&
+    'username' in param &&
+    isString(param.username) &&
+    'name' in param &&
+    isString(param.name) &&
+    'id' in param &&
+    isString(param.id) &&
+    'isadmin' in param &&
+    isBoolean(param.isadmin) &&
+    'accessToken' in param &&
+    isString(param.accessToken) &&
+    'refreshToken' in param &&
+    isString(param.refreshToken)
+  );
+};
+
+export { isProduct, isObject, isString, parseString, isNewReview, isApiErrorResponse, isLoginPayload }

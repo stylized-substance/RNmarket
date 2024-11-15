@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import authorizationService from '#src/services/authorization.ts';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -12,6 +15,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CloseButton from 'react-bootstrap/CloseButton';
+import { LoginCredentials } from '#src/types/types.ts';
 
 interface NavBarProps {
   adminLoggedIn: boolean;
@@ -22,6 +26,28 @@ interface NavBarProps {
 
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
+
+  const queryClient = useQueryClient();
+  
+  // Login using Tanstack Query
+  const loginMutation = useMutation({
+    mutationFn: (credentials: LoginCredentials) => {
+      return authorizationService.login(credentials)
+    },
+    {
+      onSuccess: (data, variables, context) => {
+        console.log(data, variables, context)
+        // Save user data to cache
+        // queryClient.setQueryData('user', payload)
+      }
+    }
+  })
+
+  const handleLogin = (credentials: LoginCredentials) => {
+    event?.preventDefault()
+    loginMutation.mutate(credentials)
+  }
+  
 
   return (
     <>
@@ -42,7 +68,7 @@ const LoginMenu = () => {
               <CloseButton onClick={() => setLoginDropdownOpen(false)} />
             </Row>
           </Container>
-          <Form className="d-flex flex-column ps-3 pe-3 mt-3">
+          <Form onSubmit={() => handleLogin()} className="d-flex flex-column ps-3 pe-3 mt-3">
             <Form.Group controlId="loginform">
               <Form.Label>Email address</Form.Label>
               <Form.Control
