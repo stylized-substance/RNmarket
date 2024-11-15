@@ -63,3 +63,4 @@
 | 07.11.2024 | 2 | Worked on single product page and review form | 135
 | 11.11.2024 | 1 | Worked on review form | 136
 | 12.11.2024 | 3 | Worked on review form, mutation logic, types, type guards | 139
+| 15.11.2024 | 1 | Worked on login functionality, types, type guards | 139
