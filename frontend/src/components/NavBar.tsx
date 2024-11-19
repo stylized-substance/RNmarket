@@ -44,6 +44,11 @@ const LoginMenu = () => {
     loginMutation.mutate(credentials);
   };
 
+  const credentials = {
+    username: 'test_user@example.org',
+    password: 'password'
+  }
+
   return (
     <>
       <Dropdown
@@ -64,10 +69,7 @@ const LoginMenu = () => {
             </Row>
           </Container>
           <Form
-            onSubmit={() => handleLogin({
-              username: 'test_user@example.org',
-              password: 'password'
-            })}
+            onSubmit={() => handleLogin(credentials)}
             className="d-flex flex-column ps-3 pe-3 mt-3"
           >
             <Form.Group controlId="loginform">
