@@ -27,26 +27,26 @@ interface NavBarProps {
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   
   // Login using Tanstack Query
-  const loginMutation = useMutation({
-    mutationFn: (credentials: LoginCredentials) => {
-      return authorizationService.login(credentials)
-    },
-    {
-      onSuccess: (data, variables, context) => {
-        console.log(data, variables, context)
-        // Save user data to cache
-        // queryClient.setQueryData('user', payload)
-      }
-    }
-  })
+  // const loginMutation = useMutation({
+  //   mutationFn: (credentials: LoginCredentials) => {
+  //     return authorizationService.login(credentials)
+  //   },
+  //   {
+  //     onSuccess: (data, variables, context) => {
+  //       console.log(data, variables, context)
+  //       // Save user data to cache
+  //       // queryClient.setQueryData('user', payload)
+  //     }
+  //   }
+  // })
 
-  const handleLogin = (credentials: LoginCredentials) => {
-    event?.preventDefault()
-    loginMutation.mutate(credentials)
-  }
+  // const handleLogin = (credentials: LoginCredentials) => {
+  //   event?.preventDefault()
+  //   loginMutation.mutate(credentials)
+  // }
   
 
   return (
