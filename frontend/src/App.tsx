@@ -15,24 +15,19 @@ import SingleProduct from '#src/components/SingleProduct';
 import Container from 'react-bootstrap/Container';
 
 const App = () => {
-  const [adminLoggedIn, setAdminLoggedIn] = useState<boolean>(true);
-  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
+  // const dummyUser = JSON.stringify({
+  //   username: 'string',
+  //   name: 'string',
+  //   id: 'string',
+  //   isadmin: true,
+  //   accessToken: 'string',
+  //   refreshToken: 'string'
+  // });
 
-  const queryClient = useQueryClient();
+  // localStorage.setItem('user', dummyUser);
 
-  const dummyUser = JSON.stringify({
-    username: 'string',
-    name: 'string',
-    id: 'string',
-    isadmin: true,
-    accessToken: 'string',
-    refreshToken: 'string'
-  });
-
-  localStorage.setItem('user', dummyUser);
-
-  const readUserFromLocalStorage = () => {
-    const userInStorage = localStorage.getItem('user');
+  const readUserFromLocalStorage = (): LoginPayload | null => {
+    const userInStorage = localStorage.getItem('loggedOnUser');
     if (!userInStorage) {
       return null;
     }
@@ -46,23 +41,17 @@ const App = () => {
     }
   };
 
-  const loggedOnUser = useQuery({
+  // Read logged on user data from localStorage and save to Tanstack Query cache
+  const { data: loggedOnUser } = useQuery({  // Destructured 'data' variable is renamed inline
     queryKey: ['loggedOnUser'],
     queryFn: readUserFromLocalStorage
-  })
-
-  console.log(loggedOnUser.data);
+  });
 
   return (
     <Container className="d-flex flex-column">
       <BrowserRouter>
         <Container style={{ marginBottom: '100px' }}>
-          <NavBar
-            adminLoggedIn={adminLoggedIn}
-            setAdminLoggedIn={setAdminLoggedIn}
-            userLoggedIn={userLoggedIn}
-            setUserLoggedIn={setUserLoggedIn}
-          />
+          <NavBar loggedOnUser={loggedOnUser ?? null} />
         </Container>
         <Container>
           <Routes>

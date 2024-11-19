@@ -15,39 +15,34 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CloseButton from 'react-bootstrap/CloseButton';
-import { LoginCredentials } from '#src/types/types.ts';
+import { LoginCredentials, LoginPayload } from '#src/types/types.ts';
 
 interface NavBarProps {
-  adminLoggedIn: boolean;
-  setAdminLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  userLoggedIn: boolean;
-  setUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedOnUser: LoginPayload | null;
 }
 
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  // const queryClient = useQueryClient();
-  
-  // Login using Tanstack Query
-  // const loginMutation = useMutation({
-  //   mutationFn: (credentials: LoginCredentials) => {
-  //     return authorizationService.login(credentials)
-  //   },
-  //   {
-  //     onSuccess: (data, variables, context) => {
-  //       console.log(data, variables, context)
-  //       // Save user data to cache
-  //       // queryClient.setQueryData('user', payload)
-  //     }
-  //   }
-  // })
+  // Login using Tanstack Query and save user data to cache and localStorage
+  const queryClient = useQueryClient()
 
-  // const handleLogin = (credentials: LoginCredentials) => {
-  //   event?.preventDefault()
-  //   loginMutation.mutate(credentials)
-  // }
-  
+  const loginMutation = useMutation({
+    mutationFn: (credentials: LoginCredentials) => {
+      return authorizationService.login(credentials);
+    },
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.setQueryData(['loggedOnUser'], data)
+        localStorage.setItem('loggedOnUser', JSON.stringify(data))
+      }
+    }
+  });
+
+  const handleLogin = (credentials: LoginCredentials) => {
+    event?.preventDefault();
+    loginMutation.mutate(credentials);
+  };
 
   return (
     <>
@@ -68,7 +63,13 @@ const LoginMenu = () => {
               <CloseButton onClick={() => setLoginDropdownOpen(false)} />
             </Row>
           </Container>
-          <Form onSubmit={() => handleLogin()} className="d-flex flex-column ps-3 pe-3 mt-3">
+          <Form
+            onSubmit={() => handleLogin({
+              username: 'test_user@example.org',
+              password: 'password'
+            })}
+            className="d-flex flex-column ps-3 pe-3 mt-3"
+          >
             <Form.Group controlId="loginform">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -84,10 +85,7 @@ const LoginMenu = () => {
               ></Form.Control>
               <Container>
                 <Row>
-                  <Button
-                    type="submit"
-                    className="custom-button mt-4 mb-2"
-                  >
+                  <Button type="submit" className="custom-button mt-4 mb-2">
                     Send
                   </Button>
                 </Row>
@@ -104,15 +102,15 @@ const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
 
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const navigate = useNavigate();
 
   const handleSearchSubmit = () => {
-    event?.preventDefault()
-    setSearchTerm('')
-    navigate(`/search/${searchTerm}`)
-  }
+    event?.preventDefault();
+    setSearchTerm('');
+    navigate(`/search/${searchTerm}`);
+  };
 
   return (
     <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
@@ -178,7 +176,7 @@ const NavBar = (props: NavBarProps) => {
             </InputGroup>
           </Form>
           <Row>
-            {props.adminLoggedIn && (
+            {props.loggedOnUser && props.loggedOnUser.isadmin && (
               <Col>
                 <Button
                   onClick={() => navigate('/admin')}
@@ -189,9 +187,10 @@ const NavBar = (props: NavBarProps) => {
               </Col>
             )}
             <Col>
-              {!props.userLoggedIn ? (
+              {!props.loggedOnUser ? (
                 <LoginMenu />
               ) : (
+                // TODO: Implement logout functionality
                 <Button className="custom-button">
                   Logout <i className="bi bi-box-arrow-left ms-2"></i>
                 </Button>
