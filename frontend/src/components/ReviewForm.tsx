@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import useAuth from '#src/hooks/useAuth.ts';
 
 import reviewsService from '#src/services/reviews';
 
@@ -16,6 +17,9 @@ interface ReviewFormValues {
 }
 
 const ReviewForm = ({ productId }: { productId: string }) => {
+  // Read currently logged on user
+  const { loggedOnUser } = useAuth();
+
   // Post new review using Tanstack Query
   const reviewMutation = useMutation({
     mutationFn: (newReview: NewReview) => {
@@ -107,10 +111,24 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            {/*TODO: Disable sending review if not logged in. Handle successful posting of review*/}
-            <Button type="submit" size="lg" className="custom-button mt-3">
-              Send
-            </Button>
+            {/*TODO: Handle successful posting of review*/}
+            {loggedOnUser ? (
+              <Button type="submit" size="lg" className="custom-button mt-3">
+                Send
+              </Button>
+            ) : (
+              <>
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled
+                  className="custom-button mt-3"
+                >
+                  Send
+                </Button>
+                <p className="mt-3"><b>Please login to send a review</b></p>
+              </>
+            )}
             {reviewMutation.isError && (
               <div>{reviewMutation.error.message}</div>
             )}
