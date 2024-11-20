@@ -26,7 +26,7 @@ const useAuth = () => {
   // Destructured 'data' variable is renamed inline
   const { data: loggedOnUser } = useQuery({
     queryKey: ['loggedOnUser'],
-    queryFn: readUserFromLocalStorage
+    queryFn: readUserFromLocalStorage,
   });
 
   // Login using Tanstack Query and save user data to query cache and localStorage
@@ -42,7 +42,13 @@ const useAuth = () => {
     }
   });
 
-  return { loggedOnUser, loginMutation };
+  // Log out user
+  const logout = () => {
+    localStorage.removeItem('loggedOnUser')
+    queryClient.setQueryData(['loggedOnUser'], null)
+  }
+
+  return { loggedOnUser, loginMutation, logout };
 };
 
 export default useAuth;

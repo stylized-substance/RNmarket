@@ -93,6 +93,8 @@ const NavBar = (props: NavBarProps) => {
 
   const navigate = useNavigate();
 
+  const { logout } = useAuth()
+
   const handleSearchSubmit = () => {
     event?.preventDefault();
     setSearchTerm('');
@@ -177,8 +179,7 @@ const NavBar = (props: NavBarProps) => {
               {!props.loggedOnUser ? (
                 <LoginMenu />
               ) : (
-                // TODO: Implement logout functionality
-                <Button className="custom-button">
+                <Button onClick={logout} className="custom-button">
                   Logout <i className="bi bi-box-arrow-left ms-2"></i>
                 </Button>
               )}
