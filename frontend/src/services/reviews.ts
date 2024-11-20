@@ -19,9 +19,13 @@ const getAllForProduct = async (productId: string): Promise<Review[] | []> => {
   return [];
 };
 
-const postNew = async (review: NewReview) => {
+const postNew = async (review: NewReview, accessToken: string | undefined) => {
   try {
-    const response = await axios.post(baseUrl, review);
+    const response = await axios.post(baseUrl, review, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
     console.log(response);
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {

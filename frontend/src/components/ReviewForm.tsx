@@ -23,7 +23,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
   // Post new review using Tanstack Query
   const reviewMutation = useMutation({
     mutationFn: (newReview: NewReview) => {
-      return reviewsService.postNew(newReview);
+      return reviewsService.postNew(newReview, loggedOnUser?.accessToken);
     }
   });
 

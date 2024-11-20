@@ -38,6 +38,7 @@ const parseString = (param: unknown): string => {
   return param;
 };
 
+// TODO: Fix this function
 const isNumber = (param: unknown): param is number => {
   let value;
 
