@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import authorizationService from '#src/services/authorization.ts';
+import useAuth from '#src/hooks/useAuth';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -24,20 +22,7 @@ interface NavBarProps {
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  // Login using Tanstack Query and save user data to cache and localStorage
-  const queryClient = useQueryClient()
-
-  const loginMutation = useMutation({
-    mutationFn: (credentials: LoginCredentials) => {
-      return authorizationService.login(credentials);
-    },
-    onSuccess: (data) => {
-      if (data) {
-        queryClient.setQueryData(['loggedOnUser'], data)
-        localStorage.setItem('loggedOnUser', JSON.stringify(data))
-      }
-    }
-  });
+  const { loginMutation } = useAuth()
 
   const handleLogin = (credentials: LoginCredentials) => {
     event?.preventDefault();

@@ -1,11 +1,7 @@
 import '#src/styles/custom.css';
 
-import { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import { LoginPayload } from '#src/types/types';
-import { isLoginPayload } from '#src/utils/typeNarrowers';
+import useAuth from '#src/hooks/useAuth';
 
 import Home from '#src/components/Home';
 import NavBar from '#src/components/NavBar';
@@ -15,37 +11,8 @@ import SingleProduct from '#src/components/SingleProduct';
 import Container from 'react-bootstrap/Container';
 
 const App = () => {
-  // const dummyUser = JSON.stringify({
-  //   username: 'string',
-  //   name: 'string',
-  //   id: 'string',
-  //   isadmin: true,
-  //   accessToken: 'string',
-  //   refreshToken: 'string'
-  // });
-
-  // localStorage.setItem('user', dummyUser);
-
-  const readUserFromLocalStorage = (): LoginPayload | null => {
-    const userInStorage = localStorage.getItem('loggedOnUser');
-    if (!userInStorage) {
-      return null;
-    }
-
-    const userObject: unknown = JSON.parse(userInStorage);
-
-    if (isLoginPayload(userObject)) {
-      return userObject;
-    } else {
-      throw new Error('Malformed user object found in localStorage');
-    }
-  };
-
-  // Read logged on user data from localStorage and save to Tanstack Query cache
-  const { data: loggedOnUser } = useQuery({  // Destructured 'data' variable is renamed inline
-    queryKey: ['loggedOnUser'],
-    queryFn: readUserFromLocalStorage
-  });
+  // Read logged on user data from localStorage
+  const { loggedOnUser } = useAuth()
 
   return (
     <Container className="d-flex flex-column">
