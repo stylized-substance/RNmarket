@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User, RefreshToken, CartItems } from '#src/types/types';
+import { UserWithoutHash, RefreshToken, CartItems } from '#src/types/types';
 import { v4 as uuidv4 } from 'uuid';
 
 // Import JWT secrets from config file
@@ -10,7 +10,7 @@ const jwtRefreshTokenSecret = envVariables.JWTREFRESHTOKENSECRET;
 
 // Function for creating JWT tokens
 const createJWTTokens = (
-  user: User
+  user: UserWithoutHash
 ): {
   refreshTokenForDb: RefreshToken;
   expiredRefreshTokenForDb: RefreshToken;

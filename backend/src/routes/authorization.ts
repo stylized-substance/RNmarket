@@ -4,7 +4,7 @@ import { User as UserModel } from '#src/models';
 import { RefreshToken as RefreshTokenModel } from '#src/models';
 import { parseString } from '#src/utils/typeNarrowers';
 import { createJWTTokens } from '#src/utils/createJWTTokens';
-import { LoginPayload } from '#src/types/types';
+import { LoginPayload, User } from '#src/types/types';
 
 const router: Router = Router();
 
@@ -53,19 +53,27 @@ router.post('/login', async (req: Request, res: Response) => {
     return res.status(401).json({ Error: 'Incorrect password' });
   }
 
+  // Strip passwordhash from user data so it doesn't get sent to client
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- passwordhash is discarded
+    passwordhash,
+    ...userWithoutHash
+  }: User =
+    user.dataValues;
+
   // Create JWT tokens
-  const accessToken = createJWTTokens(user.dataValues).accessToken;
-  const refreshTokenObject = createJWTTokens(user.dataValues).refreshTokenForDb;
+  const accessToken = createJWTTokens(userWithoutHash).accessToken;
+  const refreshTokenObject = createJWTTokens(userWithoutHash).refreshTokenForDb;
 
   // Save refresh token to database
   await RefreshTokenModel.create(refreshTokenObject);
 
   // Create response payload to send to client
   const payload: LoginPayload = {
-    username: user.dataValues.username,
-    name: user.dataValues.name,
-    id: user.dataValues.id,
-    isadmin: user.dataValues.isadmin,
+    username: userWithoutHash.username,
+    name: userWithoutHash.name,
+    id: userWithoutHash.id,
+    isadmin: userWithoutHash.isadmin,
     accessToken: accessToken,
     refreshToken: refreshTokenObject.token
   };

@@ -57,6 +57,8 @@ export interface User {
   isadmin: boolean;
 }
 
+export type UserWithoutHash = Omit<User, 'passwordhash'>
+
 export interface NewUser {
   username: string;
   name: string;
