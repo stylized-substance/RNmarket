@@ -19,24 +19,13 @@ const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     // Attach access token to request
     req.accessToken = authorization.substring(7);
-    
-    // const decoded = jwt.decode(req.accessToken)
-    // if (decoded && typeof decoded !== 'string' && decoded.iat && decoded.exp) {
-    //   console.log(decoded)
-    //   const iat = new Date(decoded.iat * 1000)
-    //   const exp = new Date(decoded.exp * 1000)
 
-    //   console.log(iat)
-  
-    //   console.log(exp)
-
-    // }
     // Verify access token
     const verifiedToken: JwtPayload | string = jwt.verify(
       req.accessToken,
       jwtAccessTokenSecret
     );
-    
+
     // Attach verified token contents to request
     req.verifiedToken = verifiedToken;
 

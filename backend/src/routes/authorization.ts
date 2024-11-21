@@ -58,8 +58,7 @@ router.post('/login', async (req: Request, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- passwordhash is discarded
     passwordhash,
     ...userWithoutHash
-  }: User =
-    user.dataValues;
+  }: User = user.dataValues;
 
   // Create JWT tokens
   const accessToken = createJWTTokens(userWithoutHash).accessToken;

@@ -156,7 +156,7 @@ describe('GET requests', () => {
 
     test('GET /api/products - Querying with a valid price range returns relevant products', async () => {
       const lowestPrice = 10;
-      const highestPrice = 50000;
+      const highestPrice = 10000;
 
       const response = await api
         .get('/api/products')

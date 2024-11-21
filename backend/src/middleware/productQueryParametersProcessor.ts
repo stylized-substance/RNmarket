@@ -1,11 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import {
   isNumber,
-  isString,
-  parseProductCategory
+  parseNumber,
+  parseProductCategory,
+  parseString
 } from '#src/utils/typeNarrowers';
 import { Review } from '#src/models';
-import { ProductSearchParameters } from '#src/types/types';
+import {
+  ProductSearchParameters,
+  ProductQueryParameters
+} from '#src/types/types';
 import { Op } from 'sequelize';
 
 const processProductQueryParameters = (
@@ -15,6 +19,36 @@ const processProductQueryParameters = (
 ) => {
   const searchParameters: ProductSearchParameters = {};
   let where = {};
+
+  const parseNumericParameter = (param: unknown) => {
+    try {
+      const parsed = parseNumber(Number(param));
+      return parsed;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const parseStringParameter = (param: unknown): string | undefined => {
+    try {
+      const parsed = parseString(param);
+      return parsed;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const queryParameters: ProductQueryParameters = {
+    limit: parseNumericParameter(req.query.limit),
+    withReviews: parseStringParameter(req.query.withReviews),
+    category: parseStringParameter(req.query.category),
+    search: parseStringParameter(req.query.search),
+    lowestPrice: parseNumericParameter(req.query.lowestPrice),
+    highestPrice: parseNumericParameter(req.query.highestPrice),
+    inStock: parseStringParameter(req.query.inStock),
+    lowestRating: parseNumericParameter(req.query.lowestRating),
+    highestRating: parseNumericParameter(req.query.highestRating)
+  };
 
   const {
     limit,
@@ -26,15 +60,16 @@ const processProductQueryParameters = (
     inStock,
     lowestRating,
     highestRating
-  } = req.query;
+  } = queryParameters;
 
   // Limit number of products returned
+  // Handle invalid limit parameter
+  if (req.query.limit && !isNumber(Number(req.query.limit))) {
+    return res.status(400).json({ Error: 'Invalid product query limit' });
+  }
+
   if (limit) {
-    if (isNumber(limit)) {
-      searchParameters.limit = limit;
-    } else {
-      return res.status(400).json({ Error: 'Invalid product query limit' });
-    }
+    searchParameters.limit = limit;
   }
 
   // Include product reviews if requested
@@ -63,7 +98,7 @@ const processProductQueryParameters = (
   }
 
   // Filter product titles by case insensitive search keyword
-  if (search && isString(search)) {
+  if (search) {
     if (search.length <= 15) {
       where = {
         ...where,
@@ -90,15 +125,11 @@ const processProductQueryParameters = (
   }
 
   if (lowestPrice && highestPrice) {
-    if (
-      !(isNumber(lowestPrice) && lowestPrice >= 0 && lowestPrice <= 1000000)
-    ) {
+    if (lowestPrice < 0 || lowestPrice > 10000) {
       return res.status(400).json({ Error: 'Invalid lowest price query' });
     }
 
-    if (
-      !(isNumber(highestPrice) && highestPrice >= 0 && highestPrice <= 1000000)
-    ) {
+    if (highestPrice < 0 || highestPrice > 10000) {
       return res.status(400).json({ Error: 'Invalid highest price query' });
     }
 
@@ -140,13 +171,11 @@ const processProductQueryParameters = (
   }
 
   if (lowestRating && highestRating) {
-    if (!(isNumber(lowestRating) && lowestRating >= 1 && lowestRating <= 5)) {
+    if (lowestRating < 1 || lowestRating > 5) {
       return res.status(400).json({ Error: 'Invalid lowest rating query' });
     }
 
-    if (
-      !(isNumber(highestRating) && highestRating >= 1 && highestRating <= 5)
-    ) {
+    if (highestRating < 1 || highestRating > 5) {
       return res.status(400).json({ Error: 'Invalid highest rating query' });
     }
 

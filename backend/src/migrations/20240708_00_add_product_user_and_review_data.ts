@@ -47,11 +47,11 @@ const migrateUp = async (queryInterface) => {
       continue;
     }
 
-    
     const typeCheckedProduct: Product = toProduct(product);
-    
+
     // Convert product price from Indian rupees to euros
-    typeCheckedProduct.price = Math.round(typeCheckedProduct.price * 0.01 * 100) / 100
+    typeCheckedProduct.price =
+      Math.round(typeCheckedProduct.price * 0.01 * 100) / 100;
 
     const productId: string = uuidv4();
 

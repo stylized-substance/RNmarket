@@ -57,7 +57,7 @@ export interface User {
   isadmin: boolean;
 }
 
-export type UserWithoutHash = Omit<User, 'passwordhash'>
+export type UserWithoutHash = Omit<User, 'passwordhash'>;
 
 export interface NewUser {
   username: string;
@@ -119,4 +119,16 @@ export interface ProductSearchParameters {
   limit?: number;
   include?: object;
   where?: object;
+}
+
+export interface ProductQueryParameters {
+  limit?: number;
+  withReviews?: string;
+  category?: string;
+  search?: string;
+  lowestPrice?: number;
+  highestPrice?: number;
+  inStock?: string;
+  lowestRating?: number;
+  highestRating?: number;
 }

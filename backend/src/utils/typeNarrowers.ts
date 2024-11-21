@@ -38,17 +38,8 @@ const parseString = (param: unknown): string => {
   return param;
 };
 
-// TODO: Fix this function
 const isNumber = (param: unknown): param is number => {
-  let value;
-
-  if (typeof param === 'string') {
-    value = Number(param);
-  } else {
-    value = param;
-  }
-
-  return typeof value === 'number' && !isNaN(value);
+  return typeof param === 'number' && !isNaN(param);
 };
 
 const parseNumber = (param: unknown): number => {

@@ -25,23 +25,11 @@ const createJWTTokens = (
     ).toString();
 
   // Create access token
-  console.log(typeof envVariables.JWTACCESSTOKENEXPIRATION)
   const accessToken: string = jwt.sign(user, jwtAccessTokenSecret, {
     expiresIn: envVariables.JWTACCESSTOKENEXPIRATION
   });
 
-  const decoded = jwt.decode(accessToken)
-    if (decoded && typeof decoded !== 'string' && decoded.iat && decoded.exp) {
-      console.log(decoded)
-      const iat = new Date(decoded.iat * 1000)
-      const exp = new Date(decoded.exp * 1000)
-
-      console.log(iat)
-  
-      console.log(exp)
-    }
-
-  // Create refresh token
+  // Create refresh token for sending to client
   const refreshToken: string = jwt.sign(user, jwtRefreshTokenSecret, {
     expiresIn: envVariables.JWTREFRESHTOKENEXPIRATION
   });

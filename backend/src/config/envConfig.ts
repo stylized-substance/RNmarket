@@ -12,15 +12,15 @@ interface EnvVariables {
 }
 
 let envVariables: EnvVariables = {
-  PORT: process.env.PORT ? parseNumber(process.env.PORT) : 0,
+  PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 0,
   DATABASE_URL: process.env.DATABASE_URL
     ? parseString(process.env.DATABASE_URL)
     : '',
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
-    ? parseNumber(process.env.JWTACCESSTOKENEXPIRATION)
+    ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
     : 0,
   JWTREFRESHTOKENEXPIRATION: process.env.JWTREFRESHTOKENEXPIRATION
-    ? parseNumber(process.env.JWTREFRESHTOKENEXPIRATION)
+    ? parseNumber(Number(process.env.JWTREFRESHTOKENEXPIRATION))
     : 0,
   JWTACCESSTOKENSECRET: process.env.JWTACCESSTOKENSECRET
     ? parseString(process.env.JWTACCESSTOKENSECRET)
@@ -45,7 +45,7 @@ const allVariablesDefined: boolean = Object.values(envVariables).every(
 
 const reassign = (): EnvVariables => {
   return {
-    PORT: parseNumber(process.env.PORT),
+    PORT: parseNumber(Number(process.env.PORT)),
     DATABASE_URL: parseString(process.env.DATABASE_URL),
     JWTACCESSTOKENEXPIRATION: parseNumber(
       Number(process.env.JWTACCESSTOKENEXPIRATION)

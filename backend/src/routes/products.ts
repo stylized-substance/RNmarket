@@ -26,7 +26,10 @@ router.get(
   processProductQueryParameters,
   async (req: Request, res: Response) => {
     const id: string = parseString(req.params.id);
-    const product: ProductModel | null = await ProductModel.findByPk(id, req.searchParameters)
+    const product: ProductModel | null = await ProductModel.findByPk(
+      id,
+      req.searchParameters
+    );
     if (product) {
       res.json({ product });
     } else {
