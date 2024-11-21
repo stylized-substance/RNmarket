@@ -66,3 +66,4 @@
 | 15.11.2024 | 1 | Worked on login functionality, types, type guards | 140
 | 19.11.2024 | 2 | Worked on login functionality and user state | 142
 | 20.11.2024 | 2 | Worked on login functionality, review functionality, JWT issues | 144
+| 21.11.2024 | 3 | Worked on login functionality, refactored backend env variable handling, query parameter handling, type guards, tests | 147
