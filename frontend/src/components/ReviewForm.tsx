@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth.ts';
 
 import reviewsService from '#src/services/reviews';
@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { NewReview } from '#src/types/types';
+import { LoginPayload, NewReview } from '#src/types/types';
 
 interface ReviewFormValues {
   title: string;
@@ -18,12 +18,48 @@ interface ReviewFormValues {
 
 const ReviewForm = ({ productId }: { productId: string }) => {
   // Read currently logged on user
-  const { loggedOnUser } = useAuth();
+  const { loggedOnUser, refreshAccessTokenMutation } = useAuth();
+
+  const queryClient = useQueryClient();
 
   // Post new review using Tanstack Query
   const reviewMutation = useMutation({
-    mutationFn: (newReview: NewReview) => {
-      return reviewsService.postNew(newReview, loggedOnUser?.accessToken);
+    mutationFn: async (newReview: NewReview) => {
+      if (loggedOnUser) {
+        await reviewsService.postNew(newReview, loggedOnUser);
+      }
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['singleProductReviews']
+      });
+    },
+    onError: async (error, newReview) => {
+      // TODO: clean up this logic and make it portable
+      if (error.message === 'jwt expired') {
+        if (loggedOnUser) {
+          console.log('refreshing access token');
+          // Refresh expired access token and retry posting review
+          const refreshSuccess =
+            await refreshAccessTokenMutation.mutateAsync(loggedOnUser);
+          if (refreshSuccess) {
+            console.log('refreshSuccess', refreshSuccess);
+            const loggedOnUser: LoginPayload | undefined =
+              queryClient.getQueryData(['loggedOnUser']);
+            if (loggedOnUser) {
+              const postSuccess = await reviewsService.postNew(
+                newReview,
+                loggedOnUser
+              );
+              if (postSuccess) {
+                await queryClient.invalidateQueries({
+                  queryKey: ['singleProductReviews']
+                });
+              }
+            }
+          }
+        }
+      }
     }
   });
 
@@ -111,7 +147,6 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            {/*TODO: Handle successful posting of review*/}
             {loggedOnUser ? (
               <Button type="submit" size="lg" className="custom-button mt-3">
                 Send
@@ -126,11 +161,10 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 >
                   Send
                 </Button>
-                <p className="mt-3"><b>Please login to send a review</b></p>
+                <p className="mt-3">
+                  <b>Please login to send a review</b>
+                </p>
               </>
-            )}
-            {reviewMutation.isError && (
-              <div>{reviewMutation.error.message}</div>
             )}
           </Form>
         )}

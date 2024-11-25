@@ -48,7 +48,6 @@ const isProductCategory = (param: string): param is ProductCategory => {
     .includes(param);
 };
 
-
 const isNewReview = (param: unknown): param is NewReview => {
   return (
     isObject(param) &&
@@ -81,10 +80,12 @@ const isProduct = (param: unknown): param is Product => {
 const isApiErrorResponse = (param: unknown): param is ApiErrorResponse => {
   return (
     isObject(param) &&
-    'Error' in param &&
-    isString(param.Error)
+    'Error name' in param &&
+    isString(param['Error name']) &&
+    'Error message' in param &&
+    isString(param['Error name'])
   );
-}
+};
 
 const isLoginPayload = (param: unknown): param is LoginPayload => {
   return (
@@ -104,4 +105,12 @@ const isLoginPayload = (param: unknown): param is LoginPayload => {
   );
 };
 
-export { isProduct, isObject, isString, parseString, isNewReview, isApiErrorResponse, isLoginPayload }
+export {
+  isProduct,
+  isObject,
+  isString,
+  parseString,
+  isNewReview,
+  isApiErrorResponse,
+  isLoginPayload
+};

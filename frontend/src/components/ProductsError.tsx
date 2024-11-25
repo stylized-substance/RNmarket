@@ -3,19 +3,19 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 interface ProductsErrorProps {
-  error: Error
+  error: Error;
 }
 
 const ProductsError = ({ error }: ProductsErrorProps) => {
   return (
     <Container>
-        <Row>
-          <Col>
-            <h1 className="text-center">{error.message}</h1>
-          </Col>
-        </Row>
-      </Container>
-  )
-}
+      <Row>
+        <Col>
+          <h1 className="text-center">{error.message}</h1>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
 
-export default ProductsError
+export default ProductsError;

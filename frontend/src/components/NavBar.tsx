@@ -22,7 +22,7 @@ interface NavBarProps {
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  const { loginMutation } = useAuth()
+  const { loginMutation } = useAuth();
 
   const handleLogin = (credentials: LoginCredentials) => {
     event?.preventDefault();
@@ -32,7 +32,7 @@ const LoginMenu = () => {
   const credentials = {
     username: 'test_user@example.org',
     password: 'password'
-  }
+  };
 
   return (
     <>
@@ -93,7 +93,7 @@ const NavBar = (props: NavBarProps) => {
 
   const navigate = useNavigate();
 
-  const { logout } = useAuth()
+  const { logout } = useAuth();
 
   const handleSearchSubmit = () => {
     event?.preventDefault();

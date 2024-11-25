@@ -1,22 +1,22 @@
 import { backendAddress } from '#src/utils/config';
+import productsService from '#src/services/products';
+import { padPrice } from '#src/utils/padPrice.ts';
+import { parseString } from '#src/utils/typeNarrowers';
 
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import productsService from '#src/services/products';
-import { padPrice } from '#src/utils/padPrice.ts';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import Carousel from 'react-bootstrap/Carousel';
 import BreadCrumb from 'react-bootstrap/Breadcrumb';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
+import StarRating from '#src/components/StarRating';
+import Reviews from '#src/components/Reviews';
 import ReviewForm from '#src/components/ReviewForm';
-import { parseString } from '#src/utils/typeNarrowers';
 
 const ImageCarousel = ({ images }: { images: string[] }) => {
   const imageUrls: string[] = images.map(
@@ -36,29 +36,14 @@ const ImageCarousel = ({ images }: { images: string[] }) => {
   );
 };
 
-const StarRating = ({ rating }: { rating: number }) => {
-  const stars = Array(5)
-    .fill(null)
-    .map((_, index) => {
-      const starIsFilled = index < rating;
-      return starIsFilled ? (
-        <i key={index} className="bi bi-star-fill text-warning fs-5"></i>
-      ) : (
-        <i key={index} className="bi bi-star text-warning fs-5"></i>
-      );
-    });
-
-  return <div>{stars}</div>;
-};
-
 const SingleProduct = () => {
   const navigate = useNavigate();
 
   // Read product id from current URI and parse it
   let { id } = useParams();
-  id = parseString(id)
+  id = parseString(id);
 
-  // Fetch products with Tanstack Query
+  // Fetch product with Tanstack Query
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['singleProduct'],
     queryFn: () => {
@@ -115,24 +100,7 @@ const SingleProduct = () => {
           </Button>
         </Col>
       </Row>
-      <Stack gap={5} className="mt-5 mb-5">
-        <h2 className="text-center">Product Reviews</h2>
-        {data.Reviews?.map((review) => (
-          <Stack key={review.id}>
-            <b>
-              <u>{review.title}</u>
-            </b>
-            <p className="border  rounded p-3 mt-2 mb-2">
-              <em>{review.content}</em>
-            </p>
-            <div>
-              Sent by: <b> {review.name}</b>
-            </div>
-            <StarRating rating={review.rating} />
-          </Stack>
-        ))}
-        <hr className="border-2" />
-      </Stack>
+      <Reviews productId={id} />
       <ReviewForm productId={id} />
     </Container>
   );

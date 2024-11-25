@@ -7,7 +7,7 @@ import { padPrice } from '#src/utils/padPrice.ts';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 interface ProductCardsProps {
   products: Product[];

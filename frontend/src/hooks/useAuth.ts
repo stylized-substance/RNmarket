@@ -6,7 +6,7 @@ import authorizationService from '#src/services/authorization';
 const useAuth = () => {
   const queryClient = useQueryClient();
 
-  // Read data from localStorage
+  // Read logged on user data from localStorage
   const readUserFromLocalStorage = (): LoginPayload | null => {
     const userInStorage = localStorage.getItem('loggedOnUser');
     if (!userInStorage) {
@@ -26,7 +26,7 @@ const useAuth = () => {
   // Destructured 'data' variable is renamed inline
   const { data: loggedOnUser } = useQuery({
     queryKey: ['loggedOnUser'],
-    queryFn: readUserFromLocalStorage,
+    queryFn: readUserFromLocalStorage
   });
 
   // Login using Tanstack Query and save user data to query cache and localStorage
@@ -42,13 +42,30 @@ const useAuth = () => {
     }
   });
 
+  // Use logged on user's refresh token to get new access token and save it to query cache and localStorage
+  const refreshAccessTokenMutation = useMutation({
+    mutationFn: (loggedOnUser: LoginPayload) => {
+      return authorizationService.refreshAccessToken(loggedOnUser);
+    },
+    onSuccess: (data) => {
+      if (data) {
+        const loggedOnUser = readUserFromLocalStorage();
+        if (loggedOnUser) {
+          loggedOnUser.accessToken = data;
+          localStorage.setItem('loggedOnUser', JSON.stringify(loggedOnUser));
+          queryClient.setQueryData(['loggedOnUser'], loggedOnUser);
+        }
+      }
+    }
+  });
+
   // Log out user
   const logout = () => {
-    localStorage.removeItem('loggedOnUser')
-    queryClient.setQueryData(['loggedOnUser'], null)
-  }
+    localStorage.removeItem('loggedOnUser');
+    queryClient.setQueryData(['loggedOnUser'], null);
+  };
 
-  return { loggedOnUser, loginMutation, logout };
+  return { loggedOnUser, loginMutation, refreshAccessTokenMutation, logout };
 };
 
 export default useAuth;

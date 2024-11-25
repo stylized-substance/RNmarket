@@ -3,7 +3,6 @@ const errorHandler = (error: unknown): string => {
     return `Error: ${error.message}`;
   }
 
-
   return 'Error: unknown error happened';
 };
 

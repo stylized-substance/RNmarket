@@ -1,8 +1,9 @@
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios';
 
 // Type for API error response for use in service modules
 export interface ApiErrorResponse extends AxiosError {
-  Error: string
+  'Error name': string;
+  'Error message': string;
 }
 
 export interface LoginCredentials {
@@ -30,6 +31,13 @@ export interface Review {
   content: string;
   rating: number;
 }
+
+export type ReviewFromBackend = Review & {
+  ProductId: string;
+  UserId: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>;
 
@@ -71,10 +79,7 @@ export interface Laptop extends BaseProduct {
   has_ssd: string;
 }
 
-export type Product =
-  | Mobile
-  | FurnitureItem
-  | Laptop;
+export type Product = Mobile | FurnitureItem | Laptop;
 
 export enum ProductCategory {
   Mobiles = 'Mobiles',
