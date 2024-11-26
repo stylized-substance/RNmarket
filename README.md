@@ -2,6 +2,8 @@
 
 This is an E-commerce single-page app built with Typescript, React, Node.js and PostgreSQL.
 
+Project work log can be found in `timekeeping.md`
+
 ## Components
 
 - Frontend
