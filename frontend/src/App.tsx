@@ -12,6 +12,7 @@ import Container from 'react-bootstrap/Container';
 
 const App = () => {
   // TODO: Handle expired refresh tokens
+  // TODO: Implement user registrations
   // Read logged on user data from localStorage
   const { loggedOnUser } = useAuth();
 

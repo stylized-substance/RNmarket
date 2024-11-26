@@ -1,11 +1,7 @@
 {
-  "name": "rnmarket",
+  "name": "RNmarket",
   "version": "1.0.0",
-  "description": "Example E-commerce site using React + Node",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "An E-commerce single-page app built with Typescript, React, Node.js and PostgreSQL.",
   "author": "Jimi Pitkäniitty",
   "license": "UNLICENSED"
 }
