@@ -44,7 +44,7 @@ const login = async (
 
 const refreshAccessToken = async (
   loggedOnUser: LoginPayload
-): Promise<string | undefined> => {
+): Promise<string> => {
   try {
     const response = await axios.post<{ accessToken: string }>(
       `${baseUrl}/refresh`,
@@ -54,10 +54,12 @@ const refreshAccessToken = async (
     );
     return response.data.accessToken;
   } catch (error) {
-    console.log(error);
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('Unknown error happened while refreshing access token');
+    }
   }
-
-  return undefined;
 };
 
 export default { login, refreshAccessToken };

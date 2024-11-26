@@ -48,13 +48,11 @@ const useAuth = () => {
       return authorizationService.refreshAccessToken(loggedOnUser);
     },
     onSuccess: (data) => {
-      if (data) {
-        const loggedOnUser = readUserFromLocalStorage();
-        if (loggedOnUser) {
-          loggedOnUser.accessToken = data;
-          localStorage.setItem('loggedOnUser', JSON.stringify(loggedOnUser));
-          queryClient.setQueryData(['loggedOnUser'], loggedOnUser);
-        }
+      const loggedOnUser = readUserFromLocalStorage();
+      if (loggedOnUser) {
+        loggedOnUser.accessToken = data;
+        localStorage.setItem('loggedOnUser', JSON.stringify(loggedOnUser));
+        queryClient.setQueryData(['loggedOnUser'], loggedOnUser);
       }
     }
   });
