@@ -24,7 +24,13 @@ const ReviewForm = ({ productId }: { productId: string }) => {
 
   // Post new review using Tanstack Query
   const reviewMutation = useMutation({
-    mutationFn: async (newReview: NewReview) => {
+    mutationFn: async ({
+      loggedOnUser,
+      newReview
+    }: {
+      loggedOnUser: LoginPayload;
+      newReview: NewReview;
+    }) => {
       if (loggedOnUser) {
         await reviewsService.postNew(newReview, loggedOnUser);
       }
@@ -34,31 +40,18 @@ const ReviewForm = ({ productId }: { productId: string }) => {
         queryKey: ['singleProductReviews']
       });
     },
-    onError: async (error, newReview) => {
+    onError: async (error, { newReview, loggedOnUser }) => {
       // TODO: clean up this logic and make it portable
       if (error.message === 'jwt expired') {
-        if (loggedOnUser) {
-          console.log('refreshing access token');
-          // Refresh expired access token and retry posting review
-          const refreshSuccess =
-            await refreshAccessTokenMutation.mutateAsync(loggedOnUser);
-          if (refreshSuccess) {
-            console.log('refreshSuccess', refreshSuccess);
-            const loggedOnUser: LoginPayload | undefined =
-              queryClient.getQueryData(['loggedOnUser']);
-            if (loggedOnUser) {
-              const postSuccess = await reviewsService.postNew(
-                newReview,
-                loggedOnUser
-              );
-              if (postSuccess) {
-                await queryClient.invalidateQueries({
-                  queryKey: ['singleProductReviews']
-                });
-              }
-            }
-          }
-        }
+        // Refresh expired access token and retry posting review
+        await refreshAccessTokenMutation.mutateAsync(loggedOnUser);
+        const loggedOnUserRefreshed = queryClient.getQueryData<LoginPayload>([
+          'loggedOnUser'
+        ]);
+        await reviewsService.postNew(newReview, loggedOnUserRefreshed);
+        await queryClient.invalidateQueries({
+          queryKey: ['singleProductReviews']
+        });
       }
     }
   });
@@ -69,7 +62,9 @@ const ReviewForm = ({ productId }: { productId: string }) => {
       ...formValues
     };
 
-    reviewMutation.mutate(newReview);
+    if (loggedOnUser) {
+      reviewMutation.mutate({ loggedOnUser, newReview });
+    }
   };
 
   const formSchema = yup.object().shape({
