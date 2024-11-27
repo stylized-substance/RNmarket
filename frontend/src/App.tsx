@@ -11,9 +11,9 @@ import SingleProduct from '#src/components/SingleProduct';
 import Container from 'react-bootstrap/Container';
 
 const App = () => {
-  // TODO: Handle expired refresh tokens
+  // TODO: Implement global toast notifications
   // TODO: Implement user registrations
-  
+
   // Read logged on user data from localStorage
   const { loggedOnUser } = useAuth();
 
