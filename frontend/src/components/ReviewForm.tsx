@@ -18,7 +18,7 @@ interface ReviewFormValues {
 
 const ReviewForm = ({ productId }: { productId: string }) => {
   // Read currently logged on user
-  const { loggedOnUser, refreshAccessTokenMutation } = useAuth();
+  const { loggedOnUser, refreshAccessToken } = useAuth();
 
   const queryClient = useQueryClient();
 
@@ -44,7 +44,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
       // TODO: clean up this logic and make it portable
       if (error.message === 'jwt expired') {
         // Refresh expired access token and retry posting review
-        await refreshAccessTokenMutation.mutateAsync(loggedOnUser);
+        await refreshAccessToken.mutateAsync(loggedOnUser);
         const loggedOnUserRefreshed = queryClient.getQueryData<LoginPayload>([
           'loggedOnUser'
         ]);
