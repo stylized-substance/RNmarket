@@ -45,7 +45,7 @@ const useAuth = () => {
   // Use logged on user's refresh token to get new access token and save it to query cache and localStorage
   const refreshAccessToken = useMutation({
     mutationFn: async (loggedOnUser: LoginPayload) => {
-      const newAccessToken =
+      const newAccessToken: string =
         await authorizationService.refreshAccessToken(loggedOnUser);
       return { newAccessToken, loggedOnUser };
     },
