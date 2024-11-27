@@ -53,6 +53,11 @@ const useAuth = () => {
       loggedOnUser.accessToken = newAccessToken;
       localStorage.setItem('loggedOnUser', JSON.stringify(loggedOnUser));
       queryClient.setQueryData(['loggedOnUser'], loggedOnUser);
+    },
+    onError: (error) => {
+      if (error.message === 'Refresh token has expired, login again') {
+        logout()
+      }
     }
   });
 

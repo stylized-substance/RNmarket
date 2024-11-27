@@ -18,10 +18,9 @@ const createJWTTokens = (
 } => {
   // Set expiry time for refresh token
   const refreshTokenExpiryTime: string =
-    // Convert seconds to milliseconds -- Unix timestamps are too large for JS Number primitive, using string type instead
+    // Unix timestamps are too large for JS Number primitive, using string type in database instead
     (
-      (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION) *
-      1000
+      (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION)
     ).toString();
 
   // Create access token

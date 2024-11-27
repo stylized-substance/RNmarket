@@ -24,7 +24,7 @@ const getAllForProduct = async (
 const postNew = async (
   review: NewReview,
   loggedOnUser?: LoginPayload
-): Promise<ReviewFromBackend | null> => {
+): Promise<ReviewFromBackend> => {
   if (!loggedOnUser) {
     throw new Error('Not logged in');
   }
@@ -39,22 +39,15 @@ const postNew = async (
         }
       }
     );
+
     return response.data.addedReview;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      if (isApiErrorResponse(error.response?.data)) {
-        if (error.response.data['Error message'] === 'jwt expired') {
-          throw new Error(error.response.data['Error message']);
-        } else {
-          throw new Error(error.message);
-        }
-      } else {
-        throw new Error('Unknown error happened while posting review');
-      }
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data['Error message']);
+    } else {
+      throw new Error('Unknown error happened while posting review');
     }
   }
-
-  return null;
 };
 
 export default { getAllForProduct, postNew };

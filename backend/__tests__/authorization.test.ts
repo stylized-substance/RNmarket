@@ -162,9 +162,10 @@ describe('POST requests', () => {
       .post('/api/authorization/refresh')
       .send({ refreshToken: expiredToken.token });
 
-    assert400Response(response);
+    assert401Response(response);
     expect(response.body).toStrictEqual({
-      Error: 'Refresh token has expired, login again'
+      'Error name': 'RefreshTokenExpiredError',
+      'Error message': 'Refresh token has expired, login again'
     });
   });
 });

@@ -27,6 +27,10 @@ const errorHandler = (
     return res.status(400).json(errorObjectCreator(error.name, error.message));
   }
 
+  if (error instanceof Error && error.name === 'RefreshTokenExpiredError') {
+    return res.status(401).json(errorObjectCreator(error.name, error.message));
+  }
+
   if (error instanceof UniqueConstraintError) {
     return res
       .status(400)

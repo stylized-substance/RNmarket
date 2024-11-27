@@ -8,8 +8,6 @@ import { LoginPayload, User } from '#src/types/types';
 
 const router: Router = Router();
 
-// Interface for payload to send to client when logging in
-
 // Login user
 router.post('/login', async (req: Request, res: Response) => {
   const username: string | null = req.body.username
@@ -81,6 +79,7 @@ router.post('/login', async (req: Request, res: Response) => {
   return res.status(200).json({ payload });
 });
 
+// Create new access token for user
 router.post('/refresh', async (req: Request, res: Response) => {
   // Refresh access token for user
   if (!req.body.refreshToken) {
@@ -106,11 +105,12 @@ router.post('/refresh', async (req: Request, res: Response) => {
 
   // Check if refresh token has expired, delete it and send error if true
   const currentDate: Date = new Date();
-  if (Date.parse(tokenInDb.dataValues.expiry_date) < currentDate.getTime()) {
+
+  if (Number(tokenInDb.dataValues.expiry_date) < currentDate.getTime()) {
     await tokenInDb.destroy();
-    return res
-      .status(400)
-      .json({ Error: 'Refresh token has expired, login again' });
+    const error = new Error('Refresh token has expired, login again');
+    error.name = 'RefreshTokenExpiredError';
+    throw error;
   }
 
   const userInDb: UserModel | null = await UserModel.findByPk(

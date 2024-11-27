@@ -1,11 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth.ts';
+import { useState } from 'react';
 
 import reviewsService from '#src/services/reviews';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Toast from 'react-bootstrap/Toast';
+
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { LoginPayload, NewReview } from '#src/types/types';
@@ -17,6 +20,9 @@ interface ReviewFormValues {
 }
 
 const ReviewForm = ({ productId }: { productId: string }) => {
+  const [toastMessage, setToastMessage] = useState<string>('');
+  const [showToast, setShowToast] = useState<boolean>(false);
+
   // Import currently logged on user and access token refreshal hook
   const { loggedOnUser, refreshAccessToken } = useAuth();
 
@@ -41,7 +47,14 @@ const ReviewForm = ({ productId }: { productId: string }) => {
     onError: async (error, { newReview, loggedOnUser }) => {
       if (error.message === 'jwt expired') {
         // Refresh expired access token and retry posting review
-        await refreshAccessToken.mutateAsync(loggedOnUser);
+        try {
+          await refreshAccessToken.mutateAsync(loggedOnUser);
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            setToastMessage(error.message);
+            setShowToast(true);
+          }
+        }
         const loggedOnUserRefreshed = queryClient.getQueryData<LoginPayload>([
           'loggedOnUser'
         ]);
@@ -72,6 +85,18 @@ const ReviewForm = ({ productId }: { productId: string }) => {
 
   return (
     <>
+      <Toast
+        show={showToast}
+        animation={true}
+        autohide={true}
+        delay={5000}
+        className="align-self-center toast-notification"
+      >
+        <Toast.Body className="toast-notification-body">
+          {toastMessage}
+        </Toast.Body>
+      </Toast>
+
       <h2>Leave a review</h2>
       <Formik<ReviewFormValues>
         validationSchema={formSchema}

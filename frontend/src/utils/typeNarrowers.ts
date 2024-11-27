@@ -83,7 +83,7 @@ const isApiErrorResponse = (param: unknown): param is ApiErrorResponse => {
     'Error name' in param &&
     isString(param['Error name']) &&
     'Error message' in param &&
-    isString(param['Error name'])
+    isString(param['Error message'])
   );
 };
 

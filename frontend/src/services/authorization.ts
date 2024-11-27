@@ -54,8 +54,8 @@ const refreshAccessToken = async (
     );
     return response.data.accessToken;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.message);
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data['Error message']);
     } else {
       throw new Error('Unknown error happened while refreshing access token');
     }
