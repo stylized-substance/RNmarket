@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth.ts';
-import { useState } from 'react';
-
+import useToast from '#src/hooks/useToast';
 import reviewsService from '#src/services/reviews';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Toast from 'react-bootstrap/Toast';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -20,11 +18,9 @@ interface ReviewFormValues {
 }
 
 const ReviewForm = ({ productId }: { productId: string }) => {
-  const [toastMessage, setToastMessage] = useState<string>('');
-  const [showToast, setShowToast] = useState<boolean>(false);
-
   // Import currently logged on user and access token refreshal hook
   const { loggedOnUser, refreshAccessToken } = useAuth();
+  const { toastMutation } = useToast();
 
   const queryClient = useQueryClient();
 
@@ -51,8 +47,10 @@ const ReviewForm = ({ productId }: { productId: string }) => {
           await refreshAccessToken.mutateAsync(loggedOnUser);
         } catch (error: unknown) {
           if (error instanceof Error) {
-            setToastMessage(error.message);
-            setShowToast(true);
+            toastMutation.mutate({
+              message: error.message,
+              show: true
+            });
           }
         }
         const loggedOnUserRefreshed = queryClient.getQueryData<LoginPayload>([
@@ -85,18 +83,6 @@ const ReviewForm = ({ productId }: { productId: string }) => {
 
   return (
     <>
-      <Toast
-        show={showToast}
-        animation={true}
-        autohide={true}
-        delay={5000}
-        className="align-self-center toast-notification"
-      >
-        <Toast.Body className="toast-notification-body">
-          {toastMessage}
-        </Toast.Body>
-      </Toast>
-
       <h2>Leave a review</h2>
       <Formik<ReviewFormValues>
         validationSchema={formSchema}

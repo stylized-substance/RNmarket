@@ -6,8 +6,6 @@ body {
   position: fixed;
   top: 4rem;
   z-index: 1000; /*Show toast above other site elements*/
-  background-color: black;
-  text-color: white
 }
 
 .toast-notification-body {
