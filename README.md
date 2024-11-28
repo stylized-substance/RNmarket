@@ -55,7 +55,7 @@ Default variables with explanations:
 
 ### Starting the app locally
 
-The app uses Vite, ts-node, Docker containers, Docker Compose and a nginx reverse proxy for the development environment. The source file directories of the backend and frontend are bind mounted to their respective containers so changes to code are hot loaded while the containers are running.
+The app uses Vite, ts-node-dev, Docker containers, Docker Compose and a nginx reverse proxy for the development environment. The source file directories of the backend and frontend are bind mounted to their respective containers so changes to code are hot loaded while the containers are running.
 
 **To start:**
 
