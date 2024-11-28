@@ -17,7 +17,7 @@ const useToast = () => {
           message: '',
           show: false
         });
-      }, 5000);
+      }, 10000);
     }
   });
 

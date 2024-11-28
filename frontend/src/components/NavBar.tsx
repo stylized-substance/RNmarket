@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth';
+import useToast from '#src/hooks/useToast';
+import usersService from '#src/services/users';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -16,20 +19,141 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-import { LoginCredentials, LoginPayload } from '#src/types/types.ts';
+import { LoginCredentials, LoginPayload, NewUser } from '#src/types/types.ts';
 
 interface NavBarProps {
   loggedOnUser: LoginPayload | null;
 }
 
+interface RegisterMenuProps {
+  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
+  const { toastMutation } = useToast();
+
+  // Register a new user account
+  const register = useMutation({
+    mutationFn: (userData: NewUser) => {
+      return usersService.register(userData);
+    },
+    onSuccess: () => {
+      setLoginDropdownOpen(false)
+      toastMutation.mutate({
+        message: 'New user created. You can now log in',
+        show: true
+      })
+    },
+    onError: (error) => {
+      toastMutation.mutate({
+        message: error.message,
+        show: true
+      });
+    }
+  });
+
+  const handleRegister = (userData: NewUser) => {
+    register.mutate(userData);
+  };
+
+  const formSchema = yup.object().shape({
+    username: yup
+      .string()
+      .email('Enter a valid email address')
+      .required('Enter a valid email address'),
+    name: yup.string().required(),
+    password: yup.string().required(),
+    isadmin: yup.boolean().required()
+  });
+
+  return (
+    <>
+      <Formik
+        validationSchema={formSchema}
+        onSubmit={(values) => handleRegister(values)}
+        initialValues={{
+          username: '',
+          name: '',
+          password: '',
+          isadmin: false
+        }}
+      >
+        {({ handleSubmit, handleChange, values, touched, errors }) => (
+          <Form
+            noValidate
+            onSubmit={handleSubmit}
+            className="d-flex flex-column ps-3 pe-3 mt-3"
+          >
+            <Form.Group controlId="registerform">
+              <Form.Label>Username</Form.Label>
+              <InputGroup hasValidation>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter username (must be an email address)"
+                  name="username"
+                  value={values.username}
+                  onChange={handleChange}
+                  isInvalid={touched.username && !!errors.username}
+                  className="navbar-loginform-form-control"
+                ></Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.username}
+                </Form.Control.Feedback>
+              </InputGroup>
+              <Form.Label className="mt-3">Full name</Form.Label>
+              <InputGroup hasValidation>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your full name"
+                  name="name"
+                  value={values.name}
+                  onChange={handleChange}
+                  isInvalid={touched.username && !!errors.name}
+                  className="navbar-loginform-form-control"
+                ></Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.name}
+                </Form.Control.Feedback>
+              </InputGroup>
+              <Form.Label className="mt-3">Password</Form.Label>
+              <InputGroup hasValidation>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter a password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  isInvalid={touched.password && !!errors.password}
+                  className="navbar-loginform-form-control"
+                ></Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.password}
+                </Form.Control.Feedback>
+              </InputGroup>
+              <Container>
+                <Row>
+                  <Button type="submit" className="custom-button mt-4 mb-2">
+                    Send
+                  </Button>
+                </Row>
+              </Container>
+            </Form.Group>
+          </Form>
+        )}
+      </Formik>
+    </>
+  );
+};
+
 const LoginMenu = () => {
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
 
-  const { loginMutation } = useAuth();
+  const [showRegisterMenu, setShowRegisterMenu] = useState<boolean>(false);
+
+  const { login } = useAuth();
 
   const handleLogin = (credentials: LoginCredentials) => {
-    event?.preventDefault();
-    loginMutation.mutate(credentials);
+    login.mutate(credentials);
   };
 
   const formSchema = yup.object().shape({
@@ -43,78 +167,101 @@ const LoginMenu = () => {
   return (
     <>
       <Dropdown
-        align="end"
+        align='end'
         show={loginDropdownOpen}
-        onToggle={() => setLoginDropdownOpen(!loginDropdownOpen)}
+        onToggle={() => {
+          console.log('toggle');
+          setLoginDropdownOpen(!loginDropdownOpen);
+          setShowRegisterMenu(false);
+        }}
       >
-        <Button
-          onClick={() => setLoginDropdownOpen(!loginDropdownOpen)}
-          className="custom-button"
-        >
+        <Dropdown.Toggle className="custom-button">
           Login <i className="bi bi-box-arrow-in-right ms-2"></i>
-        </Button>
+        </Dropdown.Toggle>
         <Dropdown.Menu className="mt-2">
-          <Container>
-            <Row className="justify-content-end me-2 mt-2">
-              <CloseButton onClick={() => setLoginDropdownOpen(false)} />
+          <Container className="d-flex">
+            <Col></Col>
+            <Row className="d-flex justify-content-center mt-1">
+              {showRegisterMenu ? <h4>Register new user</h4> : <h4>Login</h4>}
             </Row>
+            <Col className="d-flex justify-content-end me-2 mt-2">
+              <CloseButton
+                onClick={() => {
+                  setLoginDropdownOpen(false);
+                  setShowRegisterMenu(false);
+                }}
+              />
+            </Col>
           </Container>
-          <Formik<LoginCredentials>
-            validationSchema={formSchema}
-            onSubmit={(values) => handleLogin(values)}
-            initialValues={{
-              username: '',
-              password: ''
-            }}
-          >
-            {({ handleSubmit, handleChange, values, touched, errors }) => (
-              <Form
-                noValidate
-                onSubmit={handleSubmit}
-                className="d-flex flex-column ps-3 pe-3 mt-3"
-              >
-                <Form.Group controlId="loginform">
-                  <Form.Label>Email address</Form.Label>
-                  <InputGroup hasValidation>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter email address"
-                      name="username"
-                      value={values.username}
-                      onChange={handleChange}
-                      isInvalid={touched.username && !!errors.username}
-                      className="navbar-loginform-form-control"
-                    ></Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.username}
-                    </Form.Control.Feedback>
-                    <Form.Label className="mt-3">Password</Form.Label>
-                  </InputGroup>
-                  <InputGroup hasValidation>
-                    <Form.Control
-                      type="password"
-                      placeholder="Enter password"
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                      isInvalid={touched.password && !!errors.password}
-                      className="navbar-loginform-form-control"
-                    ></Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.password}
-                    </Form.Control.Feedback>
-                  </InputGroup>
-                  <Container>
-                    <Row>
-                      <Button type="submit" className="custom-button mt-4 mb-2">
-                        Send
-                      </Button>
-                    </Row>
-                  </Container>
-                </Form.Group>
-              </Form>
-            )}
-          </Formik>
+          {showRegisterMenu ? (
+            <RegisterMenu setLoginDropdownOpen={setLoginDropdownOpen} />
+          ) : (
+            <Formik
+              validationSchema={formSchema}
+              onSubmit={(values) => handleLogin(values)}
+              initialValues={{
+                username: '',
+                password: ''
+              }}
+            >
+              {({ handleSubmit, handleChange, values, touched, errors }) => (
+                <Form
+                  noValidate
+                  onSubmit={handleSubmit}
+                  className="d-flex flex-column ps-3 pe-3 mt-3"
+                >
+                  <Form.Group controlId="loginform">
+                    <Form.Label>Email address</Form.Label>
+                    <InputGroup hasValidation>
+                      <Form.Control
+                        type="email"
+                        placeholder="Enter email address"
+                        name="username"
+                        value={values.username}
+                        onChange={handleChange}
+                        isInvalid={touched.username && !!errors.username}
+                        className="navbar-loginform-form-control"
+                      ></Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.username}
+                      </Form.Control.Feedback>
+                      <Form.Label className="mt-3">Password</Form.Label>
+                    </InputGroup>
+                    <InputGroup hasValidation>
+                      <Form.Control
+                        type="password"
+                        placeholder="Enter password"
+                        name="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        isInvalid={touched.password && !!errors.password}
+                        className="navbar-loginform-form-control"
+                      ></Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.password}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                    <Container>
+                      <Row>
+                        <Button
+                          type="submit"
+                          className="custom-button mt-4 mb-2"
+                        >
+                          Send
+                        </Button>
+                      </Row>
+                    </Container>
+                  </Form.Group>
+                  <a
+                    onClick={() => setShowRegisterMenu(true)}
+                    className="text-center m-1"
+                  >
+                    Register
+                  </a>
+                </Form>
+              )}
+            </Formik>
+          )}
         </Dropdown.Menu>
       </Dropdown>
     </>

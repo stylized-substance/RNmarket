@@ -103,7 +103,6 @@ module.exports = {
       },
       name: {
         type: DataTypes.TEXT,
-        unique: true,
         allowNull: false
       },
       created_at: {

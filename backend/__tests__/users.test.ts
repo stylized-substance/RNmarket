@@ -7,6 +7,7 @@ import {
 } from '#src/utils/database';
 import {
   assert200Response,
+  assert201Response,
   assert403Response,
   assert404Response,
   assertValidType,
@@ -80,7 +81,7 @@ describe('POST requests', () => {
 
     const response = await api.post('/api/users').send(user);
 
-    assert200Response(response);
+    assert201Response(response);
     expect(response.body).toHaveProperty('addedUser');
     assertValidType('user', response.body.addedUser);
   });

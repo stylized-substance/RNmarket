@@ -45,7 +45,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   };
 
   const addedUser: UserModel = await UserModel.create({ ...userToAdd });
-  return res.json({ addedUser });
+  return res.status(201).json({ addedUser });
 });
 
 // Change user password

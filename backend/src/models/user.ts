@@ -34,9 +34,11 @@ User.init(
   },
   {
     hooks: {
-      // Omit password hash after user creation or password change so it doesn't get sent to frontend
+      // Omit password hash and timestamps after user creation or password change so they don't get sent to frontend
       afterCreate: (record) => {
         delete record.dataValues.passwordhash;
+        delete record.dataValues.updatedAt;
+        delete record.dataValues.createdAt;
       },
       afterUpdate: (record) => {
         delete record.dataValues.passwordhash;

@@ -2,9 +2,12 @@ import { LoginCredentials, LoginPayload } from '#src/types/types';
 import { isLoginPayload } from '#src/utils/typeNarrowers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import authorizationService from '#src/services/authorization';
+import useToast from '#src/hooks/useToast';
 
 const useAuth = () => {
   const queryClient = useQueryClient();
+
+  const { toastMutation } = useToast();
 
   // Read logged on user data from localStorage
   const readUserFromLocalStorage = (): LoginPayload | null => {
@@ -30,7 +33,7 @@ const useAuth = () => {
   });
 
   // Login using Tanstack Query and save user data to query cache and localStorage
-  const loginMutation = useMutation({
+  const login = useMutation({
     mutationFn: (credentials: LoginCredentials) => {
       return authorizationService.login(credentials);
     },
@@ -38,7 +41,17 @@ const useAuth = () => {
       if (data) {
         queryClient.setQueryData(['loggedOnUser'], data);
         localStorage.setItem('loggedOnUser', JSON.stringify(data));
+        toastMutation.mutate({
+          message: 'Logged in succesfully',
+          show: true
+        });
       }
+    },
+    onError: (error) => {
+      toastMutation.mutate({
+        message: error.message,
+        show: true
+      });
     }
   });
 
@@ -56,7 +69,7 @@ const useAuth = () => {
     },
     onError: (error) => {
       if (error.message === 'Refresh token has expired, login again') {
-        logout()
+        logout();
       }
     }
   });
@@ -67,7 +80,7 @@ const useAuth = () => {
     queryClient.setQueryData(['loggedOnUser'], null);
   };
 
-  return { loggedOnUser, loginMutation, refreshAccessToken, logout };
+  return { loggedOnUser, login, refreshAccessToken, logout };
 };
 
 export default useAuth;

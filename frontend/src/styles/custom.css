@@ -5,7 +5,7 @@ body {
 .toast-notification {
   position: fixed;
   top: 4rem;
-  z-index: 1000; /*Show toast above other site elements*/
+  z-index: 1050; /*Show toast above other site elements*/
 }
 
 .toast-notification-body {

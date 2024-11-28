@@ -6,6 +6,13 @@ export interface ApiErrorResponse extends AxiosError {
   'Error message': string;
 }
 
+export interface NewUser {
+  username: string;
+  name: string;
+  password: string;
+  isadmin: boolean;
+}
+
 export interface LoginCredentials {
   username: string;
   password: string;
