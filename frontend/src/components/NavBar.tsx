@@ -13,6 +13,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CloseButton from 'react-bootstrap/CloseButton';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+
 import { LoginCredentials, LoginPayload } from '#src/types/types.ts';
 
 interface NavBarProps {
@@ -29,10 +32,13 @@ const LoginMenu = () => {
     loginMutation.mutate(credentials);
   };
 
-  const credentials = {
-    username: 'test_user@example.org',
-    password: 'password'
-  };
+  const formSchema = yup.object().shape({
+    username: yup
+      .string()
+      .email('Enter a valid email address')
+      .required('Enter a valid email address'),
+    password: yup.string().required('Password must not be empty')
+  });
 
   return (
     <>
@@ -53,32 +59,62 @@ const LoginMenu = () => {
               <CloseButton onClick={() => setLoginDropdownOpen(false)} />
             </Row>
           </Container>
-          <Form
-            onSubmit={() => handleLogin(credentials)}
-            className="d-flex flex-column ps-3 pe-3 mt-3"
+          <Formik<LoginCredentials>
+            validationSchema={formSchema}
+            onSubmit={(values) => handleLogin(values)}
+            initialValues={{
+              username: '',
+              password: ''
+            }}
           >
-            <Form.Group controlId="loginform">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email address"
-                className="navbar-loginform-form-control"
-              ></Form.Control>
-              <Form.Label className="mt-3">Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                className="navbar-loginform-form-control"
-              ></Form.Control>
-              <Container>
-                <Row>
-                  <Button type="submit" className="custom-button mt-4 mb-2">
-                    Send
-                  </Button>
-                </Row>
-              </Container>
-            </Form.Group>
-          </Form>
+            {({ handleSubmit, handleChange, values, touched, errors }) => (
+              <Form
+                noValidate
+                onSubmit={handleSubmit}
+                className="d-flex flex-column ps-3 pe-3 mt-3"
+              >
+                <Form.Group controlId="loginform">
+                  <Form.Label>Email address</Form.Label>
+                  <InputGroup hasValidation>
+                    <Form.Control
+                      type="email"
+                      placeholder="Enter email address"
+                      name="username"
+                      value={values.username}
+                      onChange={handleChange}
+                      isInvalid={touched.username && !!errors.username}
+                      className="navbar-loginform-form-control"
+                    ></Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.username}
+                    </Form.Control.Feedback>
+                    <Form.Label className="mt-3">Password</Form.Label>
+                  </InputGroup>
+                  <InputGroup hasValidation>
+                    <Form.Control
+                      type="password"
+                      placeholder="Enter password"
+                      name="password"
+                      value={values.password}
+                      onChange={handleChange}
+                      isInvalid={touched.password && !!errors.password}
+                      className="navbar-loginform-form-control"
+                    ></Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.password}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <Container>
+                    <Row>
+                      <Button type="submit" className="custom-button mt-4 mb-2">
+                        Send
+                      </Button>
+                    </Row>
+                  </Container>
+                </Form.Group>
+              </Form>
+            )}
+          </Formik>
         </Dropdown.Menu>
       </Dropdown>
     </>
