@@ -35,7 +35,7 @@ const App = () => {
         delay={5000}
         autohide
         bg='dark'
-        className="align-self-center toast-notification"
+        className="align-self-center toast-notification text-center"
       >
         <Toast.Body className="toast-notification-body">
           {toastState.message}
