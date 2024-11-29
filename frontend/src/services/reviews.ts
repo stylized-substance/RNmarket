@@ -43,7 +43,7 @@ const postNew = async (
     return response.data.addedReview;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
-      throw new Error(error.response.data['Error message']);
+      throw new Error(error.response.data.Error);
     } else {
       throw new Error('Unknown error happened while posting review');
     }

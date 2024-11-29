@@ -80,10 +80,8 @@ const isProduct = (param: unknown): param is Product => {
 const isApiErrorResponse = (param: unknown): param is ApiErrorResponse => {
   return (
     isObject(param) &&
-    'Error name' in param &&
-    isString(param['Error name']) &&
-    'Error message' in param &&
-    isString(param['Error message'])
+    'Error' in param &&
+    isString(param.Error)
   );
 };
 

@@ -164,8 +164,7 @@ describe('POST requests', () => {
 
     assert401Response(response);
     expect(response.body).toStrictEqual({
-      'Error name': 'RefreshTokenExpiredError',
-      'Error message': 'Refresh token has expired, login again'
+      'Error': 'Refresh token has expired, login again'
     });
   });
 });

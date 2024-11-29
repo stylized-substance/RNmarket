@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
 
-import LoginMenu from '#src/components/Navbar/LoginMenu'
+import LoginMenu from '#src/components/Navbar/LoginMenu';
+import RegisterMenu from '#src/components/Navbar/RegisterMenu';
+
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
+import Dropdown from 'react-bootstrap/Dropdown';
+import CloseButton from 'react-bootstrap/CloseButton';
 import Navbar from 'react-bootstrap/Navbar';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
@@ -19,10 +23,13 @@ interface NavBarProps {
   loggedOnUser: LoginPayload | null;
 }
 
-
 const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
+
+  const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
+
+  const [showRegisterMenu, setShowRegisterMenu] = useState<boolean>(false);
 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -111,13 +118,45 @@ const NavBar = (props: NavBarProps) => {
               </Col>
             )}
             <Col>
-              {!props.loggedOnUser ? (
-                <LoginMenu />
-              ) : (
-                <Button onClick={logout} className="custom-button">
-                  Logout <i className="bi bi-box-arrow-left ms-2"></i>
-                </Button>
-              )}
+              <Dropdown
+                align="end"
+                show={loginDropdownOpen}
+                onToggle={() => {
+                  console.log('toggle');
+                  setLoginDropdownOpen(!loginDropdownOpen);
+                  setShowRegisterMenu(false);
+                }}
+              >
+                {!props.loggedOnUser ? (
+                  <Dropdown.Toggle className="custom-button">
+                    Login <i className="bi bi-box-arrow-in-right ms-2"></i>
+                  </Dropdown.Toggle>
+                ) : (
+                  <Button onClick={logout} className="custom-button">
+                    Logout <i className="bi bi-box-arrow-left ms-2"></i>
+                  </Button>
+                )}
+
+                <Dropdown.Menu className="mt-2">
+                  <Container className="d-flex">
+                    <Col></Col>
+                    <Row className="d-flex justify-content-center mt-1"></Row>
+                    <Col className="d-flex justify-content-end me-2 mt-2">
+                      <CloseButton
+                        onClick={() => {
+                          setLoginDropdownOpen(false);
+                          setShowRegisterMenu(false);
+                        }}
+                      />
+                    </Col>
+                  </Container>
+                  {showRegisterMenu ? (
+                    <RegisterMenu setLoginDropdownOpen={setLoginDropdownOpen} />
+                  ) : (
+                    <LoginMenu setShowRegisterMenu={setShowRegisterMenu} />
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
             </Col>
             <Col>
               <Button

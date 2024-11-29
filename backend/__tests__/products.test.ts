@@ -128,8 +128,7 @@ describe('GET requests', () => {
       const response = await api.get('/api/products').query('category=asd');
       assert400Response(response);
       expect(response.body).toStrictEqual({
-        'Error name': 'TypeNarrowingError',
-        'Error message': 'Invalid product category (asd)'
+        'Error': 'Invalid product category (asd)'
       });
     });
 

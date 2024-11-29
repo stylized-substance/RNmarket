@@ -5,19 +5,17 @@ import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/users`;
 
-const register = async (userData: NewUser) => {
+const register = async (userData: NewUser): Promise<void> => {
   try {
-    const response = await axios.post<{ addedUser: NewUser }>(
+    await axios.post<{ addedUser: NewUser }>(
       `${baseUrl}`,
       userData
     );
-
-    console.log(response);
-  } catch (error) {
+  } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
-      throw new Error(error.response.data['Error message']);
+      throw new Error(error.response.data.Error);
     } else {
-      throw new Error('Unknown error happened while posting review');
+      throw new Error('Unknown error happened while registering user');
     }
   }
 };

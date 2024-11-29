@@ -2,8 +2,7 @@ import { AxiosError } from 'axios';
 
 // Type for API error response for use in service modules
 export interface ApiErrorResponse extends AxiosError {
-  'Error name': string;
-  'Error message': string;
+  'Error': string;
 }
 
 export interface NewUser {
