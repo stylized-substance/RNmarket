@@ -1,0 +1,137 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '#src/hooks/useAuth';
+
+import LoginMenu from '#src/components/Navbar/LoginMenu'
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
+import { LoginPayload } from '#src/types/types.ts';
+
+interface NavBarProps {
+  loggedOnUser: LoginPayload | null;
+}
+
+
+const NavBar = (props: NavBarProps) => {
+  const [productsDropdownOpen, setProductsDropdownOpen] =
+    useState<boolean>(false);
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const navigate = useNavigate();
+
+  const { logout } = useAuth();
+
+  const handleSearchSubmit = () => {
+    event?.preventDefault();
+    setSearchTerm('');
+    navigate(`/search/${searchTerm}`);
+  };
+
+  return (
+    <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
+      <Container fluid>
+        <Navbar.Brand
+          as="span"
+          style={{ cursor: 'pointer' }}
+          id="navbar-brand"
+          onClick={() => navigate('/')}
+          className="me-4 fs-4"
+        >
+          <b>RNmarket</b>
+        </Navbar.Brand>
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className="justify-content-between"
+        >
+          <Nav className="fs-5">
+            <Nav.Link onClick={() => navigate('/')} className="text-light">
+              Home
+            </Nav.Link>
+            <NavDropdown
+              title="Products"
+              id="navbar-dropdown-title"
+              onMouseEnter={() => setProductsDropdownOpen(true)}
+              onMouseLeave={() => setProductsDropdownOpen(false)}
+              show={productsDropdownOpen}
+            >
+              <NavDropdown.Item
+                onClick={() => navigate('/products/mobiles')}
+                className="text-light"
+              >
+                Mobile phones
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                onClick={() => navigate('/products/furniture')}
+                className="text-light"
+              >
+                Furniture
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                onClick={() => navigate('/products/laptops')}
+                className="text-light"
+              >
+                Laptops
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          <Form style={{ width: '600px' }} onSubmit={handleSearchSubmit}>
+            <InputGroup>
+              <Form.Control
+                type="search"
+                placeholder="Search products"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                className="border-0 bg-light navbar-search-placeholder"
+              />
+              <Button type="submit" className="custom-button">
+                <i className="bi bi-search"></i>
+              </Button>
+            </InputGroup>
+          </Form>
+          <Row>
+            {props.loggedOnUser && props.loggedOnUser.isadmin && (
+              <Col>
+                <Button
+                  onClick={() => navigate('/admin')}
+                  className="custom-button"
+                >
+                  Admin <i className="bi bi-gear ms-2"></i>
+                </Button>
+              </Col>
+            )}
+            <Col>
+              {!props.loggedOnUser ? (
+                <LoginMenu />
+              ) : (
+                <Button onClick={logout} className="custom-button">
+                  Logout <i className="bi bi-box-arrow-left ms-2"></i>
+                </Button>
+              )}
+            </Col>
+            <Col>
+              <Button
+                onClick={() => navigate('/cart')}
+                className="custom-button"
+              >
+                Cart <i className="bi bi-cart4 ms-2"></i>
+              </Button>
+            </Col>
+          </Row>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
+};
+
+export default NavBar;

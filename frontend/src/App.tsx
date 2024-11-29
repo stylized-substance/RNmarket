@@ -5,7 +5,7 @@ import useAuth from '#src/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 
 import Home from '#src/components/Home';
-import NavBar from '#src/components/NavBar';
+import NavBar from '#src/components/Navbar/index.tsx';
 import Products from '#src/components/Products';
 import SingleProduct from '#src/components/SingleProduct';
 
