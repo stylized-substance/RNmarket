@@ -26,15 +26,11 @@ interface NavBarProps {
 const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
-
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
-
   const [showRegisterMenu, setShowRegisterMenu] = useState<boolean>(false);
-
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const navigate = useNavigate();
-
   const { logout } = useAuth();
 
   const handleSearchSubmit = () => {
@@ -122,7 +118,6 @@ const NavBar = (props: NavBarProps) => {
                 align="end"
                 show={loginDropdownOpen}
                 onToggle={() => {
-                  console.log('toggle');
                   setLoginDropdownOpen(!loginDropdownOpen);
                   setShowRegisterMenu(false);
                 }}
@@ -153,7 +148,7 @@ const NavBar = (props: NavBarProps) => {
                   {showRegisterMenu ? (
                     <RegisterMenu setLoginDropdownOpen={setLoginDropdownOpen} />
                   ) : (
-                    <LoginMenu setShowRegisterMenu={setShowRegisterMenu} />
+                    <LoginMenu setShowRegisterMenu={setShowRegisterMenu} setLoginDropdownOpen={setLoginDropdownOpen} />
                   )}
                 </Dropdown.Menu>
               </Dropdown>

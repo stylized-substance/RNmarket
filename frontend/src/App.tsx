@@ -13,8 +13,6 @@ import Container from 'react-bootstrap/Container';
 import Toast from 'react-bootstrap/Toast';
 
 const App = () => {
-  // TODO: Implement user registrations
-
   // Read logged on user data from localStorage
   const { loggedOnUser } = useAuth();
 
