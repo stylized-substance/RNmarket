@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
+import { useCart } from '#src/context/CartContext'
 
 import LoginMenu from '#src/components/Navbar/LoginMenu';
 import RegisterMenu from '#src/components/Navbar/RegisterMenu';
@@ -17,13 +18,19 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { LoginPayload } from '#src/types/types.ts';
+import { LoginPayload } from '#src/types/types';
 
 interface NavBarProps {
   loggedOnUser: LoginPayload | null;
 }
 
 const NavBar = (props: NavBarProps) => {
+  const cart = useCart()
+  console.log(cart)
+  cart.setCart('test2')
+  console.log(cart)
+
+
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
