@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth.ts';
-import useToast from '#src/hooks/useToast';
+import { useToast } from '#src/context/ToastContext';
 import reviewsService from '#src/services/reviews';
 
 import Button from 'react-bootstrap/Button';
@@ -20,7 +20,8 @@ interface ReviewFormValues {
 const ReviewForm = ({ productId }: { productId: string }) => {
   // Import currently logged on user and access token refreshal hook
   const { loggedOnUser, refreshAccessToken } = useAuth();
-  const { toastMutation } = useToast();
+
+  const { changeToast } = useToast();
 
   const queryClient = useQueryClient();
 
@@ -39,6 +40,10 @@ const ReviewForm = ({ productId }: { productId: string }) => {
       await queryClient.invalidateQueries({
         queryKey: ['singleProductReviews']
       });
+      changeToast({
+        message: 'Review posted successfully',
+        show: true
+      });
     },
     onError: async (error, { newReview, loggedOnUser }) => {
       if (error.message === 'jwt expired') {
@@ -47,7 +52,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
           await refreshAccessToken.mutateAsync(loggedOnUser);
         } catch (error: unknown) {
           if (error instanceof Error) {
-            toastMutation.mutate({
+            changeToast({
               message: error.message,
               show: true
             });

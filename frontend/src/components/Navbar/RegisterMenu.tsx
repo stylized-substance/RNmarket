@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
-import useToast from "#src/hooks/useToast";
-import { Formik } from "formik";
+import { useMutation } from '@tanstack/react-query';
+import { useToast } from '#src/context/ToastContext';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import usersService from '#src/services/users';
 
@@ -8,16 +8,16 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import Form from "react-bootstrap/Form";
+import Form from 'react-bootstrap/Form';
 
-import { NewUser } from "#src/types/types";
+import { NewUser } from '#src/types/types';
 
 interface RegisterMenuProps {
-  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
-  const { toastMutation } = useToast();
+  const { changeToast } = useToast();
 
   // Register a new user account
   const register = useMutation({
@@ -25,14 +25,14 @@ const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
       return usersService.register(userData);
     },
     onSuccess: () => {
-      setLoginDropdownOpen(false)
-      toastMutation.mutate({
+      setLoginDropdownOpen(false);
+      changeToast({
         message: 'New user created. You can now log in',
         show: true
-      })
+      });
     },
     onError: (error) => {
-      toastMutation.mutate({
+      changeToast({
         message: error.message,
         show: true
       });
@@ -132,4 +132,4 @@ const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
   );
 };
 
-export default RegisterMenu
+export default RegisterMenu;

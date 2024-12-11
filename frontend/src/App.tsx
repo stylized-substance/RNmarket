@@ -2,7 +2,7 @@ import '#src/styles/custom.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
+import { useToast } from './context/ToastContext';
 
 import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
@@ -16,21 +16,15 @@ const App = () => {
   // Read logged on user data from localStorage
   const { loggedOnUser } = useAuth();
 
-  // Store placeholder toast notification state in Tanstack Query cache
-  const { data: toastState } = useQuery({
-    queryKey: ['toastState'],
-    initialData: {
-      message: '',
-      show: false
-    }
-  });
+  // Import toast notification state
+  const { toastState } = useToast();
 
   return (
     <Container className="d-flex flex-column">
       <Toast
         show={toastState.show}
         animation={true}
-        bg='dark'
+        bg="dark"
         className="align-self-center toast-notification text-center"
       >
         <Toast.Body className="toast-notification-body">

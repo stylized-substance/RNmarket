@@ -2,12 +2,12 @@ import { LoginCredentials, LoginPayload } from '#src/types/types';
 import { isLoginPayload } from '#src/utils/typeNarrowers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import authorizationService from '#src/services/authorization';
-import useToast from '#src/hooks/useToast';
+import { useToast } from '#src/context/ToastContext';
 
 const useAuth = () => {
   const queryClient = useQueryClient();
 
-  const { toastMutation } = useToast();
+  const { changeToast } = useToast();
 
   // Read logged on user data from localStorage
   const readUserFromLocalStorage = (): LoginPayload | null => {
@@ -41,14 +41,14 @@ const useAuth = () => {
       if (data) {
         queryClient.setQueryData(['loggedOnUser'], data);
         localStorage.setItem('loggedOnUser', JSON.stringify(data));
-        toastMutation.mutate({
+        changeToast({
           message: 'Logged in succesfully',
           show: true
         });
       }
     },
     onError: (error) => {
-      toastMutation.mutate({
+      changeToast({
         message: error.message,
         show: true
       });
