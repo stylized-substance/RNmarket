@@ -71,3 +71,4 @@
 | 26.11.2024 | 3 | Placed reverse-proxy in front of dev environment. added README | 153
 | 27.11.2024 | 3 | Worked on access/refresh token handling | 156
 | 28.11.2024 | 3 | Implemented user registrations, created forms using Formik, tweaked toast messages and backend | 159
+| 11.12.2024 | 1 | Converted toast notifications to use React Context | 160
