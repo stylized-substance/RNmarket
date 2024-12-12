@@ -8,6 +8,7 @@ import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
 import Products from '#src/components/Products';
 import SingleProduct from '#src/components/SingleProduct';
+import Cart from '#src/components/Cart';
 
 import Container from 'react-bootstrap/Container';
 import Toast from 'react-bootstrap/Toast';
@@ -57,7 +58,7 @@ const App = () => {
               element={<Products isSearchResults={true} />}
             />
             <Route path="/admin" element={<Home />} />
-            <Route path="/cart" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
         </Container>
       </BrowserRouter>

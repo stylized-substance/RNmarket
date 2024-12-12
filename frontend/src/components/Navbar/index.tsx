@@ -26,10 +26,6 @@ interface NavBarProps {
 
 const NavBar = (props: NavBarProps) => {
   const cart = useCart()
-  console.log(cart)
-  cart.setCart('test2')
-  console.log(cart)
-
 
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);

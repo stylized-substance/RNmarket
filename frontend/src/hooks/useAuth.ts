@@ -26,7 +26,6 @@ const useAuth = () => {
   };
 
   // Save logged on user data to Tanstack Query cache
-  // Destructured 'data' variable is renamed inline
   const { data: loggedOnUser } = useQuery({
     queryKey: ['loggedOnUser'],
     queryFn: readUserFromLocalStorage

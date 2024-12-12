@@ -87,6 +87,7 @@ export interface Laptop extends BaseProduct {
 
 export type Product = Mobile | FurnitureItem | Laptop;
 
+
 export enum ProductCategory {
   Mobiles = 'Mobiles',
   Furniture = 'Furniture',

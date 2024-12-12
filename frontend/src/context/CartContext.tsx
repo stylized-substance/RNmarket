@@ -5,8 +5,12 @@ import {
   useReducer
 } from 'react';
 
+import { Product } from '#src/types/types';
+
+// type ProductWithQuantity = Product & { quantity: number };
+
 interface CartItem {
-  id: string;
+  product: Product;
   quantity: number;
 }
 
@@ -27,17 +31,17 @@ type Action =
     };
 
 interface CartContextType {
-  cartState: CartState;
-  cartDispatch: React.Dispatch<Action>;
+  state: CartState;
+  dispatch: React.Dispatch<Action>;
 }
 
 export const CartContext = createContext<CartContextType | null>(null);
 
 const CartContextProvider = ({ children }: PropsWithChildren) => {
-  const [cartState, cartDispatch] = useReducer(cartReducer, []);
+  const [state, dispatch] = useReducer(cartReducer, []);
 
   return (
-    <CartContext.Provider value={{ cartState, cartDispatch }}>
+    <CartContext.Provider value={{ state, dispatch }}>
       {children}
     </CartContext.Provider>
   );
@@ -50,24 +54,33 @@ const cartReducer = (state: CartState, action: Action) => {
       let newState;
 
       if (Array.isArray(action.payload)) {
-        newState = [...state, ...action.payload];
-        return newState;
+        const productsToAdd = []
+        for (const payloadItem of action.payload) {
+          const existingItem = state.find((cartItem) => cartItem.product.id === payloadItem.product.id)
+          if (existingItem) {
+            existingItem.quantity = existingItem.quantity + payloadItem.quantity
+            const added = [...productsToAdd, existingItem]
+          }
+        }
+        newState = [...state, ...added];
+      } else {
+        newState = [...state, action.payload];
       }
-
-      newState = [...state, action.payload];
 
       return newState;
     }
     case 'modified': {
       // Set new quantity for cart item
-      const itemToModify = state.find((item) => item.id === action.payload.id);
+      const itemToModify = state.find(
+        (item) => item.product.id === action.payload.product.id
+      );
 
       if (!itemToModify) {
         throw new Error('Item to modify not found in cart');
       }
 
       const newState = state.map((item) => {
-        if (item.id === action.payload.id) {
+        if (item.product.id === action.payload.product.id) {
           item.quantity = action.payload.quantity;
         }
 
@@ -78,13 +91,17 @@ const cartReducer = (state: CartState, action: Action) => {
     }
     case 'removed': {
       // Remove item from cart
-      const itemToDelete = state.find((item) => item.id === action.payload.id);
+      const itemToDelete = state.find(
+        (item) => item.product.id === action.payload.product.id
+      );
 
       if (!itemToDelete) {
         throw new Error('Item to delete not found in cart');
       }
 
-      const newState = state.filter((item) => item.id !== itemToDelete.id);
+      const newState = state.filter(
+        (item) => item.product.id !== itemToDelete.product.id
+      );
 
       return newState;
     }
