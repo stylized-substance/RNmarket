@@ -1,56 +1,109 @@
-import { Product } from '#src/types/types.ts';
-import { createContext, PropsWithChildren, useContext, useReducer, useState } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useReducer
+} from 'react';
 
-export interface CartContextType {
-  state: Product[] | []
-  dispatch: 
+interface CartItem {
+  id: string;
+  quantity: number;
 }
 
-// TODO: specify types
-interface CartReducerType {
-  state: Product[] | [];
-  action: {
-    payload: Product,
-    type: string
-  }
+type CartState = CartItem[] | [];
+
+type Action =
+  | {
+      type: 'added';
+      payload: CartItem | CartItem[];
+    }
+  | {
+      type: 'modified';
+      payload: CartItem;
+    }
+  | {
+      type: 'removed';
+      payload: CartItem;
+    };
+
+interface CartContextType {
+  cartState: CartState;
+  cartDispatch: React.Dispatch<Action>;
 }
 
 export const CartContext = createContext<CartContextType | null>(null);
 
-export const useCart = () => {
-  const context = useContext(CartContext)
-  
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider")
-  }
-
-  return context
-} 
-
-const CartProvider = ({ children }: PropsWithChildren) => {
-  const initialState = []
-  const [state, dispatch] = useReducer(cartReducer, initialState)
+const CartContextProvider = ({ children }: PropsWithChildren) => {
+  const [cartState, cartDispatch] = useReducer(cartReducer, []);
 
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
+    <CartContext.Provider value={{ cartState, cartDispatch }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-
-const cartReducer = ({ state, action }: CartReducerType) => {
+const cartReducer = (state: CartState, action: Action) => {
   switch (action.type) {
+    // Add item to cart
     case 'added': {
-      return [ ...state, action.payload ]
+      let newState;
+
+      if (Array.isArray(action.payload)) {
+        newState = [...state, ...action.payload];
+        return newState;
+      }
+
+      newState = [...state, action.payload];
+
+      return newState;
     }
-    case 'deleted': {
-      return [ ...state ]
+    case 'modified': {
+      // Set new quantity for cart item
+      const itemToModify = state.find((item) => item.id === action.payload.id);
+
+      if (!itemToModify) {
+        throw new Error('Item to modify not found in cart');
+      }
+
+      const newState = state.map((item) => {
+        if (item.id === action.payload.id) {
+          item.quantity = action.payload.quantity;
+        }
+
+        return item;
+      });
+
+      return newState;
+    }
+    case 'removed': {
+      // Remove item from cart
+      const itemToDelete = state.find((item) => item.id === action.payload.id);
+
+      if (!itemToDelete) {
+        throw new Error('Item to delete not found in cart');
+      }
+
+      const newState = state.filter((item) => item.id !== itemToDelete.id);
+
+      return newState;
     }
     default: {
-      throw new Error('cartReducer was called with unknown action type')
+      throw new Error('cartReducer was called with unknown action type');
     }
   }
-}
+};
 
-export default CartProvider
+export const useCart = () => {
+  const context = useContext(CartContext);
+
+  if (!context) {
+    throw new Error(
+      'useCart must be used within a CartContextProvider component'
+    );
+  }
+
+  return context;
+};
+
+export default CartContextProvider;
