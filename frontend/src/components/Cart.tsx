@@ -12,10 +12,14 @@ import { Product } from '#src/types/types.ts';
 const Cart = () => {
   // Import cart context
   const cart = useCart();
-  const cartItems = cart.state
+  const cartItems = cart.state;
 
   // Fetch products with Tanstack Query
-  const { data: products, isPending, isError } = useQuery({
+  const {
+    data: products,
+    isPending,
+    isError
+  } = useQuery({
     queryKey: ['products'],
     queryFn: () => productsService.getAll()
   });
@@ -33,20 +37,14 @@ const Cart = () => {
     return null;
   }
 
-  // const products: Product[] = data;
+  const cartIds: string[] = cart.state.map((item) => item.product.id);
 
-  const cartProducts = products.filter((product) => cart.state.includes(product.id))
-
-  // const cartProducts = products.map((product) => {
-  //   for (const item of cart.state) {
-  //     if (item.id === product.id) {
-  //       return product;
-  //     }
-  //   }
-  // });
+  const cartProducts: Product[] = products.filter((product) =>
+    cartIds.includes(product.id)
+  );
 
   console.log('cartProducts', cartProducts);
-  console.log('cartItems', cartItems)
+  console.log('cartItems', cartItems);
 
   return (
     <Container>
@@ -54,10 +52,10 @@ const Cart = () => {
         <h2>Cart</h2>
       </Row>
       <Row>
-        {/* {cartProducts.map((product) => (
-          {product.name}
-        ))} */}
-        </Row>
+        {cartProducts.map((product) => (
+          <div key={product.id}>{product.title}</div>
+        ))}
+      </Row>
     </Container>
   );
 };
