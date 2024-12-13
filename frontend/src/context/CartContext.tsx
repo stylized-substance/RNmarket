@@ -54,15 +54,21 @@ const cartReducer = (state: CartState, action: Action) => {
       let newState;
 
       if (Array.isArray(action.payload)) {
-        const productsToAdd = []
+        let itemsToAdd: CartItem[] = [];
+
         for (const payloadItem of action.payload) {
-          const existingItem = state.find((cartItem) => cartItem.product.id === payloadItem.product.id)
+          const existingItem = state.find(
+            (cartItem) => cartItem.product.id === payloadItem.product.id
+          );
           if (existingItem) {
-            existingItem.quantity = existingItem.quantity + payloadItem.quantity
-            const added = [...productsToAdd, existingItem]
+            existingItem.quantity =
+              existingItem.quantity + payloadItem.quantity;
+            itemsToAdd = [...itemsToAdd, existingItem];
+          } else {
+            itemsToAdd = [...itemsToAdd, payloadItem];
           }
         }
-        newState = [...state, ...added];
+        newState = [...state, ...itemsToAdd];
       } else {
         newState = [...state, action.payload];
       }

@@ -46,7 +46,7 @@ const Cart = () => {
   // });
 
   console.log('cartProducts', cartProducts);
-  console.log('cartItems', Array.(cartItems))
+  console.log('cartItems', cartItems)
 
   return (
     <Container>
