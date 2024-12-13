@@ -13,7 +13,9 @@ const Cart = () => {
   // Import cart context
   const cart = useCart();
   const cartItems = cart.state;
+  const cartIds: string[] = cart.state.map((item) => item.product.id);
 
+  // TODO: fetch only the products that are in cart
   // Fetch products with Tanstack Query
   const {
     data: products,
@@ -37,7 +39,6 @@ const Cart = () => {
     return null;
   }
 
-  const cartIds: string[] = cart.state.map((item) => item.product.id);
 
   const cartProducts: Product[] = products.filter((product) =>
     cartIds.includes(product.id)
