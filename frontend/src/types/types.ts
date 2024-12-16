@@ -46,6 +46,10 @@ export type ReviewFromBackend = Review & {
 };
 
 export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>;
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 export interface BaseProduct {
   id: string;

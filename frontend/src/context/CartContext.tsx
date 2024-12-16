@@ -5,14 +5,7 @@ import {
   useReducer
 } from 'react';
 
-import { Product } from '#src/types/types';
-
-// type ProductWithQuantity = Product & { quantity: number };
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { CartItem } from '#src/types/types'
 
 type CartState = CartItem[] | [];
 
@@ -61,9 +54,11 @@ const cartReducer = (state: CartState, action: Action) => {
             (cartItem) => cartItem.product.id === payloadItem.product.id
           );
           if (existingItem) {
-            existingItem.quantity =
-              existingItem.quantity + payloadItem.quantity;
-            itemsToAdd = [...itemsToAdd, existingItem];
+            const modifiedItem = {
+              ...existingItem,
+              quantity: existingItem.quantity + payloadItem.quantity
+            };
+            itemsToAdd = [...itemsToAdd, modifiedItem];
           } else {
             itemsToAdd = [...itemsToAdd, payloadItem];
           }
