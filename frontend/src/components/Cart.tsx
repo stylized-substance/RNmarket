@@ -99,7 +99,7 @@ const Cart = () => {
                 >
                   +
                 </Button>
-                <Button style={{ background: 'black' }}>Remove</Button>
+                <Button style={{ background: 'crimson' }}>Remove</Button>
               </Stack>
             </Col>
           </Row>
