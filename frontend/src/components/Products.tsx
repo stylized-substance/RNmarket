@@ -48,8 +48,6 @@ const Products = (props: ProductsProps) => {
     return <ProductsError error={error} />;
   }
 
-  console.log(data)
-
   return (
     <Container>
       <Row>

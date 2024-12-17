@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
 import { useQuery } from '@tanstack/react-query';
 
-import { backendAddress } from '#src/utils/config.ts';
-
 import productsService from '#src/services/products';
 
 import Container from 'react-bootstrap/Container';
@@ -12,9 +10,10 @@ import Col from 'react-bootstrap/Col';
 import Stack from 'react-bootstrap/Stack';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
+import Badge from 'react-bootstrap/Badge';
+import Card from 'react-bootstrap/Card'
 
 import { CartItem } from '#src/types/types';
-import { Badge } from 'react-bootstrap';
 
 const Cart = () => {
   // Import cart context
@@ -33,12 +32,10 @@ const Cart = () => {
 
   useEffect(() => {
     if (products) {
-      for (const product of products) {
         cart.dispatch({
           type: 'added',
-          payload: { product: product, quantity: 1 }
+          payload: { product: products[0], quantity: 1 }
         });
-      }
     }
   }, [products]);
 
@@ -46,7 +43,7 @@ const Cart = () => {
     return null;
   }
 
-  console.log(cartItems[0]);
+  console.log(cartItems);
 
   const CartProducts = () => {
     const handleIncrease = (item: CartItem) => {
@@ -67,6 +64,13 @@ const Cart = () => {
       });
     };
 
+    const handleRemove = (item: CartItem) => {
+      cart.dispatch({
+        type: 'removed',
+        payload: item
+      });
+    };
+
     return (
       <>
         {cartItems.map((item) => (
@@ -74,9 +78,9 @@ const Cart = () => {
             <Col>
               {item.product.imgs && (
                 <Image
-                  src={item.product.imgs[0]}
-                  thumbnail
-                  style={{ height: 200, width: "auto" }}
+                src={item.product.imgs[0]}
+                thumbnail
+                style={{ height: 200, width: 'auto' }}
                 />
               )}
             </Col>
@@ -88,19 +92,26 @@ const Cart = () => {
             <Col>
               <Stack direction="horizontal" gap={3}>
                 <Button
-                  style={{ background: "mediumblue" }}
+                  style={{ background: 'mediumblue' }}
                   onClick={() => handleDecrease(item)}
                 >
                   -
                 </Button>
-                <Badge bg="dark" className="fs-6" style={{ width: "40px"}}>{item.quantity}</Badge>
+                <Badge bg="dark" className="fs-6" style={{ width: '40px' }}>
+                  {item.quantity}
+                </Badge>
                 <Button
-                  style={{ background: "mediumblue" }}
+                  style={{ background: 'mediumblue' }}
                   onClick={() => handleIncrease(item)}
                 >
                   +
                 </Button>
-                <Button style={{ background: "firebrick" }}>Remove</Button>
+                <Button
+                  style={{ background: 'firebrick' }}
+                  onClick={() => handleRemove(item)}
+                >
+                  Remove
+                </Button>
               </Stack>
             </Col>
           </Row>

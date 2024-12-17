@@ -5,7 +5,7 @@ import {
   useReducer
 } from 'react';
 
-import { CartItem } from '#src/types/types'
+import { CartItem } from '#src/types/types';
 
 type CartState = CartItem[] | [];
 
@@ -44,28 +44,33 @@ const cartReducer = (state: CartState, action: Action) => {
   switch (action.type) {
     // Add item to cart
     case 'added': {
-      let newState;
+      let payload: CartItem[];
 
+      // Turn single item into an array
       if (Array.isArray(action.payload)) {
-        let itemsToAdd: CartItem[] = [];
-
-        for (const payloadItem of action.payload) {
-          const existingItem = state.find(
-            (cartItem) => cartItem.product.id === payloadItem.product.id
-          );
-          if (existingItem) {
-            const modifiedItem = {
-              ...existingItem,
-              quantity: existingItem.quantity + payloadItem.quantity
-            };
-            itemsToAdd = [...itemsToAdd, modifiedItem];
-          } else {
-            itemsToAdd = [...itemsToAdd, payloadItem];
-          }
-        }
-        newState = [...state, ...itemsToAdd];
+        payload = action.payload;
       } else {
-        newState = [...state, action.payload];
+        payload = [action.payload];
+      }
+
+      const handleExisting = (item: CartItem): CartItem[] => {
+        // Find and update existing product in cart state
+        if (state.length === 0) {
+          return [item];
+        }
+
+        return state.map((stateItem) =>
+          stateItem.product.id === item.product.id
+            ? { ...stateItem, quantity: stateItem.quantity + item.quantity }
+            : item
+        );
+      };
+
+      let newState: CartItem[] = [];
+
+      // Loop through payload items and update state
+      for (const payloadItem of payload) {
+        newState = handleExisting(payloadItem);
       }
 
       return newState;
