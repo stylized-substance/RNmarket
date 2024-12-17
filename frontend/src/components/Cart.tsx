@@ -11,7 +11,7 @@ import Stack from 'react-bootstrap/Stack';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
-import Card from 'react-bootstrap/Card'
+import Card from 'react-bootstrap/Card';
 
 import { CartItem } from '#src/types/types';
 
@@ -32,10 +32,10 @@ const Cart = () => {
 
   useEffect(() => {
     if (products) {
-        cart.dispatch({
-          type: 'added',
-          payload: { product: products[0], quantity: 1 }
-        });
+      cart.dispatch({
+        type: 'added',
+        payload: { product: products[0], quantity: 1 }
+      });
     }
   }, [products]);
 
@@ -71,52 +71,74 @@ const Cart = () => {
       });
     };
 
+    const cartTotalPrice = cartItems.length > 1 ? cartItems.map(item => item.product.price).reduce((accumulator, currentValue) => accumulator + currentValue) : 0
+    console.log(cartTotalPrice)
+
     return (
-      <>
-        {cartItems.map((item) => (
-          <Row key={item.product.id}>
-            <Col>
-              {item.product.imgs && (
-                <Image
-                src={item.product.imgs[0]}
-                thumbnail
-                style={{ height: 200, width: 'auto' }}
-                />
-              )}
-            </Col>
-            <Col>
-              <b>{item.product.title}</b>
-              <p>{item.product.price}</p>
-              <p>In stock: {item.product.instock}</p>
-            </Col>
-            <Col>
-              <Stack direction="horizontal" gap={3}>
-                <Button
-                  style={{ background: 'mediumblue' }}
-                  onClick={() => handleDecrease(item)}
-                >
-                  -
-                </Button>
-                <Badge bg="dark" className="fs-6" style={{ width: '40px' }}>
-                  {item.quantity}
-                </Badge>
-                <Button
-                  style={{ background: 'mediumblue' }}
-                  onClick={() => handleIncrease(item)}
-                >
-                  +
-                </Button>
-                <Button
-                  style={{ background: 'firebrick' }}
-                  onClick={() => handleRemove(item)}
-                >
-                  Remove
-                </Button>
-              </Stack>
-            </Col>
-          </Row>
-        ))}
-      </>
+      <Row>
+        <Col>
+          {cartItems.map((item) => (
+            <Row key={item.product.id}>
+              <Col>
+                {item.product.imgs && (
+                  <Image
+                    src={item.product.imgs[0]}
+                    thumbnail
+                    style={{ height: 200, width: 'auto' }}
+                  />
+                )}
+              </Col>
+              <Col>
+                <Stack>
+                  <b>{item.product.title}</b>
+                  <p>{item.product.price}€</p>
+                  <p>In stock: {item.product.instock}</p>
+                </Stack>
+              </Col>
+              <Col>
+                <Stack direction="horizontal" gap={3}>
+                  <Button
+                    style={{ background: 'mediumblue' }}
+                    onClick={() => handleDecrease(item)}
+                  >
+                    -
+                  </Button>
+                  <Badge
+                    bg="light"
+                    text="dark"
+                    className="fs-6"
+                    style={{ width: '40px' }}
+                  >
+                    {item.quantity}
+                  </Badge>
+                  <Button
+                    style={{ background: 'mediumblue' }}
+                    onClick={() => handleIncrease(item)}
+                  >
+                    +
+                  </Button>
+                  <Button
+                    style={{ background: 'firebrick' }}
+                    onClick={() => handleRemove(item)}
+                  >
+                    Remove
+                  </Button>
+                </Stack>
+              </Col>
+            </Row>
+          ))}
+        </Col>
+        <Col classNA>
+          <Card className="justify-content-center align-items-end">
+            <Row className="mt-2">
+              <h6>Totals: {cartTotalPrice}€</h6>
+            </Row>
+          </Card>
+        <Button>
+          Checkout
+        </Button>
+        </Col>
+      </Row>
     );
   };
 
