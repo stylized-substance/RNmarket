@@ -26,7 +26,7 @@ const ProductCards = (props: ProductCardsProps) => {
           <Card.Img
             variant="top"
             src={imageUrl}
-            style={{ height: 200, width: 'auto' }}
+            style={{ height: 200, width: "auto" }}
           />
           <Card.Body>
             <Card.Title>{product.title}</Card.Title>

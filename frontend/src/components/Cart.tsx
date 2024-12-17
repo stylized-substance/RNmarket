@@ -14,6 +14,7 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 
 import { CartItem } from '#src/types/types';
+import { Badge } from 'react-bootstrap';
 
 const Cart = () => {
   // Import cart context
@@ -75,7 +76,7 @@ const Cart = () => {
                 <Image
                   src={item.product.imgs[0]}
                   thumbnail
-                  style={{ height: 200, width: 'auto' }}
+                  style={{ height: 200, width: "auto" }}
                 />
               )}
             </Col>
@@ -87,19 +88,19 @@ const Cart = () => {
             <Col>
               <Stack direction="horizontal" gap={3}>
                 <Button
-                  style={{ background: 'black' }}
+                  style={{ background: "mediumblue" }}
                   onClick={() => handleDecrease(item)}
                 >
                   -
                 </Button>
-                {item.quantity}
+                <Badge bg="dark" className="fs-6" style={{ width: "40px"}}>{item.quantity}</Badge>
                 <Button
-                  style={{ background: 'black' }}
+                  style={{ background: "mediumblue" }}
                   onClick={() => handleIncrease(item)}
                 >
                   +
                 </Button>
-                <Button style={{ background: 'crimson' }}>Remove</Button>
+                <Button style={{ background: "firebrick" }}>Remove</Button>
               </Stack>
             </Col>
           </Row>

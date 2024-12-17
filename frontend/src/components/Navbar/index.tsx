@@ -91,7 +91,7 @@ const NavBar = (props: NavBarProps) => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <Form style={{ width: '600px' }} onSubmit={handleSearchSubmit}>
+          <Form style={{ width: "600px" }} onSubmit={handleSearchSubmit}>
             <InputGroup>
               <Form.Control
                 type="search"

@@ -123,7 +123,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
               <Form.Label>
                 <b>Rating</b>
               </Form.Label>
-              <InputGroup hasValidation style={{ width: '80px' }}>
+              <InputGroup hasValidation style={{ width: "80px" }}>
                 <Form.Select
                   name="rating"
                   value={values.rating}
