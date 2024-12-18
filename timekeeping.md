@@ -76,3 +76,4 @@
 | 12.12.2024 | 2 | Worked on Cart component and context | 163
 | 16.12.2024 | 1 | Worked on Cart component and context | 164
 | 17.12.2024 | 2 | Worked on Cart component and context | 166
+| 18.12.2024 | 2 | Worked on Cart component and context | 168
