@@ -11,7 +11,6 @@ import Stack from 'react-bootstrap/Stack';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
-import Card from 'react-bootstrap/Card';
 
 import { CartItem } from '#src/types/types';
 
@@ -32,10 +31,21 @@ const Cart = () => {
 
   useEffect(() => {
     if (products) {
-      cart.dispatch({
-        type: 'added',
-        payload: { product: products[0], quantity: 1 }
-      });
+      //     cart.dispatch({
+      //       type: 'added',
+      //       payload: [
+      //         { product: products[0], quantity: 1 },
+      //         { product: products[1], quantity: 1 }
+      //       ]
+      //     });
+      //   }
+      // }, [products]);
+      for (const product of products) {
+        cart.dispatch({
+          type: 'added',
+          payload: { product: product, quantity: 1 }
+        });
+      }
     }
   }, [products]);
 
@@ -43,7 +53,7 @@ const Cart = () => {
     return null;
   }
 
-  console.log(cartItems);
+  console.log('cartItems', cartItems);
 
   const CartProducts = () => {
     const handleIncrease = (item: CartItem) => {
@@ -71,86 +81,89 @@ const Cart = () => {
       });
     };
 
-    const cartTotalPrice = cartItems.length > 1 ? cartItems.map(item => item.product.price).reduce((accumulator, currentValue) => accumulator + currentValue) : 0
-    console.log(cartTotalPrice)
-
     return (
-      <Row>
-        <Col>
-          {cartItems.map((item) => (
-            <Row key={item.product.id}>
-              <Col>
-                {item.product.imgs && (
-                  <Image
-                    src={item.product.imgs[0]}
-                    thumbnail
-                    style={{ height: 200, width: 'auto' }}
-                  />
-                )}
-              </Col>
-              <Col>
-                <Stack>
-                  <b>{item.product.title}</b>
-                  <p>{item.product.price}€</p>
-                  <p>In stock: {item.product.instock}</p>
-                </Stack>
-              </Col>
-              <Col>
-                <Stack direction="horizontal" gap={3}>
-                  <Button
-                    style={{ background: 'mediumblue' }}
-                    onClick={() => handleDecrease(item)}
-                  >
-                    -
-                  </Button>
-                  <Badge
-                    bg="light"
-                    text="dark"
-                    className="fs-6"
-                    style={{ width: '40px' }}
-                  >
-                    {item.quantity}
-                  </Badge>
-                  <Button
-                    style={{ background: 'mediumblue' }}
-                    onClick={() => handleIncrease(item)}
-                  >
-                    +
-                  </Button>
-                  <Button
-                    style={{ background: 'firebrick' }}
-                    onClick={() => handleRemove(item)}
-                  >
-                    Remove
-                  </Button>
-                </Stack>
-              </Col>
-            </Row>
-          ))}
-        </Col>
-        <Col classNA>
-          <Card className="justify-content-center align-items-end">
-            <Row className="mt-2">
-              <h6>Totals: {cartTotalPrice}€</h6>
-            </Row>
-          </Card>
-        <Button>
-          Checkout
-        </Button>
-        </Col>
-      </Row>
+      <>
+        {cartItems.map((item) => (
+          <Row key={item.product.id} className="gap-5">
+            <Col id="cart-product-image" className="flex-shrink-0">
+              {item.product.imgs && (
+                <Image
+                  src={item.product.imgs[0]}
+                  thumbnail
+                  style={{ height: 200, width: 'auto' }}
+                />
+              )}
+            </Col>
+            <Col>
+              <b>{item.product.title}</b>
+              <p>{item.product.price}€</p>
+              <p>In stock: {item.product.instock}</p>
+            </Col>
+            <Col>
+              <Stack direction="horizontal" gap={3}>
+                <Button
+                  style={{ background: 'mediumblue' }}
+                  onClick={() => handleDecrease(item)}
+                >
+                  -
+                </Button>
+                <Badge
+                  bg="light"
+                  text="dark"
+                  className="fs-6"
+                  style={{ width: '40px' }}
+                >
+                  {item.quantity}
+                </Badge>
+                <Button
+                  style={{ background: 'mediumblue' }}
+                  onClick={() => handleIncrease(item)}
+                >
+                  +
+                </Button>
+                <Button
+                  style={{ background: 'firebrick' }}
+                  onClick={() => handleRemove(item)}
+                >
+                  Remove
+                </Button>
+              </Stack>
+            </Col>
+          </Row>
+        ))}
+      </>
     );
   };
 
+  const cartTotalPrice =
+    cartItems && cartItems.length > 0
+      ? Number(
+          cartItems
+            .map((item) => item.product.price * item.quantity)
+            .reduce((total, item) => total + item)
+            .toFixed(2)
+        )
+      : 0;
+
   return (
-    <Container>
-      <Stack gap={5}>
+    <>
+      <Row className="mb-5">
+        <h1 className="text-center">Shopping cart</h1>
+      </Row>
+      <Container className="d-flex">
         <Row>
-          <h2 className="text-center mb-4">Shopping cart</h2>
+          <Stack gap={5}>
+            <CartProducts />
+          </Stack>
         </Row>
-        <CartProducts />
-      </Stack>
-    </Container>
+        <Row className="d-flex flex-column flex-grow-1">
+          <Col>
+            <h5 className="text-center">Total: {cartTotalPrice}€</h5>
+            <Button className="custom-button fs-5">Checkout</Button>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 

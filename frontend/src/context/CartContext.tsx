@@ -44,33 +44,30 @@ const cartReducer = (state: CartState, action: Action) => {
   switch (action.type) {
     // Add item to cart
     case 'added': {
-      let payload: CartItem[];
-
       // Turn single item into an array
+      let payload: CartItem[];
       if (Array.isArray(action.payload)) {
         payload = action.payload;
       } else {
         payload = [action.payload];
       }
 
-      const handleExisting = (item: CartItem): CartItem[] => {
-        // Find and update existing product in cart state
-        if (state.length === 0) {
-          return [item];
-        }
-
-        return state.map((stateItem) =>
-          stateItem.product.id === item.product.id
-            ? { ...stateItem, quantity: stateItem.quantity + item.quantity }
-            : item
-        );
-      };
-
-      let newState: CartItem[] = [];
-
+      // Copy state array for mofification
+      const newState: CartItem[] = [...state];
+      
       // Loop through payload items and update state
       for (const payloadItem of payload) {
-        newState = handleExisting(payloadItem);
+        const existingItemIndex = newState.findIndex(
+          (stateItem) => stateItem.product.id === payloadItem.product.id
+        );
+
+        if (existingItemIndex !== -1) {
+          // Item is in cart, update it
+          newState[existingItemIndex].quantity += payloadItem.quantity;
+        } else {
+          // Item isn't in cart, add it
+          newState.push(payloadItem);
+        }
       }
 
       return newState;

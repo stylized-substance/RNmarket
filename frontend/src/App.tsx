@@ -21,23 +21,20 @@ const App = () => {
   const { toastState } = useToast();
 
   return (
-    <Container className="d-flex flex-column">
-      <Toast
-        show={toastState.show}
-        animation={true}
-        bg="dark"
-        className="align-self-center toast-notification text-center"
-      >
-        <Toast.Body className="toast-notification-body">
-          {toastState.message}
-        </Toast.Body>
-      </Toast>
-
-      <BrowserRouter>
-        <Container style={{ marginBottom: '100px' }}>
+    <>
+      <Container>
+        <Toast
+          show={toastState.show}
+          animation={true}
+          bg="dark"
+          className="align-self-center toast-notification text-center"
+        >
+          <Toast.Body className="toast-notification-body">
+            {toastState.message}
+          </Toast.Body>
+        </Toast>
+        <BrowserRouter>
           <NavBar loggedOnUser={loggedOnUser ?? null} />
-        </Container>
-        <Container>
           <Routes>
             <Route path="/" element={<Products />} />
             <Route
@@ -60,9 +57,9 @@ const App = () => {
             <Route path="/admin" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
-        </Container>
-      </BrowserRouter>
-    </Container>
+        </BrowserRouter>
+      </Container>
+    </>
   );
 };
 
