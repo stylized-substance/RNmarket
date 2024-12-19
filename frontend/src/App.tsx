@@ -22,7 +22,7 @@ const App = () => {
 
   return (
     <>
-      <Container>
+      <Container id="app-container">
         <Toast
           show={toastState.show}
           animation={true}

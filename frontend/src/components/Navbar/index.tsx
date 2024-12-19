@@ -45,7 +45,7 @@ const NavBar = (props: NavBarProps) => {
   return (
     <Row style={{ marginBottom: '100px' }}>
       <Navbar fixed="top" expand="lg" bg="dark" data-bs-theme="dark">
-        <Container fluid>
+        <Container fluid id="navbar-container">
           <Navbar.Brand
             as="span"
             style={{ cursor: 'pointer' }}

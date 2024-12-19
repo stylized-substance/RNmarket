@@ -87,24 +87,29 @@ const Cart = () => {
           <Row key={item.product.id} className="gap-5">
             <Col id="cart-product-image" className="flex-shrink-0">
               {item.product.imgs && (
-                    <Image
-                      src={item.product.imgs[0]}
-                      thumbnail
-                      style={{ height: 200, width: 200 }}
-                      className="object-fit-scale"
-                    />
+                <Image
+                  src={item.product.imgs[0]}
+                  thumbnail
+                  style={{ height: 200, width: 200 }}
+                  className="object-fit-scale"
+                />
               )}
             </Col>
             <Col>
               <b>{item.product.title}</b>
               <p>{item.product.price}€</p>
-              <p>In stock: {item.product.instock}</p>
+              {item.product.instock > 0 ? (
+                <p>In stock: {item.product.instock}</p>
+              ) : (
+                <p style={{ color: 'red' }}>Product out of stock</p>
+              )}
             </Col>
             <Col>
               <Stack direction="horizontal" gap={3}>
                 <Button
                   style={{ background: 'mediumblue' }}
                   onClick={() => handleDecrease(item)}
+                  disabled={item.product.instock === 0}
                 >
                   -
                 </Button>
@@ -119,6 +124,7 @@ const Cart = () => {
                 <Button
                   style={{ background: 'mediumblue' }}
                   onClick={() => handleIncrease(item)}
+                  disabled={item.product.instock === 0}
                 >
                   +
                 </Button>
@@ -148,22 +154,22 @@ const Cart = () => {
 
   return (
     <>
-      <Row className="mb-5">
+      <Row style={{ marginBottom: '100px' }}>
         <h1 className="text-center">Shopping cart</h1>
       </Row>
-      <Container className="d-flex">
-        <Row>
-          <Stack gap={5}>
+      <Row className="">
+        <Col className="">
+          <Stack gap={5} className="me-auto">
             <CartProducts />
           </Stack>
-        </Row>
-        <Row className="d-flex flex-column flex-grow-1">
-          <Col>
+        </Col>
+        <Col className="">
+          <Stack className="border p-4 w-25" gap={3}>
             <h5 className="text-center">Total: {cartTotalPrice}€</h5>
             <Button className="custom-button fs-5">Checkout</Button>
-          </Col>
-        </Row>
-      </Container>
+          </Stack>
+        </Col>
+      </Row>
     </>
   );
 };
