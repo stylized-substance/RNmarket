@@ -87,11 +87,12 @@ const Cart = () => {
           <Row key={item.product.id} className="gap-5">
             <Col id="cart-product-image" className="flex-shrink-0">
               {item.product.imgs && (
-                <Image
-                  src={item.product.imgs[0]}
-                  thumbnail
-                  style={{ height: 200, width: 'auto' }}
-                />
+                    <Image
+                      src={item.product.imgs[0]}
+                      thumbnail
+                      style={{ height: 200, width: 200 }}
+                      className="object-fit-scale"
+                    />
               )}
             </Col>
             <Col>
