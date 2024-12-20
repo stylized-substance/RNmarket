@@ -167,7 +167,7 @@ const Cart = () => {
             <CartProducts />
           </Stack>
         </Col>
-        <Col style={{ backgroundColor: '#f2f2f2' }} lg={{ span: 2 }}>
+        <Col className="bg-light" lg={{ span: 2 }}>
           <Stack className="p-4" gap={3}>
             <h5 className="text-center">Total: {cartTotalPrice}€</h5>
             <Button className="custom-button fs-5">Checkout</Button>
