@@ -165,6 +165,7 @@ const NavBar = (props: NavBarProps) => {
                 </Dropdown>
               </Col>
               <Col>
+              {/* TODO: Make this a dropdown */}
                 <Button
                   onClick={() => navigate('/cart')}
                   className="custom-button position-relative me-2"
