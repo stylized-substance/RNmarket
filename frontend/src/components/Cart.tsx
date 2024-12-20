@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
 import { useQuery } from '@tanstack/react-query';
-import { NavLink, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import productsService from '#src/services/products';
@@ -16,7 +15,6 @@ import Badge from 'react-bootstrap/Badge';
 import { CartItem } from '#src/types/types';
 
 const Cart = () => {
-  const navigate = useNavigate();
   // Import cart context
   const cart = useCart();
   const cartItems = cart.state;
