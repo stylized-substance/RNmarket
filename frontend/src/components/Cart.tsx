@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
 import { useQuery } from '@tanstack/react-query';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import productsService from '#src/services/products';
 
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Stack from 'react-bootstrap/Stack';
@@ -15,6 +16,7 @@ import Badge from 'react-bootstrap/Badge';
 import { CartItem } from '#src/types/types';
 
 const Cart = () => {
+  const navigate = useNavigate();
   // Import cart context
   const cart = useCart();
   const cartItems = cart.state;
@@ -95,7 +97,9 @@ const Cart = () => {
             </Col>
             <Col>
               <Stack gap={2}>
-                <b>{item.product.title}</b>
+                <Link to={`/products/${item.product.id}`}>
+                  <b>{item.product.title}</b>
+                </Link>
                 <i>{item.product.price}€</i>
                 {item.product.instock > 0 ? (
                   <p>In stock: {item.product.instock}</p>
