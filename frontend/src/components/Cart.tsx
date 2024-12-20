@@ -107,7 +107,7 @@ const Cart = () => {
             <Col>
               <Stack direction="horizontal" gap={3}>
                 <Button
-                  style={{ background: 'mediumblue' }}
+                  style={{ background: 'black' }}
                   onClick={() => handleDecrease(item)}
                   disabled={item.product.instock === 0}
                 >
@@ -122,7 +122,7 @@ const Cart = () => {
                   {item.quantity}
                 </Badge>
                 <Button
-                  style={{ background: 'mediumblue' }}
+                  style={{ background: 'black' }}
                   onClick={() => handleIncrease(item)}
                   disabled={item.product.instock === 0}
                 >
@@ -157,14 +157,14 @@ const Cart = () => {
       <Row style={{ marginBottom: '100px' }}>
         <h1 className="text-center">Shopping cart</h1>
       </Row>
-      <Row className="">
+      <Row className="align-items-start">
         <Col className="">
           <Stack gap={5} className="me-auto">
             <CartProducts />
           </Stack>
         </Col>
-        <Col className="">
-          <Stack className="border p-4 w-25" gap={3}>
+        <Col style={{ backgroundColor: "#f2f2f2" }} lg={{ span: 2 }}>
+          <Stack className="p-4" gap={3}>
             <h5 className="text-center">Total: {cartTotalPrice}€</h5>
             <Button className="custom-button fs-5">Checkout</Button>
           </Stack>
