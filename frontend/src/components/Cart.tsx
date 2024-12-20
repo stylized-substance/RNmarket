@@ -53,8 +53,6 @@ const Cart = () => {
     return null;
   }
 
-  console.log('cartItems', cartItems);
-
   const CartProducts = () => {
     const handleIncrease = (item: CartItem) => {
       cart.dispatch({
@@ -96,13 +94,15 @@ const Cart = () => {
               )}
             </Col>
             <Col>
-              <b>{item.product.title}</b>
-              <p>{item.product.price}€</p>
-              {item.product.instock > 0 ? (
-                <p>In stock: {item.product.instock}</p>
-              ) : (
-                <p style={{ color: 'red' }}>Product out of stock</p>
-              )}
+              <Stack gap={2}>
+                <b>{item.product.title}</b>
+                <i>{item.product.price}€</i>
+                {item.product.instock > 0 ? (
+                  <p>In stock: {item.product.instock}</p>
+                ) : (
+                  <p style={{ color: 'red' }}>Product out of stock</p>
+                )}
+              </Stack>
             </Col>
             <Col>
               <Stack direction="horizontal" gap={3}>
@@ -163,7 +163,7 @@ const Cart = () => {
             <CartProducts />
           </Stack>
         </Col>
-        <Col style={{ backgroundColor: "#f2f2f2" }} lg={{ span: 2 }}>
+        <Col style={{ backgroundColor: '#f2f2f2' }} lg={{ span: 2 }}>
           <Stack className="p-4" gap={3}>
             <h5 className="text-center">Total: {cartTotalPrice}€</h5>
             <Button className="custom-button fs-5">Checkout</Button>
