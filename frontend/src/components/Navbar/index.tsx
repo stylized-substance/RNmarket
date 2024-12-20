@@ -27,7 +27,7 @@ interface NavBarProps {
 
 const NavBar = (props: NavBarProps) => {
   const cart = useCart();
-  const cartItems = cart.state
+  const cartItems = cart.state;
 
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
@@ -168,9 +168,15 @@ const NavBar = (props: NavBarProps) => {
                 <Button
                   onClick={() => navigate('/cart')}
                   className="custom-button position-relative me-2"
-                  >
+                >
                   Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
-                  <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">{cartItems.length}</Badge>
+                  <Badge
+                    pill
+                    bg="danger"
+                    className="position-absolute top-0 start-100 translate-middle"
+                  >
+                    {cartItems.length}
+                  </Badge>
                 </Button>
               </Col>
             </Row>
