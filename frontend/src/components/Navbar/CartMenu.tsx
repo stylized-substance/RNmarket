@@ -42,7 +42,7 @@ const CartMenu = () => {
   return (
     <>
       {cartItems.map((item) => (
-        <Row key={item.product.id} className="gap-5">
+        <Row key={item.product.id} className="p-4 ">
           <Col id="cart-product-image" className="flex-shrink-0">
             {item.product.imgs && (
               <Image
@@ -59,11 +59,6 @@ const CartMenu = () => {
                 <b>{item.product.title}</b>
               </Link>
               <i>{item.product.price}€</i>
-              {item.product.instock > 0 ? (
-                <p>In stock: {item.product.instock}</p>
-              ) : (
-                <p style={{ color: 'red' }}>Product out of stock</p>
-              )}
             </Stack>
           </Col>
           <Col>

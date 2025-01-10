@@ -33,7 +33,7 @@ const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
-  const [cartDropDownOpen, setCartDropdownOpen] = useState<boolean>(true);
+  const [cartDropdownOpen, setCartDropdownOpen] = useState<boolean>(false);
   const [showRegisterMenu, setShowRegisterMenu] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -92,7 +92,7 @@ const NavBar = (props: NavBarProps) => {
                   onClick={() => navigate('/products/laptops')}
                   className="text-light"
                 >
-                  Laptops
+                 d Laptops
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
@@ -126,6 +126,7 @@ const NavBar = (props: NavBarProps) => {
                   align="end"
                   show={loginDropdownOpen}
                   onToggle={() => {
+                    setCartDropdownOpen(false);
                     setLoginDropdownOpen(!loginDropdownOpen);
                     setShowRegisterMenu(false);
                   }}
@@ -140,7 +141,7 @@ const NavBar = (props: NavBarProps) => {
                     </Button>
                   )}
 
-                  <Dropdown.Menu className="mt-2">
+                  <Dropdown.Menu className="mt-2 overflow-y-auto">
                     <Container className="d-flex">
                       <Col></Col>
                       <Row className="d-flex justify-content-center mt-1"></Row>
@@ -167,9 +168,16 @@ const NavBar = (props: NavBarProps) => {
                 </Dropdown>
               </Col>
               <Col>
-                <Dropdown align="end" show={cartDropDownOpen} >
+                <Dropdown
+                  align="end"
+                  show={cartDropdownOpen}
+                  onToggle={() => {
+                    setLoginDropdownOpen(false);
+                    setCartDropdownOpen(!cartDropdownOpen);
+                  }}
+                >
                   <Dropdown.Toggle
-                    onClick={() => navigate('/cart')}
+                    // onClick={() => navigate('/cart')}
                     className="custom-button position-relative me-2"
                   >
                     Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
@@ -181,7 +189,7 @@ const NavBar = (props: NavBarProps) => {
                       {cartItems.length}
                     </Badge>
                   </Dropdown.Toggle>
-                  <Dropdown.Menu style={{ width: 500 }}>
+                  <Dropdown.Menu style={{ maxWidth: "1000px", maxHeight: "1000px" }} className="overflow-y-scroll">
                     <CartMenu />
                   </Dropdown.Menu>
                 </Dropdown>
