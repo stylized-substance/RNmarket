@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
 import { useCart } from '#src/context/CartContext';
+import { Link } from 'react-router-dom';
 
 import LoginMenu from '#src/components/Navbar/LoginMenu';
 import RegisterMenu from '#src/components/Navbar/RegisterMenu';
+import CartProducts from '#src/components/Cart/CartProducts';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -18,6 +20,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
+import Image from 'react-bootstrap/Image';
+import Stack from 'react-bootstrap/Stack';
 
 import { LoginPayload } from '#src/types/types';
 
@@ -32,6 +36,7 @@ const NavBar = (props: NavBarProps) => {
   const [productsDropdownOpen, setProductsDropdownOpen] =
     useState<boolean>(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState<boolean>(false);
+  const [cartDropDownOpen, setCartDropdownOpen] = useState<boolean>(true);
   const [showRegisterMenu, setShowRegisterMenu] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -165,20 +170,25 @@ const NavBar = (props: NavBarProps) => {
                 </Dropdown>
               </Col>
               <Col>
-              {/* TODO: Make this a dropdown */}
-                <Button
-                  onClick={() => navigate('/cart')}
-                  className="custom-button position-relative me-2"
-                >
-                  Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
-                  <Badge
-                    pill
-                    bg="danger"
-                    className="position-absolute top-0 start-100 translate-middle"
+                {/* TODO: Make this a dropdown */}
+                <Dropdown align="end" show={cartDropDownOpen}>
+                  <Dropdown.Toggle
+                    onClick={() => navigate('/cart')}
+                    className="custom-button position-relative me-2"
                   >
-                    {cartItems.length}
-                  </Badge>
-                </Button>
+                    Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
+                    <Badge
+                      pill
+                      bg="danger"
+                      className="position-absolute top-0 start-100 translate-middle"
+                    >
+                      {cartItems.length}
+                    </Badge>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu style={{ width: 500 }}>
+                    <CartProducts />
+                  </Dropdown.Menu>
+                </Dropdown>
               </Col>
             </Row>
           </Navbar.Collapse>

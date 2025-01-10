@@ -8,7 +8,7 @@ import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
 import Products from '#src/components/Products';
 import SingleProduct from '#src/components/SingleProduct';
-import Cart from '#src/components/Cart';
+import Cart from '#src/components/Cart/index.tsx';
 
 import Container from 'react-bootstrap/Container';
 import Toast from 'react-bootstrap/Toast';
