@@ -1,8 +1,4 @@
-import { useEffect } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
-import { useQuery } from '@tanstack/react-query';
-
-import productsService from '#src/services/products';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,40 +10,6 @@ const Cart = () => {
   // Import cart context
   const cart = useCart();
   const cartItems = cart.state;
-
-  // Fetch products with Tanstack Query
-  const {
-    data: products,
-    isPending,
-    isError
-  } = useQuery({
-    queryKey: ['products'],
-    queryFn: () => productsService.getAll()
-  });
-
-  useEffect(() => {
-    if (products) {
-      //     cart.dispatch({
-      //       type: 'added',
-      //       payload: [
-      //         { product: products[0], quantity: 1 },
-      //         { product: products[1], quantity: 1 }
-      //       ]
-      //     });
-      //   }
-      // }, [products]);
-      for (const product of products) {
-        cart.dispatch({
-          type: 'added',
-          payload: { product: product, quantity: 1 }
-        });
-      }
-    }
-  }, [products]);
-
-  if (isPending || isError) {
-    return null;
-  }
 
   const cartTotalPrice =
     cartItems && cartItems.length > 0
@@ -61,15 +23,23 @@ const Cart = () => {
 
   return (
     <>
-      <Row style={{ marginBottom: '100px' }}>
-        <h1 className="text-center">Shopping cart</h1>
+      <Row style={{ marginBottom: '100px' }} className="justify-content-center">
+        <Col>
+          <h1 className="text-center">Shopping cart</h1>
+        </Col>
       </Row>
       <Row className="align-items-start">
-        <Col className="">
-          <Stack gap={5} className="me-auto">
-            <CartProducts />
-          </Stack>
-        </Col>
+        {cartItems.length > 0 ? (
+          <Col className="">
+            <Stack gap={5} className="me-auto">
+              <CartProducts />
+            </Stack>
+          </Col>
+        ) : (
+          <Col className="d-flex flex-row justify-content-center">
+            <h2 className="text-center">Cart is empty</h2>
+          </Col>
+        )}
         <Col className="bg-light" lg={{ span: 2 }}>
           <Stack className="p-4" gap={3}>
             <h5 className="text-center">Total: {cartTotalPrice}€</h5>
