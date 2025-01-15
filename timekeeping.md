@@ -81,3 +81,4 @@
 | 20.12.2024 | 1 | Worked on Cart component | 171
 | 10.01.2025 | 1 | Worked on Cart dropdown menu | 172
 | 14.01.2025 | 1 | Worked on Cart dropdown menu | 173
+| 15.01.2025 | 2 | Worked on Cart dropdown menu and product cards | 175
