@@ -63,7 +63,7 @@ const NavBar = (props: NavBarProps) => {
             id="basic-navbar-nav"
             className="justify-content-between"
           >
-            <Nav className="fs-5">
+            <Nav  className="fs-5">
               <Nav.Link onClick={() => navigate('/')} className="text-light">
                 Home
               </Nav.Link>
@@ -141,7 +141,7 @@ const NavBar = (props: NavBarProps) => {
                     </Button>
                   )}
 
-                  <Dropdown.Menu className="mt-2 overflow-y-auto">
+                  <Dropdown.Menu style={{ marginTop: '11px' }} className="overflow-y-auto">
                     <Container className="d-flex">
                       <Col></Col>
                       <Row className="d-flex justify-content-center mt-1"></Row>
