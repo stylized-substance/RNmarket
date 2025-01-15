@@ -5,6 +5,7 @@ import { parseString } from '#src/utils/typeNarrowers';
 
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '#src/context/CartContext.tsx';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -17,6 +18,8 @@ import ProductsError from '#src/components/ProductsError';
 import StarRating from '#src/components/StarRating';
 import Reviews from '#src/components/Reviews';
 import ReviewForm from '#src/components/ReviewForm';
+
+import { Product } from '#src/types/types.ts';
 
 const ImageCarousel = ({ images }: { images: string[] }) => {
   const imageUrls: string[] = images.map(
@@ -38,6 +41,7 @@ const ImageCarousel = ({ images }: { images: string[] }) => {
 
 const SingleProduct = () => {
   const navigate = useNavigate();
+  const cart = useCart();
 
   // Read product id from current URI and parse it
   let { id } = useParams();
@@ -65,6 +69,14 @@ const SingleProduct = () => {
 
   if (!data) {
     return <h1 className="text-center">Product not found</h1>;
+  }
+
+  const handleAddToCart = (product: Product) => {
+    console.log('adding', product)
+    cart.dispatch({
+      type: 'added',
+      payload: { product: product, quantity: 1 }
+    })
   }
 
   return (
@@ -95,7 +107,10 @@ const SingleProduct = () => {
               <p key={index}>{spec}</p>
             ))}
           </Col>
-          <Button size="lg" className="custom-button">
+          <Button
+            size="lg"
+            onClick={() => handleAddToCart(data)}
+            className="custom-button">
             Add to cart
           </Button>
         </Col>

@@ -49,7 +49,7 @@ const CartMenu = () => {
     <Container className="m-2">
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
-          <Row key={item.product.id} className="p-4">
+          <Row key={item.product.id} className="p-4 border">
             <Col id="cart-product-image" className="flex-shrink-0">
               {item.product.imgs && (
                 <Image
