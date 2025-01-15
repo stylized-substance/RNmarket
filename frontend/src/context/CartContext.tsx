@@ -2,12 +2,13 @@ import {
   createContext,
   PropsWithChildren,
   useContext,
+  useEffect,
   useReducer
 } from 'react';
 
-import { CartItem } from '#src/types/types';
+import { CartItem, CartState } from '#src/types/types';
 
-type CartState = CartItem[] | [];
+import { isCartState } from '#src/utils/typeNarrowers.ts';
 
 type Action =
   | {
@@ -30,8 +31,32 @@ interface CartContextType {
 
 export const CartContext = createContext<CartContextType | null>(null);
 
+const readCartFromLocalStorage = () => {
+  const cartFromLocalStorage = localStorage.getItem('cart');
+
+  if (!cartFromLocalStorage) {
+    return [];
+  }
+
+  const parsedCart: unknown = JSON.parse(cartFromLocalStorage);
+  console.log(parsedCart)
+  // TODO: fix invalid cart data on page reload
+  if (isCartState(parsedCart)) {
+    return parsedCart;
+  } else {
+    throw new Error('localStorage contains invalid cart data');
+  }
+};
+
+const initialState: CartState = readCartFromLocalStorage();
+
 const CartContextProvider = ({ children }: PropsWithChildren) => {
-  const [state, dispatch] = useReducer(cartReducer, []);
+  const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  // Sync localStorage with context state
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(state));
+  }, [state]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
@@ -54,7 +79,7 @@ const cartReducer = (state: CartState, action: Action) => {
 
       // Copy state array for mofification
       const newState: CartItem[] = [...state];
-      
+
       // Loop through payload items and update state
       for (const payloadItem of payload) {
         const existingItemIndex = newState.findIndex(

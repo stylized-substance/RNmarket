@@ -3,7 +3,9 @@ import {
   ProductCategory,
   NewReview,
   ApiErrorResponse,
-  LoginPayload
+  LoginPayload,
+  CartState,
+  CartItem
 } from '#src/types/types';
 
 const isString = (param: unknown): param is string => {
@@ -103,6 +105,23 @@ const isLoginPayload = (param: unknown): param is LoginPayload => {
   );
 };
 
+const isCartItem = (param: unknown): param is CartItem => {
+  return (
+    isObject(param) &&
+    'product' in param &&
+    isProduct(param) &&
+    'quantity' in param &&
+    isNumber(param)
+  )
+}
+
+const isCartState = (param: unknown): param is CartState => {
+  return (
+    Array.isArray(param) &&
+    param.every(item => isCartItem(item))
+  )
+}
+
 export {
   isProduct,
   isObject,
@@ -110,5 +129,6 @@ export {
   parseString,
   isNewReview,
   isApiErrorResponse,
-  isLoginPayload
+  isLoginPayload,
+  isCartState
 };

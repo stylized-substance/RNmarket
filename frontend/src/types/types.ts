@@ -51,6 +51,8 @@ export interface CartItem {
   quantity: number;
 }
 
+export type CartState = CartItem[] | [];
+
 export interface BaseProduct {
   id: string;
   title: string;
