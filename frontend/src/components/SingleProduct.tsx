@@ -19,8 +19,6 @@ import StarRating from '#src/components/StarRating';
 import Reviews from '#src/components/Reviews';
 import ReviewForm from '#src/components/ReviewForm';
 
-import { Product } from '#src/types/types.ts';
-
 const ImageCarousel = ({ images }: { images: string[] }) => {
   const imageUrls: string[] = images.map(
     (image) => `${backendAddress}${image}`
@@ -71,14 +69,6 @@ const SingleProduct = () => {
     return <h1 className="text-center">Product not found</h1>;
   }
 
-  const handleAddToCart = (product: Product) => {
-    console.log('adding', product)
-    cart.dispatch({
-      type: 'added',
-      payload: { product: product, quantity: 1 }
-    })
-  }
-
   return (
     <Container>
       <BreadCrumb className="fs-5 ms-5">
@@ -109,8 +99,14 @@ const SingleProduct = () => {
           </Col>
           <Button
             size="lg"
-            onClick={() => handleAddToCart(data)}
-            className="custom-button">
+            onClick={() =>
+              cart.dispatch({
+                type: 'added',
+                payload: { product: data, quantity: 1 }
+              })
+            }
+            className="custom-button"
+          >
             Add to cart
           </Button>
         </Col>
