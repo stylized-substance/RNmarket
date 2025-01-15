@@ -1,4 +1,5 @@
 import { useCart } from '#src/context/CartContext.tsx';
+import { useNavigate } from 'react-router-dom';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,6 +11,8 @@ const Cart = () => {
   // Import cart context
   const cart = useCart();
   const cartItems = cart.state;
+
+  const navigate = useNavigate();
 
   const cartTotalPrice =
     cartItems && cartItems.length > 0
@@ -36,15 +39,23 @@ const Cart = () => {
             </Stack>
           </Col>
         ) : (
-          <Col className="d-flex flex-row justify-content-center">
-            <h2 className="text-center">Cart is empty</h2>
+          <Col className="">
+            <h3 className="" style={{ marginLeft: '540px' }}>
+              Cart is empty
+            </h3>
           </Col>
         )}
         <Col className="bg-light" lg={{ span: 2 }}>
           <Stack className="p-4" gap={3}>
             <h5 className="text-center">Total: {cartTotalPrice}€</h5>
-            {/* TODO: Navigate to checkout page*/}
-            <Button className="custom-button fs-5">Checkout</Button>
+            <Button
+              onClick={() => {
+                navigate('/checkout');
+              }}
+              className="custom-button fs-5"
+            >
+              Checkout
+            </Button>
           </Stack>
         </Col>
       </Row>

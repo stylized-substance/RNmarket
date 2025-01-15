@@ -46,10 +46,18 @@ const CartMenu = () => {
   console.log('cartItems', cartItems);
 
   return (
-    <Container className="m-2">
+    <Container className="pe-3">
+      <Row className="justify-content-center">
+        <Button
+          onClick={() => navigate('/cart')}
+          className="custom-button w-50 mb-4 mt-4"
+        >
+          Go to cart
+        </Button>
+      </Row>
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
-          <Row key={item.product.id} className="p-4 border">
+          <Row key={item.product.id} className="p-4 border-bottom">
             <Col id="cart-product-image" className="flex-shrink-0">
               {item.product.imgs && (
                 <Image
@@ -113,14 +121,6 @@ const CartMenu = () => {
           <h4>Cart is empty</h4>
         </Row>
       )}
-      <Row className="justify-content-center">
-        <Button
-          onClick={() => navigate('/cart')}
-          className="custom-button w-50"
-        >
-          Go to cart
-        </Button>
-      </Row>
     </Container>
   );
 };
