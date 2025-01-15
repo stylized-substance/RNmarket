@@ -40,7 +40,7 @@ const Cart = () => {
           </Col>
         ) : (
           <Col className="">
-            <h3 className="" style={{ marginLeft: '540px' }}>
+            <h3 className="" style={{ marginLeft: '555px' }}>
               Cart is empty
             </h3>
           </Col>
