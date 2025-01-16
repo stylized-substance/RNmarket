@@ -57,7 +57,7 @@ const Products = (props: ProductsProps) => {
               Search results for: {searchTerm}
             </h1>
           ) : (
-            <h1 className="text-center m-4">{props.productCategory}</h1>
+            <h1 style={{ marginBottom: 100 }} className="text-center">{props.productCategory}</h1>
           )}
         </Col>
       </Row>

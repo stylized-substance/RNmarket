@@ -92,7 +92,7 @@ const NavBar = (props: NavBarProps) => {
                   onClick={() => navigate('/products/laptops')}
                   className="text-light"
                 >
-                 d Laptops
+                 Laptops
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
