@@ -44,7 +44,7 @@ const ProductCard = (props: ProductCardProps) => {
         </div>
         <Card.Body>
           <Card.Title
-            style={{ height: '100px' }}
+            style={{ height: 100 }}
             className="text-truncate text-wrap"
           >
             {props.product.title}

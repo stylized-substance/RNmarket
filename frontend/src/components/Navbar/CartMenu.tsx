@@ -43,10 +43,8 @@ const CartMenu = () => {
     });
   };
 
-  console.log('cartItems', cartItems);
-
   return (
-    <Container className="pe-3">
+    <Col className="d-flex flex-column">
       <Row className="justify-content-center">
         <Button
           onClick={() => navigate('/cart')}
@@ -57,27 +55,40 @@ const CartMenu = () => {
       </Row>
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
-          <Row key={item.product.id} className="p-4 border-bottom">
-            <Col id="cart-product-image" className="flex-shrink-0">
+          <Row
+            key={item.product.id}
+            style={{ height: 400 }}
+            className="p-4 border-bottom align-items-start flex-nowrap"
+          >
+            <Col
+              id="cart-product-image"
+              //style={{ maxWidth: '10%'}}
+              className="d-flex flex-column"
+            >
               {item.product.imgs && (
                 <Image
                   src={item.product.imgs[0]}
-                  thumbnail
-                  style={{ height: '150px', width: '150px' }}
-                  className="object-fit-scale border-0"
+                  style={{ height: 100, width: 100, objectFit: 'contain' }}
+                  className="align-self-start"
                 />
               )}
             </Col>
-            <Col>
-              <Stack gap={2}>
+            <Col className="h-50 border">
+              <Row>
                 <Link
                   to={`/products/${item.product.id}`}
                   className="text-light"
                 >
-                  <b>{item.product.title}</b>
+                  <b 
+                  className="text-truncate text-wrap"
+                  >
+                    {item.product.title}
+                  </b>
                 </Link>
-                <i>{item.product.price}€</i>
-              </Stack>
+              </Row>
+              <Row>
+                <i className="text-danger">{item.product.price}€</i>
+              </Row>
             </Col>
             <Col>
               <Stack direction="horizontal" gap={3}>
@@ -92,7 +103,6 @@ const CartMenu = () => {
                 <Badge
                   bg="light"
                   text="dark"
-                  style={{ width: '40px' }}
                   className="fs-6 border"
                 >
                   {item.quantity}
@@ -121,7 +131,7 @@ const CartMenu = () => {
           <h4>Cart is empty</h4>
         </Row>
       )}
-    </Container>
+    </Col>
   );
 };
 
