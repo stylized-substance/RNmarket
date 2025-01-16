@@ -5,7 +5,6 @@ import { useCart } from '#src/context/CartContext.tsx';
 
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
@@ -30,36 +29,41 @@ const ProductCard = (props: ProductCardProps) => {
   return (
     <Card
       id="product-card-container"
-      style={{ height: '473px' }}
-      className="justify-content-between"
+      className="justify-content-between border-0 mb-5"
     >
       <Link to={`/products/${props.product.id}`} key={props.product.id}>
-        <div className="d-flex justify-content-center align-items-end">
+        <div
+          style={{ height: 200 }}
+          className="d-flex justify-content-center align-items-center"
+        >
           <Card.Img
             variant="top"
             src={imageUrl}
-            style={{ height: 200, width: 'auto' }}
+            style={{ maxHeight: 200, objectFit: 'contain' }}
           />
         </div>
         <Card.Body>
-          <Card.Title>{props.product.title}</Card.Title>
-          <Card.Subtitle className="fs-5 mt-2 mb-4">
+          <Card.Title
+            style={{ height: '100px' }}
+            className="text-truncate text-wrap"
+          >
+            {props.product.title}
+          </Card.Title>
+          <Card.Subtitle className="fs-5 mt-2 text-danger">
             {padPrice(props.product.price)}€
           </Card.Subtitle>
-          <Card.Text className="text-truncate">
-            {props.product.specs[0]}
-          </Card.Text>
         </Card.Body>
       </Link>
       <Button
         size="lg"
+        style={{ width: 140 }}
         onClick={() =>
           cart.dispatch({
             type: 'added',
             payload: { product: props.product, quantity: 1 }
           })
         }
-        className="custom-button"
+        className="custom-button align-self-center"
       >
         Add to cart
       </Button>
