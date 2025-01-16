@@ -75,7 +75,7 @@ const cartReducer = (state: CartState, action: Action) => {
         payload = [action.payload];
       }
 
-      // Copy state array for mofification
+      // Copy state array for modification
       const newState: CartItem[] = [...state];
 
       // Loop through payload items and update state
