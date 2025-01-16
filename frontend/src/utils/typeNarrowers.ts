@@ -109,9 +109,9 @@ const isCartItem = (param: unknown): param is CartItem => {
   return (
     isObject(param) &&
     'product' in param &&
-    isProduct(param) &&
+    isProduct(param.product) &&
     'quantity' in param &&
-    isNumber(param)
+    isNumber(param.quantity)
   )
 }
 

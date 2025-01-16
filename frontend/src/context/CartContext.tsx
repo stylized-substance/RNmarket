@@ -39,8 +39,6 @@ const readCartFromLocalStorage = () => {
   }
 
   const parsedCart: unknown = JSON.parse(cartFromLocalStorage);
-  console.log(parsedCart)
-  // TODO: fix invalid cart data on page reload
   if (isCartState(parsedCart)) {
     return parsedCart;
   } else {
