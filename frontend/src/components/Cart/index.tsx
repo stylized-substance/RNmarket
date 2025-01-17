@@ -46,8 +46,9 @@ const Cart = () => {
           </Col>
         )}
         <Col className="bg-light" lg={{ span: 2 }}>
-          <Stack className="p-4" gap={3}>
-            <h5 className="text-center">Total: {cartTotalPrice}€</h5>
+          <Stack className="p-4" gap={2}>
+            <h5 className="text-center">Total price:</h5>
+            <h5 className="text-center">{cartTotalPrice}€</h5>
             <Button
               onClick={() => {
                 navigate('/checkout');
