@@ -63,7 +63,7 @@ const NavBar = (props: NavBarProps) => {
             id="basic-navbar-nav"
             className="justify-content-between"
           >
-            <Nav  className="fs-5">
+            <Nav className="fs-5">
               <Nav.Link onClick={() => navigate('/')} className="text-light">
                 Home
               </Nav.Link>
@@ -92,7 +92,7 @@ const NavBar = (props: NavBarProps) => {
                   onClick={() => navigate('/products/laptops')}
                   className="text-light"
                 >
-                 Laptops
+                  Laptops
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
@@ -141,7 +141,10 @@ const NavBar = (props: NavBarProps) => {
                     </Button>
                   )}
 
-                  <Dropdown.Menu style={{ marginTop: '11px' }} className="overflow-y-auto">
+                  <Dropdown.Menu
+                    style={{ marginTop: '11px' }}
+                    className="overflow-y-auto"
+                  >
                     <Container className="d-flex">
                       <Col></Col>
                       <Row className="d-flex justify-content-center mt-1"></Row>
@@ -177,7 +180,6 @@ const NavBar = (props: NavBarProps) => {
                   }}
                 >
                   <Dropdown.Toggle
-                    // onClick={() => navigate('/cart')}
                     className="custom-button position-relative me-2"
                   >
                     Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
@@ -189,7 +191,7 @@ const NavBar = (props: NavBarProps) => {
                       {cartItems.length}
                     </Badge>
                   </Dropdown.Toggle>
-                  <Dropdown.Menu style={{ width: "500px", maxHeight: "1000px", scrollbarWidth: 'thin', marginTop: '11px'}} className="overflow-x-hidden overflow-y-scroll">
+                  <Dropdown.Menu className="mt-2">
                     <CartMenu />
                   </Dropdown.Menu>
                 </Dropdown>

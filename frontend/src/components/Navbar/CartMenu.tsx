@@ -44,11 +44,21 @@ const CartMenu = () => {
   };
 
   return (
-    <Col className="d-flex flex-column">
-      <Row className="justify-content-center">
+    <Col
+      style={{
+        height: '50vh',
+        width: '40vh',
+        scrollbarWidth: 'thin'
+      }}
+      className="d-flex flex-column overflow-x-hidden overflow-y-scroll"
+    >
+      <Row
+        id="button-row"
+        className="justify-content-center align-items-center border-bottom"
+      >
         <Button
           onClick={() => navigate('/cart')}
-          className="custom-button w-50 mb-4 mt-4"
+          className="custom-button mb-2 w-25"
         >
           Go to cart
         </Button>
@@ -57,14 +67,9 @@ const CartMenu = () => {
         cartItems.map((item) => (
           <Row
             key={item.product.id}
-            style={{ height: 400 }}
-            className="p-4 border-bottom align-items-start flex-nowrap"
+            className="p-4 border-bottom align-items-start"
           >
-            <Col
-              id="cart-product-image"
-              //style={{ maxWidth: '10%'}}
-              className="d-flex flex-column"
-            >
+            <Col id="cart-product-image" className="d-flex flex-column">
               {item.product.imgs && (
                 <Image
                   src={item.product.imgs[0]}
@@ -73,36 +78,33 @@ const CartMenu = () => {
                 />
               )}
             </Col>
-            <Col className="h-50 border">
-              <Row>
+            <Col id="title-column">
+              <Row className="">
                 <Link
                   to={`/products/${item.product.id}`}
-                  className="text-light"
+                  className="d-flex text-light"
                 >
-                  <b 
-                  className="text-truncate text-wrap"
-                  >
-                    {item.product.title}
-                  </b>
+                  <div>{item.product.title.substring(0, 40)}...</div>
                 </Link>
               </Row>
               <Row>
-                <i className="text-danger">{item.product.price}€</i>
+                <div className="text-danger">{item.product.price}€</div>
               </Row>
             </Col>
             <Col>
-              <Stack direction="horizontal" gap={3}>
+              <Stack direction="horizontal" gap={2}>
                 <Button
                   style={{ background: 'black' }}
                   onClick={() => handleDecrease(item)}
                   disabled={item.product.instock === 0}
-                  className="border"
+                  className="border justify-content-center"
                 >
                   -
                 </Button>
                 <Badge
                   bg="light"
                   text="dark"
+                  style={{ width: 40 }}
                   className="fs-6 border"
                 >
                   {item.quantity}
