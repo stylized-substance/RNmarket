@@ -3,7 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '#src/utils/database';
 
 class Order extends Model {}
-
+// TODO: add missing fields
 Order.init(
   {
     id: {

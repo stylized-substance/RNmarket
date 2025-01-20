@@ -96,6 +96,7 @@ const NavBar = (props: NavBarProps) => {
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
+            {/*TODO: Remove hardcoded pixel values from app CSS*/}
             <Form style={{ width: '600px' }} onSubmit={handleSearchSubmit}>
               <InputGroup>
                 <Form.Control
