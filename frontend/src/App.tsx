@@ -9,6 +9,7 @@ import NavBar from '#src/components/Navbar/index.tsx';
 import Products from '#src/components/Products';
 import SingleProduct from '#src/components/SingleProduct';
 import Cart from '#src/components/Cart/index.tsx';
+import Checkout from '#src/components/Checkout';
 
 import Container from 'react-bootstrap/Container';
 import Toast from 'react-bootstrap/Toast';
@@ -56,6 +57,7 @@ const App = () => {
             />
             <Route path="/admin" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="checkout" element={<Checkout />} />
           </Routes>
         </BrowserRouter>
       </Container>

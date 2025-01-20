@@ -51,17 +51,20 @@ const CartMenu = () => {
       }}
       className="d-flex flex-column overflow-x-hidden overflow-y-scroll"
     >
-      <Row
-        id="button-row"
-        className="justify-content-center align-items-center border-bottom"
-      >
+      <Stack direction="horizontal" gap={5} className="justify-content-center">
         <Button
           onClick={() => navigate('/cart')}
           className="custom-button mb-2 w-25"
         >
           Go to cart
         </Button>
-      </Row>
+        <Button
+          onClick={() => navigate('/checkout')}
+          className="custom-button mb-2 w-25"
+        >
+          Checkout
+        </Button>
+      </Stack>
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
           <Row
