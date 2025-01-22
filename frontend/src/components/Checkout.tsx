@@ -1,6 +1,8 @@
 import { padPrice } from '#src/utils/padPrice';
-import { cartTotalPrice } from '#src/utils/cartTotalPrice'
+import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 import { useCart } from '#src/context/CartContext.tsx';
+
+import { countries } from '#src/data/countries.json';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,13 +11,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
-
-// import countries from '../../data/countries.json';
+import Button from 'react-bootstrap/Button';
 
 interface CheckoutFormValues {
   email: string;
-  firstname: string;
-  lastname: string;
+  name: string;
   address: string;
   zipcode: string;
   city: string;
@@ -32,13 +32,15 @@ const Checkout = () => {
   };
 
   const formSchema = yup.object().shape({
-    email: yup.string().email(),
-    firstname: yup.string().required(),
-    lastname: yup.string().required(),
-    address: yup.string().required(),
-    zipcode: yup.string().required(),
-    city: yup.string().required(),
-    country: yup.string().required()
+    email: yup
+      .string()
+      .email('Email must be valid address')
+      .required('Email is required'),
+    name: yup.string().required('First name is required'),
+    address: yup.string().required('Address is required'),
+    zipcode: yup.string().required('ZIP code is required'),
+    city: yup.string().required('City is required'),
+    country: yup.string().required('Country is required')
   });
 
   return (
@@ -55,8 +57,7 @@ const Checkout = () => {
               onSubmit={(values) => handleSubmit(values)}
               initialValues={{
                 email: '',
-                firstname: '',
-                lastname: '',
+                name: '',
                 address: '',
                 zipcode: '',
                 city: '',
@@ -76,36 +77,27 @@ const Checkout = () => {
                         isInvalid={touched.email && !!errors.email}
                         className="mb-3"
                       ></Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.email}
+                      </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
                   <Row>
                     <Col>
                       <Form.Group>
-                        <Form.Label>First name</Form.Label>
+                        <Form.Label>Name</Form.Label>
                         <InputGroup>
                           <Form.Control
                             type="text"
-                            name="firstname"
-                            value={values.firstname}
+                            name="name"
+                            value={values.name}
                             onChange={handleChange}
-                            isInvalid={touched.firstname && !!errors.firstname}
+                            isInvalid={touched.name && !!errors.name}
                             className="mb-3"
                           ></Form.Control>
-                        </InputGroup>
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group>
-                        <Form.Label>Last name</Form.Label>
-                        <InputGroup>
-                          <Form.Control
-                            type="text"
-                            name="lastname"
-                            value={values.lastname}
-                            onChange={handleChange}
-                            isInvalid={touched.lastname && !!errors.lastname}
-                            className="mb-3"
-                          ></Form.Control>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.name}
+                          </Form.Control.Feedback>
                         </InputGroup>
                       </Form.Group>
                     </Col>
@@ -123,6 +115,9 @@ const Checkout = () => {
                             isInvalid={touched.address && !!errors.address}
                             className="mb-3"
                           ></Form.Control>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.address}
+                          </Form.Control.Feedback>
                         </InputGroup>
                       </Form.Group>
                     </Col>
@@ -138,6 +133,9 @@ const Checkout = () => {
                             isInvalid={touched.zipcode && !!errors.zipcode}
                             className="mb-3"
                           ></Form.Control>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.zipcode}
+                          </Form.Control.Feedback>
                         </InputGroup>
                       </Form.Group>
                     </Col>
@@ -153,29 +151,38 @@ const Checkout = () => {
                             isInvalid={touched.city && !!errors.city}
                             className="mb-3"
                           ></Form.Control>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.city}
+                          </Form.Control.Feedback>
                         </InputGroup>
                       </Form.Group>
                     </Col>
                   </Row>
-                  {/* TODO: Add country dropdown*/}
                   <Form.Group>
                     <Form.Label>Country</Form.Label>
                     <InputGroup>
-                      <Form.Select>
-                        {/* {countries.map((country) => (
-                    <option key={country}>{country}</option>
-                  ))} */}
+                      <Form.Select
+                        name="country"
+                        value={values.country}
+                        onChange={handleChange}
+                        isInvalid={touched.country && !!errors.country}
+                      >
+                        {countries.map((country) => (
+                          <option key={country}>{country}</option>
+                        ))}
                       </Form.Select>
-                      {/* <Form.Control
-                  type="text"
-                  name="country"
-                  value={values.country}
-                  onChange={handleChange}
-                  isInvalid={touched.country && !!errors.country}
-                  className="mb-3"
-                ></Form.Control> */}
+                      <Form.Control.Feedback type="invalid">
+                        {errors.country}
+                      </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
+                  {/*TODO: implement order logic*/}
+                  <Button
+                    type="submit"
+                    className="custom-button mt-4"
+                  >
+                    Place order
+                  </Button>
                 </Form>
               )}
             </Formik>
@@ -214,7 +221,9 @@ const Checkout = () => {
               </Col>
             </Row>
           ))}
-          <h5 className="text-center mt-5">Total: {cartTotalPrice(cartItems)}€</h5>
+          <h5 className="text-center mt-5">
+            Total: {cartTotalPrice(cartItems)}€
+          </h5>
         </Col>
       </Row>
     </>
