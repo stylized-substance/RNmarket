@@ -1,8 +1,8 @@
+import { padPrice } from '#src/utils/padPrice'
 import { useCart } from '#src/context/CartContext.tsx';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
@@ -186,7 +186,6 @@ const Checkout = () => {
           lg={{ span: 2 }}
         >
           <h5 className="text-center">Ordering following items</h5>
-          {/*TODO: fix layout inside box*/}
           <Row className="justify-content-between">
             <Col>
               <b>Product</b>
@@ -194,6 +193,10 @@ const Checkout = () => {
             <Col>
               <b>Amount</b>
             </Col>
+            <Col>
+              <b>Price</b>
+            </Col>
+
           </Row>
             {/* <h5 className="text-center">{cartTotalPrice}€</h5> */}
             {cartItems.map((item) => (
@@ -204,6 +207,10 @@ const Checkout = () => {
                 <Col>
                   <div>{item.quantity}</div>
                 </Col>
+                <Col>
+                  <div>{padPrice(item.product.price * item.quantity)}</div>
+                </Col>
+
               </Row>
             ))}
         </Col>
