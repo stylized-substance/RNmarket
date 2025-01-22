@@ -10,5 +10,5 @@ export const padPrice = (price: number): string => {
     return `${integer}.${decimals.padEnd(2, '0')}`;
   }
 
-  return String(price)
+  return String(price.toFixed(2))
 };
