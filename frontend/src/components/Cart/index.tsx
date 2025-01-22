@@ -1,5 +1,6 @@
 import { useCart } from '#src/context/CartContext.tsx';
 import { useNavigate } from 'react-router-dom';
+import { cartTotalPrice } from '#src/utils/cartTotalPrice'
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,16 +14,6 @@ const Cart = () => {
   const cartItems = cart.state;
 
   const navigate = useNavigate();
-
-  const cartTotalPrice =
-    cartItems && cartItems.length > 0
-      ? Number(
-          cartItems
-            .map((item) => item.product.price * item.quantity)
-            .reduce((total, item) => total + item)
-            .toFixed(2)
-        )
-      : 0;
 
   return (
     <>
@@ -48,7 +39,7 @@ const Cart = () => {
         <Col className="bg-light" lg={{ span: 2 }}>
           <Stack className="p-4" gap={2}>
             <h5 className="text-center">Total price:</h5>
-            <h5 className="text-center">{cartTotalPrice}€</h5>
+            <h5 className="text-center">{cartTotalPrice(cartItems)}€</h5>
             <Button
               onClick={() => {
                 navigate('/checkout');
