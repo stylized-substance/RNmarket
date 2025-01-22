@@ -86,3 +86,4 @@
 | 17.01.2025 | 2 | Worked on Cart dropdown menu | 179
 | 20.01.2025 | 1 | Worked on checkout page | 180
 | 21.01.2025 | 1 | Worked on checkout page | 181
+| 22.01.2025 | 1 | Worked on checkout page | 182
