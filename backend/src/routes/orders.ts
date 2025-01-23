@@ -69,8 +69,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   // Add Id to order
   const orderWithId: OrderInDb = {
     id: uuidv4(),
-    name: newOrder.name,
-    address: newOrder.address
+    ...newOrder
   };
 
   // Create order in database

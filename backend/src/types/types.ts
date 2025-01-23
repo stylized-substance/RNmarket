@@ -24,8 +24,12 @@ export interface NewOrder {
     id: string;
     quantity: number;
   }[];
+  email: string;
   name: string;
   address: string;
+  zipcode: string;
+  city: string;
+  country: string;
 }
 
 export type OrderInDb = Omit<NewOrder, 'products'> & {

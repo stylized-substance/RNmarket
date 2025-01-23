@@ -3,12 +3,15 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '#src/utils/database';
 
 class Order extends Model {}
-// TODO: add missing fields
 Order.init(
   {
     id: {
       type: DataTypes.UUID,
       primaryKey: true
+    },
+    email: {
+      type: DataTypes.TEXT,
+      allowNull: false
     },
     name: {
       type: DataTypes.TEXT,
@@ -17,7 +20,19 @@ Order.init(
     address: {
       type: DataTypes.TEXT,
       allowNull: false
-    }
+    },
+    zipcode: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    country: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
   },
   {
     sequelize,

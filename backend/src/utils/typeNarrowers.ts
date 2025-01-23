@@ -90,10 +90,18 @@ const isNewOrder = (param: unknown): param is NewOrder => {
         isNumber(product.quantity)
       );
     }) &&
+    'email' in param &&
+    isString(param.email) &&
     'name' in param &&
     isString(param.name) &&
     'address' in param &&
-    isString(param.address)
+    isString(param.address) &&
+    'zipcode' in param &&
+    isString(param.zipcode) &&
+    'city' in param &&
+    isString(param.city) &&
+    'country' in param &&
+    isString(param.country)
   );
 };
 
