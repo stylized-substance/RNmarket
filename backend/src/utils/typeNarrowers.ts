@@ -110,6 +110,7 @@ const isCartItems = (param: unknown): param is CartItems => {
     isObject(param) &&
     'products' in param &&
     Array.isArray(param.products) &&
+    param.products.length > 0 &&
     param.products.every((product) => {
       return (
         isObject(product) &&

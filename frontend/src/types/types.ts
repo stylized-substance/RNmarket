@@ -27,7 +27,7 @@ export interface LoginPayload {
   refreshToken: string;
 }
 
-// Types for reviews, products and users
+// Types for reviews, orders, products and users
 export interface Review {
   id: string;
   product_id: string;
@@ -46,6 +46,19 @@ export type ReviewFromBackend = Review & {
 };
 
 export type NewReview = Omit<Review, 'id' | 'user_id' | 'name'>;
+
+export interface NewOrder {
+  products: {
+    id: string;
+    quantity: number;
+  }[];
+  email: string;
+  name: string;
+  address: string;
+  zipcode: string;
+  city: string;
+  country: string;
+}
 export interface CartItem {
   product: Product;
   quantity: number;

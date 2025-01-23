@@ -1,7 +1,7 @@
 import { padPrice } from '#src/utils/padPrice';
 import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 import { useCart } from '#src/context/CartContext.tsx';
-import useAuth from '#src/hooks/useAuth'
+import useAuth from '#src/hooks/useAuth';
 import { useEffect } from 'react';
 
 import { countries } from '#src/data/countries.json';
@@ -15,7 +15,9 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import Button from 'react-bootstrap/Button';
 
-import { CartItemForBackend } from '#src/types/types.ts';
+import ordersService from '#src/services/orders';
+
+import { CartItemForBackend, NewOrder } from '#src/types/types.ts';
 
 interface CheckoutFormValues {
   email: string;
@@ -29,19 +31,27 @@ interface CheckoutFormValues {
 const Checkout = () => {
   const cart = useCart();
   const cartItems = cart.state;
-  const { getTemporaryAccessToken } = useAuth();
+  const { temporaryAccessToken, getTemporaryAccessToken } = useAuth();
+
+  const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
+    id: item.product.id,
+    quantity: item.quantity
+  }));
 
   useEffect(() => {
-    const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
-      id: item.product.id,
-      quantity: item.quantity
-    }))
-    
-    getTemporaryAccessToken.mutate(cartItemsForBackend)
-  }, [])
+    getTemporaryAccessToken.mutate(cartItemsForBackend);
+  }, []);
 
   const handleSubmit = (formValues: CheckoutFormValues) => {
-    console.log(formValues);
+    // TODO: Handle temporary and user access tokens
+    const orderData: NewOrder = {
+      products: {
+        ...cartItemsForBackend
+      },
+      ...formValues
+    };
+
+    ordersService.postNew(orderData, temporaryAccessToken);
   };
 
   const formSchema = yup.object().shape({
@@ -192,6 +202,7 @@ const Checkout = () => {
                   {/*TODO: implement order logic*/}
                   <Button
                     type="submit"
+                    disabled={cartItems.length === 0}
                     className="custom-button mt-4"
                   >
                     Place order
