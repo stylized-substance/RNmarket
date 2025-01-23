@@ -9,11 +9,27 @@ module.exports = {
         type: DataTypes.UUID,
         primaryKey: true
       },
+      email: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
       name: {
         type: DataTypes.TEXT,
         allowNull: false
       },
       address: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      zipcode: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      city: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      country: {
         type: DataTypes.TEXT,
         allowNull: false
       },

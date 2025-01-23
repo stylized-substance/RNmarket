@@ -16,6 +16,7 @@ import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
+import { OrderInDb } from '#src/types/types';
 
 const api = supertest(app);
 
@@ -30,10 +31,14 @@ beforeEach(async () => {
   await connectToDatabase();
 
   // Add test order to database
-  const testOrder = {
+  const testOrder: OrderInDb = {
     id: uuidv4(),
-    name: 'test name',
-    address: 'test address'
+    email: 'test@example.org',
+    name: 'testname',
+    address: 'testaddress',
+    zipcode: '123',
+    city: 'testcity',
+    country: 'testcountry'
   };
 
   const product: ProductModel | null = await ProductModel.findOne({});
@@ -89,9 +94,12 @@ describe('GET requests', () => {
     assert200Response(response);
     expect(response.body.orders).toHaveLength(1);
     expect(response.body.orders[0]).toHaveProperty('id');
+    expect(response.body.orders[0]).toHaveProperty('email');
     expect(response.body.orders[0]).toHaveProperty('name');
     expect(response.body.orders[0]).toHaveProperty('address');
-    expect(response.body.orders[0]).toHaveProperty('Products');
+    expect(response.body.orders[0]).toHaveProperty('zipcode');
+    expect(response.body.orders[0]).toHaveProperty('city');
+    expect(response.body.orders[0]).toHaveProperty('country');
 
     for (const product of response.body.orders[0].Products) {
       assertValidType('product', product);
@@ -145,8 +153,12 @@ describe('POST requests', () => {
           quantity: 1
         }
       ],
-      name: 'test_name',
-      address: 'test_address'
+      email: 'test@example.org',
+      name: 'testname',
+      address: 'testaddress',
+      zipcode: '123',
+      city: 'testcity',
+      country: 'testcountry'
     };
 
     // Create new order
@@ -175,8 +187,12 @@ describe('POST requests', () => {
           quantity: 0
         }
       ],
-      name: 'test_name',
-      address: 'test_address'
+      email: 'test@example.org',
+      name: 'testname',
+      address: 'testaddress',
+      zipcode: '123',
+      city: 'testcity',
+      country: 'testcountry'
     };
 
     // Create new order
@@ -201,8 +217,12 @@ describe('POST requests', () => {
           quantity: 1
         }
       ],
-      name: 'test_name',
-      address: 'test_address'
+      email: 'test@example.org',
+      name: 'testname',
+      address: 'testaddress',
+      zipcode: '123',
+      city: 'testcity',
+      country: 'testcountry'
     };
 
     // Create new order
@@ -231,8 +251,12 @@ describe('POST requests', () => {
           quantity: 1
         }
       ],
-      name: 'test_name',
-      address: 'test_address'
+      email: 'test@example.org',
+      name: 'testname',
+      address: 'testaddress',
+      zipcode: '123',
+      city: 'testcity',
+      country: 'testcountry'
     };
 
     // Create new order
@@ -263,8 +287,12 @@ describe('POST requests', () => {
           quantity: product?.dataValues.instock + 1
         }
       ],
-      name: 'test_name',
-      address: 'test_address'
+      email: 'test@example.org',
+      name: 'testname',
+      address: 'testaddress',
+      zipcode: '123',
+      city: 'testcity',
+      country: 'testcountry'
     };
 
     // Create new order
