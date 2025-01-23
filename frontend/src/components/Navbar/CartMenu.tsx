@@ -131,7 +131,7 @@ const CartMenu = () => {
           </Row>
         ))
       ) : (
-        <Row className="text-center">
+        <Row className="text-center mt-4">
           <h4>Cart is empty</h4>
         </Row>
       )}
