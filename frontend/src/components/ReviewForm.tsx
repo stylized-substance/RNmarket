@@ -123,7 +123,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
               <Form.Label>
                 <b>Rating</b>
               </Form.Label>
-              <InputGroup hasValidation style={{ width: "80px" }}>
+              <InputGroup hasValidation style={{ width: '80px' }}>
                 <Form.Select
                   name="rating"
                   value={values.rating}
@@ -155,25 +155,17 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
-            {loggedOnUser ? (
-              <Button type="submit" size="lg" className="custom-button mt-3">
-                Send
-              </Button>
-            ) : (
-              <>
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled
-                  className="custom-button mt-3"
-                >
-                  Send
-                </Button>
-                <p className="mt-3">
-                  <b>Please login to send a review</b>
-                </p>
-              </>
-            )}
+            <Button
+              type="submit"
+              size="lg"
+              disabled={loggedOnUser === null || undefined}
+              className="custom-button mt-3"
+            >
+              Send
+            </Button>
+            <p className="mt-3">
+              <b>Please login to send a review</b>
+            </p>
           </Form>
         )}
       </Formik>

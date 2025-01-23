@@ -61,6 +61,7 @@ const CartMenu = () => {
         <Button
           onClick={() => navigate('/checkout')}
           className="custom-button mb-2 w-25"
+          disabled={cartItems.length === 0}
         >
           Checkout
         </Button>

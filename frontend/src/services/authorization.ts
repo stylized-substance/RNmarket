@@ -1,6 +1,10 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { LoginCredentials, LoginPayload } from '#src/types/types';
+import {
+  LoginCredentials,
+  LoginPayload,
+  CartItemForBackend
+} from '#src/types/types';
 import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/authorization`;
@@ -46,4 +50,24 @@ const refreshAccessToken = async (
   }
 };
 
-export default { login, refreshAccessToken };
+const getTemporaryToken = async (
+  products: CartItemForBackend[]
+): Promise<string> => {
+  try {
+    const response = await axios.post<{ accessToken: string }>(
+      `${backendAddress}/api/checkout`,
+      { products }
+    );
+    return response.data.accessToken;
+  } catch (error) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error(
+        'Unknown error happened while while getting temporary access token'
+      );
+    }
+  }
+};
+
+export default { login, refreshAccessToken, getTemporaryToken };

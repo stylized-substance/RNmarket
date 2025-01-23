@@ -1,6 +1,8 @@
 import { padPrice } from '#src/utils/padPrice';
 import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 import { useCart } from '#src/context/CartContext.tsx';
+import useAuth from '#src/hooks/useAuth'
+import { useEffect } from 'react';
 
 import { countries } from '#src/data/countries.json';
 
@@ -13,6 +15,8 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import Button from 'react-bootstrap/Button';
 
+import { CartItemForBackend } from '#src/types/types.ts';
+
 interface CheckoutFormValues {
   email: string;
   name: string;
@@ -24,8 +28,17 @@ interface CheckoutFormValues {
 
 const Checkout = () => {
   const cart = useCart();
-
   const cartItems = cart.state;
+  const { getTemporaryAccessToken } = useAuth();
+
+  useEffect(() => {
+    const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
+      id: item.product.id,
+      quantity: item.quantity
+    }))
+    
+    getTemporaryAccessToken.mutate(cartItemsForBackend)
+  }, [])
 
   const handleSubmit = (formValues: CheckoutFormValues) => {
     console.log(formValues);

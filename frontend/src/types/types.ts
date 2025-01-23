@@ -51,6 +51,11 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface CartItemForBackend {
+  id: string;
+  quantity: number;
+};
+
 export type CartState = CartItem[] | [];
 
 export interface BaseProduct {

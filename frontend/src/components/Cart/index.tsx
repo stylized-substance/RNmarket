@@ -45,6 +45,7 @@ const Cart = () => {
                 navigate('/checkout');
               }}
               className="custom-button fs-5"
+              disabled={cartItems.length === 0}
             >
               Checkout
             </Button>
