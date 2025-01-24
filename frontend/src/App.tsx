@@ -38,7 +38,7 @@ const App = () => {
           </Toast>
         </Row>
         <BrowserRouter>
-          <NavBar loggedOnUser={loggedOnUser ?? null} />
+          <NavBar loggedOnUser={loggedOnUser} />
           <Routes>
             <Route path="/" element={<Products />} />
             <Route
@@ -60,7 +60,7 @@ const App = () => {
             />
             <Route path="/admin" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="checkout" element={<Checkout />} />
+            <Route path="checkout" element={<Checkout loggedOnUser={loggedOnUser} />} />
           </Routes>
         </BrowserRouter>
       </Container>

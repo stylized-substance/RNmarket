@@ -2,6 +2,7 @@ import { padPrice } from '#src/utils/padPrice';
 import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 import authorizationService from '#src/services/authorization';
 
+import { useState } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
 import { useEffect } from 'react';
 import { useToast } from '#src/context/ToastContext';
@@ -20,7 +21,15 @@ import Button from 'react-bootstrap/Button';
 
 import ordersService from '#src/services/orders';
 
-import { CartItemForBackend, NewOrder } from '#src/types/types.ts';
+import {
+  CartItemForBackend,
+  LoginPayload,
+  NewOrder
+} from '#src/types/types.ts';
+
+interface CheckOutProps {
+  loggedOnUser: LoginPayload | null | undefined;
+}
 
 interface CheckoutFormValues {
   email: string;
@@ -31,24 +40,30 @@ interface CheckoutFormValues {
   country: string;
 }
 
-const Checkout = () => {
+const Checkout = (props: CheckOutProps) => {
   const cart = useCart();
   const cartItems = cart.state;
   const { changeToast } = useToast();
+
+  const [accessToken, setAccessToken] = useState('');
 
   const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
     id: item.product.id,
     quantity: item.quantity
   }));
 
-  const accessTokenMutation = useMutation({
-    // Get temporary access token from backend. Used for making orders without logging in.
+  const temporaryAccessTokenMutation = useMutation({
+    // Get temporary access token from backend if no user is logged in. Used for making orders without logging in.
     mutationFn: async (products: CartItemForBackend[]) => {
       return await authorizationService.getTemporaryToken(products);
+    },
+    onSuccess: (data) => {
+      setAccessToken(data);
     }
   });
 
   const orderMutation = useMutation({
+    // Send order to backend
     mutationFn: async ({
       orderData,
       accessToken
@@ -57,6 +72,11 @@ const Checkout = () => {
       accessToken: string;
     }) => {
       return await ordersService.postNew(orderData, accessToken);
+    },
+    onSuccess: () => {
+      cart.dispatch({
+        type: 'emptied'
+      })
     },
     onError: (error) => {
       changeToast({
@@ -67,20 +87,18 @@ const Checkout = () => {
   });
 
   useEffect(() => {
-    accessTokenMutation.mutate(cartItemsForBackend);
-  }, [ cartItemsForBackend, accessTokenMutation ]);
+    if (props.loggedOnUser) {
+      setAccessToken(props.loggedOnUser.accessToken);
+    } else {
+      temporaryAccessTokenMutation.mutate(cartItemsForBackend);
+    }
+  }, [props.loggedOnUser]);
 
   const handleSubmit = (formValues: CheckoutFormValues) => {
-    console.log(accessTokenMutation.data);
-    // TODO: Handle temporary and user access tokens
     const orderData: NewOrder = {
       products: [...cartItemsForBackend],
       ...formValues
     };
-
-    const accessToken = accessTokenMutation.isSuccess
-      ? accessTokenMutation.data
-      : '';
 
     orderMutation.mutate({ orderData, accessToken });
   };

@@ -23,7 +23,7 @@ import Badge from 'react-bootstrap/Badge';
 import { LoginPayload } from '#src/types/types';
 
 interface NavBarProps {
-  loggedOnUser: LoginPayload | null;
+  loggedOnUser: LoginPayload | null | undefined;
 }
 
 const NavBar = (props: NavBarProps) => {

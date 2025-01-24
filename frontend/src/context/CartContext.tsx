@@ -22,7 +22,10 @@ type Action =
   | {
       type: 'removed';
       payload: CartItem;
-    };
+    }
+  | {
+      type: 'emptied';
+  };
 
 interface CartContextType {
   state: CartState;
@@ -130,6 +133,9 @@ const cartReducer = (state: CartState, action: Action) => {
       );
 
       return newState;
+    }
+    case 'emptied': {
+      return []
     }
     default: {
       throw new Error('cartReducer was called with unknown action type');
