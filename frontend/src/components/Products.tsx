@@ -7,9 +7,13 @@ import { isString } from '#src/utils/typeNarrowers';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
 import ProductCards from '#src/components/ProductCards';
 import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
+
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 interface ProductsProps {
   productCategory?: string;
@@ -48,6 +52,43 @@ const Products = (props: ProductsProps) => {
     return <ProductsError error={error} />;
   }
 
+  const changeSorting = (value) => {
+    console.log(value);
+  };
+
+  const SortProducts = () => {
+    return (
+      <Row className="justify-content-end text-end">
+        <b>Sort products</b>
+        <Formik
+          onSubmit={(value) => changeSorting(value)}
+          initialValues={{
+            option: 'lowestPrice'
+          }}
+        >
+          {({ handleChange, values }) => (
+            <Form.Select
+              value={values.option}
+              name="option"
+              onChange={(event) => {
+                handleChange(event);
+                changeSorting(event.target.value);
+              }}
+              className="w-25 mt-2 mb-5"
+            >
+              <option>Name ascending</option>
+              <option>Name descending</option>
+              <option>Lowest price</option>
+              <option>Highest price</option>
+              <option>Lowest rating</option>
+              <option>Highest rating</option>
+            </Form.Select>
+          )}
+        </Formik>
+      </Row>
+    );
+  };
+
   return (
     <Container>
       <Row>
@@ -57,10 +98,13 @@ const Products = (props: ProductsProps) => {
               Search results for: {searchTerm}
             </h1>
           ) : (
-            <h1 style={{ marginBottom: 100 }} className="text-center">{props.productCategory}</h1>
+            <h1 style={{ marginBottom: 100 }} className="text-center">
+              {props.productCategory}
+            </h1>
           )}
         </Col>
       </Row>
+      <SortProducts />
       <ProductCards products={data} />
     </Container>
   );

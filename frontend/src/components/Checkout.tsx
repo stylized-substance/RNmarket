@@ -14,10 +14,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import Button from 'react-bootstrap/Button';
 
 import ordersService from '#src/services/orders';
 
@@ -45,7 +45,7 @@ const Checkout = (props: CheckOutProps) => {
   const cartItems = cart.state;
   const { changeToast } = useToast();
 
-  const [accessToken, setAccessToken] = useState('');
+  const [accessToken, setAccessToken] = useState<string>('');
 
   const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
     id: item.product.id,
@@ -263,7 +263,6 @@ const Checkout = (props: CheckOutProps) => {
                           </Form.Control.Feedback>
                         </InputGroup>
                       </Form.Group>
-                      {/*TODO: implement order logic*/}
                       <Button
                         type="submit"
                         disabled={cartItems.length === 0}
