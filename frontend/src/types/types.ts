@@ -59,6 +59,10 @@ export interface NewOrder {
   city: string;
   country: string;
 }
+
+export type OrderInDb = Omit<NewOrder, 'products'> & {
+  id: string;
+};
 export interface CartItem {
   product: Product;
   quantity: number;

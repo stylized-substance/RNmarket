@@ -6,6 +6,7 @@ import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/reviews`;
 
+//TODO: Improve the catch block
 const getAllForProduct = async (
   productId: string
 ): Promise<ReviewFromBackend[] | null> => {

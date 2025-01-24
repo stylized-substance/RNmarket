@@ -1,4 +1,4 @@
-import { LoginCredentials, LoginPayload, CartItemForBackend } from '#src/types/types';
+import { LoginCredentials, LoginPayload } from '#src/types/types';
 import { isLoginPayload } from '#src/utils/typeNarrowers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import authorizationService from '#src/services/authorization';
@@ -30,19 +30,6 @@ const useAuth = () => {
     queryKey: ['loggedOnUser'],
     queryFn: readUserFromLocalStorage
   });
-
-  // Read temporary access token from Tanstack Query cache
-  const temporaryAccessToken = queryClient.getQueryData(['temporaryAccessToken'])
-
-  // Get temporary access token from backend and save to Tanstack Query cache. Used for making orders without logging in.
-  const getTemporaryAccessToken = useMutation({
-    mutationFn: async (products: CartItemForBackend[]) => {
-      await authorizationService.getTemporaryToken(products);
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['temporaryAccessToken'], data)
-    }
-  })
 
   // Login using Tanstack Query and save user data to query cache and localStorage
   const login = useMutation({
@@ -92,7 +79,12 @@ const useAuth = () => {
     queryClient.setQueryData(['loggedOnUser'], null);
   };
 
-  return { loggedOnUser, login, refreshAccessToken, logout, temporaryAccessToken, getTemporaryAccessToken };
+  return {
+    loggedOnUser,
+    login,
+    refreshAccessToken,
+    logout
+  };
 };
 
 export default useAuth;

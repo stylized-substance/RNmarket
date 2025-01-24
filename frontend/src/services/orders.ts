@@ -1,17 +1,37 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 
-import { NewOrder } from '#src/types/types.ts';
-
-import { isString } from '#src/utils/typeNarrowers';
+import { NewOrder, OrderInDb } from '#src/types/types.ts';
+import { isString, isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/orders`;
 
-const postNew = (orderData: NewOrder, accessToken: unknown) => {
-  console.log(orderData, accessToken);
+const postNew = async (
+  orderData: NewOrder,
+  accessToken: string
+): Promise<OrderInDb> => {
+  if (!isString(accessToken) || accessToken.length === 0) {
+    throw new Error('Access token missing or invalid');
+  }
 
-  if (!isString(accessToken)) {
-    throw new Error('Access token missing');
+  try {
+    const response = await axios.post<{ orderInDb: OrderInDb }>(
+      baseUrl,
+      orderData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    return response.data.orderInDb;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error('Unknown error happened while sending order');
+    }
   }
 };
 
