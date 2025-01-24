@@ -13,6 +13,7 @@ import Checkout from '#src/components/Checkout';
 
 import Container from 'react-bootstrap/Container';
 import Toast from 'react-bootstrap/Toast';
+import { Row } from 'react-bootstrap';
 
 const App = () => {
   // Read logged on user data from localStorage
@@ -24,16 +25,18 @@ const App = () => {
   return (
     <>
       <Container id="app-container">
-        <Toast
-          show={toastState.show}
-          animation={true}
-          bg="dark"
-          className="align-self-center toast-notification text-center"
-        >
-          <Toast.Body className="toast-notification-body">
-            {toastState.message}
-          </Toast.Body>
-        </Toast>
+        <Row className="justify-content-center">
+          <Toast
+            show={toastState.show}
+            animation={true}
+            bg="dark"
+            className="toast-notification text-center"
+          >
+            <Toast.Body className="toast-notification-body">
+              {toastState.message}
+            </Toast.Body>
+          </Toast>
+        </Row>
         <BrowserRouter>
           <NavBar loggedOnUser={loggedOnUser ?? null} />
           <Routes>

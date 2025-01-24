@@ -37,7 +37,7 @@ const useAuth = () => {
   // Get temporary access token from backend and save to Tanstack Query cache. Used for making orders without logging in.
   const getTemporaryAccessToken = useMutation({
     mutationFn: async (products: CartItemForBackend[]) => {
-      return await authorizationService.getTemporaryToken(products);
+      await authorizationService.getTemporaryToken(products);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['temporaryAccessToken'], data)

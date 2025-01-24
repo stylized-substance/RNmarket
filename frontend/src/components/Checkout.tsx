@@ -3,6 +3,7 @@ import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 import { useCart } from '#src/context/CartContext.tsx';
 import useAuth from '#src/hooks/useAuth';
 import { useEffect } from 'react';
+import { useToast } from '#src/context/ToastContext';
 
 import { countries } from '#src/data/countries.json';
 
@@ -17,6 +18,7 @@ import Button from 'react-bootstrap/Button';
 
 import ordersService from '#src/services/orders';
 
+import errorHandler from '#src/utils/errorHandler.ts';
 import { CartItemForBackend, NewOrder } from '#src/types/types.ts';
 
 interface CheckoutFormValues {
@@ -32,6 +34,9 @@ const Checkout = () => {
   const cart = useCart();
   const cartItems = cart.state;
   const { temporaryAccessToken, getTemporaryAccessToken } = useAuth();
+  const { changeToast } = useToast();
+
+  console.log('access token', temporaryAccessToken);
 
   const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
     id: item.product.id,
@@ -51,7 +56,14 @@ const Checkout = () => {
       ...formValues
     };
 
-    ordersService.postNew(orderData, temporaryAccessToken);
+    try {
+      ordersService.postNew(orderData, temporaryAccessToken);
+    } catch (error: unknown) {
+      changeToast({
+        message: errorHandler(error),
+        show: true
+      });
+    }
   };
 
   const formSchema = yup.object().shape({
@@ -61,7 +73,10 @@ const Checkout = () => {
       .required('Email is required'),
     name: yup.string().required('First name is required'),
     address: yup.string().required('Address is required'),
-    zipcode: yup.string().required('ZIP code is required'),
+    zipcode: yup
+      .number()
+      .typeError('ZIP code must be a number')
+      .required('ZIP code is required'),
     city: yup.string().required('City is required'),
     country: yup.string().required('Country is required')
   });
