@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 import productsService from '#src/services/products';
 import { isString } from '#src/utils/typeNarrowers';
@@ -13,14 +14,70 @@ import ProductsPending from '#src/components/ProductsPending';
 import ProductsError from '#src/components/ProductsError';
 
 import { Formik } from 'formik';
-import * as yup from 'yup';
+import orderBy from 'lodash/orderBy';
+
+import { Product } from '#src/types/types.ts';
 
 interface ProductsProps {
   productCategory?: string;
   isSearchResults?: boolean;
 }
 
+// enum ProductSortOption {
+//   NameAsc = 'nameAsc',
+//   NameDesc = 'nameDesc',
+//   PriceAsc = 'priceAsc',
+//   PriceDesc = 'priceDesc',
+//   RatingAsc = 'ratingAsc',
+//   RatingDesc = 'ratingDesc'
+// }
+
+type ProductSortOption =
+  | 'nameAsc'
+  | 'nameDesc'
+  | 'priceAsc'
+  | 'priceDesc'
+  | 'ratingAsc'
+  | 'ratingDesc';
+
+interface ProductSortDropdownValue {
+  option: ProductSortOption;
+}
+
 const Products = (props: ProductsProps) => {
+  const [sortOption, setSortOption] = useState<ProductSortOption>('nameAsc');
+
+  const sortProducts = (
+    products: Product[],
+    sortOption: ProductSortOption
+  ): Product[] | [] => {
+    console.log(products);
+    console.log(sortOption);
+
+    if (!products || products.length === 0) {
+      return [];
+    }
+
+    switch (sortOption) {
+      case 'nameAsc':
+        return orderBy(products, ['title', 'asc']);
+      case 'nameDesc':
+        return orderBy(products, ['title', 'desc']);
+      case 'priceAsc':
+        return orderBy(products, ['price', 'asc']);
+      case 'priceDesc':
+        return orderBy(products, ['price', 'desc']);
+      case 'ratingAsc':
+        return orderBy(products, ['rating', 'asc']);
+      case 'ratingDesc':
+        return orderBy(products, ['rating', 'desc']);
+      default: {
+        const _exhaustiveCheck: never = sortOption;
+        return _exhaustiveCheck;
+      }
+    }
+  };
+
   // Read product search term from current URI
   const { searchTerm } = useParams();
 
@@ -39,9 +96,15 @@ const Products = (props: ProductsProps) => {
     };
   }
 
+  // Refetch query when product filter or sort option changes
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['products', productFilter],
-    queryFn: () => productsService.getAll(productFilter)
+    queryKey: ['products', productFilter, sortOption],
+    queryFn: async () => {
+      const products = await productsService.getAll(productFilter);
+      if (products) {
+        return sortProducts(products, sortOption);
+      }
+    }
   });
 
   if (isPending) {
@@ -52,18 +115,32 @@ const Products = (props: ProductsProps) => {
     return <ProductsError error={error} />;
   }
 
-  const changeSorting = (value) => {
-    console.log(value);
+  const isProductSortOption = (param: unknown): param is ProductSortOption => {
+    // return Object.values(ProductSortOption).includes(
+    //   param as ProductSortOption
+    // );
+
+    return (
+      isString(param) &&
+      [
+        'nameAsc',
+        'nameDesc',
+        'priceAsc',
+        'priceDesc',
+        'ratingAsc',
+        'ratingDesc'
+      ].includes(param)
+    );
   };
 
-  const SortProducts = () => {
+  const ProductSortDropdown = () => {
     return (
       <Row className="justify-content-end text-end">
         <b>Sort products</b>
-        <Formik
-          onSubmit={(value) => changeSorting(value)}
+        <Formik<ProductSortDropdownValue>
+          onSubmit={() => console.log('onSubmit')}
           initialValues={{
-            option: 'lowestPrice'
+            option: 'nameAsc'
           }}
         >
           {({ handleChange, values }) => (
@@ -71,17 +148,30 @@ const Products = (props: ProductsProps) => {
               value={values.option}
               name="option"
               onChange={(event) => {
-                handleChange(event);
-                changeSorting(event.target.value);
+                if (isProductSortOption(event.target.value)) {
+                  setSortOption(event.target.value);
+                  handleChange(event);
+                }
+                // void invalidateQuery();
               }}
               className="w-25 mt-2 mb-5"
             >
-              <option>Name ascending</option>
-              <option>Name descending</option>
-              <option>Lowest price</option>
-              <option>Highest price</option>
-              <option>Lowest rating</option>
-              <option>Highest rating</option>
+              {/* <option value={ProductSortOption.NameAsc}>Name ascending</option>
+              <option value={ProductSortOption.NameDesc}>
+                Name descending
+              </option>
+              <option value={ProductSortOption.PriceAsc}>Lowest price</option>
+              <option value={ProductSortOption.PriceDesc}>Highest price</option>
+              <option value={ProductSortOption.RatingAsc}>Lowest rating</option>
+              <option value={ProductSortOption.RatingDesc}>
+                Highest rating
+              </option> */}
+              <option value="nameAsc">Name ascending</option>
+              <option value="nameDesc">Name descending</option>
+              <option value="priceAsc">Lowest price</option>
+              <option value="priceDesc">Highest price</option>
+              <option value="ratingAsc">Lowest rating</option>
+              <option value="ratingDesc">Highest rating</option>
             </Form.Select>
           )}
         </Formik>
@@ -104,8 +194,8 @@ const Products = (props: ProductsProps) => {
           )}
         </Col>
       </Row>
-      <SortProducts />
-      <ProductCards products={data} />
+      <ProductSortDropdown />
+      {data && <ProductCards products={data} />}
     </Container>
   );
 };
