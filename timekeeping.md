@@ -89,3 +89,4 @@
 | 22.01.2025 | 1 | Worked on checkout page | 182
 | 23.01.2025 | 3 | Worked on checkout page and order functionality | 185
 | 24.01.2025 | 3 | Worked on checkout page, order functionality and Products page | 188
+| 27.01.2025 | 2 | Worked on product order functionality | 190
