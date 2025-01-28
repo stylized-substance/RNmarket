@@ -78,6 +78,7 @@ export type CartState = CartItem[] | [];
 export interface BaseProduct {
   id: string;
   title: string;
+  lowerCaseTitle?: string
   category: string;
   price: number;
   imgs?: string[];

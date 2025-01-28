@@ -29,37 +29,59 @@ interface ProductSortDropdownValue {
 
 const Products = (props: ProductsProps) => {
   const { sortOption } = useSortOption();
-  console.log('sortOption', sortOption)
+  console.log('sortOption', sortOption);
 
   const sortProducts = (
     products: Product[],
     sortOption: ProductSortOption
   ): Product[] | [] => {
-
     if (!products || products.length === 0) {
       return [];
     }
 
-    console.log('ordered', (orderBy(products, ['price', 'desc'])).map(prod => prod.price))
+    // Convert titles to lowercase so sorting works properly
+    const lowerCaseProducts = products.map((prod) => ({
+      ...prod,
+      lowerCaseTitle: prod.title.toLowerCase()
+    }));
 
+    let sortedProducts;
     switch (sortOption) {
       case 'nameAsc':
-        return orderBy(products, ['title', 'asc']);
+        sortedProducts = orderBy(
+          lowerCaseProducts,
+          ['lowerCaseTitle'],
+          ['asc']
+        );
+        break;
       case 'nameDesc':
-        return orderBy(products, ['title', 'desc']);
+        sortedProducts = orderBy(
+          lowerCaseProducts,
+          ['lowerCaseTitle'],
+          ['desc']
+        );
+        break;
       case 'priceAsc':
-        return orderBy(products, ['price', 'asc']);
+        sortedProducts = orderBy(products, ['price'], ['asc']);
+        break;
       case 'priceDesc':
-        return orderBy(products, ['price', 'desc']);
+        sortedProducts = orderBy(products, ['price'], ['desc']);
+        break;
       case 'ratingAsc':
-        return orderBy(products, ['rating', 'asc']);
+        sortedProducts = orderBy(products, ['rating'], ['asc']);
+        break;
       case 'ratingDesc':
-        return orderBy(products, ['rating', 'desc']);
+        sortedProducts = orderBy(products, ['rating'], ['desc']);
+        break;
       default: {
         const _exhaustiveCheck: never = sortOption;
         return _exhaustiveCheck;
       }
     }
+
+    // Discard lowercase titles
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return sortedProducts.map(({ lowerCaseTitle, ...rest }) => rest);
   };
 
   // Read product search term from current URI
