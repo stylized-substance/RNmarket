@@ -5,7 +5,8 @@ import {
   ApiErrorResponse,
   LoginPayload,
   CartState,
-  CartItem
+  CartItem,
+  ProductSortOption
 } from '#src/types/types';
 
 const isString = (param: unknown): param is string => {
@@ -122,6 +123,20 @@ const isCartState = (param: unknown): param is CartState => {
   )
 }
 
+const isProductSortOption = (param: unknown): param is ProductSortOption => {
+  return (
+    isString(param) &&
+    [
+      'nameAsc',
+      'nameDesc',
+      'priceAsc',
+      'priceDesc',
+      'ratingAsc',
+      'ratingDesc'
+    ].includes(param)
+  );
+};
+
 export {
   isProduct,
   isObject,
@@ -130,5 +145,6 @@ export {
   isNewReview,
   isApiErrorResponse,
   isLoginPayload,
-  isCartState
+  isCartState,
+  isProductSortOption
 };

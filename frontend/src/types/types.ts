@@ -115,9 +115,17 @@ export interface Laptop extends BaseProduct {
 
 export type Product = Mobile | FurnitureItem | Laptop;
 
-
 export enum ProductCategory {
   Mobiles = 'Mobiles',
   Furniture = 'Furniture',
   Laptops = 'Laptops'
 }
+
+
+export type ProductSortOption =
+  | 'nameAsc'
+  | 'nameDesc'
+  | 'priceAsc'
+  | 'priceDesc'
+  | 'ratingAsc'
+  | 'ratingDesc';

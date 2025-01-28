@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useSortOption } from '#src/context/ProductSortOptionContext.tsx';
 
 import productsService from '#src/services/products';
-import { isString } from '#src/utils/typeNarrowers';
+import { isString, isProductSortOption } from '#src/utils/typeNarrowers';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,47 +16,31 @@ import ProductsError from '#src/components/ProductsError';
 import { Formik } from 'formik';
 import orderBy from 'lodash/orderBy';
 
-import { Product } from '#src/types/types.ts';
+import { Product, ProductSortOption } from '#src/types/types.ts';
 
 interface ProductsProps {
   productCategory?: string;
   isSearchResults?: boolean;
 }
 
-// enum ProductSortOption {
-//   NameAsc = 'nameAsc',
-//   NameDesc = 'nameDesc',
-//   PriceAsc = 'priceAsc',
-//   PriceDesc = 'priceDesc',
-//   RatingAsc = 'ratingAsc',
-//   RatingDesc = 'ratingDesc'
-// }
-
-type ProductSortOption =
-  | 'nameAsc'
-  | 'nameDesc'
-  | 'priceAsc'
-  | 'priceDesc'
-  | 'ratingAsc'
-  | 'ratingDesc';
-
 interface ProductSortDropdownValue {
   option: ProductSortOption;
 }
 
 const Products = (props: ProductsProps) => {
-  const [sortOption, setSortOption] = useState<ProductSortOption>('nameAsc');
+  const { sortOption } = useSortOption();
+  console.log('sortOption', sortOption)
 
   const sortProducts = (
     products: Product[],
     sortOption: ProductSortOption
   ): Product[] | [] => {
-    console.log(products);
-    console.log(sortOption);
 
     if (!products || products.length === 0) {
       return [];
     }
+
+    console.log('ordered', (orderBy(products, ['price', 'desc'])).map(prod => prod.price))
 
     switch (sortOption) {
       case 'nameAsc':
@@ -107,6 +91,8 @@ const Products = (props: ProductsProps) => {
     }
   });
 
+  console.log('data', data);
+
   if (isPending) {
     return <ProductsPending />;
   }
@@ -115,32 +101,16 @@ const Products = (props: ProductsProps) => {
     return <ProductsError error={error} />;
   }
 
-  const isProductSortOption = (param: unknown): param is ProductSortOption => {
-    // return Object.values(ProductSortOption).includes(
-    //   param as ProductSortOption
-    // );
-
-    return (
-      isString(param) &&
-      [
-        'nameAsc',
-        'nameDesc',
-        'priceAsc',
-        'priceDesc',
-        'ratingAsc',
-        'ratingDesc'
-      ].includes(param)
-    );
-  };
-
   const ProductSortDropdown = () => {
+    const { sortOption, setSortOption } = useSortOption();
+
     return (
       <Row className="justify-content-end text-end">
         <b>Sort products</b>
         <Formik<ProductSortDropdownValue>
           onSubmit={() => console.log('onSubmit')}
           initialValues={{
-            option: 'nameAsc'
+            option: sortOption
           }}
         >
           {({ handleChange, values }) => (
@@ -149,23 +119,12 @@ const Products = (props: ProductsProps) => {
               name="option"
               onChange={(event) => {
                 if (isProductSortOption(event.target.value)) {
-                  setSortOption(event.target.value);
                   handleChange(event);
+                  setSortOption(event.target.value);
                 }
-                // void invalidateQuery();
               }}
               className="w-25 mt-2 mb-5"
             >
-              {/* <option value={ProductSortOption.NameAsc}>Name ascending</option>
-              <option value={ProductSortOption.NameDesc}>
-                Name descending
-              </option>
-              <option value={ProductSortOption.PriceAsc}>Lowest price</option>
-              <option value={ProductSortOption.PriceDesc}>Highest price</option>
-              <option value={ProductSortOption.RatingAsc}>Lowest rating</option>
-              <option value={ProductSortOption.RatingDesc}>
-                Highest rating
-              </option> */}
               <option value="nameAsc">Name ascending</option>
               <option value="nameDesc">Name descending</option>
               <option value="priceAsc">Lowest price</option>
