@@ -4,7 +4,7 @@ import { Product } from '#src/types/types';
 import productsService from '#src/services/products';
 
 import Container from 'react-bootstrap/Container';
-import ProductCards from '#src/components/ProductCards';
+import ProductCards from '#src/components/Products/ProductCards.tsx';
 
 const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);

@@ -7,8 +7,8 @@ import SortOptionContextProvider from '#src/context/ProductSortOptionContext';
 
 import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
-import Products from '#src/components/Products';
-import SingleProduct from '#src/components/SingleProduct';
+import Products from '#src/components/Products/index.tsx';
+import SingleProduct from '#src/components/Products/SingleProduct.tsx';
 import Cart from '#src/components/Cart/index.tsx';
 import Checkout from '#src/components/Checkout';
 
