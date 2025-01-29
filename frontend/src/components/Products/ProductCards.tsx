@@ -73,7 +73,7 @@ const ProductCard = (props: ProductCardProps) => {
 
 const ProductCards = (props: ProductCardsProps) => {
   return (
-    <Row lg={6}>
+    <Row lg={4}>
       {props.products.map((product) => (
         <ProductCard product={product} key={product.id} />
       ))}

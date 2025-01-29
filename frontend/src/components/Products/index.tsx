@@ -8,10 +8,11 @@ import { isString } from '#src/utils/typeNarrowers';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ProductCards from '#src/components/Products/ProductCards.tsx';
-import ProductsPending from '#src/components/Products/ProductsPending.tsx';
-import ProductsError from '#src/components/Products/ProductsError.tsx';
-import ProductSortDropdown from '#src/components/Products/ProductSortDropdown.tsx';
+import ProductCards from '#src/components/Products/ProductCards';
+import ProductsPending from '#src/components/Products/ProductsPending';
+import ProductsError from '#src/components/Products/ProductsError';
+import ProductSortDropdown from '#src/components/Products/ProductSortDropdown';
+import ProductFilter from '#src/components/Products/ProductFilter';
 
 import orderBy from 'lodash/orderBy';
 
@@ -116,23 +117,30 @@ const Products = (props: ProductsProps) => {
   }
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          {props.isSearchResults ? (
-            <h1 className="text-center m-4">
-              Search results for: {searchTerm}
-            </h1>
-          ) : (
-            <h1 style={{ marginBottom: 100 }} className="text-center">
-              {props.productCategory}
-            </h1>
-          )}
-        </Col>
-      </Row>
+    <>
+      <Col>
+        <Row>
+          <Col>
+            {props.isSearchResults ? (
+              <h1 className="text-center m-4">
+                Search results for: {searchTerm}
+              </h1>
+            ) : (
+              <h1 style={{ marginBottom: 100 }} className="text-center">
+                {props.productCategory}
+              </h1>
+            )}
+          </Col>
+        </Row>
+      </Col>
       <ProductSortDropdown />
-      {data && <ProductCards products={data} />}
-    </Container>
+      <Row>
+        <Col lg={2}>
+          <ProductFilter />
+        </Col>
+        <Col lg={10}>{data && <ProductCards products={data} />}</Col>
+      </Row>
+    </>
   );
 };
 
