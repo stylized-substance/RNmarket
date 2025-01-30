@@ -7,11 +7,15 @@ interface ProductsErrorProps {
 }
 
 const ProductsError = ({ error }: ProductsErrorProps) => {
+  console.error('Error from ProductsError component:', error.message)
+
   return (
     <Container>
       <Row>
         <Col>
-          <h1 className="text-center">{error.message}</h1>
+          <h1 className="text-center">
+            An error happened while getting products
+          </h1>
         </Col>
       </Row>
     </Container>

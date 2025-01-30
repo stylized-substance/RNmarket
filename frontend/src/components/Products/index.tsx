@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useSortOption } from '#src/context/ProductSortOptionContext.tsx';
+import { useProducts } from '#src/context/ProductContext.tsx';
 
 import productsService from '#src/services/products';
 import { isString } from '#src/utils/typeNarrowers';
@@ -13,10 +13,6 @@ import ProductsError from '#src/components/Products/ProductsError';
 import ProductSortDropdown from '#src/components/Products/ProductSortDropdown';
 import ProductFilter from '#src/components/Products/ProductFilter';
 
-import orderBy from 'lodash/orderBy';
-
-import { useProductFilter } from '#src/context/ProductFilterContext.tsx';
-import { Product, ProductSortOption } from '#src/types/types.ts';
 
 interface ProductsProps {
   productCategory?: string;
@@ -24,63 +20,9 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
-  const { sortOption } = useSortOption();
-  const productFilterContext = useProductFilter()
+  const products = useProducts();
 
-  const sortProducts = (
-    products: Product[],
-    sortOption: ProductSortOption
-  ): Product[] | [] => {
-    if (!products || products.length === 0) {
-      return [];
-    }
-
-    // Convert titles to lowercase so sorting works properly
-    const lowerCaseProducts = products.map((prod) => ({
-      ...prod,
-      lowerCaseTitle: prod.title.toLowerCase()
-    }));
-
-    let sortedProducts;
-    switch (sortOption) {
-      case 'nameAsc':
-        sortedProducts = orderBy(
-          lowerCaseProducts,
-          ['lowerCaseTitle'],
-          ['asc']
-        );
-        break;
-      case 'nameDesc':
-        sortedProducts = orderBy(
-          lowerCaseProducts,
-          ['lowerCaseTitle'],
-          ['desc']
-        );
-        break;
-      case 'priceAsc':
-        sortedProducts = orderBy(products, ['price'], ['asc']);
-        break;
-      case 'priceDesc':
-        sortedProducts = orderBy(products, ['price'], ['desc']);
-        break;
-      case 'ratingAsc':
-        sortedProducts = orderBy(products, ['rating'], ['asc']);
-        break;
-      case 'ratingDesc':
-        sortedProducts = orderBy(products, ['rating'], ['desc']);
-        break;
-      default: {
-        const _exhaustiveCheck: never = sortOption;
-        return _exhaustiveCheck;
-      }
-    }
-
-    // Discard lowercase titles
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return sortedProducts.map(({ lowerCaseTitle, ...rest }) => rest);
-  };
-
-  // Read product search term from current URI
+    // Read product search term from current URI
   const { searchTerm } = useParams();
 
   // Fetch products with Tanstack Query
@@ -99,14 +41,27 @@ const Products = (props: ProductsProps) => {
   }
 
   // Refetch query when product filter or sort option changes
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: ['products', productFilter, sortOption],
+  const { isPending, isError, error } = useQuery({
+    queryKey: ['products', productFilter],
     queryFn: async () => {
-      const products = await productsService.getAll(productFilter);
-      if (products) {
-        return sortProducts(products, sortOption);
-      }
-    }
+      const productsFromBackend = await productsService.getAll(productFilter);
+      products.dispatch({
+        type: 'added',
+        payload: productsFromBackend
+      })
+      return productsFromBackend
+    },
+      // if (products) {
+      //   const { sortOption, products } = productSort.dispatch({
+      //     type: 'modified',
+      //     payload: {
+      //       sortOption: productSort.state.sortOption,
+      //       products: products
+      //     }
+      //   })
+      //   console.log('sortedProducts', sortedProducts)
+      //   return sortedProducts
+      // }
   });
 
   if (isPending) {
@@ -116,7 +71,7 @@ const Products = (props: ProductsProps) => {
   if (isError) {
     return <ProductsError error={error} />;
   }
-
+  
   return (
     <>
       <Col>
@@ -134,12 +89,12 @@ const Products = (props: ProductsProps) => {
           </Col>
         </Row>
       </Col>
-      <ProductSortDropdown />
+      {/* <ProductSortDropdown /> */}
       <Row>
         <Col lg={2}>
           <ProductFilter />
         </Col>
-        <Col lg={10}>{data && <ProductCards products={data} />}</Col>
+        <Col lg={10}>{products.state && <ProductCards products={products.state} />}</Col>
       </Row>
     </>
   );

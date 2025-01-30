@@ -3,8 +3,7 @@ import '#src/styles/custom.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
 import { useToast } from '#src/context/ToastContext';
-import SortOptionContextProvider from '#src/context/ProductSortOptionContext';
-import ProductFilterContextProvider from '#src/context/ProductFilterContext';
+import ProductContextProvider from '#src/context/ProductContext.tsx';
 
 import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
@@ -41,36 +40,34 @@ const App = () => {
         </Row>
         <BrowserRouter>
           <NavBar loggedOnUser={loggedOnUser} />
-          <SortOptionContextProvider>
-            <ProductFilterContextProvider>
-              <Routes>
-                <Route path="/" element={<Products />} />
-                <Route
-                  path="/products/mobiles"
-                  element={<Products productCategory="Mobiles" />}
-                />
-                <Route
-                  path="/products/furniture"
-                  element={<Products productCategory="Furniture" />}
-                />
-                <Route
-                  path="/products/laptops"
-                  element={<Products productCategory="Laptops" />}
-                />
-                <Route path="/products/:id" element={<SingleProduct />} />
-                <Route
-                  path="/search/:searchTerm"
-                  element={<Products isSearchResults={true} />}
-                />
-                <Route path="/admin" element={<Home />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route
-                  path="checkout"
-                  element={<Checkout loggedOnUser={loggedOnUser} />}
-                />
-              </Routes>
-            </ProductFilterContextProvider>
-          </SortOptionContextProvider>
+          <ProductContextProvider>
+            <Routes>
+              <Route path="/" element={<Products />} />
+              <Route
+                path="/products/mobiles"
+                element={<Products productCategory="Mobiles" />}
+              />
+              <Route
+                path="/products/furniture"
+                element={<Products productCategory="Furniture" />}
+              />
+              <Route
+                path="/products/laptops"
+                element={<Products productCategory="Laptops" />}
+              />
+              <Route path="/products/:id" element={<SingleProduct />} />
+              <Route
+                path="/search/:searchTerm"
+                element={<Products isSearchResults={true} />}
+              />
+              <Route path="/admin" element={<Home />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route
+                path="checkout"
+                element={<Checkout loggedOnUser={loggedOnUser} />}
+              />
+            </Routes>
+          </ProductContextProvider>
         </BrowserRouter>
       </Container>
     </>

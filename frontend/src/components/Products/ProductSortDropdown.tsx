@@ -1,4 +1,4 @@
-import { useSortOption } from '#src/context/ProductSortOptionContext';
+import { useProducts } from '#src/context/ProductContext.tsx';
 
 import { Formik } from 'formik';
 import { Row, Form } from 'react-bootstrap';
@@ -11,7 +11,7 @@ interface ProductSortDropdownValue {
 }
 
 const ProductSortDropdown = () => {
-  const { sortOption, setSortOption } = useSortOption();
+  const productSort  = useProductSort();
   //TODO: Change URL to value corresponding to the API request that was made
   return (
     <Row className="justify-content-end text-end">
@@ -19,7 +19,7 @@ const ProductSortDropdown = () => {
       <Formik<ProductSortDropdownValue>
         onSubmit={() => console.log('onSubmit')}
         initialValues={{
-          option: sortOption
+          option: useProductSort.state.sortOption
         }}
       >
         {({ handleChange, values }) => (
