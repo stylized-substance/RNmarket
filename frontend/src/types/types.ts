@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 
 // Type for API error response for use in service modules
 export interface ApiErrorResponse extends AxiosError {
-  'Error': string;
+  Error: string;
 }
 
 export interface NewUser {
@@ -71,14 +71,14 @@ export interface CartItem {
 export interface CartItemForBackend {
   id: string;
   quantity: number;
-};
+}
 
 export type CartState = CartItem[] | [];
 
 export interface BaseProduct {
   id: string;
   title: string;
-  lowerCaseTitle?: string
+  lowerCaseTitle?: string;
   category: string;
   price: number;
   imgs?: string[];
@@ -122,7 +122,6 @@ export enum ProductCategory {
   Laptops = 'Laptops'
 }
 
-
 export type ProductSortOption =
   | 'nameAsc'
   | 'nameDesc'
@@ -130,3 +129,11 @@ export type ProductSortOption =
   | 'priceDesc'
   | 'ratingAsc'
   | 'ratingDesc';
+
+export interface ProductFilterState {
+  lowestPrice: number;
+  highestPrice: number;
+  lowestRating: number;
+  highestRating: number;
+  instock?: 'true';
+}

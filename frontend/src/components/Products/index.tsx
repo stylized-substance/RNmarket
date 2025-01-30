@@ -5,7 +5,6 @@ import { useSortOption } from '#src/context/ProductSortOptionContext.tsx';
 import productsService from '#src/services/products';
 import { isString } from '#src/utils/typeNarrowers';
 
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ProductCards from '#src/components/Products/ProductCards';
@@ -16,6 +15,7 @@ import ProductFilter from '#src/components/Products/ProductFilter';
 
 import orderBy from 'lodash/orderBy';
 
+import { useProductFilter } from '#src/context/ProductFilterContext.tsx';
 import { Product, ProductSortOption } from '#src/types/types.ts';
 
 interface ProductsProps {
@@ -25,6 +25,7 @@ interface ProductsProps {
 
 const Products = (props: ProductsProps) => {
   const { sortOption } = useSortOption();
+  const productFilterContext = useProductFilter()
 
   const sortProducts = (
     products: Product[],

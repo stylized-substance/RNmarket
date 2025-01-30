@@ -5,25 +5,18 @@ import {
   useReducer
 } from 'react';
 
-interface ProductFilterState {
-  lowestPrice: number;
-  highestPrice: number;
-  lowestRating: number;
-  highestRating: number;
-  instock?: "true"
-}
+import { ProductFilterState } from '#src/types/types.ts';
 
-type Action = {
-  type: 'changed';
+interface Action {
+  type: 'modified';
   payload: Partial<ProductFilterState>;
 }
-
 interface ProductFilterContextType {
   state: ProductFilterState;
   dispatch: React.Dispatch<Action>;
 }
 
-const ProductFilterContext = createContext<ProductFilterContextType | null>(null)
+export const ProductFilterContext = createContext<ProductFilterContextType | null>(null);
 
 const initialState: ProductFilterState = {
   lowestPrice: 0,
@@ -33,14 +26,20 @@ const initialState: ProductFilterState = {
 }
 
 const productFilterReducer = (state: ProductFilterState, action: Action) => {
-  return state
+  switch(action.type) {
+    case 'modified': {
+      return state
+    }
+    default: {
+      throw new Error("productFilterReducer was called with an unknown action type");
+    }
+  }
 }
 
 const ProductFilterContextProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(productFilterReducer, initialState);
-
   return (
-    <ProductFilterContext.Provider value={{ state, dispatch}}>
+    <ProductFilterContext.Provider value={{ state, dispatch }}>
       {children}
     </ProductFilterContext.Provider>    
   )
