@@ -26,7 +26,7 @@ type Action =
   | {
       type: 'filtered';
       payload: {
-        filter: Partial<ProductFilterState>;
+        filter: ProductFilterState;
       }
     };
 
@@ -99,22 +99,15 @@ const productReducer = (state: ProductContextType['state'], action: Action): Pro
         }
       }
 
-      console.log('sortedProducts', sortedProducts);
-
       // Discard lowercase titles
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const mappedProducts = sortedProducts.map(({ lowerCaseTitle, ...rest }) => rest
       );
 
-      console.log('return', {
-        sortOption: action.payload.sortOption,
-        products: mappedProducts
-      });
-
       return { ...state, products: mappedProducts }
     }
     case 'filtered': {
-      return state;
+      return { ...state, filter: action.payload.filter };
     }
     default: {
       throw new Error('productReducer was called with an unknown action type');
@@ -122,16 +115,10 @@ const productReducer = (state: ProductContextType['state'], action: Action): Pro
   }
 };
 
-const initialState: ProductContextType['state'] = {
+const initialState: ProductContextType['state'] | null = {
   products: [],
   sortOption: 'nameAsc',
-  filter: {
-    lowestPrice: 0,
-    highestPrice: 10000,
-    lowestRating: 1,
-    highestRating: 5,
-    instock: 'true'
-  }
+  filter: {}
 };
 
 const ProductContextProvider = ({ children }: PropsWithChildren) => {

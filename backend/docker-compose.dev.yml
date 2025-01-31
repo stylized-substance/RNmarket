@@ -18,6 +18,8 @@ services:
     container_name: rnmarket-backend-postgres
     attach: false
     image: postgres
+    ports:
+      - 5432:5432
     volumes:
       - ./postgresql/data:/var/lib/postgresql/data
     environment:

@@ -11,10 +11,18 @@ interface EnvVariables {
   JWTREFRESHTOKENSECRET: string;
 }
 
+const setDatabaseUrl = () => {
+  if (process.env.NODE_ENV === 'test') {
+    return process.env.TEST_DATABASE_URL;
+  } else {
+    return process.env.DATABASE_URL;
+  }
+}
+
 let envVariables: EnvVariables = {
   PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 0,
   DATABASE_URL: process.env.DATABASE_URL
-    ? parseString(process.env.DATABASE_URL)
+    ? parseString(setDatabaseUrl())
     : '',
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
@@ -46,7 +54,7 @@ const allVariablesDefined: boolean = Object.values(envVariables).every(
 const reassign = (): EnvVariables => {
   return {
     PORT: parseNumber(Number(process.env.PORT)),
-    DATABASE_URL: parseString(process.env.DATABASE_URL),
+    DATABASE_URL: parseString(setDatabaseUrl()),
     JWTACCESSTOKENEXPIRATION: parseNumber(
       Number(process.env.JWTACCESSTOKENEXPIRATION)
     ),

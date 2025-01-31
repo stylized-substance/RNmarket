@@ -22,7 +22,7 @@ const processProductQueryParameters = (
 
   const parseNumericParameter = (param: unknown) => {
     try {
-      const parsed = parseNumber(Number(param));
+      const parsed = parseNumber(param);
       return parsed;
     } catch {
       return undefined;

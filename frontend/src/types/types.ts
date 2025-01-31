@@ -131,9 +131,15 @@ export type ProductSortOption =
   | 'ratingDesc';
 
 export interface ProductFilterState {
-  lowestPrice: number;
-  highestPrice: number;
-  lowestRating: number;
-  highestRating: number;
-  instock?: 'true';
+  lowestPrice?: number;
+  highestPrice?: number;
+  lowestRating?: number;
+  highestRating?: number;
+  instock?: boolean;
+}
+
+export interface ProductQuery {
+  productCategory?: ProductCategory;
+  searchTerm?: string;
+  filter?: ProductFilterState;
 }

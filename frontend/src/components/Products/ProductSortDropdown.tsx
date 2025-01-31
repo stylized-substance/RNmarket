@@ -17,7 +17,7 @@ const ProductSortDropdown = () => {
     <Row className="justify-content-end text-end">
       <b>Sort products</b>
       <Formik<ProductSortDropdownValue>
-        onSubmit={() => console.log('onSubmit')}
+        onSubmit={() => {return undefined}}
         initialValues={{
           option: productContext.state.sortOption
         }}

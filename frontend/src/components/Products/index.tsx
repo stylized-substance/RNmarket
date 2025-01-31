@@ -13,6 +13,8 @@ import ProductsError from '#src/components/Products/ProductsError';
 import ProductSortDropdown from '#src/components/Products/ProductSortDropdown';
 import ProductFilter from '#src/components/Products/ProductFilter';
 
+import { isProductCategory } from '#src/utils/typeNarrowers';
+import { ProductQuery } from '#src/types/types';
 
 interface ProductsProps {
   productCategory?: string;
@@ -20,52 +22,42 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
+  console.log('rendering Products');
   const productContext = useProducts();
-  console.log(productContext.state)
 
-    // Read product search term from current URI
+  // Read product search term from current URI
   const { searchTerm } = useParams();
 
   // Fetch products with Tanstack Query
-  let productFilter = {};
+  let productQuery: ProductQuery = {};
 
   if (props.isSearchResults && isString(searchTerm)) {
-    productFilter = {
+    productQuery = {
       searchTerm: searchTerm
     };
   }
 
-  if (props.productCategory && isString(props.productCategory)) {
-    productFilter = {
+  if (props.productCategory && isProductCategory(props.productCategory)) {
+    productQuery = {
       productCategory: props.productCategory
     };
   }
 
-  // Refetch query when product filter or sort option changes
+  productQuery.filter = productContext.state.filter;
+
+  // Refetch query when product filter, category or sort option changes
   const { isPending, isError, error } = useQuery({
-    queryKey: ['products', productFilter],
+    queryKey: ['products', productQuery],
     queryFn: async () => {
-      const productsFromBackend = await productsService.getAll(productFilter);
+      const productsFromBackend = await productsService.getAll(productQuery);
       productContext.dispatch({
         type: 'added',
         payload: productsFromBackend
-      })
+      });
 
-      return productsFromBackend
-    },
-      // if (products) {
-      //   const { sortOption, products } = productSort.dispatch({
-      //     type: 'modified',
-      //     payload: {
-      //       sortOption: productSort.state.sortOption,
-      //       products: products
-      //     }
-      //   })
-      //   console.log('sortedProducts', sortedProducts)
-      //   return sortedProducts
-      // }
+      return productsFromBackend;
+    }
   });
-  
 
   if (isPending) {
     return <ProductsPending />;
@@ -74,14 +66,13 @@ const Products = (props: ProductsProps) => {
   if (isError) {
     return <ProductsError error={error} />;
   }
-  
+
   return (
     <>
       <Col>
         <Row>
           <Col>
             {props.isSearchResults ? (
-              )}
               <h1 className="text-center m-4">
                 Search results for: {searchTerm}
               </h1>
@@ -89,15 +80,27 @@ const Products = (props: ProductsProps) => {
               <h1 style={{ marginBottom: 100 }} className="text-center">
                 {props.productCategory}
               </h1>
+            )}
           </Col>
         </Row>
       </Col>
-      <ProductSortDropdown />
+      <Row>
+        <Col lg={2}>
+          <h4>{productContext.state.products.length} products</h4>
+        </Col>
+        <Col>
+          <ProductSortDropdown />
+        </Col>
+      </Row>
       <Row>
         <Col lg={2}>
           <ProductFilter />
         </Col>
-        <Col lg={10}>{productContext.state.products && <ProductCards products={productContext.state.products} />}</Col>
+        <Col lg={10}>
+          {productContext.state.products && (
+            <ProductCards products={productContext.state.products} />
+          )}
+        </Col>
       </Row>
     </>
   );

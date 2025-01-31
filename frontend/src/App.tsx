@@ -3,7 +3,6 @@ import '#src/styles/custom.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
 import { useToast } from '#src/context/ToastContext';
-import ProductContextProvider from '#src/context/ProductContext.tsx';
 
 import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
@@ -40,7 +39,6 @@ const App = () => {
         </Row>
         <BrowserRouter>
           <NavBar loggedOnUser={loggedOnUser} />
-          <ProductContextProvider>
             <Routes>
               <Route path="/" element={<Products />} />
               <Route
@@ -67,7 +65,6 @@ const App = () => {
                 element={<Checkout loggedOnUser={loggedOnUser} />}
               />
             </Routes>
-          </ProductContextProvider>
         </BrowserRouter>
       </Container>
     </>

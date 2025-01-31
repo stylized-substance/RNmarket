@@ -1,18 +1,16 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { Product } from '../types/types';
+import { Product, ProductQuery } from '../types/types';
 import { isProduct, isObject, isString } from '#src/utils/typeNarrowers';
 import errorHandler from '#src/utils/errorHandler';
 
 const baseUrl = `${backendAddress}/api/products`;
-interface ProductFilter {
-  productCategory?: string;
-  searchTerm?: string;
-}
 
-const getAll = async (
-  productFilter?: ProductFilter
-): Promise<Product[] | []> => {
+const getAll = async ({
+  productCategory,
+  searchTerm,
+  filter
+}: ProductQuery): Promise<Product[] | []> => {
   // Validate API response
   const responseIsValid = (response: unknown): boolean => {
     return (
@@ -25,16 +23,18 @@ const getAll = async (
 
   let query = '';
 
-  if (productFilter) {
-    if (productFilter.productCategory) {
-      query = `category=${productFilter.productCategory}`;
-    }
-
-    if (productFilter.searchTerm) {
-      query = `search=${productFilter.searchTerm}`;
-    }
+  if (productCategory) {
+    query = `category=${productCategory}`;
   }
 
+  if (searchTerm) {
+    query = `search=${searchTerm}`;
+  }
+
+  if (filter) {
+    query = Object.entries(filter).map((property) => `${property[0]}=${property[1]}`).join('&')
+  }
+  
   try {
     const response = await axios.get<{ products: Product[] }>(
       `${baseUrl}?${query}`

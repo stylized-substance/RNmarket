@@ -139,6 +139,7 @@ const isProductSortOption = (param: unknown): param is ProductSortOption => {
 
 export {
   isProduct,
+  isProductCategory,
   isObject,
   isString,
   parseString,
