@@ -20,40 +20,35 @@ type Action =
   | {
       type: 'sorted';
       payload: {
-        products: Product[];
         sortOption: ProductSortOption;
       };
     }
   | {
       type: 'filtered';
-      payload: Partial<ProductFilterState>;
+      payload: {
+        filter: Partial<ProductFilterState>;
+      }
     };
 
 interface ProductContextType {
   state: {
     products: Product[] | [];
     sortOption: ProductSortOption;
-    filter: Partial<ProductFilterState>;
+    filter: ProductFilterState;
   };
   dispatch: React.Dispatch<Action>;
 }
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
-const productReducer = (state: ProductContextType['state'], action: Action): ProductContextType['state']['products'] => {
+const productReducer = (state: ProductContextType['state'], action: Action): ProductContextType['state']=> {
   switch (action.type) {
     case 'added': {
-      return action.payload;
+      return state;
     }
     case 'sorted': {
-      //return orderBy(action.payload.products, ['price'], [action.payload.sortOption]);
-
-      if (!action.payload.products || action.payload.products.length === 0) {
-        return [];
-      }
-
-      // Temporarily add lowercase titles to products so orderBy function works properly
-      const lowerCaseProducts = action.payload.products.map((prod) => ({
+      // Temporarily add lowercase titles to products so orderBy function works properly when sorting by name
+      const lowerCaseProducts = state.products.map((prod) => ({
         ...prod,
         lowerCaseTitle: prod.title.toLowerCase()
       }));
@@ -75,25 +70,25 @@ const productReducer = (state: ProductContextType['state'], action: Action): Pro
           );
           break;
         case 'priceAsc':
-          sortedProducts = orderBy(action.payload.products, ['price'], ['asc']);
+          sortedProducts = orderBy(state.products, ['price'], ['asc']);
           break;
         case 'priceDesc':
           sortedProducts = orderBy(
-            action.payload.products,
+            state.products,
             ['price'],
             ['desc']
           );
           break;
         case 'ratingAsc':
           sortedProducts = orderBy(
-            action.payload.products,
+            state.products,
             ['rating'],
             ['asc']
           );
           break;
         case 'ratingDesc':
           sortedProducts = orderBy(
-            action.payload.products,
+            state.products,
             ['rating'],
             ['desc']
           );
@@ -116,10 +111,10 @@ const productReducer = (state: ProductContextType['state'], action: Action): Pro
         products: mappedProducts
       });
 
-      return mappedProducts;
+      return { ...state, products: mappedProducts }
     }
     case 'filtered': {
-      return [];
+      return state;
     }
     default: {
       throw new Error('productReducer was called with an unknown action type');
@@ -134,7 +129,8 @@ const initialState: ProductContextType['state'] = {
     lowestPrice: 0,
     highestPrice: 10000,
     lowestRating: 1,
-    highestRating: 5
+    highestRating: 5,
+    instock: 'true'
   }
 };
 
