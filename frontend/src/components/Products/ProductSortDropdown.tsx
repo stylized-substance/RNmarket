@@ -11,7 +11,7 @@ interface ProductSortDropdownValue {
 }
 
 const ProductSortDropdown = () => {
-  const productSort  = useProductSort();
+  const productContext = useProducts();
   //TODO: Change URL to value corresponding to the API request that was made
   return (
     <Row className="justify-content-end text-end">
@@ -19,7 +19,7 @@ const ProductSortDropdown = () => {
       <Formik<ProductSortDropdownValue>
         onSubmit={() => console.log('onSubmit')}
         initialValues={{
-          option: useProductSort.state.sortOption
+          option: productContext.state.sortOption
         }}
       >
         {({ handleChange, values }) => (
@@ -29,7 +29,12 @@ const ProductSortDropdown = () => {
             onChange={(event) => {
               if (isProductSortOption(event.target.value)) {
                 handleChange(event);
-                setSortOption(event.target.value);
+                productContext.dispatch({
+                  type: 'sorted',
+                  payload: {
+                    sortOption: event.target.value
+                  }
+                });
               }
             }}
             className="w-25 mt-2 mb-5"

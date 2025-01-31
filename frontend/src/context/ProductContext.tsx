@@ -44,7 +44,7 @@ const ProductContext = createContext<ProductContextType | null>(null);
 const productReducer = (state: ProductContextType['state'], action: Action): ProductContextType['state']=> {
   switch (action.type) {
     case 'added': {
-      return state;
+      return { ...state, products: action.payload };
     }
     case 'sorted': {
       // Temporarily add lowercase titles to products so orderBy function works properly when sorting by name

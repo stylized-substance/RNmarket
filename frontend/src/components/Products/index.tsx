@@ -20,7 +20,8 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
-  const products = useProducts();
+  const productContext = useProducts();
+  console.log(productContext.state)
 
     // Read product search term from current URI
   const { searchTerm } = useParams();
@@ -45,10 +46,11 @@ const Products = (props: ProductsProps) => {
     queryKey: ['products', productFilter],
     queryFn: async () => {
       const productsFromBackend = await productsService.getAll(productFilter);
-      products.dispatch({
+      productContext.dispatch({
         type: 'added',
         payload: productsFromBackend
       })
+
       return productsFromBackend
     },
       // if (products) {
@@ -63,6 +65,7 @@ const Products = (props: ProductsProps) => {
       //   return sortedProducts
       // }
   });
+  
 
   if (isPending) {
     return <ProductsPending />;
@@ -78,6 +81,7 @@ const Products = (props: ProductsProps) => {
         <Row>
           <Col>
             {props.isSearchResults ? (
+              )}
               <h1 className="text-center m-4">
                 Search results for: {searchTerm}
               </h1>
@@ -85,16 +89,15 @@ const Products = (props: ProductsProps) => {
               <h1 style={{ marginBottom: 100 }} className="text-center">
                 {props.productCategory}
               </h1>
-            )}
           </Col>
         </Row>
       </Col>
-      {/* <ProductSortDropdown /> */}
+      <ProductSortDropdown />
       <Row>
         <Col lg={2}>
           <ProductFilter />
         </Col>
-        <Col lg={10}>{products.state && <ProductCards products={products.state} />}</Col>
+        <Col lg={10}>{productContext.state.products && <ProductCards products={productContext.state.products} />}</Col>
       </Row>
     </>
   );
