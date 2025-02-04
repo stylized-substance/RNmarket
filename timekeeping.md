@@ -94,3 +94,4 @@
 | 29.01.2025 | 1 | Worked on product filtering functionality | 193
 | 30.01.2025 | 2 | Worked on product context | 195
 | 31.01.2025 | 4 | Worked on product context and filtering | 199
+| 04.02.2025 | 2 | Worked on product context, filtering, backend | 201
