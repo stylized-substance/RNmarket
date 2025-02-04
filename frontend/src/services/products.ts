@@ -22,7 +22,11 @@ const getAll = async ({
   };
 
   let query = '';
-
+  
+  if (searchTerm) {
+    query = `search=${searchTerm}&`;
+  }
+  
   if (productCategory) {
     query = `category=${productCategory}&`;
   }
@@ -33,9 +37,6 @@ const getAll = async ({
       .join('&');
   }
 
-  if (searchTerm) {
-    query = `search=${searchTerm}`;
-  }
 
   try {
     const response = await axios.get<{ products: Product[] }>(
