@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useProducts } from '#src/context/ProductContext.tsx';
@@ -22,7 +23,20 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
+  // TODO: fix filter reset on product category change, check if initialFilterReset is needed
+  const [ initialFilterReset, setInitialFilterReset ] = useState(false);
+  console.log('products rendering');
+
   const productContext = useProducts();
+  console.log(productContext.state.filter);
+
+  useEffect(() => {
+    console.log('effect running');
+    if (initialFilterReset) {
+      productContext.dispatch({ type: 'filterReset', payload: undefined });
+      setInitialFilterReset(true)
+    }
+  }, [props.productCategory, initialFilterReset, productContext]);
 
   // Read product search term from current URI
   const { searchTerm } = useParams();
@@ -44,7 +58,7 @@ const Products = (props: ProductsProps) => {
 
   productQuery.filter = productContext.state.filter;
 
-  // Refetch query when product filter, category or sort option changes
+  // Refetch query when product filter, category or search term changes
   const { isPending, isError, error } = useQuery({
     queryKey: ['products', productQuery],
     queryFn: async () => {

@@ -28,6 +28,10 @@ type Action =
       payload: {
         filter: ProductFilterState;
       };
+    }
+  | {
+      type: 'filterReset';
+      payload: undefined;
     };
 
 interface ProductContextType {
@@ -101,13 +105,17 @@ const productReducer = (
     case 'filtered': {
       return { ...state, filter: action.payload.filter };
     }
+    case 'filterReset': {
+      console.log('initialfilter', initialState.filter);
+      return { ...state, filter: initialState.filter };
+    }
     default: {
       throw new Error('productReducer was called with an unknown action type');
     }
   }
 };
 
-const initialState: ProductContextType['state'] | null = {
+const initialState: ProductContextType['state'] = {
   products: [],
   sortOption: 'nameAsc',
   filter: {}
