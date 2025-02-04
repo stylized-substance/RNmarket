@@ -81,11 +81,7 @@ const isProduct = (param: unknown): param is Product => {
 };
 
 const isApiErrorResponse = (param: unknown): param is ApiErrorResponse => {
-  return (
-    isObject(param) &&
-    'Error' in param &&
-    isString(param.Error)
-  );
+  return isObject(param) && 'Error' in param && isString(param.Error);
 };
 
 const isLoginPayload = (param: unknown): param is LoginPayload => {
@@ -113,15 +109,12 @@ const isCartItem = (param: unknown): param is CartItem => {
     isProduct(param.product) &&
     'quantity' in param &&
     isNumber(param.quantity)
-  )
-}
+  );
+};
 
 const isCartState = (param: unknown): param is CartState => {
-  return (
-    Array.isArray(param) &&
-    param.every(item => isCartItem(item))
-  )
-}
+  return Array.isArray(param) && param.every((item) => isCartItem(item));
+};
 
 const isProductSortOption = (param: unknown): param is ProductSortOption => {
   return (

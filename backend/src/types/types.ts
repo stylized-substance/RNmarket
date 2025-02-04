@@ -132,7 +132,7 @@ export interface ProductQueryParameters {
   search?: string;
   lowestPrice?: number;
   highestPrice?: number;
-  inStock?: string;
+  instock?: string;
   lowestRating?: number;
   highestRating?: number;
 }

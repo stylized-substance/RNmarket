@@ -76,7 +76,7 @@ const Checkout = (props: CheckOutProps) => {
     onSuccess: () => {
       cart.dispatch({
         type: 'emptied'
-      })
+      });
     },
     onError: (error) => {
       changeToast({

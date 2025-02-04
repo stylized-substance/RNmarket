@@ -24,17 +24,19 @@ const getAll = async ({
   let query = '';
 
   if (productCategory) {
-    query = `category=${productCategory}`;
+    query = `category=${productCategory}&`;
+  }
+
+  if (filter) {
+    query += Object.entries(filter)
+      .map((property) => `${property[0]}=${property[1]}`)
+      .join('&');
   }
 
   if (searchTerm) {
     query = `search=${searchTerm}`;
   }
 
-  if (filter) {
-    query = Object.entries(filter).map((property) => `${property[0]}=${property[1]}`).join('&')
-  }
-  
   try {
     const response = await axios.get<{ products: Product[] }>(
       `${baseUrl}?${query}`

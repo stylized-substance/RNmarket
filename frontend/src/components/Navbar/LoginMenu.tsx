@@ -8,20 +8,22 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-
 import { LoginCredentials } from '#src/types/types.ts';
 
 interface LoginMenuProps {
-  setShowRegisterMenu: React.Dispatch<React.SetStateAction<boolean>>
-  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setShowRegisterMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginMenu = ({ setShowRegisterMenu, setLoginDropdownOpen }: LoginMenuProps) => {
+const LoginMenu = ({
+  setShowRegisterMenu,
+  setLoginDropdownOpen
+}: LoginMenuProps) => {
   const { login } = useAuth();
 
   const handleLogin = (credentials: LoginCredentials) => {
     login.mutate(credentials);
-    setLoginDropdownOpen(false)
+    setLoginDropdownOpen(false);
   };
 
   const formSchema = yup.object().shape({

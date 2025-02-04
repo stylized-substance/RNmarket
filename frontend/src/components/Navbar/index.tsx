@@ -180,9 +180,7 @@ const NavBar = (props: NavBarProps) => {
                     setCartDropdownOpen(!cartDropdownOpen);
                   }}
                 >
-                  <Dropdown.Toggle
-                    className="custom-button position-relative me-2"
-                  >
+                  <Dropdown.Toggle className="custom-button position-relative me-2">
                     Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
                     <Badge
                       pill

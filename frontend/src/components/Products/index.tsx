@@ -22,7 +22,6 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
-  console.log('rendering Products');
   const productContext = useProducts();
 
   // Read product search term from current URI
@@ -59,14 +58,6 @@ const Products = (props: ProductsProps) => {
     }
   });
 
-  if (isPending) {
-    return <ProductsPending />;
-  }
-
-  if (isError) {
-    return <ProductsError error={error} />;
-  }
-
   return (
     <>
       <Col>
@@ -97,6 +88,8 @@ const Products = (props: ProductsProps) => {
           <ProductFilter />
         </Col>
         <Col lg={10}>
+          {isPending && <ProductsPending />}
+          {isError && <ProductsError error={error} />}
           {productContext.state.products && (
             <ProductCards products={productContext.state.products} />
           )}

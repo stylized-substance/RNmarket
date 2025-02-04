@@ -1,6 +1,6 @@
 import { useCart } from '#src/context/CartContext.tsx';
 import { useNavigate } from 'react-router-dom';
-import { cartTotalPrice } from '#src/utils/cartTotalPrice'
+import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

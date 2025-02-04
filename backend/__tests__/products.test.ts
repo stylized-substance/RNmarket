@@ -206,21 +206,13 @@ describe('GET requests', () => {
       });
     });
 
-    test('GET /api/products with query inStock=true returns products that are in stock', async () => {
-      const response = await api.get('/api/products').query('inStock=true');
+    test('GET /api/products with query instock=true returns products that are in stock', async () => {
+      const response = await api.get('/api/products').query('instock=true');
       assert200Response(response);
       expect(response.body).toHaveProperty('products');
       response.body.products.forEach((product: Product) => {
         assertValidType('product', product);
         expect(product.instock).toBeGreaterThan(0);
-      });
-    });
-
-    test('GET /api/products fails if value of inStock is not true', async () => {
-      const response = await api.get('/api/products').query('inStock=asd');
-      assert400Response(response);
-      expect(response.body).toStrictEqual({
-        Error: `Value for 'inStock' must be 'true' if used`
       });
     });
 

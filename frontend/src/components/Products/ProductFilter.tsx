@@ -22,16 +22,32 @@ const ProductFilter = () => {
         filter: formValues
       }
     });
-    await queryClient.invalidateQueries({ queryKey: ['products'] })
+    await queryClient.invalidateQueries({ queryKey: ['products'] });
   };
 
   //TODO: Change URL to value corresponding to the API request that was made
 
   const formSchema = yup.object().shape({
-    lowestPrice: yup.number().required().min(0),
-    highestPrice: yup.number().required().max(10000),
-    lowestRating: yup.number().required().min(1),
-    highestRating: yup.number().required().max(5),
+    lowestPrice: yup
+      .number()
+      .required()
+      .min(0, 'Must be 0 or higher')
+      .max(10000, 'Must be 10000 or lower'),
+    highestPrice: yup
+      .number()
+      .required()
+      .min(0, 'Must be 0 or higher')
+      .max(10000, 'Must be 10000 or lower'),
+    lowestRating: yup
+      .number()
+      .required()
+      .min(1, 'Must be 1 or higher')
+      .max(5, 'Must be 5 or lower'),
+    highestRating: yup
+      .number()
+      .required()
+      .min(1, 'Must be 1 or higher')
+      .max(5, 'Must be 5 or lower'),
     instock: yup.boolean().required()
   });
 
@@ -129,7 +145,7 @@ const ProductFilter = () => {
               </Form.Group>
               <Form.Group>
                 <Form.Label></Form.Label>
-                <b>In stock items</b>
+                <b>In stock items only</b>
                 <InputGroup>
                   <Form.Check
                     type="switch"

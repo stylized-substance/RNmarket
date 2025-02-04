@@ -27,7 +27,7 @@ type Action =
       type: 'filtered';
       payload: {
         filter: ProductFilterState;
-      }
+      };
     };
 
 interface ProductContextType {
@@ -41,7 +41,10 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
-const productReducer = (state: ProductContextType['state'], action: Action): ProductContextType['state']=> {
+const productReducer = (
+  state: ProductContextType['state'],
+  action: Action
+): ProductContextType['state'] => {
   switch (action.type) {
     case 'added': {
       return { ...state, products: action.payload };
@@ -73,25 +76,13 @@ const productReducer = (state: ProductContextType['state'], action: Action): Pro
           sortedProducts = orderBy(state.products, ['price'], ['asc']);
           break;
         case 'priceDesc':
-          sortedProducts = orderBy(
-            state.products,
-            ['price'],
-            ['desc']
-          );
+          sortedProducts = orderBy(state.products, ['price'], ['desc']);
           break;
         case 'ratingAsc':
-          sortedProducts = orderBy(
-            state.products,
-            ['rating'],
-            ['asc']
-          );
+          sortedProducts = orderBy(state.products, ['rating'], ['asc']);
           break;
         case 'ratingDesc':
-          sortedProducts = orderBy(
-            state.products,
-            ['rating'],
-            ['desc']
-          );
+          sortedProducts = orderBy(state.products, ['rating'], ['desc']);
           break;
         default: {
           const _exhaustiveCheck: never = action.payload.sortOption;
@@ -100,11 +91,12 @@ const productReducer = (state: ProductContextType['state'], action: Action): Pro
       }
 
       // Discard lowercase titles
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const mappedProducts = sortedProducts.map(({ lowerCaseTitle, ...rest }) => rest
+      const mappedProducts = sortedProducts.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ({ lowerCaseTitle, ...rest }) => rest
       );
 
-      return { ...state, products: mappedProducts }
+      return { ...state, products: mappedProducts };
     }
     case 'filtered': {
       return { ...state, filter: action.payload.filter };

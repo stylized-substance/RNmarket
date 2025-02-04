@@ -30,6 +30,7 @@ const processProductQueryParameters = (
   };
 
   const parseStringParameter = (param: unknown): string | undefined => {
+    console.log('param', param);
     try {
       const parsed = parseString(param);
       return parsed;
@@ -38,6 +39,8 @@ const processProductQueryParameters = (
     }
   };
 
+  console.log('query', req.query);
+
   const queryParameters: ProductQueryParameters = {
     limit: parseNumericParameter(req.query.limit),
     withReviews: parseStringParameter(req.query.withReviews),
@@ -45,7 +48,7 @@ const processProductQueryParameters = (
     search: parseStringParameter(req.query.search),
     lowestPrice: parseNumericParameter(req.query.lowestPrice),
     highestPrice: parseNumericParameter(req.query.highestPrice),
-    inStock: parseStringParameter(req.query.inStock),
+    instock: parseStringParameter(req.query.instock),
     lowestRating: parseNumericParameter(req.query.lowestRating),
     highestRating: parseNumericParameter(req.query.highestRating)
   };
@@ -57,7 +60,7 @@ const processProductQueryParameters = (
     search,
     lowestPrice,
     highestPrice,
-    inStock,
+    instock,
     lowestRating,
     highestRating
   } = queryParameters;
@@ -142,19 +145,13 @@ const processProductQueryParameters = (
   }
 
   // Only return products that are in stock
-  if (inStock) {
-    if (inStock === 'true') {
-      where = {
-        ...where,
-        instock: {
-          [Op.gt]: 0
-        }
-      };
-    } else {
-      return res
-        .status(400)
-        .json({ Error: `Value for 'inStock' must be 'true' if used` });
-    }
+  if (instock && instock === 'true') {
+    where = {
+      ...where,
+      instock: {
+        [Op.gt]: 0
+      }
+    };
   }
 
   // Filter products by rating
