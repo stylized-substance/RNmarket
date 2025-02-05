@@ -95,3 +95,4 @@
 | 30.01.2025 | 2 | Worked on product context | 195
 | 31.01.2025 | 4 | Worked on product context and filtering | 199
 | 04.02.2025 | 2 | Worked on product context, filtering, backend | 201
+| 05.02.2025 | 2 | Worked on filter reset, Home component, CSS | 203
