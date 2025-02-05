@@ -84,7 +84,7 @@ const Products = (props: ProductsProps) => {
       </Col>
       <Row>
         <Col lg={2}>
-          <h4>{productContext.state.products.length} products</h4>
+          <h5>{productContext.state.products.length} products</h5>
         </Col>
         <Col>
           <ProductSortDropdown />

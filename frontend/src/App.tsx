@@ -3,7 +3,6 @@ import '#src/styles/custom.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import useAuth from '#src/hooks/useAuth';
 import { useToast } from '#src/context/ToastContext';
-import ProductContextProvider from '#src/context/ProductContext.tsx';
 
 import Home from '#src/components/Home';
 import NavBar from '#src/components/Navbar/index.tsx';
@@ -13,8 +12,9 @@ import Cart from '#src/components/Cart/index.tsx';
 import Checkout from '#src/components/Checkout';
 
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
-import { Row } from 'react-bootstrap';
 
 const App = () => {
   // Read logged on user data from localStorage
@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <>
-      <Container id="app-container">
+      <Container fluid id="app-container">
         <Row className="justify-content-center">
           <Toast
             show={toastState.show}
@@ -39,10 +39,16 @@ const App = () => {
           </Toast>
         </Row>
         <BrowserRouter>
-          <NavBar loggedOnUser={loggedOnUser} />
-          <ProductContextProvider>
+          <Row id="navbar-row">
+            <NavBar loggedOnUser={loggedOnUser} />
+          </Row>
+          {/* TODO: center home component */}
+          <Col
+            id="content-col"
+            className="d-flex flex-column justify-content-center"
+          >
             <Routes>
-              <Route path="/" element={<Products />} />
+              <Route path="/" element={<Home />} />
               <Route
                 path="/products/mobiles"
                 element={<Products productCategory="Mobiles" />}
@@ -67,7 +73,7 @@ const App = () => {
                 element={<Checkout loggedOnUser={loggedOnUser} />}
               />
             </Routes>
-          </ProductContextProvider>
+          </Col>
         </BrowserRouter>
       </Container>
     </>
