@@ -27,7 +27,7 @@ const Products = (props: ProductsProps) => {
   const dispatchRef = useRef(productContext.dispatch);
 
   useEffect(() => {
-    // A ref is used to allow automatic product filter reset on product category change without causing a render loop
+    // A ref is used to prevent a render loop while having necessary functions as useEffect dependencies
     dispatchRef.current({ type: 'filterReset' });
   }, [props.productCategory]);
 

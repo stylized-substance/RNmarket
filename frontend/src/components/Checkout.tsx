@@ -2,7 +2,7 @@ import { padPrice } from '#src/utils/padPrice';
 import { cartTotalPrice } from '#src/utils/cartTotalPrice';
 import authorizationService from '#src/services/authorization';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
 import { useEffect } from 'react';
 import { useToast } from '#src/context/ToastContext';
@@ -44,13 +44,15 @@ const Checkout = (props: CheckOutProps) => {
   const cart = useCart();
   const cartItems = cart.state;
   const { changeToast } = useToast();
-
+  
   const [accessToken, setAccessToken] = useState<string>('');
-
+  
   const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
     id: item.product.id,
     quantity: item.quantity
   }));
+  
+  const cartItemsForBackendRef = useRef(cartItemsForBackend);
 
   const temporaryAccessTokenMutation = useMutation({
     // Get temporary access token from backend if no user is logged in. Used for making orders without logging in.
@@ -61,6 +63,8 @@ const Checkout = (props: CheckOutProps) => {
       setAccessToken(data);
     }
   });
+  
+  const temporaryAccessTokenMutationRef = useRef(temporaryAccessTokenMutation);
 
   const orderMutation = useMutation({
     // Send order to backend
@@ -87,10 +91,11 @@ const Checkout = (props: CheckOutProps) => {
   });
 
   useEffect(() => {
+    // Refs are used to prevent a render loop while having necessary functions as useEffect dependencies
     if (props.loggedOnUser) {
       setAccessToken(props.loggedOnUser.accessToken);
     } else {
-      temporaryAccessTokenMutation.mutate(cartItemsForBackend);
+      temporaryAccessTokenMutationRef.current.mutate(cartItemsForBackendRef.current)
     }
   }, [props.loggedOnUser]);
 
