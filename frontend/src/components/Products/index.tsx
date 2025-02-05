@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useProducts } from '#src/context/ProductContext.tsx';
@@ -23,20 +23,13 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
-  // TODO: fix filter reset on product category change, check if initialFilterReset is needed
-  const [ initialFilterReset, setInitialFilterReset ] = useState(false);
-  console.log('products rendering');
-
   const productContext = useProducts();
-  console.log(productContext.state.filter);
+  const dispatchRef = useRef(productContext.dispatch);
 
   useEffect(() => {
-    console.log('effect running');
-    if (initialFilterReset) {
-      productContext.dispatch({ type: 'filterReset', payload: undefined });
-      setInitialFilterReset(true)
-    }
-  }, [props.productCategory, initialFilterReset, productContext]);
+    // A ref is used to allow automatic product filter reset on product category change without causing a render loop
+    dispatchRef.current({ type: 'filterReset' });
+  }, [props.productCategory]);
 
   // Read product search term from current URI
   const { searchTerm } = useParams();

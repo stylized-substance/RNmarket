@@ -62,7 +62,7 @@ const ProductFilter = () => {
           highestPrice: 10000,
           lowestRating: 1,
           highestRating: 5,
-          instock: true
+          instock: false
         }}
       >
         {({

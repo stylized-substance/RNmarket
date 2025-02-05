@@ -31,7 +31,6 @@ type Action =
     }
   | {
       type: 'filterReset';
-      payload: undefined;
     };
 
 interface ProductContextType {
@@ -106,7 +105,6 @@ const productReducer = (
       return { ...state, filter: action.payload.filter };
     }
     case 'filterReset': {
-      console.log('initialfilter', initialState.filter);
       return { ...state, filter: initialState.filter };
     }
     default: {
