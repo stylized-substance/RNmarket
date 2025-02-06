@@ -11,7 +11,7 @@ const baseUrl = `${backendAddress}/api/authorization`;
 
 const login = async (
   credentials: LoginCredentials
-): Promise<LoginPayload | undefined> => {
+): Promise<LoginPayload> => {
   try {
     const response = await axios.post<{ payload: LoginPayload }>(
       `${baseUrl}/login`,
@@ -26,8 +26,6 @@ const login = async (
       throw new Error('Unknown error happened while logging in');
     }
   }
-
-  return undefined;
 };
 
 const refreshAccessToken = async (
