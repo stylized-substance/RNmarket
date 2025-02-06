@@ -13,7 +13,6 @@ import Checkout from '#src/components/Checkout';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
 
 const App = () => {
@@ -25,8 +24,8 @@ const App = () => {
 
   return (
     <>
-      <Container fluid id="app-container">
-        <Row className="justify-content-center">
+      <Container fluid id="app-container" className="min-vh-100">
+        <Row id="toast-row" className="justify-content-center">
           <Toast
             show={toastState.show}
             animation={true}
@@ -42,40 +41,48 @@ const App = () => {
           <Row id="navbar-row">
             <NavBar loggedOnUser={loggedOnUser} />
           </Row>
-          {/* TODO: center home component */}
-          <Col
-            id="content-col"
-            className="d-flex flex-column justify-content-center"
-          >
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/products/mobiles"
-                element={<Products productCategory="Mobiles" />}
-              />
-              <Route
-                path="/products/furniture"
-                element={<Products productCategory="Furniture" />}
-              />
-              <Route
-                path="/products/laptops"
-                element={<Products productCategory="Laptops" />}
-              />
-              <Route path="/products/:id" element={<SingleProduct />} />
-              <Route
-                path="/search/:searchTerm"
-                element={<Products isSearchResults={true} />}
-              />
-              <Route path="/admin" element={<Home />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route
-                path="checkout"
-                element={<Checkout loggedOnUser={loggedOnUser} />}
-              />
-            </Routes>
-          </Col>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/products/mobiles"
+              element={<Products productCategory="Mobiles" />}
+            />
+            <Route
+              path="/products/furniture"
+              element={<Products productCategory="Furniture" />}
+            />
+            <Route
+              path="/products/laptops"
+              element={<Products productCategory="Laptops" />}
+            />
+            <Route path="/products/:id" element={<SingleProduct />} />
+            <Route
+              path="/search/:searchTerm"
+              element={<Products isSearchResults={true} />}
+            />
+            <Route path="/admin" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="checkout"
+              element={<Checkout loggedOnUser={loggedOnUser} />}
+            />
+          </Routes>
         </BrowserRouter>
       </Container>
+      <footer
+        style={{
+          backgroundColor: 'black',
+          color: 'white',
+          // position: 'fixed',
+          width: '100%',
+          // left: 0,
+          // right: 0,
+          bottom: 0
+        }}
+        className="p-2 text-center"
+      >
+        © 2025 RNMarket
+      </footer>
     </>
   );
 };

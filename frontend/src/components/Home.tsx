@@ -1,14 +1,13 @@
-import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import Stack from 'react-bootstrap/Stack';
 
 import Button from 'react-bootstrap/Button';
 
 const Home = () => {
   return (
-    <Row>
-      <Row>
-        <h1 className="text-center">Hello, select a product category</h1>;
-      </Row>
+    <Col className="border border-4 border-primary min-vh-100 d-flex flex-column justify-content-center">
+      <h1 className="text-center pb-5">Hello, select a product category</h1>
       <Stack direction="horizontal" gap={3} className="justify-content-center">
         <Button className="custom-button" size="lg">
           Mobile phones
@@ -20,7 +19,7 @@ const Home = () => {
           Laptops
         </Button>
       </Stack>
-    </Row>
+    </Col>
   );
 };
 

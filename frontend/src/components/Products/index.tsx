@@ -68,18 +68,14 @@ const Products = (props: ProductsProps) => {
   return (
     <>
       <Col>
-        <Row>
-          <Col>
-            {props.isSearchResults ? (
-              <h1 className="text-center m-4">
-                Search results for: {searchTerm}
-              </h1>
-            ) : (
-              <h1 style={{ marginBottom: 100 }} className="text-center">
-                {props.productCategory}
-              </h1>
-            )}
-          </Col>
+        <Row className="m-4">
+          {props.isSearchResults ? (
+            <h1 className="text-center">
+              Search results for: {searchTerm}
+            </h1>
+          ) : (
+            <h1 className="text-center">{props.productCategory}</h1>
+          )}
         </Row>
       </Col>
       <Row>
