@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 const Home = () => {
   return (
-    <Col className="border border-4 border-primary min-vh-100 d-flex flex-column justify-content-center">
+    <Col className="d-flex flex-column justify-content-center">
       <h1 className="text-center pb-5">Hello, select a product category</h1>
       <Stack direction="horizontal" gap={3} className="justify-content-center">
         <Button className="custom-button" size="lg">

@@ -24,7 +24,11 @@ const App = () => {
 
   return (
     <>
-      <Container fluid id="app-container" className="min-vh-100">
+      <Container
+        fluid
+        id="app-container"
+        className="d-flex flex-column min-vh-100"
+      >
         <Row id="toast-row" className="justify-content-center">
           <Toast
             show={toastState.show}
@@ -68,21 +72,21 @@ const App = () => {
             />
           </Routes>
         </BrowserRouter>
+        <footer
+          style={{
+            backgroundColor: 'black',
+            color: 'white',
+            position: 'fixed',
+            width: '100%',
+            left: 0,
+            right: 0,
+            bottom: 0
+          }}
+          className="p-2 text-center w-100"
+        >
+          © 2025 RNMarket
+        </footer>
       </Container>
-      <footer
-        style={{
-          backgroundColor: 'black',
-          color: 'white',
-          // position: 'fixed',
-          width: '100%',
-          // left: 0,
-          // right: 0,
-          bottom: 0
-        }}
-        className="p-2 text-center"
-      >
-        © 2025 RNMarket
-      </footer>
     </>
   );
 };
