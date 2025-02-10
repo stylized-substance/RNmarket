@@ -64,13 +64,8 @@ const ProductFilter = () => {
       <Formik<ProductFilterState>
         validationSchema={formSchema}
         onSubmit={(values) => handleSubmit(values)}
-        initialValues={{
-          lowestPrice: 0,
-          highestPrice: 10000,
-          lowestRating: 1,
-          highestRating: 5,
-          instock: false
-        }}
+        initialValues={productContext.state.filter}
+        enableReinitialize
       >
         {({
           handleSubmit,

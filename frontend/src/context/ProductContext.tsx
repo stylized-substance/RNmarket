@@ -44,6 +44,18 @@ interface ProductContextType {
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
+const initialState: ProductContextType['state'] = {
+  products: [],
+  sortOption: 'nameAsc',
+  filter: {
+    lowestPrice: 0,
+    highestPrice: 10000,
+    lowestRating: 1,
+    highestRating: 5,
+    instock: false
+  }
+};
+
 const productReducer = (
   state: ProductContextType['state'],
   action: Action
@@ -111,12 +123,6 @@ const productReducer = (
       throw new Error('productReducer was called with an unknown action type');
     }
   }
-};
-
-const initialState: ProductContextType['state'] = {
-  products: [],
-  sortOption: 'nameAsc',
-  filter: {}
 };
 
 const ProductContextProvider = ({ children }: PropsWithChildren) => {

@@ -31,17 +31,19 @@ const Products = (props: ProductsProps) => {
       ? searchTerm
       : undefined;
   
-  useEffect(() => {
-    // Reset product filter form state when product category or search term changes
-    // A ref is used to prevent a render loop while having necessary functions as useEffect dependencies
-    dispatchRef.current({ type: 'filterReset' });
-  }, [props.productCategory, searchTerm]);
-
-  // Fetch products with Tanstack Query
+  // Parse current product category
   const productCategory =
     props.productCategory && isProductCategory(props.productCategory)
       ? props.productCategory
       : undefined;
+
+  useEffect(() => {
+    // Reset product filter form state when product category or search term changes
+    // A ref is used to prevent a render loop while having necessary functions as useEffect dependencies
+    dispatchRef.current({ type: 'filterReset' });
+  }, [productCategory, searchTerm]);
+
+  // Fetch products with Tanstack Query
 
   const productQuery = useLocation().search.substring(1);
 
