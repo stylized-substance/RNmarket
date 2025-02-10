@@ -12,7 +12,6 @@ interface ProductSortDropdownValue {
 
 const ProductSortDropdown = () => {
   const productContext = useProducts();
-  //TODO: Change URL to value corresponding to the API request that was made
   return (
     <Row className="justify-content-end text-end">
       <b>Sort products</b>

@@ -73,7 +73,7 @@ const SingleProduct = () => {
     <Container>
       <BreadCrumb className="fs-5 ms-5">
         <BreadCrumb.Item onClick={() => navigate('/')}>Home</BreadCrumb.Item>
-        <BreadCrumb.Item onClick={() => navigate('/')}>
+        <BreadCrumb.Item onClick={() => navigate('/products')}>
           Products
         </BreadCrumb.Item>
         <BreadCrumb.Item onClick={() => navigate(`/products/${data.category}`)}>

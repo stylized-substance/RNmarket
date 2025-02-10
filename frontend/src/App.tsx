@@ -48,6 +48,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
+              path="/products"
+              element={<Products productCategory="All products" />}
+            />
+            <Route
               path="/products/mobiles"
               element={<Products productCategory="Mobiles" />}
             />
@@ -61,13 +65,13 @@ const App = () => {
             />
             <Route path="/products/:id" element={<SingleProduct />} />
             <Route
-              path="/search/:searchTerm"
+              path="/products/search/:searchTerm"
               element={<Products isSearchResults={true} />}
             />
             <Route path="/admin" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route
-              path="checkout"
+              path="/checkout"
               element={<Checkout loggedOnUser={loggedOnUser} />}
             />
           </Routes>

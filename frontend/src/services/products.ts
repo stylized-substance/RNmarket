@@ -6,29 +6,27 @@ import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 const baseUrl = `${backendAddress}/api/products`;
 
 const getAll = async ({
-  productCategory,
   searchTerm,
-  filter
+  productCategory,
+  productQuery
 }: ProductQuery): Promise<Product[] | []> => {
-  let query = '';
+  let query = '?';
 
   if (searchTerm) {
-    query = `search=${searchTerm}&`;
+    query += `search=${searchTerm}&`;
   }
 
   if (productCategory) {
-    query = `category=${productCategory}&`;
+    query += `category=${productCategory}&`;
   }
 
-  if (filter) {
-    query += Object.entries(filter)
-      .map((property) => `${property[0]}=${property[1]}`)
-      .join('&');
+  if (productQuery) {
+    query += productQuery;
   }
 
   try {
     const response = await axios.get<{ products: Product[] | [] }>(
-      `${baseUrl}?${query}`
+      `${baseUrl}${query}`
     );
     return response.data.products;
   } catch (error: unknown) {

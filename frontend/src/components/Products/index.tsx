@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useProducts } from '#src/context/ProductContext.tsx';
 
 import productsService from '#src/services/products';
@@ -15,8 +14,7 @@ import ProductSortDropdown from '#src/components/Products/ProductSortDropdown';
 import ProductFilter from '#src/components/Products/ProductFilter';
 
 import { isProductCategory } from '#src/utils/typeNarrowers';
-import { ProductQuery } from '#src/types/types';
-
+import { useEffect, useRef } from 'react';
 interface ProductsProps {
   productCategory?: string;
   isSearchResults?: boolean;
@@ -26,36 +24,36 @@ const Products = (props: ProductsProps) => {
   const productContext = useProducts();
   const dispatchRef = useRef(productContext.dispatch);
 
+  // Read product search term from current URI and parse if rendering product search results
+  let { searchTerm } = useParams();
+  searchTerm =
+    props.isSearchResults && searchTerm && isString(searchTerm)
+      ? searchTerm
+      : undefined;
+  
   useEffect(() => {
+    // Reset product filter form state when product category or search term changes
     // A ref is used to prevent a render loop while having necessary functions as useEffect dependencies
     dispatchRef.current({ type: 'filterReset' });
-  }, [props.productCategory]);
-
-  // Read product search term from current URI
-  const { searchTerm } = useParams();
+  }, [props.productCategory, searchTerm]);
 
   // Fetch products with Tanstack Query
-  let productQuery: ProductQuery = {};
+  const productCategory =
+    props.productCategory && isProductCategory(props.productCategory)
+      ? props.productCategory
+      : undefined;
 
-  if (props.isSearchResults && isString(searchTerm)) {
-    productQuery = {
-      searchTerm: searchTerm
-    };
-  }
+  const productQuery = useLocation().search.substring(1);
 
-  if (props.productCategory && isProductCategory(props.productCategory)) {
-    productQuery = {
-      productCategory: props.productCategory
-    };
-  }
-
-  productQuery.filter = productContext.state.filter;
-
-  // Refetch query when product filter, category or search term changes
+  // Refetch query when product search term, category or filter query changes
   const { isPending, isError, error } = useQuery({
-    queryKey: ['products', productQuery],
+    queryKey: ['products', searchTerm, productCategory, productQuery],
     queryFn: async () => {
-      const productsFromBackend = await productsService.getAll(productQuery);
+      const productsFromBackend = await productsService.getAll({
+        searchTerm,
+        productCategory,
+        productQuery
+      });
       productContext.dispatch({
         type: 'added',
         payload: productsFromBackend
@@ -70,9 +68,7 @@ const Products = (props: ProductsProps) => {
       <Col>
         <Row className="m-4">
           {props.isSearchResults ? (
-            <h1 className="text-center">
-              Search results for: {searchTerm}
-            </h1>
+            <h1 className="text-center">Search results for: {searchTerm}</h1>
           ) : (
             <h1 className="text-center">{props.productCategory}</h1>
           )}

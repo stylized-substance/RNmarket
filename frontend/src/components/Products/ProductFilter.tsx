@@ -1,5 +1,5 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useProducts } from '#src/context/ProductContext.tsx';
-import { useQueryClient } from '@tanstack/react-query';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -12,20 +12,27 @@ import * as yup from 'yup';
 import { ProductFilterState } from '#src/types/types.ts';
 
 const ProductFilter = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const productContext = useProducts();
-  const queryClient = useQueryClient();
 
-  const handleSubmit = async (formValues: ProductFilterState) => {
+  const handleSubmit = (formValues: ProductFilterState) => {
+    // Construct URL query string from form values
+    const query = `?${Object.entries(formValues)
+      .map((property) => `${property[0]}=${property[1]}`)
+      .join('&')}`;
+    
+
+    // Update product filter state
     productContext.dispatch({
       type: 'filtered',
       payload: {
         filter: formValues
       }
     });
-    await queryClient.invalidateQueries({ queryKey: ['products'] });
-  };
 
-  //TODO: Change URL to value corresponding to the API request that was made
+    navigate(`${location.pathname}${query}`);
+  };
 
   const formSchema = yup.object().shape({
     lowestPrice: yup

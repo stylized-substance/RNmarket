@@ -139,7 +139,7 @@ export interface ProductFilterState {
 }
 
 export interface ProductQuery {
-  productCategory?: ProductCategory;
   searchTerm?: string;
-  filter?: ProductFilterState;
+  productCategory?: ProductCategory;
+  productQuery?: string;
 }
