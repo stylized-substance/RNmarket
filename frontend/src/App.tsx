@@ -64,10 +64,6 @@ const App = () => {
               element={<Products productCategory="Laptops" />}
             />
             <Route path="/products/:id" element={<SingleProduct />} />
-            <Route
-              path="/products/search/:searchTerm"
-              element={<Products isSearchResults={true} />}
-            />
             <Route path="/admin" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route

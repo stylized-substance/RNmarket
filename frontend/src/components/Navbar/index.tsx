@@ -43,7 +43,7 @@ const NavBar = (props: NavBarProps) => {
   const handleSearchSubmit = () => {
     event?.preventDefault();
     setSearchTerm('');
-    navigate(`/products/search/${searchTerm}`);
+    navigate(`/products?search=${searchTerm}`);
   };
 
   return (

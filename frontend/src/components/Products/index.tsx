@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useProducts } from '#src/context/ProductContext.tsx';
 
 import productsService from '#src/services/products';
-import { isString } from '#src/utils/typeNarrowers';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -17,19 +16,15 @@ import { isProductCategory } from '#src/utils/typeNarrowers';
 import { useEffect, useRef } from 'react';
 interface ProductsProps {
   productCategory?: string;
-  isSearchResults?: boolean;
 }
 
 const Products = (props: ProductsProps) => {
   const productContext = useProducts();
   const dispatchRef = useRef(productContext.dispatch);
 
-  // Read product search term from current URI and parse if rendering product search results
-  let { searchTerm } = useParams();
-  searchTerm =
-    props.isSearchResults && searchTerm && isString(searchTerm)
-      ? searchTerm
-      : undefined;
+  // Parse search term and product filter query from URL
+  const [ searchTerm ] = new URLSearchParams(useLocation().search).getAll('search');
+  const urlFilter = useLocation().search.substring(1)
 
   // Parse current product category
   const productCategory =
@@ -44,17 +39,16 @@ const Products = (props: ProductsProps) => {
   }, [productCategory, searchTerm]);
 
   // Fetch products with Tanstack Query
-
-  const productQuery = useLocation().search.substring(1);
+  const filterQuery = searchTerm ? undefined : urlFilter;
 
   // Refetch query when product search term, category or filter query changes
   const { isPending, isError, error } = useQuery({
-    queryKey: ['products', searchTerm, productCategory, productQuery],
+    queryKey: ['products', searchTerm, productCategory, filterQuery],
     queryFn: async () => {
       const productsFromBackend = await productsService.getAll({
         searchTerm,
         productCategory,
-        productQuery
+        filterQuery
       });
       productContext.dispatch({
         type: 'added',
@@ -69,7 +63,7 @@ const Products = (props: ProductsProps) => {
     <Col id="products-page" className="ms-4 me-4">
       <Col className="flex-grow-0 mt-5">
         <Row className="m-4">
-          {props.isSearchResults ? (
+          {searchTerm ? (
             <h1 className="text-center">Search results for: {searchTerm}</h1>
           ) : (
             <h1 className="text-center">{props.productCategory}</h1>

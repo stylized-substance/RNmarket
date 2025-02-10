@@ -8,7 +8,7 @@ const baseUrl = `${backendAddress}/api/products`;
 const getAll = async ({
   searchTerm,
   productCategory,
-  productQuery
+  filterQuery
 }: ProductQuery): Promise<Product[] | []> => {
   let query = '?';
 
@@ -20,8 +20,8 @@ const getAll = async ({
     query += `category=${productCategory}&`;
   }
 
-  if (productQuery) {
-    query += productQuery;
+  if (filterQuery) {
+    query += filterQuery;
   }
 
   try {

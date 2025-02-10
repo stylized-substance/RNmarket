@@ -141,5 +141,5 @@ export interface ProductFilterState {
 export interface ProductQuery {
   searchTerm?: string;
   productCategory?: ProductCategory;
-  productQuery?: string;
+  filterQuery?: string;
 }
