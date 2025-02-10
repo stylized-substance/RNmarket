@@ -30,7 +30,7 @@ const Products = (props: ProductsProps) => {
     props.isSearchResults && searchTerm && isString(searchTerm)
       ? searchTerm
       : undefined;
-  
+
   // Parse current product category
   const productCategory =
     props.productCategory && isProductCategory(props.productCategory)
@@ -66,8 +66,8 @@ const Products = (props: ProductsProps) => {
   });
 
   return (
-    <>
-      <Col className="flex-grow-0 mt-4">
+    <Col id="products-page" className="ms-4 me-4">
+      <Col className="flex-grow-0 mt-5">
         <Row className="m-4">
           {props.isSearchResults ? (
             <h1 className="text-center">Search results for: {searchTerm}</h1>
@@ -96,7 +96,7 @@ const Products = (props: ProductsProps) => {
           )}
         </Col>
       </Row>
-    </>
+    </Col>
   );
 };
 
