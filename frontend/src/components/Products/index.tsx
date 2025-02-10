@@ -67,7 +67,7 @@ const Products = (props: ProductsProps) => {
 
   return (
     <>
-      <Col>
+      <Col className="flex-grow-0 mt-4">
         <Row className="m-4">
           {props.isSearchResults ? (
             <h1 className="text-center">Search results for: {searchTerm}</h1>
