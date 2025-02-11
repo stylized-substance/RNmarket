@@ -45,7 +45,6 @@ a {
   .navbar-loginform-form-control {
     color: black;
     background-color: white;
-    width: 400px;
   }
 
   .navbar-loginform-form-control::placeholder {

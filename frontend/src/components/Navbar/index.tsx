@@ -47,55 +47,67 @@ const NavBar = (props: NavBarProps) => {
   };
 
   return (
-    <Navbar expand="lg" bg="dark" data-bs-theme="dark" className="ps-4 pe-4">
-      <Navbar.Brand
-        as="span"
-        style={{ cursor: 'pointer' }}
-        id="navbar-brand"
-        onClick={() => navigate('/')}
-        className="fs-4"
-      >
-        <b>RNmarket</b>
-      </Navbar.Brand>
-      <Navbar.Collapse
-        id="basic-navbar-nav"
-        className="justify-content-between"
-      >
-        <Nav className="fs-5">
-          <Nav.Link onClick={() => navigate('/')} className="text-light">
-            Home
-          </Nav.Link>
-          <NavDropdown
-            title="Products"
-            id="navbar-dropdown-title"
-            onMouseEnter={() => setProductsDropdownOpen(true)}
-            onMouseLeave={() => setProductsDropdownOpen(false)}
-            show={productsDropdownOpen}
+    <Navbar
+      expand="lg"
+      bg="dark"
+      data-bs-theme="dark"
+      className="ps-4 pe-4 justify-content-between"
+    >
+      <Row id="brand-and-dropdown-row">
+        <Col>
+          <Navbar.Brand
+            as="span"
+            style={{ cursor: 'pointer' }}
+            id="navbar-brand"
+            onClick={() => navigate('/')}
+            className="d-flex flex-column fs-4 justify-content-center"
           >
-            <NavDropdown.Item
-              onClick={() => navigate('/products/mobiles')}
-              className="text-light"
+            <b>RNmarket</b>
+          </Navbar.Brand>
+        </Col>
+        <Col>
+          <Nav className="fs-5">
+            <Nav.Link onClick={() => navigate('/')} className="text-light">
+              Home
+            </Nav.Link>
+            <NavDropdown
+              title="Products"
+              id="navbar-dropdown-title"
+              onMouseEnter={() => setProductsDropdownOpen(true)}
+              onMouseLeave={() => setProductsDropdownOpen(false)}
+              show={productsDropdownOpen}
             >
-              Mobile phones
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item
-              onClick={() => navigate('/products/furniture')}
-              className="text-light"
-            >
-              Furniture
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item
-              onClick={() => navigate('/products/laptops')}
-              className="text-light"
-            >
-              Laptops
-            </NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
-        {/*TODO: Remove hardcoded pixel values from app CSS*/}
-        <Form style={{ width: '600px' }} onSubmit={handleSearchSubmit}>
+              <NavDropdown.Item
+                onClick={() => navigate('/products/mobiles')}
+                className="text-light"
+              >
+                Mobile phones
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                onClick={() => navigate('/products/furniture')}
+                className="text-light"
+              >
+                Furniture
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                onClick={() => navigate('/products/laptops')}
+                className="text-light"
+              >
+                Laptops
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Col>
+      </Row>
+      {/*TODO: Remove hardcoded pixel values from app CSS*/}
+      <Row id="search-form-row">
+        <Form
+          id="search-form"
+          style={{ width: '600px' }}
+          onSubmit={handleSearchSubmit}
+        >
           <InputGroup>
             <Form.Control
               type="search"
@@ -109,90 +121,82 @@ const NavBar = (props: NavBarProps) => {
             </Button>
           </InputGroup>
         </Form>
-        <Row>
-          {props.loggedOnUser && props.loggedOnUser.isadmin && (
-            <Col>
-              <Button
-                onClick={() => navigate('/admin')}
-                className="custom-button"
-              >
-                Admin <i className="bi bi-gear ms-2"></i>
-              </Button>
-            </Col>
-          )}
+      </Row>
+      <Row id="button-row">
+        {props.loggedOnUser && props.loggedOnUser.isadmin && (
           <Col>
-            <Dropdown
-              align="end"
-              show={loginDropdownOpen}
-              onToggle={() => {
-                setCartDropdownOpen(false);
-                setLoginDropdownOpen(!loginDropdownOpen);
-                setShowRegisterMenu(false);
-              }}
+            <Button
+              onClick={() => navigate('/admin')}
+              className="custom-button"
             >
-              {!props.loggedOnUser ? (
-                <Dropdown.Toggle className="custom-button">
-                  Login <i className="bi bi-box-arrow-in-right ms-2"></i>
-                </Dropdown.Toggle>
-              ) : (
-                <Button onClick={logout} className="custom-button">
-                  Logout <i className="bi bi-box-arrow-left ms-2"></i>
-                </Button>
-              )}
-
-              <Dropdown.Menu
-                style={{ marginTop: '11px' }}
-                className="overflow-y-auto"
-              >
-                <Container className="d-flex">
-                  <Col></Col>
-                  <Row className="d-flex justify-content-center mt-1"></Row>
-                  <Col className="d-flex justify-content-end me-2 mt-2">
-                    <CloseButton
-                      onClick={() => {
-                        setLoginDropdownOpen(false);
-                        setShowRegisterMenu(false);
-                      }}
-                    />
-                  </Col>
-                </Container>
-                {showRegisterMenu ? (
-                  <RegisterMenu setLoginDropdownOpen={setLoginDropdownOpen} />
-                ) : (
-                  <LoginMenu
-                    setShowRegisterMenu={setShowRegisterMenu}
-                    setLoginDropdownOpen={setLoginDropdownOpen}
-                  />
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
+              Admin <i className="bi bi-gear ms-2"></i>
+            </Button>
           </Col>
-          <Col>
-            <Dropdown
-              align="end"
-              show={cartDropdownOpen}
-              onToggle={() => {
-                setLoginDropdownOpen(false);
-                setCartDropdownOpen(!cartDropdownOpen);
-              }}
-            >
-              <Dropdown.Toggle className="custom-button position-relative me-2">
-                Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
-                <Badge
-                  pill
-                  bg="danger"
-                  className="position-absolute top-0 start-100 translate-middle"
-                >
-                  {cartItems.length}
-                </Badge>
+        )}
+        <Col>
+          <Dropdown
+            align="end"
+            show={loginDropdownOpen}
+            onToggle={() => {
+              setCartDropdownOpen(false);
+              setLoginDropdownOpen(!loginDropdownOpen);
+              setShowRegisterMenu(false);
+            }}
+          >
+            {!props.loggedOnUser ? (
+              <Dropdown.Toggle className="custom-button">
+                Login <i className="bi bi-box-arrow-in-right ms-2"></i>
               </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-2">
-                <CartMenu />
-              </Dropdown.Menu>
-            </Dropdown>
-          </Col>
-        </Row>
-      </Navbar.Collapse>
+            ) : (
+              <Button onClick={logout} className="custom-button">
+                Logout <i className="bi bi-box-arrow-left ms-2"></i>
+              </Button>
+            )}
+            <Dropdown.Menu id="login-dropdown">
+              <Row className="justify-content-end me-3 mt-2">
+                <CloseButton
+                  onClick={() => {
+                    setLoginDropdownOpen(false);
+                    setShowRegisterMenu(false);
+                  }}
+                />
+              </Row>
+              {showRegisterMenu ? (
+                <RegisterMenu setLoginDropdownOpen={setLoginDropdownOpen} />
+              ) : (
+                <LoginMenu
+                  setShowRegisterMenu={setShowRegisterMenu}
+                  setLoginDropdownOpen={setLoginDropdownOpen}
+                />
+              )}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+        <Col>
+          <Dropdown
+            align="end"
+            show={cartDropdownOpen}
+            onToggle={() => {
+              setLoginDropdownOpen(false);
+              setCartDropdownOpen(!cartDropdownOpen);
+            }}
+          >
+            <Dropdown.Toggle className="custom-button position-relative me-2">
+              Cart <i className="bi bi-cart4 ms-2 ms-2"></i>
+              <Badge
+                pill
+                bg="danger"
+                className="position-absolute top-0 start-100 translate-middle"
+              >
+                {cartItems.length}
+              </Badge>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-2">
+              <CartMenu />
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+      </Row>
     </Navbar>
   );
 };

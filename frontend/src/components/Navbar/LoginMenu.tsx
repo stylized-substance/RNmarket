@@ -4,6 +4,7 @@ import * as yup from 'yup';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -46,11 +47,17 @@ const LoginMenu = ({
       >
         {({ handleSubmit, handleChange, values, touched, errors }) => (
           <Form
+            id="login-form"
             noValidate
             onSubmit={handleSubmit}
-            className="d-flex flex-column ps-3 pe-3 mt-3"
+            className="d-flex flex-column ms-3 me-3 mt-3"
+            style={{
+              height: '50vh',
+              width: '40vh',
+              scrollbarWidth: 'thin'
+            }}
           >
-            <Form.Group controlId="loginform">
+            <Form.Group id="loginform-group" controlId="loginform">
               <Form.Label>Email address</Form.Label>
               <InputGroup hasValidation>
                 <Form.Control
@@ -65,8 +72,10 @@ const LoginMenu = ({
                 <Form.Control.Feedback type="invalid">
                   {errors.username}
                 </Form.Control.Feedback>
-                <Form.Label className="mt-3">Password</Form.Label>
               </InputGroup>
+              <Form.Label id="form-label-password" className="mt-3">
+                Password
+              </Form.Label>
               <InputGroup hasValidation>
                 <Form.Control
                   type="password"
