@@ -45,32 +45,34 @@ const App = () => {
           <Row id="navbar-row">
             <NavBar loggedOnUser={loggedOnUser} />
           </Row>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/products"
-              element={<Products productCategory="All products" />}
-            />
-            <Route
-              path="/products/mobiles"
-              element={<Products productCategory="Mobiles" />}
-            />
-            <Route
-              path="/products/furniture"
-              element={<Products productCategory="Furniture" />}
-            />
-            <Route
-              path="/products/laptops"
-              element={<Products productCategory="Laptops" />}
-            />
-            <Route path="/products/:id" element={<SingleProduct />} />
-            <Route path="/admin" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route
-              path="/checkout"
-              element={<Checkout loggedOnUser={loggedOnUser} />}
-            />
-          </Routes>
+          <Row id="content-row" className="ms-4 me-4">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/products"
+                element={<Products productCategory="All products" />}
+              />
+              <Route
+                path="/products/mobiles"
+                element={<Products productCategory="Mobiles" />}
+              />
+              <Route
+                path="/products/furniture"
+                element={<Products productCategory="Furniture" />}
+              />
+              <Route
+                path="/products/laptops"
+                element={<Products productCategory="Laptops" />}
+              />
+              <Route path="/products/:id" element={<SingleProduct />} />
+              <Route path="/admin" element={<Home />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route
+                path="/checkout"
+                element={<Checkout loggedOnUser={loggedOnUser} />}
+              />
+            </Routes>
+          </Row>
         </BrowserRouter>
         <footer
           style={{

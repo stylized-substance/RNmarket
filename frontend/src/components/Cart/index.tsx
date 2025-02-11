@@ -12,17 +12,16 @@ const Cart = () => {
   // Import cart context
   const cart = useCart();
   const cartItems = cart.state;
-
   const navigate = useNavigate();
 
   return (
     <>
-      <Row style={{ marginBottom: '100px' }} className="justify-content-center">
+      <Row className="justify-content-center mt-5 mb-5">
         <Col>
           <h1 className="text-center">Shopping cart</h1>
         </Col>
       </Row>
-      <Row className="align-items-start">
+      <Row className="align-items-start mt-5">
         {cartItems.length > 0 ? (
           <Col className="">
             <Stack gap={5} className="me-auto">

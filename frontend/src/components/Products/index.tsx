@@ -60,7 +60,7 @@ const Products = (props: ProductsProps) => {
   });
 
   return (
-    <Col id="products-page" className="ms-4 me-4">
+    <Col id="products-page">
       <Col className="flex-grow-0 mt-5">
         <Row className="m-4">
           {searchTerm ? (

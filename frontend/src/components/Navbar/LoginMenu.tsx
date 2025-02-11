@@ -89,12 +89,12 @@ const LoginMenu = ({
                 </Row>
               </Container>
             </Form.Group>
-            <a
+            <Button
               onClick={() => setShowRegisterMenu(true)}
-              className="text-center m-1"
+              className="text-center custom-button mb-2"
             >
               Register
-            </a>
+            </Button>
           </Form>
         )}
       </Formik>

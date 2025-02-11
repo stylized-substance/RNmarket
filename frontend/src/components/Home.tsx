@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <Col className="d-flex flex-column justify-content-center">
+    <Col className="d-flex flex-column justify-content-center mt-5">
       <h1 className="text-center pb-5">Hello, select a product category</h1>
       <Stack direction="horizontal" gap={3} className="justify-content-center">
         <Link to={'/products/mobiles'}>
