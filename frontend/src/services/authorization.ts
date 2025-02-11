@@ -9,9 +9,7 @@ import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/authorization`;
 
-const login = async (
-  credentials: LoginCredentials
-): Promise<LoginPayload> => {
+const login = async (credentials: LoginCredentials): Promise<LoginPayload> => {
   try {
     const response = await axios.post<{ payload: LoginPayload }>(
       `${baseUrl}/login`,

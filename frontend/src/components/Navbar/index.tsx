@@ -101,10 +101,7 @@ const NavBar = (props: NavBarProps) => {
         </Col>
       </Row>
       <Row id="search-form-row" className="w-25">
-        <Form
-          id="search-form"
-          onSubmit={handleSearchSubmit}
-        >
+        <Form id="search-form" onSubmit={handleSearchSubmit}>
           <InputGroup>
             <Form.Control
               type="search"

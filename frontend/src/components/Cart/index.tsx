@@ -30,9 +30,7 @@ const Cart = () => {
           </Col>
         ) : (
           <Col md={{ offset: 2 }} className="text-center">
-            <h3>
-              Cart is empty
-            </h3>
+            <h3>Cart is empty</h3>
           </Col>
         )}
         <Col className="bg-light" lg={2}>

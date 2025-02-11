@@ -44,14 +44,14 @@ const Checkout = (props: CheckOutProps) => {
   const cart = useCart();
   const cartItems = cart.state;
   const { changeToast } = useToast();
-  
+
   const [accessToken, setAccessToken] = useState<string>('');
-  
+
   const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
     id: item.product.id,
     quantity: item.quantity
   }));
-  
+
   const cartItemsForBackendRef = useRef(cartItemsForBackend);
 
   const temporaryAccessTokenMutation = useMutation({
@@ -63,7 +63,7 @@ const Checkout = (props: CheckOutProps) => {
       setAccessToken(data);
     }
   });
-  
+
   const temporaryAccessTokenMutationRef = useRef(temporaryAccessTokenMutation);
 
   const orderMutation = useMutation({
@@ -95,7 +95,9 @@ const Checkout = (props: CheckOutProps) => {
     if (props.loggedOnUser) {
       setAccessToken(props.loggedOnUser.accessToken);
     } else {
-      temporaryAccessTokenMutationRef.current.mutate(cartItemsForBackendRef.current)
+      temporaryAccessTokenMutationRef.current.mutate(
+        cartItemsForBackendRef.current
+      );
     }
   }, [props.loggedOnUser]);
 
@@ -280,10 +282,7 @@ const Checkout = (props: CheckOutProps) => {
                 </Formik>
               </Col>
             </Col>
-            <Col
-              className="d-flex flex-column bg-light ms-4 p-3"
-              lg={4}
-            >
+            <Col className="d-flex flex-column bg-light ms-4 p-3" lg={4}>
               <h5 className="text-center pb-4">Ordering following items</h5>
               <Row className="text-center pb-2">
                 <Col>

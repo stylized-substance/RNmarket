@@ -75,11 +75,7 @@ const CartProducts = () => {
               >
                 -
               </Button>
-              <Badge
-                bg="light"
-                text="dark"
-                className="fs-6"
-              >
+              <Badge bg="light" text="dark" className="fs-6">
                 {item.quantity}
               </Badge>
               <Button

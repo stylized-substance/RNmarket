@@ -21,7 +21,6 @@ const ProductFilter = () => {
     const query = `?${Object.entries(formValues)
       .map((property) => `${property[0]}=${property[1]}`)
       .join('&')}`;
-    
 
     // Update product filter state
     productContext.dispatch({
