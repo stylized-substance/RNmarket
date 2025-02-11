@@ -1,10 +1,32 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 
-import { NewOrder, OrderInDb } from '#src/types/types.ts';
+import { LoginPayload, NewOrder, OrderInDb } from '#src/types/types.ts';
 import { isString, isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/orders`;
+
+const getAll = async (
+  loggedOnUser?: LoginPayload
+): Promise<OrderInDb[] | []> => {
+  if (!loggedOnUser?.isadmin) {
+    throw new Error('Admin not logged in');
+  }
+  try {
+    const response = await axios.get<{ orders: OrderInDb[] }>(baseUrl, {
+      headers: {
+        Authorization: `Bearer ${loggedOnUser.accessToken}`
+      }
+    });
+    return response.data.orders;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error('Unknown error happened while getting orders');
+    }
+  }
+};
 
 const postNew = async (
   orderData: NewOrder,
@@ -35,4 +57,4 @@ const postNew = async (
   }
 };
 
-export default { postNew };
+export default { postNew, getAll };

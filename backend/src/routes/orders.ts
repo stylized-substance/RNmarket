@@ -18,10 +18,6 @@ router.get('/', tokenExtractor, async (req: Request, res: Response) => {
     include: ProductModel
   });
 
-  if (orders.length === 0) {
-    return res.status(400).json({ Message: 'No orders found in database' });
-  }
-
   return res.json({ orders });
 });
 

@@ -10,6 +10,7 @@ import Products from '#src/components/Products/index.tsx';
 import SingleProduct from '#src/components/Products/SingleProduct.tsx';
 import Cart from '#src/components/Cart/index.tsx';
 import Checkout from '#src/components/Checkout';
+import Admin from '#src/components/Admin';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -65,7 +66,7 @@ const App = () => {
                 element={<Products productCategory="Laptops" />}
               />
               <Route path="/products/:id" element={<SingleProduct />} />
-              <Route path="/admin" element={<Home />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="/cart" element={<Cart />} />
               <Route
                 path="/checkout"

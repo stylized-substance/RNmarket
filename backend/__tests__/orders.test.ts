@@ -105,25 +105,6 @@ describe('GET requests', () => {
       assertValidType('product', product);
     }
   });
-  test('GET - Request fails if there are no orders in database', async () => {
-    // Remove all orders from database
-    const orders = await OrderModel.findAll();
-    for (const order of orders) {
-      // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
-      await order.setProducts([]);
-      await order.destroy();
-    }
-
-    // Get orders from database
-    const response = await api
-      .get('/api/orders')
-      .set('Authorization', `Bearer ${adminAccessToken}`);
-
-    assert400Response(response);
-    expect(response.body).toStrictEqual({
-      Message: 'No orders found in database'
-    });
-  });
   test('GET - Request fails for regular user', async () => {
     const response = await api
       .get('/api/orders')
