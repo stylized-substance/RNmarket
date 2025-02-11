@@ -97,3 +97,4 @@
 | 04.02.2025 | 2 | Worked on product context, filtering, backend | 201
 | 05.02.2025 | 2 | Worked on filter reset, Home component, CSS | 203
 | 06.02.2025 | 2 | Worked on styles, refactored services | 205
+| 10.02.2025 | 3 | Worked on styles, refactored app logic | 208
