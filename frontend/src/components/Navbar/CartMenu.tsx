@@ -82,7 +82,7 @@ const CartMenu = () => {
               )}
             </Col>
             <Col id="title-column">
-              <Row className="">
+              <Row>
                 <Link
                   to={`/products/${item.product.id}`}
                   className="d-flex text-light"

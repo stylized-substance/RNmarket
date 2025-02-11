@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '#src/context/CartContext.tsx';
 
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -25,10 +24,15 @@ const ImageCarousel = ({ images }: { images: string[] }) => {
   );
 
   return (
-    <Carousel interval={null} data-bs-theme="dark" className="imagecarousel">
+    <Carousel
+      id="image-carousel"
+      interval={null}
+      data-bs-theme="dark"
+      className="d-flex align-items-center justify-content-center h-auto w-auto mt-5"
+    >
       {imageUrls.map((imageUrl) => (
         <Carousel.Item key={imageUrl}>
-          <div className="imagecarousel-imagecontainer">
+          <div className="d-flex justify-content-center">
             <img src={imageUrl} />
           </div>
         </Carousel.Item>
@@ -70,20 +74,24 @@ const SingleProduct = () => {
   }
 
   return (
-    <Container>
-      <BreadCrumb className="fs-5 ms-5">
-        <BreadCrumb.Item onClick={() => navigate('/')}>Home</BreadCrumb.Item>
-        <BreadCrumb.Item onClick={() => navigate('/products')}>
-          Products
-        </BreadCrumb.Item>
-        <BreadCrumb.Item onClick={() => navigate(`/products/${data.category}`)}>
-          {data.category}
-        </BreadCrumb.Item>
-      </BreadCrumb>
+    <>
       <Row>
-        <Col>{data.imgs && <ImageCarousel images={data.imgs} />}</Col>
-        <Col className="product-info">
-          <h1>{data.title}</h1>
+        <BreadCrumb className="fs-5 ms-5 mt-5">
+          <BreadCrumb.Item onClick={() => navigate('/')}>Home</BreadCrumb.Item>
+          <BreadCrumb.Item onClick={() => navigate('/products')}>
+            Products
+          </BreadCrumb.Item>
+          <BreadCrumb.Item
+            onClick={() => navigate(`/products/${data.category}`)}
+          >
+            {data.category}
+          </BreadCrumb.Item>
+        </BreadCrumb>
+      </Row>
+      <Row className="justify-content-between">
+        <Col lg={4}>{data.imgs && <ImageCarousel images={data.imgs} />}</Col>
+        <Col id="product-info" lg={6} className="d-flex flex-column mt-5 ">
+          <h1 className="w-75">{data.title}</h1>
           <p style={{ color: 'coral' }} className="fs-1">
             {padPrice(data.price)}€
           </p>
@@ -105,15 +113,17 @@ const SingleProduct = () => {
                 payload: { product: data, quantity: 1 }
               })
             }
-            className="custom-button"
+            className="custom-button w-25"
           >
             Add to cart
           </Button>
         </Col>
       </Row>
-      <Reviews productId={id} />
-      <ReviewForm productId={id} />
-    </Container>
+      <Row className="mt-5">
+        <Reviews productId={id} />
+        <ReviewForm productId={id} />
+      </Row>
+    </>
   );
 };
 

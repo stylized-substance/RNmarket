@@ -79,7 +79,6 @@ const CartProducts = () => {
                 bg="light"
                 text="dark"
                 className="fs-6"
-                style={{ width: '40px' }}
               >
                 {item.quantity}
               </Badge>

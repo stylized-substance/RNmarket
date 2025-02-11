@@ -51,20 +51,3 @@ a {
     color: black;
   }
 }
-
-.product-info {
-  margin-top: 90px;
-}
-
-.imagecarousel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 800px;
-  width: 800px;
-}
-
-.imagecarousel-imagecontainer {
-  display: flex;
-  justify-content: center;
-}

@@ -134,8 +134,8 @@ const Checkout = (props: CheckOutProps) => {
           <Row className="mb-5 text-center">
             <h1 className="mb-5 mt-5">Checkout</h1>
           </Row>
-          <Row className="mb-5">
-            <Col>
+          <Row className="mb-5 justify-content-between">
+            <Col lg={5}>
               <h2 className="mb-5">Delivery information</h2>
               <Col className="me-5">
                 <Formik<CheckoutFormValues>
@@ -281,9 +281,8 @@ const Checkout = (props: CheckOutProps) => {
               </Col>
             </Col>
             <Col
-              style={{ width: '40%' }}
               className="d-flex flex-column bg-light ms-4 p-3"
-              lg={{ span: 2 }}
+              lg={4}
             >
               <h5 className="text-center pb-4">Ordering following items</h5>
               <Row className="text-center pb-2">

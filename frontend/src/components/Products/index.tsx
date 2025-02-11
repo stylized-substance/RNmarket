@@ -23,8 +23,10 @@ const Products = (props: ProductsProps) => {
   const dispatchRef = useRef(productContext.dispatch);
 
   // Parse search term and product filter query from URL
-  const [ searchTerm ] = new URLSearchParams(useLocation().search).getAll('search');
-  const urlFilter = useLocation().search.substring(1)
+  const [searchTerm] = new URLSearchParams(useLocation().search).getAll(
+    'search'
+  );
+  const urlFilter = useLocation().search.substring(1);
 
   // Parse current product category
   const productCategory =

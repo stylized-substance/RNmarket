@@ -7,7 +7,6 @@ import LoginMenu from '#src/components/Navbar/LoginMenu';
 import RegisterMenu from '#src/components/Navbar/RegisterMenu';
 import CartMenu from '#src/components/Navbar/CartMenu';
 
-import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
 import CloseButton from 'react-bootstrap/CloseButton';
@@ -101,11 +100,9 @@ const NavBar = (props: NavBarProps) => {
           </Nav>
         </Col>
       </Row>
-      {/*TODO: Remove hardcoded pixel values from app CSS*/}
-      <Row id="search-form-row">
+      <Row id="search-form-row" className="w-25">
         <Form
           id="search-form"
-          style={{ width: '600px' }}
           onSubmit={handleSearchSubmit}
         >
           <InputGroup>

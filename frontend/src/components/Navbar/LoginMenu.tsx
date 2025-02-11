@@ -2,9 +2,6 @@ import useAuth from '#src/hooks/useAuth.ts';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -52,9 +49,7 @@ const LoginMenu = ({
             onSubmit={handleSubmit}
             className="d-flex flex-column ms-3 me-3 mt-3"
             style={{
-              height: '50vh',
-              width: '40vh',
-              scrollbarWidth: 'thin'
+              width: '30vh'
             }}
           >
             <Form.Group id="loginform-group" controlId="loginform">
@@ -90,14 +85,10 @@ const LoginMenu = ({
                   {errors.password}
                 </Form.Control.Feedback>
               </InputGroup>
-              <Container>
-                <Row>
-                  <Button type="submit" className="custom-button mt-4 mb-2">
-                    Send
-                  </Button>
-                </Row>
-              </Container>
             </Form.Group>
+            <Button type="submit" className="custom-button mt-4 mb-2">
+              Send
+            </Button>
             <Button
               onClick={() => setShowRegisterMenu(true)}
               className="text-center custom-button mb-2"

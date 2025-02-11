@@ -23,19 +23,19 @@ const Cart = () => {
       </Row>
       <Row className="align-items-start mt-5">
         {cartItems.length > 0 ? (
-          <Col className="">
+          <Col>
             <Stack gap={5} className="me-auto">
               <CartProducts />
             </Stack>
           </Col>
         ) : (
-          <Col className="">
-            <h3 className="" style={{ marginLeft: '555px' }}>
+          <Col md={{ offset: 2 }} className="text-center">
+            <h3>
               Cart is empty
             </h3>
           </Col>
         )}
-        <Col className="bg-light" lg={{ span: 2 }}>
+        <Col className="bg-light" lg={2}>
           <Stack className="p-4" gap={2}>
             <h5 className="text-center">Total price:</h5>
             <h5 className="text-center">{cartTotalPrice(cartItems)}€</h5>

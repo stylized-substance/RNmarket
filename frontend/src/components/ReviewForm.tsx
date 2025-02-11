@@ -88,7 +88,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
 
   return (
     <>
-      <h2>Leave a review</h2>
+      <h2 className="mb-4">Leave a review</h2>
       <Formik<ReviewFormValues>
         validationSchema={formSchema}
         onSubmit={(values) => handleSubmit(values)}
@@ -112,7 +112,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                   value={values.title}
                   onChange={handleChange}
                   isInvalid={touched.title && !!errors.title}
-                  className="mb-3"
+                  className="mb-3 flex-grow-0 w-50"
                 ></Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.title}
@@ -123,13 +123,13 @@ const ReviewForm = ({ productId }: { productId: string }) => {
               <Form.Label>
                 <b>Rating</b>
               </Form.Label>
-              <InputGroup hasValidation style={{ width: '80px' }}>
+              <InputGroup hasValidation>
                 <Form.Select
                   name="rating"
                   value={values.rating}
                   onChange={handleChange}
                   isInvalid={touched.rating && !!errors.rating}
-                  className="mb-3"
+                  className="mb-3 flex-grow-0 w-auto"
                 >
                   <option>1</option>
                   <option>2</option>
@@ -149,6 +149,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                   value={values.content}
                   onChange={handleChange}
                   isInvalid={touched.content && !!errors.content}
+                  className="flex-grow-0 w-50"
                 ></Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.content}

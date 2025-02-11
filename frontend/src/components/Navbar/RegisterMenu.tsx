@@ -5,8 +5,6 @@ import * as yup from 'yup';
 import usersService from '#src/services/users';
 
 import InputGroup from 'react-bootstrap/InputGroup';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -70,6 +68,9 @@ const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
             noValidate
             onSubmit={handleSubmit}
             className="d-flex flex-column ps-3 pe-3 mt-3"
+            style={{
+              width: '30vh'
+            }}
           >
             <Form.Group controlId="registerform">
               <Form.Label>Username</Form.Label>
@@ -117,14 +118,10 @@ const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
                   {errors.password}
                 </Form.Control.Feedback>
               </InputGroup>
-              <Container>
-                <Row>
-                  <Button type="submit" className="custom-button mt-4 mb-2">
-                    Send
-                  </Button>
-                </Row>
-              </Container>
             </Form.Group>
+            <Button type="submit" className="custom-button mt-4 mb-2">
+              Send
+            </Button>
           </Form>
         )}
       </Formik>
