@@ -12,6 +12,7 @@ const useAuth = () => {
   // Read logged on user data from localStorage
   const readUserFromLocalStorage = (): LoginPayload | null => {
     const userInStorage = localStorage.getItem('loggedOnUser');
+    console.log('userinstorage', userInStorage)
     if (!userInStorage) {
       return null;
     }

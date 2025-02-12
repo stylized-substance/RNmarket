@@ -46,6 +46,7 @@ const postNew = async (
         }
       }
     );
+    console.log(response.data)
 
     return response.data.orderInDb;
   } catch (error: unknown) {

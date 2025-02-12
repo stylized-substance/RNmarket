@@ -9,11 +9,13 @@ import ordersService from '#src/services/orders';
 const Admin = () => {
   const { loggedOnUser } = useAuth();
 
+  //TODO: fix loggedOnUser not being defined on first render
   // Fetch orders with Tanstack Query
   const { data: orders } = useQuery({
     queryKey: ['orders'],
     queryFn: async () => {
       if (!loggedOnUser) {
+        console.error("No user logged in")
         return null;
       }
 
@@ -24,9 +26,6 @@ const Admin = () => {
   if (!loggedOnUser?.isadmin) {
     return <h1 className="text-center mt-5">Admin not logged in</h1>;
   }
-
-  console.log(loggedOnUser?.accessToken);
-  console.log(orders);
 
   return (
     <>
