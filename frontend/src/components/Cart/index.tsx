@@ -11,8 +11,8 @@ import CartProducts from '#src/components/Cart/CartProducts';
 const Cart = () => {
   // Import cart context
   const cart = useCart();
-  const cartItems = cart.state;
   const navigate = useNavigate();
+  const cartItems = cart.state;
 
   return (
     <>

@@ -7,6 +7,7 @@ import { useCart } from '#src/context/CartContext.tsx';
 import { useEffect } from 'react';
 import { useToast } from '#src/context/ToastContext';
 import { useMutation } from '@tanstack/react-query';
+import useAuth from '#src/hooks/useAuth.ts';
 
 import { countries } from '#src/data/countries.json';
 
@@ -27,10 +28,6 @@ import {
   NewOrder
 } from '#src/types/types.ts';
 
-interface CheckOutProps {
-  loggedOnUser: LoginPayload | null | undefined;
-}
-
 interface CheckoutFormValues {
   email: string;
   name: string;
@@ -40,66 +37,80 @@ interface CheckoutFormValues {
   country: string;
 }
 
-const Checkout = (props: CheckOutProps) => {
+const Checkout = () => {
   const cart = useCart();
   const cartItems = cart.state;
   const { changeToast } = useToast();
+  const { loggedOnUser, refreshAccessToken } = useAuth();
 
-  const [accessToken, setAccessToken] = useState<string>('');
+  const [temporaryAccessToken, setTemporaryAccessToken] = useState<
+    string | undefined
+  >(undefined);
 
   const cartItemsForBackend: CartItemForBackend[] = cartItems.map((item) => ({
     id: item.product.id,
     quantity: item.quantity
   }));
 
-  const cartItemsForBackendRef = useRef(cartItemsForBackend);
-
+  // Get temporary access token from backend if no user is logged in. Used for making orders without logging in.
   const temporaryAccessTokenMutation = useMutation({
-    // Get temporary access token from backend if no user is logged in. Used for making orders without logging in.
     mutationFn: async (products: CartItemForBackend[]) => {
       return await authorizationService.getTemporaryToken(products);
     },
     onSuccess: (data) => {
-      setAccessToken(data);
+      setTemporaryAccessToken(data);
     }
   });
 
+  // Refs are used to prevent a render loop while having necessary functions as useEffect dependencies
+  const cartItemsForBackendRef = useRef(cartItemsForBackend);
   const temporaryAccessTokenMutationRef = useRef(temporaryAccessTokenMutation);
+
+  useEffect(() => {
+    if (!loggedOnUser) {
+      temporaryAccessTokenMutationRef.current.mutate(
+        cartItemsForBackendRef.current
+      );
+    }
+  }, [loggedOnUser]);
+
+  const refreshToken = async (loggedOnUser: LoginPayload) => {
+    return await refreshAccessToken.mutateAsync(loggedOnUser);
+  };
 
   const orderMutation = useMutation({
     // Send order to backend
-    mutationFn: async ({
-      orderData,
-      accessToken
-    }: {
-      orderData: NewOrder;
-      accessToken: string;
-    }) => {
-      return await ordersService.postNew(orderData, accessToken);
+    mutationFn: async (orderData: NewOrder) => {
+      if (loggedOnUser) {
+        return await ordersService.postNew(orderData, loggedOnUser.accessToken);
+      } else if (temporaryAccessToken) {
+        return await ordersService.postNew(orderData, temporaryAccessToken);
+      }
     },
     onSuccess: () => {
       cart.dispatch({
         type: 'emptied'
       });
     },
-    onError: (error) => {
-      changeToast({
-        message: error.message,
-        show: true
-      });
+    onError: async (error, orderData: NewOrder) => {
+      console.log('error', error);
+      if (error.message === 'jwt expired' && loggedOnUser) {
+        // Refresh expired access token and retry posting review
+        try {
+          await refreshToken(loggedOnUser);
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            changeToast({
+              message: error.message,
+              show: true
+            });
+          }
+        }
+
+        await ordersService.postNew(orderData, loggedOnUser.accessToken);
+      }
     }
   });
-
-  useEffect(() => {
-    // Refs are used to prevent a render loop while having necessary functions as useEffect dependencies
-    if (props.loggedOnUser) {
-      setAccessToken(props.loggedOnUser.accessToken);
-    } else {
-      temporaryAccessTokenMutationRef.current.mutate(
-        cartItemsForBackendRef.current
-      );
-    }
-  }, [props.loggedOnUser]);
 
   const handleSubmit = (formValues: CheckoutFormValues) => {
     const orderData: NewOrder = {
@@ -107,7 +118,7 @@ const Checkout = (props: CheckOutProps) => {
       ...formValues
     };
 
-    orderMutation.mutate({ orderData, accessToken });
+    orderMutation.mutate(orderData);
   };
 
   const formSchema = yup.object().shape({

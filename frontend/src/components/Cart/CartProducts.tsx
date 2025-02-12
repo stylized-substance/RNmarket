@@ -1,4 +1,6 @@
-import { useCart } from '#src/context/CartContext.tsx';
+import { useCart } from '#src/context/CartContext';
+
+import productsService from '#src/services/products';
 
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
@@ -9,13 +11,21 @@ import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 
 import { CartItem } from '#src/types/types.ts';
+import { useQuery } from '@tanstack/react-query';
 
 const CartProducts = () => {
-  const cart = useCart();
-  const cartItems = cart.state;
+  const cartContext = useCart();
+  const cartItems = cartContext.state;
+
+  const { data: products } = useQuery({
+    queryKey: ['allProducts', cartItems],
+    queryFn: async () => {
+      return await productsService.getAll({});
+    }
+  });
 
   const handleIncrease = (item: CartItem) => {
-    cart.dispatch({
+    cartContext.dispatch({
       type: 'modified',
       payload: { product: item.product, quantity: item.quantity + 1 }
     });
@@ -26,17 +36,39 @@ const CartProducts = () => {
       return;
     }
 
-    cart.dispatch({
+    cartContext.dispatch({
       type: 'modified',
       payload: { product: item.product, quantity: item.quantity - 1 }
     });
   };
 
   const handleRemove = (item: CartItem) => {
-    cart.dispatch({
+    cartContext.dispatch({
       type: 'removed',
       payload: item
     });
+  };
+
+  // TODO: improve logic
+  const checkEnoughProductInStock = (item: CartItem) => {
+    if (!products) {
+      console.error('No products from backend');
+      return true
+    }
+
+    const matchedProduct = products.find(
+      (product) => product.id === item.product.id
+    );
+
+    if (!matchedProduct) {
+      console.error('Cart item not found in product context');
+      return true;
+    }
+
+    if (item.quantity > matchedProduct.instock) {
+      return false;
+    }
+
   };
 
   return (
@@ -63,6 +95,9 @@ const CartProducts = () => {
                 <p>In stock: {item.product.instock}</p>
               ) : (
                 <p style={{ color: 'red' }}>Product out of stock</p>
+              )}
+              {!checkEnoughProductInStock(item) && (
+                <p style={{ color: 'red' }}>Not enough product in stock</p>
               )}
             </Stack>
           </Col>
