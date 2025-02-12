@@ -106,6 +106,7 @@ const SingleProduct = () => {
             ))}
           </Col>
           <Button
+            disabled={data.instock === 0}
             size="lg"
             onClick={() =>
               cart.dispatch({
@@ -117,6 +118,7 @@ const SingleProduct = () => {
           >
             Add to cart
           </Button>
+          {data.instock === 0 && (<b className="mt-4 fs-4" style={{ color: 'red' }}> Product out of stock</b>)}
         </Col>
       </Row>
       <Row className="mt-5">
