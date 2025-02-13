@@ -18,7 +18,9 @@ import Toast from 'react-bootstrap/Toast';
 
 const App = () => {
   // Read logged on user data from localStorage
-  const { loggedOnUser } = useAuth();
+  const { readUserFromLocalStorage } = useAuth();
+  const loggedOnUser = readUserFromLocalStorage();
+  console.log('loggedOnUser', loggedOnUser)
 
   // Import toast notification state
   const { toastState } = useToast();
@@ -66,7 +68,7 @@ const App = () => {
                 element={<Products productCategory="Laptops" />}
               />
               <Route path="/products/:id" element={<SingleProduct />} />
-              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin" element={<Admin loggedOnUser={loggedOnUser}/>} />
               <Route path="/cart" element={<Cart />} />
               <Route
                 path="/checkout"
