@@ -10,14 +10,16 @@ const getAll = async (
   loggedOnUser?: LoginPayload
 ): Promise<OrderInDb[] | []> => {
   if (!loggedOnUser?.isadmin) {
-    throw new Error('Admin not logged in');
+    throw new Error('Only admin users can get orders');
   }
+
   try {
     const response = await axios.get<{ orders: OrderInDb[] }>(baseUrl, {
       headers: {
         Authorization: `Bearer ${loggedOnUser.accessToken}`
       }
     });
+    
     return response.data.orders;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
@@ -46,7 +48,6 @@ const postNew = async (
         }
       }
     );
-    console.log(response.data)
 
     return response.data.orderInDb;
   } catch (error: unknown) {

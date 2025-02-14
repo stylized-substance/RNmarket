@@ -18,9 +18,7 @@ import Toast from 'react-bootstrap/Toast';
 
 const App = () => {
   // Read logged on user data from localStorage
-  const { readUserFromLocalStorage } = useAuth();
-  const loggedOnUser = readUserFromLocalStorage();
-  console.log('loggedOnUser', loggedOnUser)
+  const { loggedOnUser } = useAuth();
 
   // Import toast notification state
   const { toastState } = useToast();

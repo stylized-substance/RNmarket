@@ -1,7 +1,5 @@
 import useAuth from '#src/hooks/useAuth.ts';
 import { useQuery } from '@tanstack/react-query';
-import { useToast } from '#src/context/ToastContext';
-import { useEffect } from 'react';
 
 import ordersService from '#src/services/orders';
 import { LoginPayload } from '#src/types/types.ts';
@@ -11,7 +9,6 @@ import Col from 'react-bootstrap/Col';
 
 const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
   const { refreshAccessToken } = useAuth();
-  const { changeToast } = useToast();
 
   const refreshTokenAndRetry = async (user: LoginPayload) => {
     try {
@@ -19,11 +16,9 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
       return await ordersService.getAll(refreshResult.loggedOnUser);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        changeToast({
-          message: `Error while getting orders: ${error.message}`,
-          show: true
-        });
+        console.error(`Error while refreshing token and getting orders: ${error.message}`);
       }
+      return []
     }
   };
 
@@ -32,61 +27,23 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
     queryKey: ['orders'],
     queryFn: async () => {
       if (!loggedOnUser?.isadmin) {
-        throw new Error('Admin not logged in');
+        return;
       }
-
+  
       try {
         return await ordersService.getAll(loggedOnUser);
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message === 'jwt expired') {
-            const refreshResult = await refreshTokenAndRetry(loggedOnUser);
-            console.log('refreshresult', refreshResult);
+            return await refreshTokenAndRetry(loggedOnUser);
           } else {
             throw new Error(error.message);
           }
         }
       }
-    }
+    },
+    enabled: !!loggedOnUser?.isadmin // Don't run query if admin user isn't logged in
   });
-
-  console.log(orders);
-
-  useEffect(() => {
-    if (orders.error) {
-      changeToast({
-        message: orders.error.message,
-        show: true
-      });
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   const getNewToken = async () => {
-  //     if (loggedOnUser) {
-  //       await refreshAccessToken.mutateAsync(loggedOnUser);
-  //     }
-  //   };
-
-  //   if (
-  //     orders.error &&
-  //     orders.error instanceof Error &&
-  //     orders.error.message === 'jwt expired' &&
-  //     loggedOnUser
-  //   ) {
-  //     try {
-  //       const token = getNewToken();
-  //       console.log('token', token)
-  //     } catch (error: unknown) {
-  //       if (error instanceof Error) {
-  //         changeToast({
-  //           message: error.message,
-  //           show: true
-  //         });
-  //       }
-  //     }
-  //   }
-  // });
 
   if (!loggedOnUser?.isadmin) {
     return <h1 className="text-center mt-5">Admin not logged in</h1>;

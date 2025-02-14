@@ -59,11 +59,10 @@ router.post('/login', async (req: Request, res: Response) => {
   }: User = user.dataValues;
 
   // Create JWT tokens
-  const accessToken = createJWTTokens(userWithoutHash).accessToken;
-  const refreshTokenObject = createJWTTokens(userWithoutHash).refreshTokenForDb;
+  const { accessToken, refreshTokenForDb } = createJWTTokens(userWithoutHash);
 
   // Save refresh token to database
-  await RefreshTokenModel.create(refreshTokenObject);
+  await RefreshTokenModel.create(refreshTokenForDb);
 
   // Create response payload to send to client
   const payload: LoginPayload = {
@@ -72,7 +71,7 @@ router.post('/login', async (req: Request, res: Response) => {
     id: userWithoutHash.id,
     isadmin: userWithoutHash.isadmin,
     accessToken: accessToken,
-    refreshToken: refreshTokenObject.token
+    refreshToken: refreshTokenForDb.token
   };
 
   // Send payload to client

@@ -1,6 +1,6 @@
 import { LoginCredentials, LoginPayload } from '#src/types/types';
 import { isLoginPayload } from '#src/utils/typeNarrowers';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import authorizationService from '#src/services/authorization';
 import { useToast } from '#src/context/ToastContext';
 
@@ -24,6 +24,8 @@ const useAuth = () => {
       throw new Error('Malformed user object found in localStorage');
     }
   };
+
+  const loggedOnUser = readUserFromLocalStorage()
 
   // Login using Tanstack Query and save user data to query cache and localStorage
   const login = useMutation({
@@ -61,13 +63,8 @@ const useAuth = () => {
       queryClient.setQueryData(['loggedOnUser'], loggedOnUser);
     },
     onError: (error) => {
-      if (error.message === 'Refresh token has expired, login again') {
-        changeToast({
-          message: error.message,
-          show: true
-        });
-        logout();
-      }
+      logout();
+      throw error;
     }
   });
 
@@ -75,10 +72,14 @@ const useAuth = () => {
   const logout = () => {
     localStorage.removeItem('loggedOnUser');
     queryClient.setQueryData(['loggedOnUser'], null);
+    changeToast({
+      message: 'Logged out',
+      show: true
+    });
   };
 
   return {
-    readUserFromLocalStorage,
+    loggedOnUser,
     login,
     refreshAccessToken,
     logout

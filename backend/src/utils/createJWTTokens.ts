@@ -20,7 +20,7 @@ const createJWTTokens = (
   const refreshTokenExpiryTime: string =
     // Unix timestamps are too large for JS Number primitive, using string type in database instead
     (
-      (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION)
+      (new Date().getTime() + envVariables.JWTREFRESHTOKENEXPIRATION * 1000)
     ).toString();
 
   // Create access token
