@@ -101,3 +101,4 @@
 | 11.02.2025 | 3 | Worked on styles, admin page | 211
 | 12.02.2025 | 2 | Worked on refactoring, admin page | 213
 | 13.02.2025 | 2 | Worked on refactoring, admin page | 215
+| 14.02.2025 | 3 | Worked on refactoring, admin page. Fixed bugs | 218
