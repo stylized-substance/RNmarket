@@ -6,6 +6,9 @@ import { LoginPayload } from '#src/types/types.ts';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Accordion from 'react-bootstrap/Accordion';
 
 const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
   const { refreshAccessToken } = useAuth();
@@ -51,14 +54,43 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
     return <h1 className="text-center mt-5">Admin not logged in</h1>;
   }
 
+  console.log(orders.data);
+
   return (
     <>
       <h1 className="text-center m-4">Admin page</h1>
       <Row>
-        <Col>Products in database</Col>
-        <Col>Users in database</Col>
-        <Col>Orders in database</Col>
-        {orders.data?.map((order) => <div key={order.id}>{order.id}</div>)}
+        <Col lg={4}>
+          <Card>
+            <Card.Header>Products in database</Card.Header>
+            <Card.Body>
+              <ListGroup></ListGroup>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col lg={4}>
+          <Card>
+            <Card.Header>Users in database</Card.Header>
+            <Card.Body>
+              <ListGroup></ListGroup>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col lg={4}>
+          <Card>
+            <Card.Header>Orders in database</Card.Header>
+            <Card.Body>
+              <Accordion>
+                {orders.data?.map((order) => (
+                  <Accordion.Item key={order.id} eventKey="0">
+                    <Accordion.Header>{order.id}</Accordion.Header>
+                    <Accordion.Body></Accordion.Body>
+                  </Accordion.Item>
+                ))}
+              </Accordion>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
     </>
   );
