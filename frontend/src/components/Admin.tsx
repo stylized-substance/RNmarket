@@ -16,9 +16,11 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
       return await ordersService.getAll(refreshResult.loggedOnUser);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error(`Error while refreshing token and getting orders: ${error.message}`);
+        console.error(
+          `Error while refreshing token and getting orders: ${error.message}`
+        );
       }
-      return []
+      return [];
     }
   };
 
@@ -29,7 +31,7 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
       if (!loggedOnUser?.isadmin) {
         return;
       }
-  
+
       try {
         return await ordersService.getAll(loggedOnUser);
       } catch (error: unknown) {

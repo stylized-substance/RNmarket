@@ -66,12 +66,12 @@ const App = () => {
                 element={<Products productCategory="Laptops" />}
               />
               <Route path="/products/:id" element={<SingleProduct />} />
-              <Route path="/admin" element={<Admin loggedOnUser={loggedOnUser}/>} />
-              <Route path="/cart" element={<Cart />} />
               <Route
-                path="/checkout"
-                element={<Checkout />}
+                path="/admin"
+                element={<Admin loggedOnUser={loggedOnUser} />}
               />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Routes>
           </Row>
         </BrowserRouter>

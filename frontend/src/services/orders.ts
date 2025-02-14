@@ -19,7 +19,7 @@ const getAll = async (
         Authorization: `Bearer ${loggedOnUser.accessToken}`
       }
     });
-    
+
     return response.data.orders;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
