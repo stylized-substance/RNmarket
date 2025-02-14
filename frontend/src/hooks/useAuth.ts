@@ -34,7 +34,6 @@ const useAuth = () => {
     },
     onSuccess: (data) => {
       if (data) {
-        queryClient.setQueryData(['loggedOnUser'], data);
         localStorage.setItem('loggedOnUser', JSON.stringify(data));
         changeToast({
           message: 'Logged in succesfully',
@@ -60,7 +59,6 @@ const useAuth = () => {
     onSuccess: ({ newAccessToken, loggedOnUser }) => {
       loggedOnUser.accessToken = newAccessToken;
       localStorage.setItem('loggedOnUser', JSON.stringify(loggedOnUser));
-      queryClient.setQueryData(['loggedOnUser'], loggedOnUser);
     },
     onError: (error) => {
       logout();
@@ -71,7 +69,6 @@ const useAuth = () => {
   // Log out user
   const logout = () => {
     localStorage.removeItem('loggedOnUser');
-    queryClient.setQueryData(['loggedOnUser'], null);
     changeToast({
       message: 'Logged out',
       show: true

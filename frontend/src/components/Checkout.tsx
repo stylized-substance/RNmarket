@@ -22,11 +22,7 @@ import * as yup from 'yup';
 
 import ordersService from '#src/services/orders';
 
-import {
-  CartItemForBackend,
-  LoginPayload,
-  NewOrder
-} from '#src/types/types.ts';
+import { CartItemForBackend, NewOrder } from '#src/types/types.ts';
 
 interface CheckoutFormValues {
   email: string;
@@ -74,17 +70,29 @@ const Checkout = () => {
     }
   }, [loggedOnUser]);
 
-  const refreshToken = async (loggedOnUser: LoginPayload) => {
-    return await refreshAccessToken.mutateAsync(loggedOnUser);
-  };
-
   const orderMutation = useMutation({
     // Send order to backend
     mutationFn: async (orderData: NewOrder) => {
-      if (loggedOnUser) {
-        return await ordersService.postNew(orderData, loggedOnUser.accessToken);
-      } else if (temporaryAccessToken) {
-        return await ordersService.postNew(orderData, temporaryAccessToken);
+      const accessToken = loggedOnUser
+        ? loggedOnUser.accessToken
+        : temporaryAccessToken;
+      if (!accessToken) {
+        throw new Error('Access token missing');
+      }
+
+      try {
+        return await ordersService.postNew(orderData, accessToken);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          if (error.message === 'jwt expired' && loggedOnUser) {
+            // Refresh expired access token and retry posting order
+            const { newAccessToken } =
+              await refreshAccessToken.mutateAsync(loggedOnUser);
+            return await ordersService.postNew(orderData, newAccessToken);
+          } else {
+            throw error;
+          }
+        }
       }
     },
     onSuccess: () => {
@@ -92,23 +100,11 @@ const Checkout = () => {
         type: 'emptied'
       });
     },
-    onError: async (error, orderData: NewOrder) => {
-      console.log('error', error);
-      if (error.message === 'jwt expired' && loggedOnUser) {
-        // Refresh expired access token and retry posting review
-        try {
-          await refreshToken(loggedOnUser);
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            changeToast({
-              message: error.message,
-              show: true
-            });
-          }
-        }
-
-        await ordersService.postNew(orderData, loggedOnUser.accessToken);
-      }
+    onError: (error) => {
+      changeToast({
+        message: error.message,
+        show: true
+      });
     }
   });
 

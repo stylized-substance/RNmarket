@@ -34,9 +34,23 @@ const ReviewForm = ({ productId }: { productId: string }) => {
       loggedOnUser: LoginPayload;
       newReview: NewReview;
     }) => {
-      await reviewsService.postNew(newReview, loggedOnUser);
+      try {
+        await reviewsService.postNew(newReview, loggedOnUser);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          if (error.message === 'jwt expired') {
+            // Refresh expired access token and retry posting review
+            const refreshResult =
+              await refreshAccessToken.mutateAsync(loggedOnUser);
+            await reviewsService.postNew(newReview, refreshResult.loggedOnUser);
+          } else {
+            throw error;
+          }
+        }
+      }
     },
     onSuccess: async () => {
+      // Invalidate query to refresh review section in browser
       await queryClient.invalidateQueries({
         queryKey: ['singleProductReviews']
       });
@@ -45,27 +59,11 @@ const ReviewForm = ({ productId }: { productId: string }) => {
         show: true
       });
     },
-    onError: async (error, { newReview, loggedOnUser }) => {
-      if (error.message === 'jwt expired') {
-        // Refresh expired access token and retry posting review
-        try {
-          await refreshAccessToken.mutateAsync(loggedOnUser);
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            changeToast({
-              message: error.message,
-              show: true
-            });
-          }
-        }
-        const loggedOnUserRefreshed = queryClient.getQueryData<LoginPayload>([
-          'loggedOnUser'
-        ]);
-        await reviewsService.postNew(newReview, loggedOnUserRefreshed);
-        await queryClient.invalidateQueries({
-          queryKey: ['singleProductReviews']
-        });
-      }
+    onError: (error) => {
+      changeToast({
+        message: error.message,
+        show: true
+      });
     }
   });
 
@@ -164,9 +162,11 @@ const ReviewForm = ({ productId }: { productId: string }) => {
             >
               Send
             </Button>
-            <p className="mt-3">
-              <b>Please login to send a review</b>
-            </p>
+            {!loggedOnUser && (
+              <p className="mt-3">
+                <b>Please login to send a review</b>
+              </p>
+            )}
           </Form>
         )}
       </Formik>
