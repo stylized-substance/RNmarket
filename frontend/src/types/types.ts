@@ -61,7 +61,13 @@ export interface NewOrder {
 }
 
 export type OrderInDb = Omit<NewOrder, 'products'> & {
+  Products: {
+    id: string;
+    quantity: number;
+  }[];
   id: string;
+  createdAt: string;
+  updatedAt: string;
 };
 export interface CartItem {
   product: Product;

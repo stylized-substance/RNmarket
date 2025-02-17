@@ -13,6 +13,7 @@ router.get('/', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.verifiedToken.isadmin) {
     return res.status(400).json({ Error: 'Only admin users can list orders' });
   }
+  // TODO: improve returned data format
 
   const orders: OrderModel[] = await OrderModel.findAll({
     include: ProductModel

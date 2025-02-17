@@ -2,7 +2,7 @@ import useAuth from '#src/hooks/useAuth.ts';
 import { useQuery } from '@tanstack/react-query';
 
 import ordersService from '#src/services/orders';
-import { LoginPayload } from '#src/types/types.ts';
+import { LoginPayload, OrderInDb } from '#src/types/types.ts';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -54,6 +54,21 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
     return <h1 className="text-center mt-5">Admin not logged in</h1>;
   }
 
+  // const createOrderDetails = (order: OrderInDb) => {
+  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   const { products, ...rest } = order;
+  //   // console.log(Object.entries(rest))
+  //   return (
+  //     <dl>
+  //       {Object.entries(rest).map(([key, value]) => (
+  //         <React.Fragment key={order.id}>
+  //           <dt>{key}</dt>
+  //           <dd>{value}</dd>
+  //         </React.Fragment>
+  //       ))}
+  //     </dl>
+  //   );
+  // };
   console.log(orders.data);
 
   return (
@@ -84,7 +99,31 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
                 {orders.data?.map((order) => (
                   <Accordion.Item key={order.id} eventKey="0">
                     <Accordion.Header>{order.id}</Accordion.Header>
-                    <Accordion.Body></Accordion.Body>
+                    <Accordion.Body>
+                      <dl>
+                        <dt>Created at</dt>
+                        <dd>{order.createdAt}</dd>
+                        <dt>Email</dt>
+                        <dd>{order.email}</dd>
+                        <dt>Name</dt>
+                        <dd>{order.name}</dd>
+                        <dt>Address</dt>
+                        <dd>{order.address}</dd>
+                        <dt>Zip code</dt>
+                        <dd>{order.zipcode}</dd>
+                        <dt>City</dt>
+                        <dd>{order.city}</dd>
+                        <dt>Country</dt>
+                        <dd>{order.country}</dd>
+                        <dt>Products</dt>
+                        {order.Products.map((product) => (
+                          <div key={product.id}>
+                            <div>{product.title}</div>
+                            <div>{product.quantity}</div>
+                          </div>
+                        ))}
+                      </dl>
+                    </Accordion.Body>
                   </Accordion.Item>
                 ))}
               </Accordion>
