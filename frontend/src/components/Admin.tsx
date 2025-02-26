@@ -97,7 +97,7 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
             <Card.Body>
               <Accordion>
                 {orders.data?.map((order) => (
-                  <Accordion.Item key={order.id} eventKey="0">
+                  <Accordion.Item key={order.id} eventKey={order.id}>
                     <Accordion.Header>{order.id}</Accordion.Header>
                     <Accordion.Body>
                       <dl>
