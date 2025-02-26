@@ -26,4 +26,4 @@ RefreshToken.belongsTo(User);
 Product.belongsToMany(Order, { through: ProductOrder });
 Order.belongsToMany(Product, { through: ProductOrder });
 
-export { Product, Review, User, RefreshToken, Order };
+export { Product, ProductOrder, Review, User, RefreshToken, Order };

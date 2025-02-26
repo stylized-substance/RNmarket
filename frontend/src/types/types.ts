@@ -60,15 +60,30 @@ export interface NewOrder {
   country: string;
 }
 
-export type OrderInDb = Omit<NewOrder, 'products'> & {
-  Products: {
-    id: string;
-    quantity: number;
-  }[];
+export type OrderFromBackendTest = Omit<NewOrder, 'products'>
+
+export type OrderFromBackend = Omit<NewOrder, 'products'> & {
+  Products: [
+    Product & 
+    {
+      ProductOrder: {
+        OrderId: string;
+        ProductId: string;
+        createdAt: string;
+        quantity: number;
+        updatedAt: string;
+      }
+    }
+  ];
   id: string;
   createdAt: string;
   updatedAt: string;
 };
+
+export type OrderWithProducts = Omit<OrderInDb, 'Products'> & {
+  Products: Product[]
+}
+
 export interface CartItem {
   product: Product;
   quantity: number;

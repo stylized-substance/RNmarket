@@ -2,7 +2,9 @@ import useAuth from '#src/hooks/useAuth.ts';
 import { useQuery } from '@tanstack/react-query';
 
 import ordersService from '#src/services/orders';
-import { LoginPayload, OrderInDb } from '#src/types/types.ts';
+import productsService from '#src/services/products';
+
+import { LoginPayload, OrderFromBackend, OrderWithProducts, Product } from '#src/types/types.ts';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -36,7 +38,32 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
       }
 
       try {
-        return await ordersService.getAll(loggedOnUser);
+        // Fetch orders
+        const orders: OrderFromBackend[] =  await ordersService.getAll(loggedOnUser);
+        return orders
+
+        // Fetch order product data and attach to order
+        // const ordersWithProducts: OrderWithProducts[] = []
+
+        // for (const order of orders) {
+          // const orderProducts = order.Products.map(async (product) => {
+          //   return await productsService.getOne(product.id)
+          // })
+          // const resolved = await Promise.all(orderProducts)
+          // console.log(resolved)
+
+          // const orderProducts = await Promise.all(order.Products.map(async (product) => await productsService.getOne(product.id)))
+          
+          // const orderWithProducts: OrderWithProducts = {
+          //   ...order,
+          //   Products: orderProducts
+          // }
+          
+          // ordersWithProducts.push(orderWithProducts)
+        //}
+        // console.log(ordersWithProducts)
+
+        // return ordersWithProducts
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message === 'jwt expired') {
@@ -70,6 +97,8 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
   //   );
   // };
   console.log(orders.data);
+
+  
 
   return (
     <>

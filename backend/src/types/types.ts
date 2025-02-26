@@ -36,6 +36,22 @@ export type OrderInDb = Omit<NewOrder, 'products'> & {
   id: string;
 };
 
+export type OrderForFrontend = {
+  id: string,
+  email: string,
+  name: string,
+  address: string,
+  zipcode: string,
+  city: string,
+  country: string,
+  createdAt: string,
+  updatedAt: string,
+  products: {
+    id: string,
+    quantity: number
+  }[]
+}
+
 export type CartItems = Pick<NewOrder, 'products'>;
 
 // Types for reviews, products and users
