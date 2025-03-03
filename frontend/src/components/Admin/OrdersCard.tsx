@@ -2,6 +2,7 @@ import { OrderFromBackend } from '#src/types/types.ts';
 
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
+import Button from 'react-bootstrap/Button';
 
 const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
   return (
@@ -53,6 +54,14 @@ const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
                     </div>
                   ))}
                 </dl>
+                <Button
+                  style={{ background: 'firebrick' }}
+                  onClick={() => handleRemove(order.id)}
+                  className="d-flex gap-2"
+                >
+                  <div>Delete</div>
+                  <i className="bi bi-trash3"></i>
+                </Button>
               </Accordion.Body>
             </Accordion.Item>
           ))}
