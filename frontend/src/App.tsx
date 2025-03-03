@@ -10,7 +10,7 @@ import Products from '#src/components/Products/index.tsx';
 import SingleProduct from '#src/components/Products/SingleProduct.tsx';
 import Cart from '#src/components/Cart/index.tsx';
 import Checkout from '#src/components/Checkout';
-import Admin from '#src/components/Admin';
+import Admin from '#src/components/Admin/index.tsx';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

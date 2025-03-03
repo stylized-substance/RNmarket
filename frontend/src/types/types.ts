@@ -12,6 +12,8 @@ export interface NewUser {
   isadmin: boolean;
 }
 
+export type User = Omit<NewUser, 'password'> & { id: string };
+
 export interface LoginCredentials {
   username: string;
   password: string;
@@ -27,7 +29,6 @@ export interface LoginPayload {
   refreshToken: string;
 }
 
-// Types for reviews, orders, products and users
 export interface Review {
   id: string;
   product_id: string;
@@ -65,7 +66,7 @@ export type OrderInDb = Omit<NewOrder, 'products'> & {
     id: string;
     quantity: number;
   }[];
-}
+};
 
 export interface OrderFromBackend {
   id: string;
@@ -86,7 +87,7 @@ export interface OrderFromBackend {
       quantity: number;
     }
   ];
-};
+}
 
 export interface CartItem {
   product: Product;
