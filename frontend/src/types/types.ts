@@ -60,29 +60,33 @@ export interface NewOrder {
   country: string;
 }
 
-export type OrderFromBackendTest = Omit<NewOrder, 'products'>
+export type OrderInDb = Omit<NewOrder, 'products'> & {
+  Products: {
+    id: string;
+    quantity: number;
+  }[];
+}
 
-export type OrderFromBackend = Omit<NewOrder, 'products'> & {
-  Products: [
-    Product & 
-    {
-      ProductOrder: {
-        OrderId: string;
-        ProductId: string;
-        createdAt: string;
-        quantity: number;
-        updatedAt: string;
-      }
-    }
-  ];
+export interface OrderFromBackend {
   id: string;
+  email: string;
+  name: string;
+  address: string;
+  zipcode: string;
+  city: string;
+  country: string;
   createdAt: string;
   updatedAt: string;
+  Products: [
+    {
+      id: string;
+      title: string;
+      price: number;
+      instock: number;
+      quantity: number;
+    }
+  ];
 };
-
-export type OrderWithProducts = Omit<OrderInDb, 'Products'> & {
-  Products: Product[]
-}
 
 export interface CartItem {
   product: Product;

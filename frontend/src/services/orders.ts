@@ -1,20 +1,20 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 
-import { LoginPayload, NewOrder, OrderInDb } from '#src/types/types.ts';
+import { LoginPayload, NewOrder, OrderInDb, OrderFromBackend } from '#src/types/types.ts';
 import { isString, isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/orders`;
 
 const getAll = async (
   loggedOnUser?: LoginPayload
-): Promise<OrderInDb[] | []> => {
+): Promise<OrderFromBackend[] | []> => {
   if (!loggedOnUser?.isadmin) {
     throw new Error('Only admin users can get orders');
   }
 
   try {
-    const response = await axios.get<{ orders: OrderInDb[] }>(baseUrl, {
+    const response = await axios.get<{ orders: OrderFromBackend[] }>(baseUrl, {
       headers: {
         Authorization: `Bearer ${loggedOnUser.accessToken}`
       }

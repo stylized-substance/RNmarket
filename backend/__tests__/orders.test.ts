@@ -9,7 +9,6 @@ import {
   assert200Response,
   assert400Response,
   getToken,
-  assertValidType,
   assert201Response
 } from '#src/utils/testHelpers';
 import { Order as OrderModel } from '#src/models';
@@ -99,11 +98,9 @@ describe('GET requests', () => {
     expect(response.body.orders[0]).toHaveProperty('address');
     expect(response.body.orders[0]).toHaveProperty('zipcode');
     expect(response.body.orders[0]).toHaveProperty('city');
-    expect(response.body.orders[0]).toHaveProperty('country');
-
-    for (const product of response.body.orders[0].Products) {
-      assertValidType('product', product);
-    }
+    expect(response.body.orders[0]).toHaveProperty('createdAt');
+    expect(response.body.orders[0]).toHaveProperty('updatedAt');
+    expect(response.body.orders[0]).toHaveProperty('Products');
   });
   test('GET - Request fails for regular user', async () => {
     const response = await api

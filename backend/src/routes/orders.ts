@@ -4,7 +4,8 @@ import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
 // import { ProductOrder as ProductOrderModel } from '#src/models';
 import { NewOrder, OrderInDb } from '#src/types/types';
-import { OrderForFrontend } from '#src/types/types';
+import { OrderFromDb } from '#src/types/types';
+// import { OrderForFrontend } from '#src/types/types';
 import { toNewOrder, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,107 +17,37 @@ router.get('/', tokenExtractor, async (req: Request, res: Response) => {
     return res.status(400).json({ Error: 'Only admin users can list orders' });
   }
 
-  // TODO: fix typing, etc.
-
-  // const orders: OrderModel[] = await OrderModel.findAll({
-  //   include: ProductModel
-  // });
-
+  // Get orders from db
   const orders: OrderModel[] = await OrderModel.findAll({
-    include: [{
-      model: ProductModel,
-      through: {
-        attributes: ['quantity'] // Include product quantity from junction table
+    include: [
+      {
+        model: ProductModel,
+        attributes: ['id', 'title', 'price', 'instock'],
+        through: {
+          attributes: ['quantity'] // Include product quantity from junction table
+        }
       }
-  }]
+    ]
   });
 
+  // Convert sequelize order data to JSON
+  const JSONOrders: OrderFromDb[] = orders.map((order) => order.toJSON());
 
-  // Build response object for frontend
-  // const stringifiedOrders = JSON.stringify(orders, null, 2)
-  const JSONOrders = orders.map((order) => order.toJSON())
-  // console.log(JSONOrders)
-  JSONOrders.forEach((order) => console.log(order.Products))
-
-  const ordersForFrontend: OrderForFrontend[] = JSONOrders.map((order) => {
+  // Build new orders object for frontend
+  const ordersForFrontend = JSONOrders.map((order) => {
     return {
-      id: order.id,
-      email: order.email,
-      name: order.name,
-      address: order.address,
-      zipcode: order.zipcode,
-      city: order.city,
-      country: order.country,
-      createdAt: order.createdAt,
-      updatedAt: order.updatedAt,
-      products: order.Products.map((product: {id: string; ProductOrder: { quantity: 1 }}) => {
+      ...order,
+      Products: order.Products.map((Product) => {
+        const { ProductOrder, ...rest } = Product;
         return {
-          id: product.id,
-          quantity: product.ProductOrder.quantity
-        }
+          ...rest,
+          quantity: ProductOrder.quantity
+        };
       })
-    }
-  })
-  
+    };
+  });
 
-  // const ordersForFrontend: OrderForFrontend[] = stringifiedOrders.map((order) => {
-  //   return {
-  //     id: order.id,
-  //     email: order.email,
-  //     name: order.name,
-  //     address: order.address,
-  //     zipcode: order.zipcode,
-  //     city: order.city,
-  //     country: order.country,
-  //     createdAt: order.createdAt,
-  //     updatedAt: order.updatedAt,
-  //     products: order.Products.map((product) => {
-  //       id: product.id,
-  //       quantity: product.ProductOrder.quantity
-  //     })
-  //   }
-  // })
-
-
-  // const ordersForFrontend: OrderForFrontend[] = stringifiedOrders.map((order) => {
-  //   return {
-  //     id: order.id,
-  //     email: order.email,
-  //     name: order.name,
-  //     address: order.address,
-  //     zipcode: order.zipcode,
-  //     city: order.city,
-  //     country: order.country,
-  //     createdAt: order.createdAt,
-  //     updatedAt: order.updatedAt,
-  //     products: order.Products.map((product) => {
-  //       id: product.id,
-  //       quantity: product.ProductOrder.quantity
-  //     })
-  //   }
-  // })
-  // console.log(orders[1].dataValues.Products)
-  // console.log(ordersForFrontend)
-
-  // console.log(orders[0].dataValues.Products[0].dataValues.ProductOrder.dataValues.quantity)
-
-  
-  // orders = orders.map((order) => {
-  //   order.dataValues
-  //   const orderProducts: ProductModel[] = order.dataValues.Products.dataValues.map((product) => product.dataValues)
-
-  //   return {
-  //     ...order.dataValues,
-  //     products: orderProducts
-  //   };
-  // });
-
-  // console.log('orders', orders)
-  // for (const order of orders) {
-  //   console.log(order.dataValues)
-  // }
-
-  return res.json({ ordersForFrontend });
+  return res.json({ orders: ordersForFrontend });
 });
 
 // Add new order

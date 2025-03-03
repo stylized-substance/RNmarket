@@ -36,21 +36,40 @@ export type OrderInDb = Omit<NewOrder, 'products'> & {
   id: string;
 };
 
-export type OrderForFrontend = {
-  id: string,
-  email: string,
-  name: string,
-  address: string,
-  zipcode: string,
-  city: string,
-  country: string,
-  createdAt: string,
-  updatedAt: string,
-  products: {
-    id: string,
-    quantity: number
-  }[]
+export interface OrderFromDb {
+  id: string;
+  email: string;
+  name: string;
+  address: string;
+  zipcode: string;
+  city: string;
+  country: string;
+  createdAt: string;
+  updatedAt: string;
+  Products: [
+    {
+      id: string;
+      title: string;
+      price: number;
+      instock: number;
+      ProductOrder: {
+        quantity: number;
+      };
+    }
+  ];
 }
+
+export type OrderForFrontend = Omit<OrderFromDb, 'Products'> & {
+  Products: [
+    {
+      id: string;
+      title: string;
+      price: number;
+      instock: number;
+      quantity: number;
+    }
+  ];
+};
 
 export type CartItems = Pick<NewOrder, 'products'>;
 
