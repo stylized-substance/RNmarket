@@ -2,9 +2,8 @@ import useAuth from '#src/hooks/useAuth.ts';
 import { useQuery } from '@tanstack/react-query';
 
 import ordersService from '#src/services/orders';
-import productsService from '#src/services/products';
 
-import { LoginPayload, OrderFromBackend, OrderWithProducts, Product } from '#src/types/types.ts';
+import { LoginPayload, OrderFromBackend } from '#src/types/types.ts';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -39,31 +38,9 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
 
       try {
         // Fetch orders
-        const orders: OrderFromBackend[] =  await ordersService.getAll(loggedOnUser);
-        return orders
-
-        // Fetch order product data and attach to order
-        // const ordersWithProducts: OrderWithProducts[] = []
-
-        // for (const order of orders) {
-          // const orderProducts = order.Products.map(async (product) => {
-          //   return await productsService.getOne(product.id)
-          // })
-          // const resolved = await Promise.all(orderProducts)
-          // console.log(resolved)
-
-          // const orderProducts = await Promise.all(order.Products.map(async (product) => await productsService.getOne(product.id)))
-          
-          // const orderWithProducts: OrderWithProducts = {
-          //   ...order,
-          //   Products: orderProducts
-          // }
-          
-          // ordersWithProducts.push(orderWithProducts)
-        //}
-        // console.log(ordersWithProducts)
-
-        // return ordersWithProducts
+        const orders: OrderFromBackend[] =
+          await ordersService.getAll(loggedOnUser);
+        return orders;
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message === 'jwt expired') {
@@ -97,8 +74,6 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
   //   );
   // };
   console.log(orders.data);
-
-  
 
   return (
     <>
@@ -146,10 +121,30 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
                         <dd>{order.country}</dd>
                         <dt>Products</dt>
                         {order.Products.map((product) => (
-                          <div key={product.id}>
-                            <div>{product.title}</div>
-                            <div>{product.quantity}</div>
-                          </div>
+                          <>
+                            <Accordion className="mt-2">
+                              <Accordion.Item
+                                key={product.id}
+                                eventKey={product.id}
+                              >
+                                <Accordion.Header>
+                                  {product.title}
+                                </Accordion.Header>
+                                <Accordion.Body>
+                                  <dl>
+                                    <dt>Id:</dt>
+                                    {product.id}
+                                    <dt>Price:</dt>
+                                    {product.price}
+                                    <dt>Amount of product in stock: </dt>
+                                    {product.instock}
+                                    <dt>Product quantity in order: </dt>
+                                    {product.quantity}
+                                  </dl>
+                                </Accordion.Body>
+                              </Accordion.Item>
+                            </Accordion>
+                          </>
                         ))}
                       </dl>
                     </Accordion.Body>

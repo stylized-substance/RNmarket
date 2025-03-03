@@ -28,6 +28,7 @@ const getAll = async ({
     const response = await axios.get<{ products: Product[] | [] }>(
       `${baseUrl}${query}`
     );
+    console.log(response.data.products)
     return response.data.products;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
