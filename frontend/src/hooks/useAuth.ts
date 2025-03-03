@@ -60,7 +60,7 @@ const useAuth = () => {
     },
     onError: (error) => {
       logout();
-      throw error;
+      throw new Error(`Error while refreshing token ${error.message}`);
     }
   });
 

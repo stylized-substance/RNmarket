@@ -1,30 +1,28 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { NewUser, User, LoginPayload } from '#src/types/types.ts';
+import { NewUser, UserFromBackend, LoginPayload } from '#src/types/types.ts';
 import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/users`;
 
-const getAll = async (loggedOnUser?: LoginPayload): Promise<User[]> => {
+const getAll = async (loggedOnUser?: LoginPayload): Promise<UserFromBackend[]> => {
   if (!loggedOnUser?.isadmin) {
     throw new Error('Only admin users can get users');
   }
 
   try {
-    const response = await axios.get<{ users: User[] }>(baseUrl, {
+    const response = await axios.get<{ users: UserFromBackend[] }>(baseUrl, {
       headers: {
         Authorization: `Bearer ${loggedOnUser.accessToken}`
       }
     });
-
-    console.log('response', response.data.users)
 
     return response.data.users;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
       throw new Error(error.response.data.Error);
     } else {
-      throw new Error('Unknown error happened while getting orders');
+      throw new Error('Unknown error happened while getting users');
     }
   }
 };

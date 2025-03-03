@@ -14,8 +14,6 @@ const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
               <Accordion.Header>{order.id}</Accordion.Header>
               <Accordion.Body>
                 <dl>
-                  <dt>Created at</dt>
-                  <dd>{order.createdAt}</dd>
                   <dt>Email</dt>
                   <dd>{order.email}</dd>
                   <dt>Name</dt>
@@ -28,9 +26,13 @@ const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
                   <dd>{order.city}</dd>
                   <dt>Country</dt>
                   <dd>{order.country}</dd>
+                  <dt>Created at</dt>
+                  <dd>{order.createdAt}</dd>
+                  <dt>Updated at</dt>
+                  <dd>{order.updatedAt}</dd>
                   <dt>Products</dt>
                   {order.Products.map((product) => (
-                    <>
+                    <div key={product.id}>
                       <Accordion className="mt-2">
                         <Accordion.Item key={product.id} eventKey={product.id}>
                           <Accordion.Header>{product.title}</Accordion.Header>
@@ -42,13 +44,13 @@ const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
                               {product.price}
                               <dt>Amount of product in stock: </dt>
                               {product.instock}
-                              <dt>Product quantity in order: </dt>
+                              <dt>Quantity of product in order: </dt>
                               {product.quantity}
                             </dl>
                           </Accordion.Body>
                         </Accordion.Item>
                       </Accordion>
-                    </>
+                    </div>
                   ))}
                 </dl>
               </Accordion.Body>

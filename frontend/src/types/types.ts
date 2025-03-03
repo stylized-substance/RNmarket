@@ -12,7 +12,11 @@ export interface NewUser {
   isadmin: boolean;
 }
 
-export type User = Omit<NewUser, 'password'> & { id: string };
+export type UserFromBackend = Omit<NewUser, 'password'> & {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export interface LoginCredentials {
   username: string;
@@ -114,6 +118,8 @@ export interface BaseProduct {
   original_id?: string;
   rating?: number;
   Reviews?: Review[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Mobile extends BaseProduct {
