@@ -1,54 +1,47 @@
-import ordersService from '#src/services/orders';
-
-import { useToast } from '#src/context/ToastContext';
-import useAuth from '#src/hooks/useAuth.ts';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
-import DeleteModal from './DeleteModal';
 
 import { OrderFromBackend } from '#src/types/types.ts';
 
-const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
-  const { changeToast } = useToast();
-  const { loggedOnUser, refreshAccessToken } = useAuth();
-  const queryClient = useQueryClient();
-  const [showModal, setShowModal] = useState<boolean>(false);
+interface itemToDelete {
+  type: 'product' | 'user' | 'order';
+  id: string;
+}
 
-  const deleteMutation = useMutation({
-    // Delete order from backend
-    mutationFn: async (id: string) => {
-      try {
-        return await ordersService.deleteOne(id, loggedOnUser?.accessToken);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          if (error.message === 'jwt expired' && loggedOnUser) {
-            // Refresh expired access token and retry deleting order
-            const { newAccessToken } =
-              await refreshAccessToken.mutateAsync(loggedOnUser);
-            return await ordersService.deleteOne(id, newAccessToken);
-          } else {
-            throw error;
-          }
-        }
-      }
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['orders']
-      });
-      changeToast({ message: 'Order deleted', show: true });
-    },
-    onError: (error) => changeToast({ message: error.message, show: true })
-  });
-
-  const handleDelete = (id: string) => {
-    setShowModal(false);
-    deleteMutation.mutate(id);
-  };
+const OrdersCard = ({
+  orders,
+  prepareForDelete
+}: {
+  orders: OrderFromBackend[] | undefined;
+  prepareForDelete: (item: itemToDelete) => void;
+}) => {
+  // const deleteMutation = useMutation({
+  //   // Delete order from backend
+  //   mutationFn: async (id: string) => {
+  //     try {
+  //       return await ordersService.deleteOne(id, loggedOnUser?.accessToken);
+  //     } catch (error: unknown) {
+  //       if (error instanceof Error) {
+  //         if (error.message === 'jwt expired' && loggedOnUser) {
+  //           // Refresh expired access token and retry deleting order
+  //           const { newAccessToken } =
+  //             await refreshAccessToken.mutateAsync(loggedOnUser);
+  //           return await ordersService.deleteOne(id, newAccessToken);
+  //         } else {
+  //           throw error;
+  //         }
+  //       }
+  //     }
+  //   },
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries({
+  //       queryKey: ['orders']
+  //     });
+  //     changeToast({ message: 'Order deleted', show: true });
+  //   },
+  //   onError: (error) => changeToast({ message: error.message, show: true })
+  // });
 
   return (
     <Card>
@@ -57,13 +50,6 @@ const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
         <Accordion>
           {orders?.map((order) => (
             <div key={order.id}>
-              <DeleteModal
-                showModal={showModal}
-                setShowModal={setShowModal}
-                handleDelete={handleDelete}
-                id={order.id}
-              />
-
               <Accordion.Item key={order.id} eventKey={order.id}>
                 <Accordion.Header>{order.id}</Accordion.Header>
                 <Accordion.Body>
@@ -112,7 +98,9 @@ const OrdersCard = ({ orders }: { orders: OrderFromBackend[] | undefined }) => {
                   </dl>
                   <Button
                     style={{ background: 'firebrick' }}
-                    onClick={() => setShowModal(true)}
+                    onClick={() =>
+                      prepareForDelete({ type: 'order', id: order.id })
+                    }
                     className="d-flex gap-2"
                   >
                     <div>Delete</div>

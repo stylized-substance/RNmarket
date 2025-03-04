@@ -4,17 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 interface DeleteModalProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  handleDelete: (id: string) => void;
-  id: string;
+  handleDelete: () => void;
 }
 
 const DeleteModal = ({
   showModal,
   setShowModal,
-  handleDelete,
-  id
+  handleDelete
 }: DeleteModalProps) => {
-  console.log('modal_id', id)
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header>
@@ -29,7 +26,7 @@ const DeleteModal = ({
         </Button>
         <Button
           style={{ background: 'firebrick' }}
-          onClick={() => handleDelete(id)}
+          onClick={() => handleDelete()}
           className="d-flex gap-2"
         >
           <div>Delete</div>
