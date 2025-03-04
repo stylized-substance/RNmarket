@@ -17,13 +17,11 @@ const setDatabaseUrl = () => {
   } else {
     return process.env.DATABASE_URL;
   }
-}
+};
 
 let envVariables: EnvVariables = {
   PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 0,
-  DATABASE_URL: process.env.DATABASE_URL
-    ? parseString(setDatabaseUrl())
-    : '',
+  DATABASE_URL: process.env.DATABASE_URL ? parseString(setDatabaseUrl()) : '',
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
     : 0,

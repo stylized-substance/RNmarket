@@ -40,14 +40,14 @@ const parseString = (param: unknown): string => {
 
 const isNumber = (param: unknown): param is number => {
   if (typeof param === 'number' && !isNaN(param)) {
-    return true
+    return true;
   }
 
   if (typeof param === 'string' && param.trim() !== '') {
-    return !isNaN(Number(param))
+    return !isNaN(Number(param));
   }
 
-  return false
+  return false;
 };
 
 const parseNumber = (param: unknown): number => {

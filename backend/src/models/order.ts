@@ -32,7 +32,7 @@ Order.init(
     country: {
       type: DataTypes.TEXT,
       allowNull: false
-    },
+    }
   },
   {
     sequelize,
