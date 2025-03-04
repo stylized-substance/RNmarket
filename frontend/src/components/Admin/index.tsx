@@ -111,18 +111,18 @@ const Admin = () => {
   });
 
   const prepareForDelete = (item: itemToDelete) => {
-    setItemtoDelete(item)
-    setShowModal(true)
+    setItemtoDelete(item);
+    setShowModal(true);
   };
-  
+
   const handleDelete = () => {
-    console.log('itemToDelete', itemToDelete)
+    console.log('itemToDelete', itemToDelete);
 
     if (itemToDelete) {
       setShowModal(false);
       // deleteMutation.mutate(itemToDelete);
     }
-  }
+  };
 
   if (!loggedOnUser?.isadmin) {
     return <h1 className="text-center mt-5">Admin not logged in</h1>;
@@ -138,7 +138,10 @@ const Admin = () => {
       <h1 className="text-center m-4">Admin page</h1>
       <Row className="mt-4">
         <Col lg={4}>
-          <ProductsCard products={products} prepareForDelete={prepareForDelete} />
+          <ProductsCard
+            products={products}
+            prepareForDelete={prepareForDelete}
+          />
         </Col>
         <Col lg={4}>
           <UsersCard users={users} prepareForDelete={prepareForDelete} />

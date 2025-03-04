@@ -5,7 +5,9 @@ import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/users`;
 
-const getAll = async (loggedOnUser?: LoginPayload): Promise<UserFromBackend[]> => {
+const getAll = async (
+  loggedOnUser?: LoginPayload
+): Promise<UserFromBackend[]> => {
   if (!loggedOnUser?.isadmin) {
     throw new Error('Only admin users can get users');
   }
@@ -45,9 +47,7 @@ const deleteOne = async (id: string, accessToken?: string) => {
   }
 
   try {
-    const response = await axios.delete(
-      `${baseUrl}/${id}`,
-    {
+    const response = await axios.delete(`${baseUrl}/${id}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -58,7 +58,7 @@ const deleteOne = async (id: string, accessToken?: string) => {
         `Got response code ${response.status} while deleting product`
       );
     }
-    return response
+    return response;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
       throw new Error(error.response.data.Error);
@@ -66,6 +66,6 @@ const deleteOne = async (id: string, accessToken?: string) => {
       throw new Error('Unknown error happened while deleting user');
     }
   }
-}
+};
 
 export default { getAll, register, deleteOne };

@@ -55,7 +55,7 @@ const ProductCard = (props: ProductCardProps) => {
         </Card.Body>
       </Link>
       <Button
-      disabled={props.product.instock === 0}
+        disabled={props.product.instock === 0}
         size="lg"
         style={{ width: 140 }}
         onClick={() =>

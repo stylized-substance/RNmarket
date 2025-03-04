@@ -1,7 +1,12 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 
-import { LoginPayload, NewOrder, OrderInDb, OrderFromBackend } from '#src/types/types.ts';
+import {
+  LoginPayload,
+  NewOrder,
+  OrderInDb,
+  OrderFromBackend
+} from '#src/types/types.ts';
 import { isString, isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/orders`;
@@ -84,6 +89,6 @@ const deleteOne = async (id: string, accessToken?: string) => {
       throw new Error('Unknown error happened while deleting order');
     }
   }
-}
+};
 
 export default { postNew, getAll, deleteOne };
