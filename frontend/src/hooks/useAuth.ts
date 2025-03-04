@@ -8,10 +8,10 @@ const useAuth = () => {
   const { changeToast } = useToast();
 
   // Read logged on user data from localStorage
-  const readUserFromLocalStorage = (): LoginPayload | null => {
+  const readUserFromLocalStorage = (): LoginPayload | undefined => {
     const userInStorage = localStorage.getItem('loggedOnUser');
     if (!userInStorage) {
-      return null;
+      return undefined;
     }
 
     const userObject: unknown = JSON.parse(userInStorage);

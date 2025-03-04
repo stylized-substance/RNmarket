@@ -1,7 +1,7 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
 import { NewUser, UserFromBackend, LoginPayload } from '#src/types/types.ts';
-import { isApiErrorResponse } from '#src/utils/typeNarrowers';
+import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/users`;
 
@@ -39,4 +39,33 @@ const register = async (userData: NewUser): Promise<void> => {
   }
 };
 
-export default { getAll, register };
+const deleteOne = async (id: string, accessToken?: string) => {
+  if (!isString(accessToken) || accessToken.length === 0) {
+    throw new Error('Access token missing or invalid');
+  }
+
+  try {
+    const response = await axios.delete(
+      `${baseUrl}/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (response.status !== 204) {
+      console.error(
+        `Got response code ${response.status} while deleting product`
+      );
+    }
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error('Unknown error happened while deleting user');
+    }
+  }
+}
+
+export default { getAll, register, deleteOne };

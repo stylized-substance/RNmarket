@@ -59,4 +59,31 @@ const postNew = async (
   }
 };
 
-export default { postNew, getAll };
+const deleteOne = async (id: string, accessToken?: string) => {
+  if (!isString(accessToken) || accessToken.length === 0) {
+    throw new Error('Access token missing or invalid');
+  }
+
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (response.status !== 204) {
+      console.error(
+        `Got response code ${response.status} while deleting order`
+      );
+    }
+    return response;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error('Unknown error happened while deleting order');
+    }
+  }
+}
+
+export default { postNew, getAll, deleteOne };

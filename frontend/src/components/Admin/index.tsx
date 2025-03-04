@@ -5,16 +5,14 @@ import productsService from '#src/services/products';
 import usersService from '#src/services/users';
 import ordersService from '#src/services/orders';
 
-import { LoginPayload } from '#src/types/types.ts';
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OrdersCard from '#src/components/Admin/OrdersCard';
 import ProductsCard from '#src/components/Admin/ProductsCard';
 import UsersCard from '#src/components/Admin/UsersCard';
 
-const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
-  const { refreshAccessToken } = useAuth();
+const Admin = () => {
+  const { loggedOnUser, refreshAccessToken } = useAuth();
 
   // Fetch products, users and orders with Tanstack Query
   const { data: products } = useQuery({
@@ -64,7 +62,7 @@ const Admin = ({ loggedOnUser }: { loggedOnUser: LoginPayload | null }) => {
               await refreshAccessToken.mutateAsync(loggedOnUser);
             return await ordersService.getAll(refreshResult?.loggedOnUser);
           } else {
-            throw new Error(error.message);
+            throw error;
           }
         }
       }

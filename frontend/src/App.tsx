@@ -68,7 +68,7 @@ const App = () => {
               <Route path="/products/:id" element={<SingleProduct />} />
               <Route
                 path="/admin"
-                element={<Admin loggedOnUser={loggedOnUser} />}
+                element={<Admin />}
               />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
@@ -85,7 +85,7 @@ const App = () => {
             right: 0,
             bottom: 0
           }}
-          className="p-2 text-center w-100"
+          className="p-2 text-center"
         >
           © 2025 RNMarket
         </footer>
