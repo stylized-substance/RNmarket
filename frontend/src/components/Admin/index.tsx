@@ -15,7 +15,7 @@ import ProductsCard from '#src/components/Admin/ProductsCard';
 import UsersCard from '#src/components/Admin/UsersCard';
 import DeleteModal from './DeleteModal';
 
-import { ItemToDelete } from '#src/types/types'
+import { ItemToDelete } from '#src/types/types';
 
 const Admin = () => {
   const { changeToast } = useToast();
@@ -24,13 +24,10 @@ const Admin = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [itemToDelete, setItemtoDelete] = useState<ItemToDelete | null>(null);
 
-  // TODO: Consolidate queries to a single function
-
   // Fetch products, users and orders with Tanstack Query
   const { data: products } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      console.log('fetching products');
       return await productsService.getAll({});
     }
   });
