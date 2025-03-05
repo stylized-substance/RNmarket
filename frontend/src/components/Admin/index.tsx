@@ -124,9 +124,7 @@ const Admin = () => {
         }
       }
     },
-    onSuccess: async (result, { type }) => {
-      console.log(result);
-      console.log(`invalidating ${type}`);
+    onSuccess: async (_result, { type }) => {
       await queryClient.invalidateQueries({
         queryKey: [`${type}`]
       });
