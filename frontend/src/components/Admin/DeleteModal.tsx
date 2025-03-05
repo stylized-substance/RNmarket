@@ -2,25 +2,25 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 interface DeleteModalProps {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showDeleteModal: boolean;
+  setShowDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: () => void;
 }
 
 const DeleteModal = ({
-  showModal,
-  setShowModal,
+  showDeleteModal,
+  setShowDeleteModal,
   handleDelete
 }: DeleteModalProps) => {
   return (
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
+    <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
       <Modal.Header>
         <Modal.Title>Really delete?</Modal.Title>
       </Modal.Header>
       <Modal.Footer>
         <Button
           style={{ background: 'black' }}
-          onClick={() => setShowModal(false)}
+          onClick={() => setShowDeleteModal(false)}
         >
           Cancel
         </Button>

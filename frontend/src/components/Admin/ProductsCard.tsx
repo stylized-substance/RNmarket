@@ -2,18 +2,14 @@ import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 
-import { Product } from '#src/types/types.ts';
-interface itemToDelete {
-  type: 'product' | 'user' | 'order';
-  id: string;
-}
+import { Product, ItemToDelete } from '#src/types/types.ts';
 
 const ProductsCard = ({
   products,
   prepareForDelete
 }: {
   products: Product[] | undefined;
-  prepareForDelete: (item: itemToDelete) => void;
+  prepareForDelete: (item: ItemToDelete) => void;
 }) => {
   return (
     <Card>
@@ -42,7 +38,7 @@ const ProductsCard = ({
                   <Button
                     style={{ background: 'firebrick' }}
                     onClick={() =>
-                      prepareForDelete({ type: 'product', id: product.id })
+                      prepareForDelete({ type: 'products', id: product.id })
                     }
                     className="d-flex gap-2"
                   >

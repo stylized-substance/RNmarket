@@ -2,49 +2,15 @@ import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 
-import { UserFromBackend } from '#src/types/types.ts';
-
-interface itemToDelete {
-  type: 'product' | 'user' | 'order';
-  id: string;
-}
+import { UserFromBackend, ItemToDelete } from '#src/types/types.ts';
 
 const UsersCard = ({
   users,
   prepareForDelete
 }: {
   users: UserFromBackend[] | undefined;
-  prepareForDelete: (item: itemToDelete) => void;
+  prepareForDelete: (item: ItemToDelete) => void;
 }) => {
-  // TODO: fix users being deleted in reverse order
-
-  // const deleteMutation = useMutation({
-  //   // Delete user from backend
-  //   mutationFn: async (id: string) => {
-  //     try {
-  //       return await usersService.deleteOne(id, loggedOnUser?.accessToken);
-  //     } catch (error: unknown) {
-  //       if (error instanceof Error) {
-  //         if (error.message === 'jwt expired' && loggedOnUser) {
-  //           // Refresh expired access token and retry deleting user
-  //           const { newAccessToken } =
-  //             await refreshAccessToken.mutateAsync(loggedOnUser);
-  //           return await usersService.deleteOne(id, newAccessToken);
-  //         } else {
-  //           throw error;
-  //         }
-  //       }
-  //     }
-  //   },
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: ['users']
-  //     });
-  //     changeToast({ message: 'User deleted', show: true });
-  //   },
-  //   onError: (error) => changeToast({ message: error.message, show: true })
-  // });
-
   return (
     <Card>
       <Card.Header>Users in database</Card.Header>
@@ -70,7 +36,7 @@ const UsersCard = ({
                   <Button
                     style={{ background: 'firebrick' }}
                     onClick={() =>
-                      prepareForDelete({ type: 'user', id: user.id })
+                      prepareForDelete({ type: 'users', id: user.id })
                     }
                     className="d-flex gap-2"
                   >

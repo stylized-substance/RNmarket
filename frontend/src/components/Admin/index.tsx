@@ -15,22 +15,22 @@ import ProductsCard from '#src/components/Admin/ProductsCard';
 import UsersCard from '#src/components/Admin/UsersCard';
 import DeleteModal from './DeleteModal';
 
-interface itemToDelete {
-  type: 'product' | 'user' | 'order';
-  id: string;
-}
+import { ItemToDelete } from '#src/types/types'
 
 const Admin = () => {
   const { changeToast } = useToast();
   const { loggedOnUser, refreshAccessToken } = useAuth();
   const queryClient = useQueryClient();
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [itemToDelete, setItemtoDelete] = useState<itemToDelete | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [itemToDelete, setItemtoDelete] = useState<ItemToDelete | null>(null);
+
+  // TODO: Consolidate queries to a single function
 
   // Fetch products, users and orders with Tanstack Query
   const { data: products } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
+      console.log('fetching products');
       return await productsService.getAll({});
     }
   });
@@ -84,43 +84,68 @@ const Admin = () => {
   });
 
   const deleteMutation = useMutation({
-    // Delete product from backend
-    mutationFn: async (id: string) => {
+    // Delete item from backend
+    mutationFn: async ({ type, id }: ItemToDelete) => {
+      let deleteFunction;
+
       try {
-        return await productsService.deleteOne(id, loggedOnUser?.accessToken);
+        switch (type) {
+          case 'products':
+            deleteFunction = productsService.deleteOne;
+            return await productsService.deleteOne(
+              id,
+              loggedOnUser?.accessToken
+            );
+          case 'users':
+            deleteFunction = usersService.deleteOne;
+            return await usersService.deleteOne(id, loggedOnUser?.accessToken);
+          case 'orders':
+            deleteFunction = ordersService.deleteOne;
+            return await ordersService.deleteOne(id, loggedOnUser?.accessToken);
+          default: {
+            const _exhaustiveCheck: never = type;
+            return _exhaustiveCheck;
+          }
+        }
       } catch (error: unknown) {
         if (error instanceof Error) {
-          if (error.message === 'jwt expired' && loggedOnUser) {
+          if (
+            error.message === 'jwt expired' &&
+            loggedOnUser &&
+            deleteFunction
+          ) {
             // Refresh expired access token and retry deleting product
             const { newAccessToken } =
               await refreshAccessToken.mutateAsync(loggedOnUser);
-            return await productsService.deleteOne(id, newAccessToken);
+            return await deleteFunction(id, newAccessToken);
           } else {
             throw error;
           }
         }
       }
     },
-    onSuccess: async () => {
+    onSuccess: async (result, { type }) => {
+      console.log(result);
+      console.log(`invalidating ${type}`);
       await queryClient.invalidateQueries({
-        queryKey: ['products']
+        queryKey: [`${type}`]
       });
-      changeToast({ message: 'Product deleted', show: true });
+      changeToast({ message: `${type} deleted`, show: true });
     },
     onError: (error) => changeToast({ message: error.message, show: true })
   });
 
-  const prepareForDelete = (item: itemToDelete) => {
+  const prepareForDelete = (item: ItemToDelete) => {
     setItemtoDelete(item);
-    setShowModal(true);
+    setShowDeleteModal(true);
   };
 
   const handleDelete = () => {
     console.log('itemToDelete', itemToDelete);
 
     if (itemToDelete) {
-      setShowModal(false);
-      // deleteMutation.mutate(itemToDelete);
+      setShowDeleteModal(false);
+      deleteMutation.mutate(itemToDelete);
     }
   };
 
@@ -131,8 +156,8 @@ const Admin = () => {
   return (
     <>
       <DeleteModal
-        showModal={showModal}
-        setShowModal={setShowModal}
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
         handleDelete={handleDelete}
       />
       <h1 className="text-center m-4">Admin page</h1>
