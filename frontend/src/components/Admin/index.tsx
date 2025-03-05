@@ -139,8 +139,6 @@ const Admin = () => {
   };
 
   const handleDelete = () => {
-    console.log('itemToDelete', itemToDelete);
-
     if (itemToDelete) {
       setShowDeleteModal(false);
       deleteMutation.mutate(itemToDelete);
