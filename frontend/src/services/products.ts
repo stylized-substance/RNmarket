@@ -89,15 +89,16 @@ const editOne = async (product: Product, accessToken?: string) => {
     throw new Error('Access token missing or invalid');
   }
 
-  console.log(product);
-
   try {
-    const response = await axios.put(`${baseUrl}/${product.id}`, product, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
+    const response = await axios.put<{ saveResult: Product }>(
+      `${baseUrl}/${product.id}`,
+      product,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       }
-    });
-
+    );
     return response;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
