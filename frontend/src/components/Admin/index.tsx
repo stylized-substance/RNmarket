@@ -25,7 +25,7 @@ const Admin = () => {
   const queryClient = useQueryClient();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [itemToDelete, setItemtoDelete] = useState<ItemToDelete | null>(null);
-  const [showProductAddForm, setShowProductAddForm] = useState<boolean>(true);
+  const [showProductAddForm, setShowProductAddForm] = useState<boolean>(false);
 
   // Fetch products, users and orders with Tanstack Query
   const { data: products } = useQuery({
@@ -159,23 +159,22 @@ const Admin = () => {
       <Row className="mt-4">
         <h1 className="text-center mt-4 mb-4">Admin page</h1>
       </Row>
-      <Row>
-        {showProductAddForm && (
+      <Row className="mt-4">
+        {showProductAddForm ? (
           <Col lg={4}>
-            <ProductAddForm />
+            <ProductAddForm setShowProductAddForm={setShowProductAddForm} />
+          </Col>
+        ) : (
+          <Col lg={4}>
+            <Button
+              className="custom-button"
+              size="lg"
+              onClick={() => setShowProductAddForm(true)}
+            >
+              Add new product
+            </Button>
           </Col>
         )}
-      </Row>
-      <Row className="mt-4">
-        <Col lg={4}>
-          <Button
-            className="custom-button"
-            size="lg"
-            onClick={() => setShowProductAddForm(true)}
-          >
-            Add new product
-          </Button>
-        </Col>
       </Row>
       <Row className="mt-4">
         <Col lg={4}>

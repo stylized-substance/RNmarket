@@ -31,6 +31,7 @@ const ProductCard = (props: ProductCardProps) => {
       id="product-card-container"
       className="justify-content-between border-0 mb-5"
     >
+      {/*TODO: remove hardcoded pixel values*/}
       <Link to={`/products/${props.product.id}`} key={props.product.id}>
         <div
           style={{ height: 200 }}

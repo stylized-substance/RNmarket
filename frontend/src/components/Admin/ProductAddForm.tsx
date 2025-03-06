@@ -14,7 +14,11 @@ import * as yup from 'yup';
 
 import { NewProduct } from '#src/types/types.ts';
 
-const ProductAddForm = () => {
+const ProductAddForm = ({
+  setShowProductAddForm
+}: {
+  setShowProductAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { changeToast } = useToast();
   const { loggedOnUser, refreshAccessToken } = useAuth();
 
@@ -181,9 +185,17 @@ const ProductAddForm = () => {
               </InputGroup>
             </Form.Group>
           </Row>
-          <Button type="submit" className="custom-button mt-4">
-            Add product
-          </Button>
+          <Row className="gap-3 ms-1 mb-4">
+            <Button type="submit" className="custom-button mt-4 w-auto">
+              Add product
+            </Button>
+            <Button
+              className="custom-button mt-4 w-auto"
+              onClick={() => setShowProductAddForm(false)}
+            >
+              Cancel
+            </Button>
+          </Row>
         </Form>
       )}
     </Formik>
