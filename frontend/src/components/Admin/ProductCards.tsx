@@ -79,7 +79,10 @@ const ProductCards = ({
       <Card.Body>
         {products?.map((product) => (
           <div key={product.id} className="mb-2">
-            <ProductAccordion product={product} prepareForDelete={prepareForDelete} />
+            <ProductAccordion
+              product={product}
+              prepareForDelete={prepareForDelete}
+            />
           </div>
         ))}
       </Card.Body>

@@ -54,9 +54,7 @@ const deleteOne = async (id: string, accessToken?: string) => {
     });
 
     if (response.status !== 204) {
-      console.error(
-        `Got response code ${response.status} while deleting user`
-      );
+      console.error(`Got response code ${response.status} while deleting user`);
     }
     return response;
   } catch (error: unknown) {

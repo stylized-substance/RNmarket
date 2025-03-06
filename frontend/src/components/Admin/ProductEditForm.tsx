@@ -34,7 +34,7 @@ const ProductEditForm = ({
       const productForBackend = {
         ...product,
         ...editedProduct
-      }
+      };
 
       try {
         return await productsService.editOne(
@@ -47,7 +47,10 @@ const ProductEditForm = ({
             // Refresh expired access token and retry posting order
             const { newAccessToken } =
               await refreshAccessToken.mutateAsync(loggedOnUser);
-            return await productsService.editOne(productForBackend, newAccessToken);
+            return await productsService.editOne(
+              productForBackend,
+              newAccessToken
+            );
           } else {
             throw error;
           }
