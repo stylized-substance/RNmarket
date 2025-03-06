@@ -8,7 +8,7 @@ import ProductEditForm from '#src/components/Admin/ProductEditForm';
 
 import { Product, ItemToDelete } from '#src/types/types.ts';
 
-const ProductCard = ({
+const ProductAccordion = ({
   product,
   prepareForDelete
 }: {
@@ -78,8 +78,8 @@ const ProductCards = ({
       <Card.Header>Products in database</Card.Header>
       <Card.Body>
         {products?.map((product) => (
-          <div key={product.id}>
-            <ProductCard product={product} prepareForDelete={prepareForDelete} />
+          <div key={product.id} className="mb-2">
+            <ProductAccordion product={product} prepareForDelete={prepareForDelete} />
           </div>
         ))}
       </Card.Body>
