@@ -1,6 +1,11 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { NewProduct, Product, ProductQuery } from '../types/types';
+import {
+  NewProduct,
+  EditedProduct,
+  Product,
+  ProductQuery
+} from '../types/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/products`;
@@ -65,12 +70,16 @@ const addNew = async (product: NewProduct, accessToken?: string) => {
   };
 
   try {
-    const response = await axios.post<{ addedProduct: Product }>(baseUrl, newProduct, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
+    const response = await axios.post<{ addedProduct: Product }>(
+      baseUrl,
+      newProduct,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       }
-    });
-    return response.data.addedProduct
+    );
+    return response.data.addedProduct;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
       throw new Error(error.response.data.Error);
@@ -78,6 +87,31 @@ const addNew = async (product: NewProduct, accessToken?: string) => {
       throw new Error('Unknown error happened while adding product');
     }
   }
+};
+
+const editOne = async (product: Product, accessToken?: string) => {
+  if (!isString(accessToken) || accessToken.length === 0) {
+    throw new Error('Access token missing or invalid');
+  }
+
+  console.log(product);
+
+  try {
+    const response = await axios.put(`${baseUrl}/${product.id}`, product, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    console.log(response);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error('Unknown error happened while adding product');
+    }
+  }
+
+  return;
 };
 
 const deleteOne = async (id: string, accessToken?: string) => {
@@ -107,4 +141,4 @@ const deleteOne = async (id: string, accessToken?: string) => {
   }
 };
 
-export default { getAll, getOne, addNew, deleteOne };
+export default { getAll, getOne, addNew, editOne, deleteOne };

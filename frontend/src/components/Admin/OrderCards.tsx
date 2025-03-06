@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 import { OrderFromBackend, ItemToDelete } from '#src/types/types.ts';
 
-const OrdersCard = ({
+const OrderCards = ({
   orders,
   prepareForDelete
 }: {
@@ -84,4 +84,4 @@ const OrdersCard = ({
   );
 };
 
-export default OrdersCard;
+export default OrderCards;

@@ -135,6 +135,8 @@ export type NewProduct = Pick<
   specs: string | string[];
 };
 
+export type EditedProduct = Pick<BaseProduct, 'title' | 'price' | 'instock'>
+
 export interface Mobile extends BaseProduct {
   category: 'Mobiles';
   popular?: boolean;

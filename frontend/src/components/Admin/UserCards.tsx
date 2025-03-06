@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 import { UserFromBackend, ItemToDelete } from '#src/types/types.ts';
 
-const UsersCard = ({
+const UserCards = ({
   users,
   prepareForDelete
 }: {
@@ -53,4 +53,4 @@ const UsersCard = ({
   );
 };
 
-export default UsersCard;
+export default UserCards;

@@ -11,9 +11,9 @@ import ordersService from '#src/services/orders';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import OrdersCard from '#src/components/Admin/OrdersCard';
-import ProductsCard from '#src/components/Admin/ProductsCard';
-import UsersCard from '#src/components/Admin/UsersCard';
+import OrderCards from '#src/components/Admin/OrderCards';
+import ProductCards from '#src/components/Admin/ProductCards';
+import UserCards from '#src/components/Admin/UserCards';
 import DeleteModal from '#src/components/Admin/DeleteModal';
 import ProductAddForm from '#src/components/Admin/ProductAddForm';
 
@@ -178,16 +178,16 @@ const Admin = () => {
       </Row>
       <Row className="mt-4">
         <Col lg={4}>
-          <ProductsCard
+          <ProductCards
             products={products}
             prepareForDelete={prepareForDelete}
           />
         </Col>
         <Col lg={4}>
-          <UsersCard users={users} prepareForDelete={prepareForDelete} />
+          <UserCards users={users} prepareForDelete={prepareForDelete} />
         </Col>
         <Col lg={4}>
-          <OrdersCard orders={orders} prepareForDelete={prepareForDelete} />
+          <OrderCards orders={orders} prepareForDelete={prepareForDelete} />
         </Col>
       </Row>
     </>
