@@ -36,8 +36,6 @@ const ProductEditForm = ({
         ...editedProduct
       }
 
-      // console.log(productForBackend)
-
       try {
         return await productsService.editOne(
           productForBackend,

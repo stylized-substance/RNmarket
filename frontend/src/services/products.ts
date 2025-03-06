@@ -1,11 +1,6 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import {
-  NewProduct,
-  EditedProduct,
-  Product,
-  ProductQuery
-} from '../types/types';
+import { NewProduct, Product, ProductQuery } from '../types/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/products`;
@@ -102,7 +97,8 @@ const editOne = async (product: Product, accessToken?: string) => {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    console.log(response);
+
+    return response;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
       throw new Error(error.response.data.Error);
@@ -110,8 +106,6 @@ const editOne = async (product: Product, accessToken?: string) => {
       throw new Error('Unknown error happened while adding product');
     }
   }
-
-  return;
 };
 
 const deleteOne = async (id: string, accessToken?: string) => {
