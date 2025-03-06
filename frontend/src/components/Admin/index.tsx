@@ -10,10 +10,12 @@ import ordersService from '#src/services/orders';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import OrdersCard from '#src/components/Admin/OrdersCard';
 import ProductsCard from '#src/components/Admin/ProductsCard';
 import UsersCard from '#src/components/Admin/UsersCard';
-import DeleteModal from './DeleteModal';
+import DeleteModal from '#src/components/Admin/DeleteModal';
+import ProductAddForm from '#src/components/Admin/ProductAddForm';
 
 import { ItemToDelete } from '#src/types/types';
 
@@ -23,6 +25,7 @@ const Admin = () => {
   const queryClient = useQueryClient();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [itemToDelete, setItemtoDelete] = useState<ItemToDelete | null>(null);
+  const [showProductAddForm, setShowProductAddForm] = useState<boolean>(true);
 
   // Fetch products, users and orders with Tanstack Query
   const { data: products } = useQuery({
@@ -153,7 +156,27 @@ const Admin = () => {
         setShowDeleteModal={setShowDeleteModal}
         handleDelete={handleDelete}
       />
-      <h1 className="text-center m-4">Admin page</h1>
+      <Row className="mt-4">
+        <h1 className="text-center mt-4 mb-4">Admin page</h1>
+      </Row>
+      <Row>
+        {showProductAddForm && (
+          <Col lg={4}>
+            <ProductAddForm />
+          </Col>
+        )}
+      </Row>
+      <Row className="mt-4">
+        <Col lg={4}>
+          <Button
+            className="custom-button"
+            size="lg"
+            onClick={() => setShowProductAddForm(true)}
+          >
+            Add new product
+          </Button>
+        </Col>
+      </Row>
       <Row className="mt-4">
         <Col lg={4}>
           <ProductsCard

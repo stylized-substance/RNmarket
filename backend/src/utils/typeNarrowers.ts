@@ -11,7 +11,7 @@ import {
   Laptop,
   ProductCategory,
   EditedReview,
-  CartItems
+  CartItems,
 } from '#src/types/types';
 
 // Custom error class for type narrowing errors

@@ -46,9 +46,7 @@ const isStringArray = (param: unknown): param is string[] => {
 };
 
 const isProductCategory = (param: string): param is ProductCategory => {
-  return Object.values(ProductCategory)
-    .map((value) => value.toString())
-    .includes(param);
+  return ['Mobiles', 'Furniture', 'Laptops'].includes(param);
 };
 
 const isNewReview = (param: unknown): param is NewReview => {

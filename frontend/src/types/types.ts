@@ -115,7 +115,7 @@ export interface BaseProduct {
   id: string;
   title: string;
   lowerCaseTitle?: string;
-  category: string;
+  category: ProductCategory;
   price: number;
   imgs?: string[];
   specs: string[];
@@ -127,6 +127,13 @@ export interface BaseProduct {
   createdAt: string;
   updatedAt: string;
 }
+
+export type NewProduct = Pick<
+  BaseProduct,
+  'category' | 'title' | 'price' | 'instock'
+> & {
+  specs: string | string[];
+};
 
 export interface Mobile extends BaseProduct {
   category: 'Mobiles';
@@ -154,11 +161,7 @@ export interface Laptop extends BaseProduct {
 
 export type Product = Mobile | FurnitureItem | Laptop;
 
-export enum ProductCategory {
-  Mobiles = 'Mobiles',
-  Furniture = 'Furniture',
-  Laptops = 'Laptops'
-}
+export type ProductCategory = 'Mobiles' | 'Furniture' | 'Laptops';
 
 export type ProductSortOption =
   | 'nameAsc'

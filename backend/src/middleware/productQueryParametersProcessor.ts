@@ -30,7 +30,6 @@ const processProductQueryParameters = (
   };
 
   const parseStringParameter = (param: unknown): string | undefined => {
-    console.log('param', param);
     try {
       const parsed = parseString(param);
       return parsed;
@@ -38,8 +37,6 @@ const processProductQueryParameters = (
       return undefined;
     }
   };
-
-  console.log('query', req.query);
 
   const queryParameters: ProductQueryParameters = {
     limit: parseNumericParameter(req.query.limit),

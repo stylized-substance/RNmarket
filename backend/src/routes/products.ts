@@ -3,7 +3,7 @@ import { Product as ProductModel } from '#src/models';
 import { processProductQueryParameters } from '#src/middleware/productQueryParametersProcessor';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Product } from '#src/types/types';
-import { toProduct, parseString } from '#src/utils/typeNarrowers';
+import { isProduct, toProduct, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
 const router: Router = Router();
@@ -43,11 +43,20 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   if (!req.verifiedToken.isadmin) {
     return res.status(400).json({ Error: 'Only admin users can add products' });
   }
-  const newProduct: Product = toProduct(req.body);
-  newProduct.id = uuidv4();
+
+  if (!isProduct(req.body)) {
+    return res.status(400).json({ Error: 'Invalid product data' })
+  }
+
+  const newProduct: Product = {
+    ...req.body,
+    id: uuidv4()
+  }
+
   const addedProduct: ProductModel = await ProductModel.create({
     ...newProduct
   });
+
   return res.json({ addedProduct });
 });
 

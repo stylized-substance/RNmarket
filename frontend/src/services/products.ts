@@ -1,6 +1,6 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { Product, ProductQuery } from '../types/types';
+import { NewProduct, Product, ProductQuery } from '../types/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl = `${backendAddress}/api/products`;
@@ -53,6 +53,33 @@ const getOne = async (id: string): Promise<Product> => {
   }
 };
 
+const addNew = async (product: NewProduct, accessToken?: string) => {
+  if (!isString(accessToken) || accessToken.length === 0) {
+    throw new Error('Access token missing or invalid');
+  }
+
+  // Add product specs to array to comply with backend type
+  const newProduct = {
+    ...product,
+    specs: [product.specs]
+  };
+
+  try {
+    const response = await axios.post<{ addedProduct: Product }>(baseUrl, newProduct, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    return response.data.addedProduct
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {
+      throw new Error(error.response.data.Error);
+    } else {
+      throw new Error('Unknown error happened while adding product');
+    }
+  }
+};
+
 const deleteOne = async (id: string, accessToken?: string) => {
   if (!isString(accessToken) || accessToken.length === 0) {
     throw new Error('Access token missing or invalid');
@@ -80,4 +107,4 @@ const deleteOne = async (id: string, accessToken?: string) => {
   }
 };
 
-export default { getAll, getOne, deleteOne };
+export default { getAll, getOne, addNew, deleteOne };
