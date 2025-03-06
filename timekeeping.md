@@ -106,3 +106,4 @@
 | 26.02.2025 | 2 | Worked on admin page, orders data handling | 221
 | 03.03.2025 | 4 | Worked on admin page, orders data handling | 225
 | 04.03.2025 | 3 | Worked on admin page | 228
+| 06.03.2025 | 3 | Worked on admin page | 231
