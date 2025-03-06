@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
 
 import { Product, ItemToDelete } from '#src/types/types.ts';
 
@@ -35,16 +36,24 @@ const ProductsCard = ({
                     <dt>Updated at</dt>
                     <dd>{product.updatedAt}</dd>
                   </dl>
-                  <Button
-                    style={{ background: 'firebrick' }}
-                    onClick={() =>
-                      prepareForDelete({ type: 'products', id: product.id })
-                    }
-                    className="d-flex gap-2"
-                  >
-                    <div>Delete</div>
-                    <i className="bi bi-trash3"></i>
-                  </Button>
+                  <Row className="gap-3">
+                    <Button
+                      style={{ background: 'firebrick' }}
+                      onClick={() =>
+                        prepareForDelete({ type: 'products', id: product.id })
+                      }
+                      className="d-flex gap-2 w-auto"
+                    >
+                      <div>Delete</div>
+                      <i className="bi bi-trash3"></i>
+                    </Button>
+                    <Button
+                      className="custom-button w-auto"
+                      onClick={() => {}}
+                    >
+                      Edit
+                    </Button>
+                  </Row>
                 </Accordion.Body>
               </Accordion.Item>
             </div>
