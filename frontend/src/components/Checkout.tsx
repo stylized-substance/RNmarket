@@ -150,10 +150,9 @@ const Checkout = () => {
                 <Formik<CheckoutFormValues>
                   validationSchema={formSchema}
                   onSubmit={(values) => handleSubmit(values)}
-                  //TODO: autofill logged on user's details
                   initialValues={{
-                    email: '',
-                    name: '',
+                    email: loggedOnUser ? loggedOnUser.username : '',
+                    name: loggedOnUser ? loggedOnUser.name : '',
                     address: '',
                     zipcode: '',
                     city: '',
