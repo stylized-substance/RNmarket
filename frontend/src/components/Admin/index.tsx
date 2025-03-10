@@ -8,6 +8,8 @@ import productsService from '#src/services/products';
 import usersService from '#src/services/users';
 import ordersService from '#src/services/orders';
 
+import orderBy from 'lodash/orderBy';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -31,7 +33,23 @@ const Admin = () => {
   const { data: products } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      return await productsService.getAll({});
+      const products = await productsService.getAll({});
+
+      // Sort by title
+      const lowerCased = products.map((product) => ({
+        ...product,
+        lowerCaseTitle: product.title.toLowerCase()
+      }));
+
+      const sorted = orderBy(lowerCased, ['lowerCaseTitle'], ['asc']);
+
+      // Discard lowercase titles
+      const lowerCaseDiscarded = sorted.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ({ lowerCaseTitle, ...rest }) => rest
+      );
+
+      return lowerCaseDiscarded;
     }
   });
 
@@ -43,7 +61,23 @@ const Admin = () => {
       }
 
       try {
-        return await usersService.getAll(loggedOnUser);
+        const users = await usersService.getAll(loggedOnUser);
+
+        // Sort by username
+        const lowerCased = users.map((user) => ({
+          ...user,
+          lowerCaseUsername: user.username.toLowerCase()
+        }));
+
+        const sorted = orderBy(lowerCased, ['lowerCaseUsername'], ['asc']);
+
+        // Discard lowercase user names
+        const lowerCaseDiscarded = sorted.map(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ({ lowerCaseUsername, ...rest }) => rest
+        );
+
+        return lowerCaseDiscarded;
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message === 'jwt expired') {
@@ -67,7 +101,8 @@ const Admin = () => {
       }
 
       try {
-        return await ordersService.getAll(loggedOnUser);
+        const orders = await ordersService.getAll(loggedOnUser);
+        return orderBy(orders, ['createdAt'], ['desc']);
       } catch (error: unknown) {
         if (error instanceof Error) {
           if (error.message === 'jwt expired') {
