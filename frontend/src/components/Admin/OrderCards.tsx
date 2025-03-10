@@ -17,7 +17,7 @@ const OrderCards = ({
       <Card.Body>
         <Accordion>
           {orders?.map((order) => (
-            <div key={order.id}>
+            <div key={order.id} className="mb-2">
               <Accordion.Item key={order.id} eventKey={order.id}>
                 <Accordion.Header>{order.id}</Accordion.Header>
                 <Accordion.Body>

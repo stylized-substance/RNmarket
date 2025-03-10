@@ -17,7 +17,7 @@ const UserCards = ({
       <Card.Body>
         <Accordion>
           {users?.map((user) => (
-            <div key={user.id}>
+            <div key={user.id} className="mb-2">
               <Accordion.Item key={user.id} eventKey={user.id}>
                 <Accordion.Header>{user.username}</Accordion.Header>
                 <Accordion.Body>
