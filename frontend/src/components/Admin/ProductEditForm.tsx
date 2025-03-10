@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth.ts';
 import { useToast } from '#src/context/ToastContext.tsx';
 
@@ -23,6 +23,7 @@ const ProductEditForm = ({
 }) => {
   const { changeToast } = useToast();
   const { loggedOnUser, refreshAccessToken } = useAuth();
+  const queryClient = useQueryClient();
 
   const productEditMutation = useMutation({
     // Edit product in backend
@@ -57,7 +58,10 @@ const ProductEditForm = ({
         }
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['products']
+      });
       changeToast({
         message: 'Product updated',
         show: true
@@ -72,6 +76,7 @@ const ProductEditForm = ({
   });
 
   const handleSubmit = (formValues: EditedProduct) => {
+    setIsEditing(false)
     productEditMutation.mutate(formValues);
   };
 
