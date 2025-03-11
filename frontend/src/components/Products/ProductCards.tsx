@@ -5,6 +5,7 @@ import { useCart } from '#src/context/CartContext.tsx';
 
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
+
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
@@ -29,25 +30,36 @@ const ProductCard = (props: ProductCardProps) => {
   return (
     <Card
       id="product-card-container"
-      className="justify-content-between border-0 mb-5"
+      className="border-0 mb-5 justify-content-start"
+      style={{
+        height: '40vh',
+        width: 'auto',
+        aspectRatio: '1 / 1'
+      }}
     >
-      {/*TODO: remove hardcoded pixel values*/}
-      <Link to={`/products/${props.product.id}`} key={props.product.id}>
-        <div
-          style={{ height: 200 }}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <Card.Img
-            variant="top"
-            src={imageUrl}
-            style={{ maxHeight: 200, objectFit: 'contain' }}
-          />
-        </div>
+      <Link
+        to={`/products/${props.product.id}`}
+        key={props.product.id}
+        id="image-link"
+        style={{ height: '50%' }}
+      >
+        <Card.Img
+          variant="top"
+          src={imageUrl}
+          style={{
+            height: '100%',
+            objectFit: 'contain'
+          }}
+        />
+      </Link>
+      <Link
+        to={`/products/${props.product.id}`}
+        key={props.product.id}
+        id="image-link"
+        style={{ height: '40%' }}
+      >
         <Card.Body>
-          <Card.Title
-            style={{ height: 100 }}
-            className="text-truncate text-wrap"
-          >
+          <Card.Title className="text-truncate text-wrap">
             {props.product.title}
           </Card.Title>
           <Card.Subtitle className="fs-5 mt-2 text-danger">
@@ -58,7 +70,7 @@ const ProductCard = (props: ProductCardProps) => {
       <Button
         disabled={props.product.instock === 0}
         size="lg"
-        style={{ width: 140 }}
+        style={{ height: '10%' }}
         onClick={() =>
           cart.dispatch({
             type: 'added',
