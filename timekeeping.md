@@ -108,3 +108,4 @@
 | 04.03.2025 | 3 | Worked on admin page | 228
 | 06.03.2025 | 3 | Worked on admin page | 231
 | 10.03.2025 | 1 | Worked on admin page, checkout page | 232
+| 11.03.2025 | 1 | Worked product card styles | 233
