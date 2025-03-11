@@ -39,6 +39,8 @@ const CartProducts = () => {
     });
   };
 
+  {/*TODO: remove hardcoded pixel values*/}
+
   return (
     <>
       {cartItems.map((item) => (

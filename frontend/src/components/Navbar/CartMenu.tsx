@@ -42,6 +42,9 @@ const CartMenu = () => {
     });
   };
 
+  {/*TODO: remove hardcoded pixel values*/}
+
+
   return (
     <Col
       style={{
