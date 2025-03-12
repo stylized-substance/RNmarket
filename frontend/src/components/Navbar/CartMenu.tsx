@@ -42,8 +42,9 @@ const CartMenu = () => {
     });
   };
 
-  {/*TODO: remove hardcoded pixel values*/}
-
+  {
+    /*TODO: remove hardcoded pixel values*/
+  }
 
   return (
     <Col
@@ -54,7 +55,13 @@ const CartMenu = () => {
       }}
       className="d-flex flex-column overflow-x-hidden overflow-y-scroll"
     >
-      <Stack direction="horizontal" gap={5} className="justify-content-center">
+      <Stack
+        direction="horizontal"
+        gap={5}
+        id="top-buttons-stack"
+        style={{ height: '10%' }}
+        className="justify-content-center border"
+      >
         <Button
           onClick={() => navigate('/cart')}
           className="custom-button mb-2 w-25"
@@ -69,75 +76,93 @@ const CartMenu = () => {
           Checkout
         </Button>
       </Stack>
-      {cartItems.length > 0 ? (
-        cartItems.map((item) => (
-          <Row
-            key={item.product.id}
-            className="p-4 border-bottom align-items-start"
-          >
-            <Col id="cart-product-image" className="d-flex flex-column">
-              {item.product.imgs && (
-                <Image
-                  src={item.product.imgs[0]}
-                  style={{ height: 100, width: 100, objectFit: 'contain' }}
-                  className="align-self-start"
-                />
-              )}
-            </Col>
-            <Col id="title-column">
-              <Row>
+      {cartItems.length === 0 ? (
+        <Row className="text-center mt-4">
+          <h4>Cart is empty</h4>
+        </Row>
+      ) : (
+        <>
+          {cartItems.map((item) => (
+            <Row
+              key={item.product.id}
+              style={{
+                height: '25%'
+              }}
+              className="border-bottom align-items-start ms-2 me-2 border"
+            >
+              <Col
+                lg={4}
+                id="cart-product-image-column"
+                style={{ height: '100%' }}
+                // className="d-flex flex-column"
+              >
+                {item.product.imgs && (
+                  <Image
+                    src={item.product.imgs[0]}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      objectFit: 'contain'
+                    }}
+                    className="align-self-start"
+                  />
+                )}
+              </Col>
+              <Col lg={4} id="title-column">
                 <Link
                   to={`/products/${item.product.id}`}
                   className="d-flex text-light"
                 >
                   <div>{item.product.title.substring(0, 40)}...</div>
                 </Link>
-              </Row>
-              <Row>
                 <div className="text-danger">{item.product.price}€</div>
-              </Row>
-            </Col>
-            <Col>
-              <Stack direction="horizontal" gap={2}>
-                <Button
-                  style={{ background: 'black' }}
-                  onClick={() => handleDecrease(item)}
-                  disabled={item.product.instock === 0}
-                  className="border justify-content-center"
+              </Col>
+              <Col
+              id="stack-column"
+              lg={4}
+              className="border">
+                <Stack
+                  direction="horizontal"
+                  // style={{ width: '100%' }}
+                  gap={2}
+                  className=""
                 >
-                  -
-                </Button>
-                <Badge
-                  bg="light"
-                  text="dark"
-                  style={{ width: 40 }}
-                  className="fs-6 border"
-                >
-                  {item.quantity}
-                </Badge>
-                <Button
-                  style={{ background: 'black' }}
-                  onClick={() => handleIncrease(item)}
-                  disabled={item.product.instock === 0}
-                  className="border"
-                >
-                  +
-                </Button>
-                <Button
-                  style={{ background: 'firebrick' }}
-                  onClick={() => handleRemove(item)}
-                  className="border"
-                >
-                  <i className="bi bi-trash3"></i>
-                </Button>
-              </Stack>
-            </Col>
-          </Row>
-        ))
-      ) : (
-        <Row className="text-center mt-4">
-          <h4>Cart is empty</h4>
-        </Row>
+                  <Button
+                    style={{ background: 'black' }}
+                    onClick={() => handleDecrease(item)}
+                    disabled={item.product.instock === 0}
+                    className="border justify-content-center"
+                  >
+                    -
+                  </Button>
+                  <Badge
+                    bg="light"
+                    text="dark"
+                    style={{ width: '50%' }}
+                    className="fs-6 border"
+                  >
+                    {item.quantity}
+                  </Badge>
+                  <Button
+                    style={{ background: 'black' }}
+                    onClick={() => handleIncrease(item)}
+                    disabled={item.product.instock === 0}
+                    className="border"
+                  >
+                    +
+                  </Button>
+                  <Button
+                    style={{ background: 'firebrick' }}
+                    onClick={() => handleRemove(item)}
+                    className="border"
+                  >
+                    <i className="bi bi-trash3"></i>
+                  </Button>
+                </Stack>
+              </Col>
+            </Row>
+          ))}
+        </>
       )}
     </Col>
   );
