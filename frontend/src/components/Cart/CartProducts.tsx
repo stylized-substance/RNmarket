@@ -39,19 +39,25 @@ const CartProducts = () => {
     });
   };
 
-  {/*TODO: remove hardcoded pixel values*/}
-
   return (
     <>
       {cartItems.map((item) => (
-        <Row key={item.product.id} className="gap-5">
-          <Col id="cart-product-image" className="flex-shrink-0">
+        <Row
+          key={item.product.id}
+          style={{ height: '15vh' }}
+          className="gap-5 "
+        >
+          <Col
+            id="cart-product-image"
+            style={{ height: '100%' }}
+            className="flex-shrink-0"
+          >
             {item.product.imgs && (
               <Image
                 src={item.product.imgs[0]}
                 thumbnail
-                style={{ height: 200, width: 200 }}
-                className="object-fit-scale"
+                style={{ height: '100%' }}
+                className="object-fit-contain"
               />
             )}
           </Col>
