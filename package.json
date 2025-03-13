@@ -3,5 +3,10 @@
   "version": "1.0.0",
   "description": "An E-commerce single-page app built with Typescript, React, Node.js and PostgreSQL.",
   "author": "Jimi Pitkäniitty",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "scripts": {
+    "lint": "cd backend && npm run lint && cd ../frontend && npm run lint",
+    "installDependencies": "cd backend && npm install && cd ../frontend && npm install)",
+    "build": "cd frontend && npm run build"
+  }
 }
