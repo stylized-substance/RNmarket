@@ -42,25 +42,19 @@ const CartMenu = () => {
     });
   };
 
-  {
-    /*TODO: remove hardcoded pixel values*/
-  }
-
   return (
     <Col
       style={{
-        height: '50vh',
-        width: '40vh',
-        scrollbarWidth: 'thin'
+        height: '100%',
+        width: '100%'
       }}
-      className="d-flex flex-column overflow-x-hidden overflow-y-scroll"
     >
       <Stack
         direction="horizontal"
         gap={5}
         id="top-buttons-stack"
         style={{ height: '10%' }}
-        className="justify-content-center border"
+        className="justify-content-center mb-3"
       >
         <Button
           onClick={() => navigate('/cart')}
@@ -81,20 +75,27 @@ const CartMenu = () => {
           <h4>Cart is empty</h4>
         </Row>
       ) : (
-        <>
+        <Stack
+          gap={3}
+          style={{
+            height: '100%',
+            width: '100%'
+          }}
+        >
           {cartItems.map((item) => (
             <Row
               key={item.product.id}
               style={{
                 height: '25%'
               }}
-              className="border-bottom align-items-start ms-2 me-2 border"
+              className="border-bottom ms-1 me-1"
             >
               <Col
-                lg={4}
                 id="cart-product-image-column"
-                style={{ height: '100%' }}
-                // className="d-flex flex-column"
+                className="pb-3"
+                style={{
+                  height: '100%'
+                }}
               >
                 {item.product.imgs && (
                   <Image
@@ -104,42 +105,33 @@ const CartMenu = () => {
                       width: '100%',
                       objectFit: 'contain'
                     }}
-                    className="align-self-start"
                   />
                 )}
               </Col>
-              <Col lg={4} id="title-column">
+              <Col id="title-column">
                 <Link
                   to={`/products/${item.product.id}`}
-                  className="d-flex text-light"
+                  className="text-light text-wrap"
                 >
                   <div>{item.product.title.substring(0, 40)}...</div>
                 </Link>
                 <div className="text-danger">{item.product.price}€</div>
               </Col>
-              <Col
-              id="stack-column"
-              lg={4}
-              className="border">
-                <Stack
-                  direction="horizontal"
-                  // style={{ width: '100%' }}
-                  gap={2}
-                  className=""
-                >
+              <Col id="stack-column" className="">
+                <Stack direction="horizontal" gap={2}>
                   <Button
                     style={{ background: 'black' }}
                     onClick={() => handleDecrease(item)}
                     disabled={item.product.instock === 0}
-                    className="border justify-content-center"
+                    className="border"
                   >
                     -
                   </Button>
                   <Badge
                     bg="light"
                     text="dark"
-                    style={{ width: '50%' }}
-                    className="fs-6 border"
+                    style={{ width: '2em' }}
+                    className="d-flex justify-content-center fs-6 border"
                   >
                     {item.quantity}
                   </Badge>
@@ -162,7 +154,7 @@ const CartMenu = () => {
               </Col>
             </Row>
           ))}
-        </>
+        </Stack>
       )}
     </Col>
   );

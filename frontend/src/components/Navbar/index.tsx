@@ -185,7 +185,14 @@ const NavBar = (props: NavBarProps) => {
                 {cartItems.length}
               </Badge>
             </Dropdown.Toggle>
-            <Dropdown.Menu className="mt-2">
+            <Dropdown.Menu
+              className="mt-2 d-flex flex-column overflow-x-hidden overflow-y-scroll"
+              style={{
+                height: '50vh',
+                width: '40vh',
+                scrollbarWidth: 'thin'
+              }}
+            >
               <CartMenu />
             </Dropdown.Menu>
           </Dropdown>
