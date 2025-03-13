@@ -8,6 +8,11 @@ import ordersRouter from '#src/routes/orders';
 import checkoutRouter from '#src/routes/checkout';
 import errorHandler from './utils/errorHandler';
 import cors from 'cors';
+import { connectToDatabase } from '#src/utils/database';
+import envVariables from '#src/config/envConfig';
+import logger from '#src/utils/logger';
+
+const listeningPort = envVariables.PORT;
 
 const app = express();
 
@@ -30,5 +35,14 @@ app.use('/api/orders', ordersRouter);
 app.use('/api/checkout', checkoutRouter);
 
 app.use(errorHandler);
+
+const start = async () => {
+  await connectToDatabase();
+  app.listen(listeningPort, () => {
+    logger(`Server running on port ${envVariables.PORT}`);
+  });
+};
+
+start();
 
 export default app;

@@ -7,9 +7,9 @@
     "#src/*": "./src/*"
   },
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "ts-node ./src/app.ts",
     "startprod": "node build/index.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --files ./src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --files ./src/app.ts",
     "test": "NODE_ENV=test jest --watchAll --runInBand",
     "lint": "eslint .",
     "prettier": "prettier . '!./postgresql' --write",
