@@ -110,3 +110,4 @@
 | 10.03.2025 | 1 | Worked on admin page, checkout page | 232
 | 11.03.2025 | 1 | Worked product card styles | 233
 | 12.03.2025 | 1 | Worked cart menu styles | 234
+| 13.03.2025 | 2 | Refactored cart menu. Worked on production environment | 236
