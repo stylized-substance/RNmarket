@@ -8,10 +8,13 @@
   "scripts": {
     "lint": "cd backend && npm run lint && cd ../frontend && npm run lint",
     "installDependencies": "cd backend && npm install && cd ../frontend && npm install",
-    "build": "cd frontend && npm run build && cd ../backend && npm run tsc && tscpaths -p tsconfig.json -s ./backend/src -o ./backend/build",
+    "build": "cd frontend && npm run build && cd ../backend && npm run tsc && tsc-alias -p tsconfig.json",
     "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.21.2"
-  }  
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.11"
+  }
 }
