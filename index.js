@@ -1,17 +1,20 @@
+import dotenv from 'dotenv';
 import express from 'express'
-import backend from './backend/build/src/app.js'
+import { app as backend } from './backend/build/src/app.js'
 const frontend = "./frontend/dist/";
 
-const PORT = process.env.PORT || 3003
+dotenv.config()
 
-const app = express();
+const PORT = 4004
 
-app.use(express.static(frontend))
+const server = express();
 
-app.use('/api', backend)
+server.use(express.static(frontend))
 
-app.get('/', (req, res) => res.sendFile(frontend))
+server.use('/api', backend)
 
-app.listen(PORT, () => {
+server.get('/', (req, res) => res.sendFile(frontend))
+
+server.listen(PORT, () => {
   console.log(`App running on port ${PORT}`)
 })

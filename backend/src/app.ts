@@ -36,13 +36,16 @@ app.use('/api/checkout', checkoutRouter);
 
 app.use(errorHandler);
 
-const start = async () => {
+// Connect to database
+(async () => {
   await connectToDatabase();
-  app.listen(listeningPort, () => {
-    logger(`Server running on port ${envVariables.PORT}`);
-  });
-};
+})();
 
-start();
+app.listen(listeningPort, () => {
+  logger(`Server running on port ${envVariables.PORT}`);
+});
 
 export default app;
+
+// Export for node
+export { app }
