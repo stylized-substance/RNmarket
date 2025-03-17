@@ -112,3 +112,4 @@
 | 12.03.2025 | 1 | Worked cart menu styles | 234
 | 13.03.2025 | 2 | Refactored cart menu. Worked on production environment | 236
 | 14.03.2025 | 2 | Worked on production environment | 238
+| 17.03.2025 | 2 | Worked on deployment to production | 240
