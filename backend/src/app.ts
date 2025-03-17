@@ -14,6 +14,8 @@ import logger from '#src/utils/logger';
 
 const listeningPort = envVariables.PORT;
 
+const productsRoute = process.env.NODE_ENV === 'production' ? '/products' : '/api/products';
+
 const app = express();
 
 app.use(cors());
@@ -22,7 +24,7 @@ app.use(express.json());
 
 app.use('/data/images', express.static('data/images'));
 
-app.use('/api/products', productsRouter);
+app.use(productsRoute, productsRouter);
 
 app.use('/api/users', usersRouter);
 

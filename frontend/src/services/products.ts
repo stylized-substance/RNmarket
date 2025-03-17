@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NewProduct, Product, ProductQuery } from '../types/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
-const baseUrl = `${backendAddress}/api/products`;
+const baseUrl = process.env.NODE_ENV !== 'production' ? `${backendAddress}/api/products` : '/api/products'
 
 const getAll = async ({
   searchTerm,
@@ -11,7 +11,7 @@ const getAll = async ({
   filterQuery
 }: ProductQuery): Promise<Product[] | []> => {
   let query = '?';
-
+  
   if (searchTerm) {
     query += `search=${searchTerm}&`;
   }
@@ -19,11 +19,11 @@ const getAll = async ({
   if (productCategory) {
     query += `category=${productCategory}&`;
   }
-
+  
   if (filterQuery) {
     query += filterQuery;
   }
-
+  
   try {
     const response = await axios.get<{ products: Product[] | [] }>(
       `${baseUrl}${query}`

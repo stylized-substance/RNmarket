@@ -1,1 +1,1 @@
-export const backendAddress = 'http://localhost:8080';
+export const backendAddress = import.meta.env.PROD ? undefined : 'http://localhost:8080';

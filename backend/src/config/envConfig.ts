@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import { parseString, parseNumber } from '#src/utils/typeNarrowers';
 import logger from '#src/utils/logger';
 
@@ -20,14 +19,14 @@ const setDatabaseUrl = () => {
 };
 
 let envVariables: EnvVariables = {
-  PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 0,
+  PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 3003,
   DATABASE_URL: process.env.DATABASE_URL ? parseString(setDatabaseUrl()) : '',
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
-    : 0,
+    : 3600,
   JWTREFRESHTOKENEXPIRATION: process.env.JWTREFRESHTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTREFRESHTOKENEXPIRATION))
-    : 0,
+    : 86400,
   JWTACCESSTOKENSECRET: process.env.JWTACCESSTOKENSECRET
     ? parseString(process.env.JWTACCESSTOKENSECRET)
     : '',
@@ -64,9 +63,13 @@ const reassign = (): EnvVariables => {
   };
 };
 
-// Use dotenv to set environment variables if they aren't already defined
+// Use dotenv to set environment variables if they aren't already defined and if not running in production
 if (!allVariablesDefined) {
-  dotenv.config();
+  if (process.env.NODE_ENV !== 'production') {
+    import('dotenv').then(dotenv => dotenv.config())
+    envVariables = reassign();
+  }
+
   for (const variable of Object.keys(envVariables)) {
     if (!variableDefined(process.env[variable])) {
       logger(
@@ -75,7 +78,6 @@ if (!allVariablesDefined) {
       process.exit();
     }
   }
-  envVariables = reassign();
 }
 
 logger('Environment variables:\n', JSON.stringify(envVariables, null, 2));
