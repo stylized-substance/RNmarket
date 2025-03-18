@@ -2,10 +2,6 @@ import express from 'express'
 import { app as backend } from './backend/build/src/app.js'
 const frontend = "./frontend/dist/";
 
-if (process.env.NODE_ENV !== 'production') {
-  import('dotenv').then(dotenv => dotenv.config())
-}
-
 const PORT = process.env.PORT || 3000
 
 const server = express();

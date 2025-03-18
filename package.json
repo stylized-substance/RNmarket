@@ -9,7 +9,7 @@
     "lint": "cd backend && npm run lint && cd ../frontend && npm run lint",
     "installDependencies": "cd backend && npm install && cd ../frontend && npm install",
     "build": "cd frontend && npm run build && cd ../backend && npm run build",
-    "start": "node index.js"
+    "start": "NODE_ENV=production node index.js"
   },
   "dependencies": {
     "express": "^4.21.2"

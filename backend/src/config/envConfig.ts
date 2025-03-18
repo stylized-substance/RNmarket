@@ -20,7 +20,7 @@ const setDatabaseUrl = () => {
 
 let envVariables: EnvVariables = {
   PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 3003,
-  DATABASE_URL: process.env.DATABASE_URL ? parseString(setDatabaseUrl()) : '',
+  DATABASE_URL: process.env.DATABASE_URL ? parseString(setDatabaseUrl()) : 'postgres://dummy:dummy@dummy:5432/postgres',
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
     : 3600,
@@ -29,10 +29,10 @@ let envVariables: EnvVariables = {
     : 86400,
   JWTACCESSTOKENSECRET: process.env.JWTACCESSTOKENSECRET
     ? parseString(process.env.JWTACCESSTOKENSECRET)
-    : '',
+    : 'accesssecret',
   JWTREFRESHTOKENSECRET: process.env.JWTREFRESHTOKENSECRET
     ? parseString(process.env.JWTREFRESHTOKENSECRET)
-    : ''
+    : 'refreshsecret'
 };
 
 const variableDefined = (variable: unknown): boolean => {
@@ -70,8 +70,8 @@ if (!allVariablesDefined) {
     envVariables = reassign();
   }
 
-  for (const variable of Object.keys(envVariables)) {
-    if (!variableDefined(process.env[variable])) {
+  for (const variable of Object.keys(envVariables) as Array<keyof EnvVariables>) {
+    if (!variableDefined(envVariables[variable])) {
       logger(
         `Environment variable ${variable} missing, exiting. Are you missing an .env file at project root or did you forget to set some variable?`
       );

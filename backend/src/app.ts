@@ -14,7 +14,8 @@ import logger from '#src/utils/logger';
 
 const listeningPort = envVariables.PORT;
 
-const productsRoute = process.env.NODE_ENV === 'production' ? '/products' : '/api/products';
+const productsRoute =
+  process.env.NODE_ENV === 'production' ? '/products' : '/api/products';
 
 const app = express();
 
@@ -50,4 +51,4 @@ app.listen(listeningPort, () => {
 export default app;
 
 // Export for node
-export { app }
+export { app };
