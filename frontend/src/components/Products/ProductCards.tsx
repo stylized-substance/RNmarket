@@ -22,6 +22,7 @@ interface ProductCardProps {
 const ProductCard = (props: ProductCardProps) => {
   const cart = useCart();
 
+  // TODO: Change path where images live to project root
   let imageUrl = '';
   if (props.product.imgs !== null && props.product.imgs !== undefined) {
     imageUrl = `${backendAddress}${props.product.imgs[0]}`;
