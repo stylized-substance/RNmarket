@@ -7,7 +7,7 @@ import {
 } from '#src/types/types';
 import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
-const baseUrl = `${backendAddress}/api/authorization`;
+const baseUrl = process.env.NODE_ENV === 'production' ? '/api/authorization' : `${backendAddress}/api/authorization`;
 
 const login = async (credentials: LoginCredentials): Promise<LoginPayload> => {
   try {

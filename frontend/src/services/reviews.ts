@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ReviewFromBackend, NewReview, LoginPayload } from '#src/types/types';
 import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
-const baseUrl = `${backendAddress}/api/reviews`;
+const baseUrl = process.env.NODE_ENV === 'production' ? '/api/reviews' : `${backendAddress}/api/reviews`;
 
 const getAllForProduct = async (
   productId: string

@@ -9,7 +9,7 @@ import {
 } from '#src/types/types.ts';
 import { isString, isApiErrorResponse } from '#src/utils/typeNarrowers';
 
-const baseUrl = `${backendAddress}/api/orders`;
+const baseUrl = process.env.NODE_ENV === 'production' ? '/api/orders' : `${backendAddress}/api/orders`;
 
 const getAll = async (
   loggedOnUser?: LoginPayload

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NewProduct, Product, ProductQuery } from '../types/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
-const baseUrl = process.env.NODE_ENV !== 'production' ? `${backendAddress}/api/products` : '/api/products'
+const baseUrl = process.env.NODE_ENV === 'production' ? '/api/products' : `${backendAddress}/api/products`;
 
 const getAll = async ({
   searchTerm,
