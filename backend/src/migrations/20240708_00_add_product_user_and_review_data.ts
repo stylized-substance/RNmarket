@@ -97,16 +97,13 @@ const migrateUp = async (queryInterface) => {
   await queryInterface.bulkInsert('reviews', reviewArray);
 };
 
-// Using ES5 export so Umzug can work with it
-module.exports = {
-  // @ts-expect-error - no type available for queryInterface
-  up: async ({ context: queryInterface }) => {
-    await migrateUp(queryInterface);
-  },
-  // @ts-expect-error - no type available for queryInterface
-  down: async ({ context: queryInterface }) => {
-    await queryInterface.bulkDelete('users');
-    await queryInterface.bulkDelete('products');
-    await queryInterface.bulkDelete('reviews');
-  }
+// @ts-expect-error - no type available for queryInterface
+export const up = async ({ context: queryInterface }) => {
+  await migrateUp(queryInterface);
+};
+// @ts-expect-error - no type available for queryInterface
+export const down = async ({ context: queryInterface }) => {
+  await queryInterface.bulkDelete('users');
+  await queryInterface.bulkDelete('products');
+  await queryInterface.bulkDelete('reviews');
 };

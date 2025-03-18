@@ -8,12 +8,13 @@
   },
   "scripts": {
     "start": "ts-node ./src/app.ts",
-    "startprod": "node build/index.js",
+    "startprod": "node ./build/src/app.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --files ./src/app.ts",
     "test": "NODE_ENV=test jest --watchAll --runInBand",
     "lint": "eslint .",
     "prettier": "prettier . '!./postgresql' --write",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "build": "npm run tsc && tsc-alias -p tsconfig.json"
   },
   "author": "Jimi Pitkäniitty",
   "license": "UNLICENSED",
