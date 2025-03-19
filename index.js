@@ -8,7 +8,7 @@ const server = express();
 
 server.use(express.static(frontend));
 
-server.use("/api", backend);
+server.use(["/data", "/api"], backend);
 
 server.get("/", (req, res) => res.sendFile(frontend));
 

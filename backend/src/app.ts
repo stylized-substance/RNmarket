@@ -20,19 +20,19 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use('/data/images', express.static('data/images'));
+app.use(['/images', '/data/images'], express.static('./backend/data/images'));
 
 app.use(['/products', '/api/products'], productsRouter);
 
-app.use(['users', '/api/users'], usersRouter);
+app.use(['/users', '/api/users'], usersRouter);
 
-app.use(['reviews', '/api/reviews'], reviewsRouter);
+app.use(['/reviews', '/api/reviews'], reviewsRouter);
 
-app.use(['authorization', '/api/authorization'], authorizationRouter);
+app.use(['/authorization', '/api/authorization'], authorizationRouter);
 
-app.use(['orders', '/api/orders'], ordersRouter);
+app.use(['/orders', '/api/orders'], ordersRouter);
 
-app.use(['checkout', '/api/checkout'], checkoutRouter);
+app.use(['/checkout', '/api/checkout'], checkoutRouter);
 
 app.use(errorHandler);
 

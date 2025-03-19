@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "prettier": "prettier . '!./postgresql' --write",
     "tsc": "tsc",
-    "build": "npm run tsc && tsc-alias -p tsconfig.json"
+    "build": "npm run tsc && tsc-alias -p tsconfig.json && cp -r data/* build/data"
   },
   "author": "Jimi Pitkäniitty",
   "license": "UNLICENSED",

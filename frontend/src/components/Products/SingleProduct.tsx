@@ -19,9 +19,11 @@ import Reviews from '#src/components/Reviews';
 import ReviewForm from '#src/components/ReviewForm';
 
 const ImageCarousel = ({ images }: { images: string[] }) => {
-  const imageUrls: string[] = images.map(
-    (image) => `${backendAddress}${image}`
-  );
+  const imageUrls: string[] = images.map((image) => {
+    return process.env.NODE_ENV === 'production'
+      ? image
+      : `${backendAddress}${image}`;
+  });
 
   return (
     <Carousel
