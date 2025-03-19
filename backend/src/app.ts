@@ -14,14 +14,6 @@ import logger from '#src/utils/logger';
 
 const listeningPort = envVariables.PORT;
 
-const productsRoute = process.env.NODE_ENV === 'production' ? '/products' : '/api/products';
-const usersRoute = process.env.NODE_ENV === 'production' ? '/users' : '/api/users';
-const reviewsRoute = process.env.NODE_ENV === 'production' ? '/reviews' : '/api/reviews';
-const authorizationRoute = process.env.NODE_ENV === 'production' ? '/authorization' : '/api/authorization';
-const ordersRoute = process.env.NODE_ENV === 'production' ? '/orders' : '/api/orders';
-const checkoutRoute = process.env.NODE_ENV === 'production' ? '/checkout' : '/api/checkout';
-
-
 const app = express();
 
 app.use(cors());
@@ -30,17 +22,17 @@ app.use(express.json());
 
 app.use('/data/images', express.static('data/images'));
 
-app.use(productsRoute, productsRouter);
+app.use(['/products', '/api/products'], productsRouter);
 
-app.use(usersRoute, usersRouter);
+app.use(['users', '/api/users'], usersRouter);
 
-app.use(reviewsRoute, reviewsRouter);
+app.use(['reviews', '/api/reviews'], reviewsRouter);
 
-app.use(authorizationRoute, authorizationRouter);
+app.use(['authorization', '/api/authorization'], authorizationRouter);
 
-app.use(ordersRoute, ordersRouter);
+app.use(['orders', '/api/orders'], ordersRouter);
 
-app.use(checkoutRoute, checkoutRouter);
+app.use(['checkout', '/api/checkout'], checkoutRouter);
 
 app.use(errorHandler);
 
