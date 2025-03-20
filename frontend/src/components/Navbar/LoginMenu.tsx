@@ -12,7 +12,7 @@ interface LoginMenuProps {
   setShowRegisterMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
+//TODO: Fix menu not closing
 const LoginMenu = ({
   setShowRegisterMenu,
   setLoginDropdownOpen

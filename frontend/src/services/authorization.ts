@@ -7,7 +7,10 @@ import {
 } from '#src/types/types';
 import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
-const baseUrl = process.env.NODE_ENV === 'production' ? '/api/authorization' : `${backendAddress}/api/authorization`;
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? '/api/authorization'
+    : `${backendAddress}/api/authorization`;
 
 const login = async (credentials: LoginCredentials): Promise<LoginPayload> => {
   try {
@@ -49,11 +52,15 @@ const refreshAccessToken = async (
 const getTemporaryToken = async (
   products: CartItemForBackend[]
 ): Promise<string> => {
+  const url =
+    process.env.NODE_ENV === 'production'
+      ? '/api/checkout'
+      : `${backendAddress}/api/checkout`;
+
   try {
-    const response = await axios.post<{ accessToken: string }>(
-      `${backendAddress}/api/checkout`,
-      { products }
-    );
+    const response = await axios.post<{ accessToken: string }>(url, {
+      products
+    });
     return response.data.accessToken;
   } catch (error) {
     if (axios.isAxiosError(error) && isApiErrorResponse(error.response?.data)) {

@@ -11,6 +11,8 @@ import Badge from 'react-bootstrap/Badge';
 
 import { CartItem } from '#src/types/types.ts';
 
+//TODO: Fix menu not closing
+
 const CartMenu = () => {
   const cart = useCart();
   const cartItems = cart.state;
