@@ -11,8 +11,6 @@ import Badge from 'react-bootstrap/Badge';
 
 import { CartItem } from '#src/types/types.ts';
 
-//TODO: Fix menu not closing
-
 const CartMenu = () => {
   const cart = useCart();
   const cartItems = cart.state;
@@ -46,9 +44,11 @@ const CartMenu = () => {
 
   return (
     <Col
+      className="mt-2 d-flex flex-column overflow-x-hidden overflow-y-scroll"
       style={{
-        height: '100%',
-        width: '100%'
+        height: '50vh',
+        width: '40vh',
+        scrollbarWidth: 'thin'
       }}
     >
       <Stack
