@@ -33,7 +33,7 @@ const ProductCard = (props: ProductCardProps) => {
   return (
     <Card
       id="product-card-container"
-      className="mb-5 justify-content-start"
+      className="border-0 mb-5 justify-content-start"
       style={{
         aspectRatio: '1 / 1'
       }}
