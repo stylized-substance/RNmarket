@@ -14,13 +14,15 @@ import logger from '#src/utils/logger';
 
 const listeningPort = envVariables.PORT;
 
+const imagesPath = process.env.NODE_ENV === 'production' ? './backend/data/images' : './data/images'
+
 const app = express();
 
 app.use(cors());
 
 app.use(express.json());
 
-app.use(['/images', '/data/images'], express.static('./backend/data/images'));
+app.use(['/images', '/data/images'], express.static(imagesPath));
 
 app.use(['/products', '/api/products'], productsRouter);
 
