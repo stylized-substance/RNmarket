@@ -14,12 +14,16 @@ const useAuth = () => {
       return undefined;
     }
 
-    const userObject: unknown = JSON.parse(userInStorage);
+    try {
+      const userObject: unknown = JSON.parse(userInStorage);
 
-    if (isLoginPayload(userObject)) {
-      return userObject;
-    } else {
-      throw new Error('Malformed user object found in localStorage');
+      if (isLoginPayload(userObject)) {
+        return userObject;
+      } else {
+        throw new Error('Malformed user object found in localStorage');
+      }
+    } catch {
+      return undefined;
     }
   };
 

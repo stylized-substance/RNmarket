@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import { useCart } from '#src/context/CartContext.tsx';
 import { useEffect } from 'react';
 import { useToast } from '#src/context/ToastContext';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '#src/hooks/useAuth.ts';
 
 import { countries } from '#src/data/countries.json';
@@ -38,6 +38,8 @@ const Checkout = () => {
   const cartItems = cart.state;
   const { changeToast } = useToast();
   const { loggedOnUser, refreshAccessToken } = useAuth();
+
+  const queryClient = useQueryClient();
 
   const [temporaryAccessToken, setTemporaryAccessToken] = useState<
     string | undefined
@@ -90,6 +92,18 @@ const Checkout = () => {
               await refreshAccessToken.mutateAsync(loggedOnUser);
             return await ordersService.postNew(orderData, newAccessToken);
           } else {
+            if (
+              error.message ===
+              `One or more products not found in database, order failed.`
+            ) {
+              // Empty cart and force refetching of products if data in cache is stale
+              cart.dispatch({
+                type: 'emptied'
+              });
+              await queryClient.invalidateQueries({
+                queryKey: ['products']
+              });
+            }
             throw error;
           }
         }

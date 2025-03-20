@@ -27,8 +27,6 @@ const ProductCard = (props: ProductCardProps) => {
     imageUrl = process.env.NODE_ENV === 'production' ? `${props.product.imgs[0]}` : `${backendAddress}${props.product.imgs[0]}`;
   }
 
-  console.log(imageUrl)
-
   return (
     <Card
       id="product-card-container"

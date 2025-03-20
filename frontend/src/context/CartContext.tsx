@@ -6,6 +6,8 @@ import {
   useReducer
 } from 'react';
 
+import productsService from '#src/services/products';
+
 import { CartItem, CartState } from '#src/types/types';
 
 import { isCartState } from '#src/utils/typeNarrowers.ts';
@@ -34,25 +36,56 @@ interface CartContextType {
 
 export const CartContext = createContext<CartContextType | null>(null);
 
-const readCartFromLocalStorage = () => {
+const readCartFromLocalStorage = async (): Promise<CartItem[] | []> => {
   const cartFromLocalStorage = localStorage.getItem('cart');
 
   if (!cartFromLocalStorage) {
     return [];
   }
 
-  const parsedCart: unknown = JSON.parse(cartFromLocalStorage);
-  if (isCartState(parsedCart)) {
-    return parsedCart;
-  } else {
-    throw new Error('localStorage contains invalid cart data');
+  try {
+    const parsedCart: unknown = JSON.parse(cartFromLocalStorage);
+    // Check if parsed cart state corresponds to CartState type
+    if (!isCartState(parsedCart)) {
+      return [];
+    }
+
+    // Loop through cart products and check if they exist in backend. Return only found products
+    const validatedCart = [];
+
+    for (const item of parsedCart) {
+      try {
+        const product = await productsService.getOne(item.product.id);
+        if (product) {
+          validatedCart.push(item);
+        }
+      } catch {
+        console.error('Cart product missing from database, omitting it.');
+      }
+    }
+
+    return validatedCart;
+  } catch {
+    return [];
   }
 };
 
-const initialState: CartState = readCartFromLocalStorage();
-
 const CartContextProvider = ({ children }: PropsWithChildren) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [state, dispatch] = useReducer(cartReducer, []);
+
+  // Initialize cart
+  useEffect(() => {
+    const initializeCart = async () => {
+      const initialCart = await readCartFromLocalStorage();
+      dispatch({
+        type: 'added',
+        payload: initialCart
+      });
+      localStorage.setItem('cart', JSON.stringify(state));
+    };
+
+    void initializeCart();
+  }, []);
 
   // Sync localStorage with context state
   useEffect(() => {
