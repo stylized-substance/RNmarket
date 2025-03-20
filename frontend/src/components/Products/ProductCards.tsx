@@ -21,19 +21,20 @@ interface ProductCardProps {
 
 const ProductCard = (props: ProductCardProps) => {
   const cart = useCart();
-  
+
   let imageUrl = '';
   if (props.product.imgs !== null && props.product.imgs !== undefined) {
-    imageUrl = process.env.NODE_ENV === 'production' ? `${props.product.imgs[0]}` : `${backendAddress}${props.product.imgs[0]}`;
+    imageUrl =
+      process.env.NODE_ENV === 'production'
+        ? `${props.product.imgs[0]}`
+        : `${backendAddress}${props.product.imgs[0]}`;
   }
 
   return (
     <Card
       id="product-card-container"
-      className="border-0 mb-5 justify-content-start"
+      className="mb-5 justify-content-start"
       style={{
-        height: '40vh',
-        width: 'auto',
         aspectRatio: '1 / 1'
       }}
     >
