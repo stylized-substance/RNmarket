@@ -115,4 +115,5 @@
 | 17.03.2025 | 2 | Worked on deployment to production | 240
 | 18.03.2025 | 2 | Worked on deployment to production | 242
 | 19.03.2025 | 2 | Worked on deployment to production | 244
-| 19.03.2025 | 2 | Worked on deployment to production, styles, app logic | 246
+| 20.03.2025 | 2 | Worked on deployment to production, styles, app logic | 246
+| 21.03.2025 | 1 | Worked on styles | 247
