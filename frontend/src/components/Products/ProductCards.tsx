@@ -33,31 +33,27 @@ const ProductCard = (props: ProductCardProps) => {
   return (
     <Card
       id="product-card-container"
-      className="border-0 mb-5 justify-content-start"
-      style={{
-        aspectRatio: '1 / 1'
-      }}
+      className="border-0 mb-5 justify-content-between"
     >
       <Link
         to={`/products/${props.product.id}`}
         key={props.product.id}
         id="image-link"
-        style={{ height: '50%' }}
       >
         <Card.Img
           variant="top"
           src={imageUrl}
           style={{
-            height: '100%',
+            aspectRatio: '1 / 1',
             objectFit: 'contain'
           }}
+          className="border"
         />
       </Link>
       <Link
         to={`/products/${props.product.id}`}
         key={props.product.id}
-        id="image-link"
-        style={{ height: '40%' }}
+        id="title-link"
       >
         <Card.Body>
           <Card.Title className="text-truncate text-wrap">
@@ -71,7 +67,6 @@ const ProductCard = (props: ProductCardProps) => {
       <Button
         disabled={props.product.instock === 0}
         size="lg"
-        style={{ height: '10%' }}
         onClick={() =>
           cart.dispatch({
             type: 'added',
