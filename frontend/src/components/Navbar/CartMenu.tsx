@@ -55,7 +55,6 @@ const CartMenu = () => {
         direction="horizontal"
         gap={5}
         id="top-buttons-stack"
-        style={{ height: '10%' }}
         className="justify-content-center mb-3"
       >
         <Button
@@ -77,33 +76,18 @@ const CartMenu = () => {
           <h4>Cart is empty</h4>
         </Row>
       ) : (
-        <Stack
-          gap={3}
-          style={{
-            height: '100%',
-            width: '100%'
-          }}
-        >
+        <Stack gap={3} style={{}}>
           {cartItems.map((item) => (
             <Row
               key={item.product.id}
-              style={{
-                height: '25%'
-              }}
+              style={{}}
               className="border-bottom ms-1 me-1"
             >
-              <Col
-                id="cart-product-image-column"
-                className="pb-3"
-                style={{
-                  height: '100%'
-                }}
-              >
+              <Col id="cart-product-image-column" className="pb-3" style={{}}>
                 {item.product.imgs && (
                   <Image
                     src={item.product.imgs[0]}
                     style={{
-                      height: '100%',
                       width: '100%',
                       objectFit: 'contain'
                     }}
