@@ -47,7 +47,6 @@ const ProductCard = (props: ProductCardProps) => {
             aspectRatio: '1 / 1',
             objectFit: 'contain'
           }}
-          className="border"
         />
       </Link>
       <Link
