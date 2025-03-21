@@ -68,7 +68,7 @@ const Products = (props: ProductsProps) => {
           {searchTerm ? (
             <h1 className="text-center">Search results for: {searchTerm}</h1>
           ) : (
-            <h1 className="text-center">{props.productCategory}</h1>
+            <h1 className="text-center">{props.productCategory === 'Mobiles' ? 'Mobile phones' : props.productCategory}</h1>
           )}
         </Row>
       </Col>
