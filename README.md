@@ -4,6 +4,8 @@ This is an E-commerce single-page app built with Typescript, React, Node.js and 
 
 Project work log can be found in `timekeeping.md`
 
+### [You can test this app here](https://rnmarket.fly.dev)
+
 ## Components
 
 - Frontend
@@ -42,7 +44,7 @@ There are two pre-made users for testing:
 
 ### Environment variables
 
-The backend relies on multiple environment variables. These can be edited in `/backend/docker-compose.dev.yml`. In case variables aren't set in the Docker Compose file, the app tries to read them from a `.env` file in `/backend` directory.
+The backend relies on multiple environment variables. These can be edited in `/backend/docker-compose.dev.yml`. In case variables aren't set in the Docker Compose file, the app tries to read them from a `.env` file in `backend` directory.
 
 Default variables with explanations:
 
@@ -53,11 +55,11 @@ Default variables with explanations:
 **JWTACCESSTOKENEXPIRATION=3600** - JSON Web Token expiration time in seconds (access token)  
 **JWTREFRESHTOKENEXPIRATION=86400** - JSON Web Token expiration time in seconds (refresh token)
 
-### Starting the app locally
+### Development environment
 
 The app uses Vite, ts-node-dev, Docker containers, Docker Compose and a nginx reverse proxy for the development environment. The source file directories of the backend and frontend are bind mounted to their respective containers so changes to code are hot loaded while the containers are running.
 
-**To start:**
+**To start the development environment locally:**
 
 Clone this repository.
 >
@@ -75,6 +77,24 @@ Change directory to repository root and run `docker compose -f docker-compose.de
 The app must be accessed through the reverse-proxy at http://localhost:8080. The frontend can't find the backend if frontend is accessed directly.
 
 > client -> reverse-proxy (http://localhost:8080) -> frontend -> backend
+
+### Production build
+
+The production build of the app is done monorepo-style. `index.js` at project root defines an Express webserver that serves the backend and frontend builds respectively.
+The production build depends on an external PostgreSQL database. When deploying to production, a connection URL for the database must be passed to the app as an environment variable (`process.env.DATABASE_URL`), otherwise there will be no products in the webshop.
+
+**To start production build locally:**
+
+> *Navigate to project root*
+> 
+> *Install dependencies*
+>
+> `npm install && cd frontend && npm install && cd ../backend && npm install && cd ..`
+>
+> `npm run build && npm run start`
+
+The app is now available at http://localhost:3000. 
+
 
 ## Miscellaneous info
 
