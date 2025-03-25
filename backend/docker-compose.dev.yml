@@ -8,6 +8,7 @@ services:
     volumes:
       - ./src:/usr/src/app/src
     environment:
+      - NODE_ENV=development
       - PORT=3003
       - DATABASE_URL=postgres://postgres:dbpassword@rnmarket-backend-postgres:5432/postgres
       - JWTACCESSTOKENSECRET=accesssecret

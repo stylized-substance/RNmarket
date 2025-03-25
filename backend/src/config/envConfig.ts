@@ -11,16 +11,20 @@ interface EnvVariables {
 }
 
 const setDatabaseUrl = () => {
-  if (process.env.NODE_ENV === 'test') {
-    return process.env.TEST_DATABASE_URL;
-  } else {
-    return process.env.DATABASE_URL;
+  if (!process.env.NODE_ENV) {
+    return 'postgres://dummy:dummy@dummy:5432/postgres';
   }
+
+  if (process.env.NODE_ENV === 'test') {
+    return 'postgres://postgres:dbpassword@localhost:5432/postgres';
+  }
+
+  return process.env.DATABASE_URL;
 };
 
 let envVariables: EnvVariables = {
   PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 3003,
-  DATABASE_URL: process.env.DATABASE_URL ? parseString(setDatabaseUrl()) : 'postgres://dummy:dummy@dummy:5432/postgres',
+  DATABASE_URL: parseString(setDatabaseUrl()),
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
     : 3600,
@@ -66,11 +70,13 @@ const reassign = (): EnvVariables => {
 // Use dotenv to set environment variables if they aren't already defined and if not running in production
 if (!allVariablesDefined) {
   if (process.env.NODE_ENV !== 'production') {
-    import('dotenv').then(dotenv => dotenv.config())
+    import('dotenv').then((dotenv) => dotenv.config());
     envVariables = reassign();
   }
 
-  for (const variable of Object.keys(envVariables) as Array<keyof EnvVariables>) {
+  for (const variable of Object.keys(envVariables) as Array<
+    keyof EnvVariables
+  >) {
     if (!variableDefined(envVariables[variable])) {
       logger(
         `Environment variable ${variable} missing, exiting. Are you missing an .env file at project root or did you forget to set some variable?`
