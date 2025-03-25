@@ -6,7 +6,7 @@ import reviewsRouter from '#src/routes/reviews';
 import authorizationRouter from '#src/routes/authorization';
 import ordersRouter from '#src/routes/orders';
 import checkoutRouter from '#src/routes/checkout';
-import errorHandler from './utils/errorHandler';
+import errorHandler from '#src/utils/errorHandler';
 import cors from 'cors';
 import { connectToDatabase } from '#src/utils/database';
 import envVariables from '#src/config/envConfig';
@@ -14,7 +14,10 @@ import logger from '#src/utils/logger';
 
 const listeningPort = envVariables.PORT;
 
-const imagesPath = process.env.NODE_ENV === 'production' ? './backend/data/images' : './data/images'
+const imagesPath =
+  process.env.NODE_ENV === 'production'
+    ? './backend/data/images'
+    : './data/images';
 
 const app = express();
 
@@ -22,32 +25,51 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(['/images', '/data/images'], express.static(imagesPath));
+const defineRoutes = () => {
+  app.use(['/images', '/data/images'], express.static(imagesPath));
 
-app.use(['/products', '/api/products'], productsRouter);
+  app.use(['/products', '/api/products'], productsRouter);
 
-app.use(['/users', '/api/users'], usersRouter);
+  app.use(['/users', '/api/users'], usersRouter);
 
-app.use(['/reviews', '/api/reviews'], reviewsRouter);
+  app.use(['/reviews', '/api/reviews'], reviewsRouter);
 
-app.use(['/authorization', '/api/authorization'], authorizationRouter);
+  app.use(['/authorization', '/api/authorization'], authorizationRouter);
 
-app.use(['/orders', '/api/orders'], ordersRouter);
+  app.use(['/orders', '/api/orders'], ordersRouter);
 
-app.use(['/checkout', '/api/checkout'], checkoutRouter);
+  app.use(['/checkout', '/api/checkout'], checkoutRouter);
+
+  app.use('/test', (_req, res) => {
+    res.send('test');
+  });
+};
 
 app.use(errorHandler);
 
-// Connect to database
-(async () => {
-  await connectToDatabase();
-})();
+const start = async () => {
+  try {
+    logger('Connecting to database');
+    await connectToDatabase();
+  } catch (error) {
+    logger(
+      'Error while connecting to database, not defining any routes for backend and not opening a listening port. Error:',
+      error
+    );
 
-app.listen(listeningPort, () => {
-  logger(`Server running on port ${envVariables.PORT}`);
-});
+    return;
+  }
+
+  defineRoutes();
+
+  app.listen(listeningPort, () => {
+    logger(`Server running on port ${envVariables.PORT}`);
+  });
+};
+
+start();
 
 export default app;
 
-// Export for node
+// Export for node in production mode
 export { app };

@@ -52,13 +52,18 @@ const Products = (props: ProductsProps) => {
         productCategory,
         filterQuery
       });
+
+      if (productsFromBackend.length === 0) {
+        throw new Error("No products found")
+      }
+
       productContext.dispatch({
         type: 'added',
         payload: productsFromBackend
       });
 
       return productsFromBackend;
-    }
+    },
   });
 
   return (

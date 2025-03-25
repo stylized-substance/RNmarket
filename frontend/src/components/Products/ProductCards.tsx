@@ -51,7 +51,7 @@ const ProductCard = (props: ProductCardProps) => {
       </Link>
       <Link
         to={`/products/${props.product.id}`}
-        key={props.product.id}
+        key={props.product.id + 1}
         id="title-link"
       >
         <Card.Body>

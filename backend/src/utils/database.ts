@@ -24,17 +24,21 @@ const migrationConfig = {
 // Disable migration logging while running tests
 const runMigrations = async () => {
   const migrator = new Umzug(migrationConfig);
-  const migrations = await migrator.up();
-  logger(
-    'Database migrations done',
-    JSON.stringify(
-      {
-        files: migrations.map((migration) => migration.name)
-      },
-      null,
-      2
-    )
-  );
+  try {
+    const migrations = await migrator.up();
+    logger(
+      'Database migrations done',
+      JSON.stringify(
+        {
+          files: migrations.map((migration) => migration.name)
+        },
+        null,
+        2
+      )
+    );
+  } catch (error) {
+    logger('Error while running database migrations:', error);
+  }
 };
 
 // Revert all migrations
@@ -45,22 +49,15 @@ const rollbackMigration = async () => {
 };
 
 const dropAllTables = async () => {
-  logger('Dropping all DB tables');
-  await sequelize.authenticate();
+  logger('Dropping all database tables');
   await sequelize.drop();
 };
 
 const connectToDatabase = async () => {
-  try {
-    await sequelize.authenticate();
-    await dropAllTables();
-    await runMigrations();
-    logger('Connected to PostgreSQL');
-  } catch (error) {
-    logger('Failed to connect to PostgreSQL, error:', error);
-  }
-
-  return null;
+  await sequelize.authenticate();
+  await dropAllTables();
+  await runMigrations();
+  logger('Connected to PostgreSQL');
 };
 
 const closeDatabaseConnection = async () => {

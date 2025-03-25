@@ -12,9 +12,13 @@ server.use(["/data", "/api"], backend);
 
 server.get("/", (req, res) => res.sendFile(frontend));
 
-// Always send frontend to client browser
+// Fallback route for frontend requests
 server.get("*", (req, res) => {
-  res.sendFile(frontend);
+  if (!req.path.startsWith('/data') && !req.path.startsWith('/api')) {
+    res.sendFile(frontend);
+  } else {
+    res.status(404)
+  }
 });
 
 server.listen(PORT, () => {
