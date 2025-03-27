@@ -60,12 +60,13 @@ const start = async () => {
     return;
   }
 
-  defineRoutes();
-
-  app.listen(listeningPort, () => {
-    logger(`Server running on port ${envVariables.PORT}`);
-  });
 };
+
+defineRoutes();
+
+app.listen(listeningPort, () => {
+  logger(`Server running on port ${envVariables.PORT}`);
+});
 
 start();
 

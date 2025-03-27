@@ -10,10 +10,12 @@ const dbUrl = envVariables.DATABASE_URL;
 logger('Database URL:', dbUrl);
 
 if (!dbUrl?.startsWith('postgres')) {
-  throw new Error("Invalid database URL, connection will not work.");
+  throw new Error('Invalid database URL, connection will not work.');
 }
 
-const sequelize = new Sequelize(`${dbUrl}`, { logging: (msg) => logger(msg) });
+const sequelize = new Sequelize(`${dbUrl}`, {
+  logging: (msg) => logger(msg)
+});
 
 const migrationConfig = {
   migrations: {
@@ -22,7 +24,7 @@ const migrationConfig = {
 
   storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
   context: sequelize.getQueryInterface(),
-  logger: process.env.NODE_ENV === 'test' ? undefined : console
+  logger: process.env.NODE_ENV?.startsWith('test') ? undefined : console
 };
 
 // Disable migration logging while running tests
@@ -59,7 +61,9 @@ const dropAllTables = async () => {
 
 const connectToDatabase = async () => {
   await sequelize.authenticate();
-  await dropAllTables();
+  if (process.env.NODE_ENV === 'production') {
+    await dropAllTables();
+  }
   await runMigrations();
   logger('Connected to PostgreSQL');
 };
