@@ -9,6 +9,10 @@ const dbUrl = envVariables.DATABASE_URL;
 
 logger('Database URL:', dbUrl);
 
+if (!dbUrl?.startsWith('postgres')) {
+  throw new Error("Invalid database URL, connection will not work.");
+}
+
 const sequelize = new Sequelize(`${dbUrl}`, { logging: (msg) => logger(msg) });
 
 const migrationConfig = {

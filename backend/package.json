@@ -9,8 +9,9 @@
   "scripts": {
     "start": "ts-node ./src/app.ts",
     "startprod": "NODE_ENV=production node ./build/src/app.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --files ./src/app.ts",
-    "test": "NODE_ENV=test jest --watchAll --runInBand",
+    "dev": "NODE_ENV=development ts-node-dev -r tsconfig-paths/register --files ./src/app.ts",
+    "test-node": "NODE_ENV=test-node jest --watchAll --runInBand",
+    "test-docker": "NODE_ENV=test-docker jest --watchAll --runInBand",
     "lint": "eslint .",
     "prettier": "prettier . '!./postgresql' --write",
     "tsc": "tsc",

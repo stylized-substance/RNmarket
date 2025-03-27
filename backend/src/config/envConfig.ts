@@ -1,5 +1,6 @@
 import { parseString, parseNumber } from '#src/utils/typeNarrowers';
 import logger from '#src/utils/logger';
+import dotenv from 'dotenv'
 
 interface EnvVariables {
   PORT: number;
@@ -11,20 +12,23 @@ interface EnvVariables {
 }
 
 const setDatabaseUrl = () => {
-  if (!process.env.NODE_ENV) {
-    return 'postgres://dummy:dummy@dummy:5432/postgres';
+  switch (process.env.NODE_ENV) {
+    case 'test-node':
+      return 'postgres://postgres:dbpassword@localhost:5432/postgres';
+    case 'test-docker':
+      return 'postgres://postgres:dbpassword@postgres:5432/postgres';
+    case 'development':
+      return process.env.DATABASE_URL;
+    case 'production':
+      return process.env.DATABASE_URL;
+    default:
+      return '';
   }
-
-  if (process.env.NODE_ENV === 'test') {
-    return 'postgres://postgres:dbpassword@localhost:5432/postgres';
-  }
-
-  return process.env.DATABASE_URL;
 };
 
 let envVariables: EnvVariables = {
   PORT: process.env.PORT ? parseNumber(Number(process.env.PORT)) : 3003,
-  DATABASE_URL: parseString(setDatabaseUrl()),
+  DATABASE_URL: process.env.DATABASE_URL ? parseString(setDatabaseUrl()) : '',
   JWTACCESSTOKENEXPIRATION: process.env.JWTACCESSTOKENEXPIRATION
     ? parseNumber(Number(process.env.JWTACCESSTOKENEXPIRATION))
     : 3600,
@@ -70,7 +74,7 @@ const reassign = (): EnvVariables => {
 // Use dotenv to set environment variables if they aren't already defined and if not running in production
 if (!allVariablesDefined) {
   if (process.env.NODE_ENV !== 'production') {
-    import('dotenv').then((dotenv) => dotenv.config());
+    dotenv.config();
     envVariables = reassign();
   }
 
