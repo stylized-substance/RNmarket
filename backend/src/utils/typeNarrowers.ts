@@ -12,15 +12,8 @@ import {
   ProductCategory,
   EditedReview,
   CartItems,
+  TypeNarrowingError
 } from '#src/types/types';
-
-// Custom error class for type narrowing errors
-class TypeNarrowingError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = 'TypeNarrowingError';
-  }
-}
 
 const isBoolean = (param: unknown): param is boolean => {
   return typeof param === 'boolean';

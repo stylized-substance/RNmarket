@@ -2,10 +2,8 @@ import { Request, Response, Router } from 'express';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
-// import { ProductOrder as ProductOrderModel } from '#src/models';
 import { NewOrder, OrderInDb } from '#src/types/types';
 import { OrderFromDb } from '#src/types/types';
-// import { OrderForFrontend } from '#src/types/types';
 import { toNewOrder, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -80,16 +78,25 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   }
 
   // Check that all products are in stock, send error if not
-  productsInDb.forEach((product) => {
+  // productsInDb.forEach((product) => {
+  //   if (product.dataValues.instock < 1) {
+  //     return res
+  //       .status(400)
+  //       .json({ Error: `Product ${product.dataValues.id} not in stock, order failed` });
+  //   } else {
+  //     return;
+  //   }
+  // });
+
+  for (const product of productsInDb) {
     if (product.dataValues.instock < 1) {
-      const id = product.dataValues.id;
       return res
         .status(400)
-        .json({ Error: `Product ${id} not in stock, order failed` });
-    } else {
-      return;
+        .json({
+          Error: `Product ${product.dataValues.id} not in stock, order failed`
+        });
     }
-  });
+  }
 
   // Add Id to order
   const orderWithId: OrderInDb = {

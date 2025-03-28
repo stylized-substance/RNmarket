@@ -2,8 +2,24 @@ import supertest from 'supertest';
 import app from '#src/app';
 import { assert200Response } from '#src/utils/testHelpers';
 import { isString } from '#src/utils/typeNarrowers';
+import {
+  connectToDatabase,
+  closeDatabaseConnection,
+  dropAllTables
+} from '#src/utils/database';
+
 
 const api = supertest(app);
+
+beforeAll(async () => {
+  // Empty database and run migrations
+  await dropAllTables();
+  await connectToDatabase();
+})
+
+afterAll(async () => {
+  await closeDatabaseConnection();
+});
 
 describe('POST requests', () => {
   test('POST - Sending a valid shopping cart returns a temporary access token', async () => {

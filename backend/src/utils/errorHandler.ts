@@ -3,6 +3,7 @@ import { UniqueConstraintError } from 'sequelize';
 import { TypeNarrowingError } from './typeNarrowers';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import logger from '#src/utils/logger';
+import { RefreshTokenExpiredError } from '#src/types/types';
 
 const errorHandler = (
   error: unknown,
@@ -20,7 +21,7 @@ const errorHandler = (
     return res.status(400).json({ Error: error.message });
   }
 
-  if (error instanceof Error && error.name === 'RefreshTokenExpiredError') {
+  if (error instanceof RefreshTokenExpiredError) {
     return res.status(401).json({ Error: error.message });
   }
 
