@@ -4,7 +4,7 @@ import envVariables from '#src/config/envConfig';
 import logger from '#src/utils/logger';
 import path from 'path';
 
-const migrationsFolder = path.join(__dirname, '../migrations'); // Replace with your folder name
+const migrationsFolder = path.join(__dirname, '../migrations');
 const dbUrl = envVariables.DATABASE_URL;
 
 logger('Database URL:', dbUrl);

@@ -29,7 +29,7 @@ const user = {
   password: 'password'
 };
 
-beforeAll(async () => {
+beforeEach(async () => {
   // Empty database and run migrations
   await dropAllTables();
   await connectToDatabase();
@@ -164,7 +164,7 @@ describe('POST requests', () => {
 
     assert401Response(response);
     expect(response.body).toStrictEqual({
-      'Error': 'Refresh token has expired, login again'
+      Error: 'Refresh token has expired, login again'
     });
   });
 });
