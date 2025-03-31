@@ -89,7 +89,7 @@ The production build depends on an external PostgreSQL database. When deploying 
 > 
 > *Install dependencies*
 >
-> `npm install && cd frontend && npm install && cd ../backend && npm install && cd ..`
+> `npm run installDependenciesDev && cd ..`
 >
 > `npm run build && npm run start`
 
