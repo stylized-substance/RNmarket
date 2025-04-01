@@ -3,7 +3,7 @@ import {
   PropsWithChildren,
   useContext,
   useEffect,
-  useReducer
+  useReducer,
 } from 'react';
 
 import productsService from '#src/services/products';
@@ -81,7 +81,6 @@ const CartContextProvider = ({ children }: PropsWithChildren) => {
         type: 'added',
         payload: initialCart
       });
-      localStorage.setItem('cart', JSON.stringify(state));
     };
 
     void initializeCart();
