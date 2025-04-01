@@ -4,6 +4,8 @@ This is an E-commerce single-page app built with Typescript, React, Node.js and 
 
 Project work log can be found in `timekeeping.md`
 
+Commits related to testing work with GitHub Actions can be found in this repository: https://github.com/stylized-substance/RNmarket-GitHub_Actions_test
+
 ### [You can test this app here](https://rnmarket.fly.dev)
 
 ## Components
