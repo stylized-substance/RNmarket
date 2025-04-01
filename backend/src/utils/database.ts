@@ -57,7 +57,7 @@ const rollbackMigration = async () => {
 const dropAllTables = async () => {
   logger('Dropping all database tables');
   await sequelize.authenticate();
-  await sequelize.drop();
+  await sequelize.drop({ cascade: true });
 };
 
 const connectToDatabase = async () => {
