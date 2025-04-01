@@ -53,10 +53,6 @@ const Products = (props: ProductsProps) => {
         filterQuery
       });
 
-      if (productsFromBackend.length === 0) {
-        throw new Error("No products found")
-      }
-
       productContext.dispatch({
         type: 'added',
         payload: productsFromBackend
