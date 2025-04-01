@@ -25,7 +25,6 @@ Project work log can be found in `timekeeping.md`
 - Database
   - PostgreSQL
 
-
 ## Usage
 
 The app works like a typical webshop. Products can be viewed, filtered and added to cart. Orders can be placed for cart items and the orders get saved into the database. Logged in users can also write reviews when viewing a single product. Logged in admin users gain access to an admin page through the site's navigation bar (link appears after logging in).
