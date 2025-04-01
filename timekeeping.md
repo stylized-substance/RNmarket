@@ -119,3 +119,4 @@
 | 21.03.2025 | 1 | Worked on styles | 247
 | 28.03.2025 | 3 | Worked on tests and GitHub Actions (used separate repository for actions testing) | 250
 | 31.03.2025 | 3 | Worked on tests and GitHub Actions (used separate repository for actions testing) | 253
+| 01.04.2025 | 2 | Worked on GitHub Actions (used separate repository for actions testing), updated packages, fixed bugs, released v1 of app | 255
