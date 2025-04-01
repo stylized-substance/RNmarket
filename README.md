@@ -65,12 +65,9 @@ Clone this repository.
 >
 > *Install dependencies outside containers to get rid of IntelliSense errors in code editor*
 >
-> `cd backend && npm install`
->
-> `cd frontend && npm install`
+> `npm runinstallDependenciesDev`
 
 Change directory to repository root and run `docker compose -f docker-compose.dev.yml up` to start the development environment. The app is then accessible at http://localhost:8080
-
 
 ### App networking structure in development mode
 
@@ -98,7 +95,7 @@ The app is now available at http://localhost:3000.
 
 ## Miscellaneous info
 
-- The backend runs database migrations on start to populate the database with products, reviews and users.
+- The backend runs database migrations on start to populate the database with products, reviews and users. In production mode the database is returned to default state when the app starts.
 - User passwords are hashed with bcrypt before saving to database.
 - The app uses JSON Web Tokens for user session management. When logging in, the server creates access and refresh tokens and sends them to the client.  
 When an access token expires, it is refreshed behind the scenes. When the refresh token expires, the user is prompted to log in again.  
