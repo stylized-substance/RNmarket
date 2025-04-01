@@ -88,10 +88,9 @@ The production build depends on an external PostgreSQL database. When deploying 
 >
 > `npm run installDependenciesDev && cd ..`
 >
-> `npm run build && npm run start`
+> `npm run build && DATABASE_URL={Postgres URL} npm run start`
 
 The app is now available at http://localhost:3000. 
-
 
 ## Miscellaneous info
 
