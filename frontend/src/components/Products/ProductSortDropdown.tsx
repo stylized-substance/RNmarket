@@ -12,6 +12,7 @@ interface ProductSortDropdownValue {
 
 const ProductSortDropdown = () => {
   const productContext = useProducts();
+  
   return (
     <Row className="justify-content-end text-end">
       <b>Sort products</b>

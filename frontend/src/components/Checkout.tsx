@@ -34,10 +34,11 @@ interface CheckoutFormValues {
 }
 
 const Checkout = () => {
+  // Import currently logged on user and access token refreshal hook
+  const { loggedOnUser, refreshAccessToken } = useAuth();
   const cart = useCart();
   const cartItems = cart.state;
   const { changeToast } = useToast();
-  const { loggedOnUser, refreshAccessToken } = useAuth();
 
   const queryClient = useQueryClient();
 
@@ -92,11 +93,11 @@ const Checkout = () => {
               await refreshAccessToken.mutateAsync(loggedOnUser);
             return await ordersService.postNew(orderData, newAccessToken);
           } else {
+            // Empty cart and force refetching of products if data in cache is stale
             if (
               error.message ===
               `One or more products not found in database, order failed.`
             ) {
-              // Empty cart and force refetching of products if data in cache is stale
               cart.dispatch({
                 type: 'emptied'
               });

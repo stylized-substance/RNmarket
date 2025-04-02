@@ -7,9 +7,7 @@ import {
 } from 'react';
 
 import productsService from '#src/services/products';
-
 import { CartItem, CartState } from '#src/types/types';
-
 import { isCartState } from '#src/utils/typeNarrowers.ts';
 
 type Action =

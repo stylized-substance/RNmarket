@@ -4,16 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import Stack from 'react-bootstrap/Stack';
 import StarRating from '#src/components/StarRating';
 
-interface ReviewsProps {
-  productId: string;
-}
-
-const Reviews = (props: ReviewsProps) => {
+const Reviews = ({ productId }: { productId: string }) => {
   // Fetch product reviews with Tanstack Query
   const { data } = useQuery({
     queryKey: ['singleProductReviews'],
     queryFn: () => {
-      return reviewsService.getAllForProduct(props.productId);
+      return reviewsService.getAllForProduct(productId);
     }
   });
 
@@ -30,7 +26,7 @@ const Reviews = (props: ReviewsProps) => {
             <b>
               <u>{review.title}</u>
             </b>
-            <p className="border  rounded p-3 mt-2 mb-2">
+            <p className="border rounded p-3 mt-2 mb-2">
               <em>{review.content}</em>
             </p>
             <div>

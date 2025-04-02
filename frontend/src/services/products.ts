@@ -1,6 +1,6 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { NewProduct, Product, ProductQuery } from '../types/types';
+import { NewProduct, Product, ProductQuery } from '#src/types/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl = process.env.NODE_ENV === 'production' ? '/api/products' : `${backendAddress}/api/products`;

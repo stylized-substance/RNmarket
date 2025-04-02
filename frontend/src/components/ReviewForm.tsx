@@ -20,9 +20,7 @@ interface ReviewFormValues {
 const ReviewForm = ({ productId }: { productId: string }) => {
   // Import currently logged on user and access token refreshal hook
   const { loggedOnUser, refreshAccessToken } = useAuth();
-
   const { changeToast } = useToast();
-
   const queryClient = useQueryClient();
 
   // Post new review using Tanstack Query

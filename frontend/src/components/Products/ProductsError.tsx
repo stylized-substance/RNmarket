@@ -1,10 +1,6 @@
 import Row from 'react-bootstrap/Row';
 
-interface ProductsErrorProps {
-  error: Error;
-}
-
-const ProductsError = ({ error }: ProductsErrorProps) => {
+const ProductsError = ({ error }: { error: Error }) => {
   console.error('Error from ProductsError component:', error.message);
 
   return (

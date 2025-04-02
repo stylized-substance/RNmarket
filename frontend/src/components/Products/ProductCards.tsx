@@ -11,23 +11,15 @@ import { Link } from 'react-router-dom';
 
 import { Product } from '#src/types/types';
 
-interface ProductCardsProps {
-  products: Product[];
-}
-
-interface ProductCardProps {
-  product: Product;
-}
-
-const ProductCard = (props: ProductCardProps) => {
+const ProductCard = ({ product }: { product: Product }) => {
   const cart = useCart();
 
   let imageUrl = '';
-  if (props.product.imgs !== null && props.product.imgs !== undefined) {
+  if (product.imgs !== null && product.imgs !== undefined) {
     imageUrl =
       process.env.NODE_ENV === 'production'
-        ? `${props.product.imgs[0]}`
-        : `${backendAddress}${props.product.imgs[0]}`;
+        ? `${product.imgs[0]}`
+        : `${backendAddress}${product.imgs[0]}`;
   }
 
   return (
@@ -36,8 +28,8 @@ const ProductCard = (props: ProductCardProps) => {
       className="border-0 mb-5 justify-content-between"
     >
       <Link
-        to={`/products/${props.product.id}`}
-        key={props.product.id}
+        to={`/products/${product.id}`}
+        key={product.id}
         id="image-link"
       >
         <Card.Img
@@ -50,26 +42,26 @@ const ProductCard = (props: ProductCardProps) => {
         />
       </Link>
       <Link
-        to={`/products/${props.product.id}`}
-        key={props.product.id + 1}
+        to={`/products/${product.id}`}
+        key={product.id + 1}
         id="title-link"
       >
         <Card.Body>
           <Card.Title className="text-truncate text-wrap">
-            {props.product.title}
+            {product.title}
           </Card.Title>
           <Card.Subtitle className="fs-5 mt-2 text-danger">
-            {padPrice(props.product.price)}€
+            {padPrice(product.price)}€
           </Card.Subtitle>
         </Card.Body>
       </Link>
       <Button
-        disabled={props.product.instock === 0}
+        disabled={product.instock === 0}
         size="lg"
         onClick={() =>
           cart.dispatch({
             type: 'added',
-            payload: { product: props.product, quantity: 1 }
+            payload: { product: product, quantity: 1 }
           })
         }
         className="custom-button align-self-center"
@@ -80,10 +72,10 @@ const ProductCard = (props: ProductCardProps) => {
   );
 };
 
-const ProductCards = (props: ProductCardsProps) => {
+const ProductCards = ({ products }: { products: Product[] }) => {
   return (
     <Row lg={4}>
-      {props.products.map((product) => (
+      {products.map((product) => (
         <ProductCard product={product} key={product.id} />
       ))}
     </Row>
