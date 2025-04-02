@@ -77,17 +77,6 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
     });
   }
 
-  // Check that all products are in stock, send error if not
-  // productsInDb.forEach((product) => {
-  //   if (product.dataValues.instock < 1) {
-  //     return res
-  //       .status(400)
-  //       .json({ Error: `Product ${product.dataValues.id} not in stock, order failed` });
-  //   } else {
-  //     return;
-  //   }
-  // });
-
   for (const product of productsInDb) {
     if (product.dataValues.instock < 1) {
       return res
@@ -128,7 +117,7 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
     }
 
     // Add products to order in database
-    // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
+    // @ts-expect-error - Sequelize model special methods/mixins don't seem to work with Typescript
     await orderInDb.addProduct(product, {
       through: { quantity: productQuantity }
     });
