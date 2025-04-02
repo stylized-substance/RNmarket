@@ -63,9 +63,6 @@ const dropAllTables = async () => {
 
 const connectToDatabase = async () => {
   await sequelize.authenticate();
-  if (process.env.NODE_ENV === 'production') {
-    await dropAllTables();
-  }
   await runMigrations();
   logger('Connected to PostgreSQL');
 };

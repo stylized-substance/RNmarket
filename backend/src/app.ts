@@ -8,9 +8,9 @@ import ordersRouter from '#src/routes/orders';
 import checkoutRouter from '#src/routes/checkout';
 import errorHandler from '#src/utils/errorHandler';
 import cors from 'cors';
-import { connectToDatabase } from '#src/utils/database';
-import envVariables from '#src/config/envConfig';
+import { connectToDatabase, dropAllTables } from '#src/utils/database';
 import logger from '#src/utils/logger';
+import envVariables from '#src/config/envConfig';
 
 const listeningPort = envVariables.PORT;
 
@@ -46,7 +46,11 @@ app.use('/test', (_req, res) => {
 app.use(errorHandler);
 
 const connectToDb = async () => {
+  // Reset database if runinng in production
   try {
+    if (process.env.NODE_ENV === 'production') {
+      await dropAllTables();
+    }
     logger('Connecting to database');
     await connectToDatabase();
   } catch (error) {
