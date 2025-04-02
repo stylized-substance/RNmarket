@@ -76,7 +76,7 @@ const ProductEditForm = ({
   });
 
   const handleSubmit = (formValues: EditedProduct) => {
-    setIsEditing(false)
+    setIsEditing(false);
     productEditMutation.mutate(formValues);
   };
 

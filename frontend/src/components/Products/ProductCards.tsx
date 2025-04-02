@@ -27,11 +27,7 @@ const ProductCard = ({ product }: { product: Product }) => {
       id="product-card-container"
       className="border-0 mb-5 justify-content-between"
     >
-      <Link
-        to={`/products/${product.id}`}
-        key={product.id}
-        id="image-link"
-      >
+      <Link to={`/products/${product.id}`} key={product.id} id="image-link">
         <Card.Img
           variant="top"
           src={imageUrl}
@@ -41,11 +37,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           }}
         />
       </Link>
-      <Link
-        to={`/products/${product.id}`}
-        key={product.id + 1}
-        id="title-link"
-      >
+      <Link to={`/products/${product.id}`} key={product.id + 1} id="title-link">
         <Card.Body>
           <Card.Title className="text-truncate text-wrap">
             {product.title}

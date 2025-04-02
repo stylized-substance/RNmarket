@@ -111,7 +111,11 @@ const productReducer = (
         ({ lowerCaseTitle, ...rest }) => rest
       );
 
-      return { ...state, sortOption: action.payload.sortOption, products: mappedProducts };
+      return {
+        ...state,
+        sortOption: action.payload.sortOption,
+        products: mappedProducts
+      };
     }
     case 'filtered': {
       return { ...state, filter: action.payload.filter };
@@ -127,7 +131,7 @@ const productReducer = (
 
 const ProductContextProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(productReducer, initialState);
-  
+
   return (
     <ProductContext.Provider value={{ state, dispatch }}>
       {children}

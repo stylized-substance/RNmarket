@@ -3,7 +3,7 @@ import {
   PropsWithChildren,
   useContext,
   useEffect,
-  useReducer,
+  useReducer
 } from 'react';
 
 import productsService from '#src/services/products';

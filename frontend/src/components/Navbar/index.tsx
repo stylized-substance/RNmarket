@@ -185,9 +185,7 @@ const NavBar = (props: NavBarProps) => {
                 {cartItems.length}
               </Badge>
             </Dropdown.Toggle>
-            <Dropdown.Menu
-              
-            >
+            <Dropdown.Menu>
               <CartMenu />
             </Dropdown.Menu>
           </Dropdown>
@@ -196,6 +194,5 @@ const NavBar = (props: NavBarProps) => {
     </Navbar>
   );
 };
-
 
 export default NavBar;

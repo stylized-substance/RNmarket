@@ -3,7 +3,10 @@ import axios from 'axios';
 import { NewUser, UserFromBackend, LoginPayload } from '#src/types/types.ts';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
-const baseUrl = process.env.NODE_ENV === 'production' ? '/api/users' : `${backendAddress}/api/users`;
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? '/api/users'
+    : `${backendAddress}/api/users`;
 
 const getAll = async (
   loggedOnUser?: LoginPayload
