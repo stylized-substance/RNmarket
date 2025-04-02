@@ -44,7 +44,7 @@ beforeEach(async () => {
 
   const orderInDb: OrderModel | null = await OrderModel.create(testOrder);
 
-  // @ts-expect-error - Sequelize model pecial methods/mixins don't seem to work with Typescript
+  // @ts-expect-error - Sequelize model special methods/mixins don't seem to work with Typescript
   await orderInDb.addProduct(product, {
     through: { quantity: 1 }
   });
