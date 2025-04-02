@@ -1,11 +1,12 @@
 import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
-import envVariables from '#src/config/envConfig';
 import logger from '#src/utils/logger';
 import path from 'path';
+import envVariables from '#src/config/envConfig';
+
+const dbUrl = envVariables.DATABASE_URL;
 
 const migrationsFolder = path.join(__dirname, '../migrations');
-const dbUrl = envVariables.DATABASE_URL;
 
 logger('Database URL:', dbUrl);
 

@@ -1,9 +1,9 @@
-import Product from './product';
-import Review from './review';
-import User from './user';
-import RefreshToken from './refreshtoken';
-import Order from './order';
-import ProductOrder from './productorder';
+import Product from '#src/models/product';
+import Review from '#src/models/review';
+import User from '#src/models/user';
+import RefreshToken from '#src/models/refreshtoken';
+import Order from '#src/models/order';
+import ProductOrder from '#src/models/productorder';
 
 Product.hasMany(Review, {
   // Automatically delete reviews when product is deleted

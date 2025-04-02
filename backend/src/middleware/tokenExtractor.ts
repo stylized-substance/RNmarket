@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import envVariables from '#src/config/envConfig';
 import { JwtPayload } from 'jsonwebtoken';
 
-// Import JWT secret from config file
+// Import JWT secret from environment variable
 const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET;
 
 const tokenExtractor = (req: Request, res: Response, next: NextFunction) => {

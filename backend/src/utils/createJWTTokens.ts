@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { UserWithoutHash, RefreshToken, CartItems } from '#src/types/types';
 import { v4 as uuidv4 } from 'uuid';
 
-// Import JWT secrets from config file
+// Import JWT secrets from environment variables
 import envVariables from '#src/config/envConfig';
 
 const jwtAccessTokenSecret = envVariables.JWTACCESSTOKENSECRET;
