@@ -85,7 +85,9 @@ if (!allVariablesDefined) {
 
 for (const key of Object.keys(envVariables) as (keyof EnvVariables)[]) {
   if (!variableDefined(envVariables[key])) {
-    throw new Error(`Environment variable ${key} missing, exiting. Are you missing an .env file at project root or did you forget to set some variable?`)
+    throw new Error(
+      `Environment variable ${key} missing, exiting. Are you missing an .env file at project root or did you forget to set some variable?`
+    );
   }
 }
 

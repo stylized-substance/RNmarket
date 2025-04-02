@@ -54,10 +54,7 @@ const connectToDb = async () => {
     logger('Connecting to database');
     await connectToDatabase();
   } catch (error) {
-    logger(
-      'Error while connecting to database. Error:',
-      error
-    );
+    logger('Error while connecting to database. Error:', error);
 
     return;
   }

@@ -79,11 +79,9 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
 
   for (const product of productsInDb) {
     if (product.dataValues.instock < 1) {
-      return res
-        .status(400)
-        .json({
-          Error: `Product ${product.dataValues.id} not in stock, order failed`
-        });
+      return res.status(400).json({
+        Error: `Product ${product.dataValues.id} not in stock, order failed`
+      });
     }
   }
 

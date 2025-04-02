@@ -79,51 +79,46 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 // Create new access token for user
-router.post(
-  '/refresh',
-  async (req: Request, res: Response) => {
-    // Refresh access token for user
-    if (!req.body.refreshToken) {
-      return res
-        .status(400)
-        .json({ Error: 'Refresh token missing from request' });
-    }
-
-    const refreshToken: string = parseString(req.body.refreshToken);
-
-    // Find existing refresh token in database, send error if not found
-    const tokenInDb: RefreshTokenModel | null = await RefreshTokenModel.findOne(
-      {
-        where: {
-          token: refreshToken
-        }
-      }
-    );
-
-    if (!tokenInDb) {
-      return res
-        .status(400)
-        .json({ Error: 'Refresh token not found in database' });
-    }
-
-    // Check if refresh token has expired, delete it and send error if true
-    const currentDate: Date = new Date();
-
-    if (Number(tokenInDb.dataValues.expiry_date) < currentDate.getTime()) {
-      await tokenInDb.destroy();
-      throw new RefreshTokenExpiredError(
-        'Refresh token has expired, login again'
-      );
-    }
-
-    const userInDb: UserModel | null = await UserModel.findByPk(
-      tokenInDb.dataValues.user_id
-    );
-
-    // Create new access token and send to client
-    const newAccessToken = createJWTTokens(userInDb?.dataValues).accessToken;
-    return res.status(201).json({ accessToken: newAccessToken });
+router.post('/refresh', async (req: Request, res: Response) => {
+  // Refresh access token for user
+  if (!req.body.refreshToken) {
+    return res
+      .status(400)
+      .json({ Error: 'Refresh token missing from request' });
   }
-);
+
+  const refreshToken: string = parseString(req.body.refreshToken);
+
+  // Find existing refresh token in database, send error if not found
+  const tokenInDb: RefreshTokenModel | null = await RefreshTokenModel.findOne({
+    where: {
+      token: refreshToken
+    }
+  });
+
+  if (!tokenInDb) {
+    return res
+      .status(400)
+      .json({ Error: 'Refresh token not found in database' });
+  }
+
+  // Check if refresh token has expired, delete it and send error if true
+  const currentDate: Date = new Date();
+
+  if (Number(tokenInDb.dataValues.expiry_date) < currentDate.getTime()) {
+    await tokenInDb.destroy();
+    throw new RefreshTokenExpiredError(
+      'Refresh token has expired, login again'
+    );
+  }
+
+  const userInDb: UserModel | null = await UserModel.findByPk(
+    tokenInDb.dataValues.user_id
+  );
+
+  // Create new access token and send to client
+  const newAccessToken = createJWTTokens(userInDb?.dataValues).accessToken;
+  return res.status(201).json({ accessToken: newAccessToken });
+});
 
 export default router;

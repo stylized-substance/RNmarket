@@ -45,13 +45,13 @@ router.post('/', tokenExtractor, async (req: Request, res: Response) => {
   }
 
   if (!isProduct(req.body)) {
-    return res.status(400).json({ Error: 'Invalid product data' })
+    return res.status(400).json({ Error: 'Invalid product data' });
   }
 
   const newProduct: Product = {
     ...req.body,
     id: uuidv4()
-  }
+  };
 
   const addedProduct: ProductModel = await ProductModel.create({
     ...newProduct
