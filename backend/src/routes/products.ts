@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { Product as ProductModel } from '#src/models';
-import { processProductQueryParameters } from '#src/middleware/productQueryParametersProcessor';
+import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Product } from '#src/types/types';
 import { isProduct, toProduct, parseString } from '#src/utils/typeNarrowers';
