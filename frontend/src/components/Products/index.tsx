@@ -58,6 +58,14 @@ const Products = (props: ProductsProps) => {
         payload: productsFromBackend
       });
 
+
+      productContext.dispatch({
+        type: 'sorted',
+        payload: {
+          sortOption: productContext.state.sortOption
+        }
+      });
+
       return productsFromBackend;
     },
   });
