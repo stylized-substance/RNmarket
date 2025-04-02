@@ -11,7 +11,11 @@ import Badge from 'react-bootstrap/Badge';
 
 import { CartItem } from '#src/types/types.ts';
 
-const CartMenu = () => {
+const CartMenu = ({
+  setCartDropdownOpen
+}: {
+  setCartDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const cart = useCart();
   const cartItems = cart.state;
 
@@ -58,13 +62,19 @@ const CartMenu = () => {
         className="justify-content-center mb-3"
       >
         <Button
-          onClick={() => navigate('/cart')}
+          onClick={() => {
+            setCartDropdownOpen(false);
+            navigate('/cart');
+          }}
           className="custom-button mb-2 w-25"
         >
           Go to cart
         </Button>
         <Button
-          onClick={() => navigate('/checkout')}
+          onClick={() => {
+            setCartDropdownOpen(false);
+            navigate('/checkout');
+          }}
           className="custom-button mb-2 w-25"
           disabled={cartItems.length === 0}
         >

@@ -186,7 +186,7 @@ const NavBar = (props: NavBarProps) => {
               </Badge>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <CartMenu />
+              <CartMenu setCartDropdownOpen={setCartDropdownOpen} />
             </Dropdown.Menu>
           </Dropdown>
         </Col>
