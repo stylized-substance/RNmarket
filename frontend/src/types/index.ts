@@ -15,6 +15,7 @@ export type {
   ProductFilterState,
   ProductSortOption
 } from './products';
+
 export type { Review, ReviewFromBackend, NewReview } from '#src/types/reviews';
 export type { NewUser, UserFromBackend } from '#src/types/users';
 
@@ -29,10 +30,12 @@ export type {
   CartContextAction,
   CartContextType
 } from '#src/types/Context/CartContext';
+
 export type {
   ProductContextAction,
   ProductContextType
 } from '#src/types/Context/ProductContext';
+
 export type {
   ToastStateType,
   ToastActionType,
