@@ -9,13 +9,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { LoginPayload, NewReview } from '#src/types/types';
-
-interface ReviewFormValues {
-  title: string;
-  rating: number;
-  content: string;
-}
+import { LoginPayload, NewReview, ReviewFormValues } from '#src/types';
 
 const ReviewForm = ({ productId }: { productId: string }) => {
   // Import currently logged on user and access token refreshal hook

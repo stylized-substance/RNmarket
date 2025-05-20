@@ -9,7 +9,7 @@ import Stack from 'react-bootstrap/Stack';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-import { ProductFilterState } from '#src/types/types.ts';
+import { ProductFilterState } from '#src/types';
 
 const ProductFilter = () => {
   const navigate = useNavigate();

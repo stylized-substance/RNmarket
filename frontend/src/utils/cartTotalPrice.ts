@@ -1,4 +1,4 @@
-import { CartState } from '#src/types/types.ts';
+import { CartState } from '#src/types';
 
 export const cartTotalPrice = (cartItems: CartState): number => {
   return cartItems && cartItems.length > 0

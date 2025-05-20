@@ -2,7 +2,7 @@ import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 
-import { UserFromBackend, ItemToDelete } from '#src/types/types.ts';
+import { UserFromBackend, ItemToDelete } from '#src/types';
 
 const UserCards = ({
   users,

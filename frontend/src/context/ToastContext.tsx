@@ -5,32 +5,19 @@ import {
   useReducer
 } from 'react';
 
-interface StateType {
-  message: string;
-  show: boolean;
-}
-
-interface ActionType {
-  type: 'changed';
-  payload: {
-    message: string;
-    show: boolean;
-  };
-}
-
-interface ToastContextType {
-  toastState: StateType;
-  changeToast: (payload: ActionType['payload']) => void;
-}
+import { ToastStateType, ToastActionType, ToastContextType } from '#src/types';
 
 export const ToastContext = createContext<ToastContextType | null>(null);
 
-const initialState: StateType = {
+const initialState: ToastStateType = {
   message: '',
   show: false
 };
 
-export const toastReducer = (_state: StateType, action: ActionType) => {
+export const toastReducer = (
+  _state: ToastStateType,
+  action: ToastActionType
+) => {
   switch (action.type) {
     case 'changed': {
       return action.payload;
@@ -45,7 +32,7 @@ const ToastContextProvider = ({ children }: PropsWithChildren) => {
   const [toastState, toastDispatch] = useReducer(toastReducer, initialState);
 
   // Show toast notification for 5 seconds
-  const changeToast = (payload: ActionType['payload']) => {
+  const changeToast = (payload: ToastActionType['payload']) => {
     toastDispatch({
       type: 'changed',
       payload

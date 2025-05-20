@@ -7,30 +7,13 @@ import {
 } from 'react';
 
 import productsService from '#src/services/products';
-import { CartItem, CartState } from '#src/types/types';
+import {
+  CartItem,
+  CartState,
+  CartContextType,
+  CartContextAction
+} from '#src/types';
 import { isCartState } from '#src/utils/typeNarrowers.ts';
-
-type Action =
-  | {
-      type: 'added';
-      payload: CartItem | CartItem[];
-    }
-  | {
-      type: 'modified';
-      payload: CartItem;
-    }
-  | {
-      type: 'removed';
-      payload: CartItem;
-    }
-  | {
-      type: 'emptied';
-    };
-
-interface CartContextType {
-  state: CartState;
-  dispatch: React.Dispatch<Action>;
-}
 
 export const CartContext = createContext<CartContextType | null>(null);
 
@@ -96,7 +79,7 @@ const CartContextProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-const cartReducer = (state: CartState, action: Action) => {
+const cartReducer = (state: CartState, action: CartContextAction) => {
   switch (action.type) {
     // Add item to cart
     case 'added': {

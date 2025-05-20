@@ -6,41 +6,7 @@ import {
 } from 'react';
 
 import orderBy from 'lodash/orderBy';
-import {
-  Product,
-  ProductSortOption,
-  ProductFilterState
-} from '#src/types/types';
-
-type Action =
-  | {
-      type: 'added';
-      payload: Product[];
-    }
-  | {
-      type: 'sorted';
-      payload: {
-        sortOption: ProductSortOption;
-      };
-    }
-  | {
-      type: 'filtered';
-      payload: {
-        filter: ProductFilterState;
-      };
-    }
-  | {
-      type: 'filterReset';
-    };
-
-interface ProductContextType {
-  state: {
-    products: Product[] | [];
-    sortOption: ProductSortOption;
-    filter: ProductFilterState;
-  };
-  dispatch: React.Dispatch<Action>;
-}
+import { ProductContextAction, ProductContextType } from '#src/types';
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
@@ -58,7 +24,7 @@ const initialState: ProductContextType['state'] = {
 
 const productReducer = (
   state: ProductContextType['state'],
-  action: Action
+  action: ProductContextAction
 ): ProductContextType['state'] => {
   switch (action.type) {
     case 'added': {

@@ -1,6 +1,6 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { NewProduct, Product, ProductQuery } from '#src/types/types';
+import { NewProduct, Product, ProductQuery } from '#src/types';
 import { isApiErrorResponse, isString } from '#src/utils/typeNarrowers';
 
 const baseUrl =
@@ -10,7 +10,7 @@ const baseUrl =
 
 const getAll = async ({
   searchTerm,
-  productCategory,
+  parsedProductCategory,
   filterQuery
 }: ProductQuery): Promise<Product[] | []> => {
   let query = '?';
@@ -19,8 +19,8 @@ const getAll = async ({
     query += `search=${searchTerm}&`;
   }
 
-  if (productCategory) {
-    query += `category=${productCategory}&`;
+  if (parsedProductCategory) {
+    query += `category=${parsedProductCategory}&`;
   }
 
   if (filterQuery) {

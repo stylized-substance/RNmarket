@@ -14,11 +14,8 @@ import ProductFilter from '#src/components/Products/ProductFilter';
 
 import { isProductCategory } from '#src/utils/typeNarrowers';
 import { useEffect, useRef } from 'react';
-interface ProductsProps {
-  productCategory?: string;
-}
 
-const Products = (props: ProductsProps) => {
+const Products = ({ productCategory }: { productCategory?: string }) => {
   const productContext = useProducts();
   const dispatchRef = useRef(productContext.dispatch);
 
@@ -29,9 +26,9 @@ const Products = (props: ProductsProps) => {
   const urlFilter = useLocation().search.substring(1);
 
   // Parse current product category
-  const productCategory =
-    props.productCategory && isProductCategory(props.productCategory)
-      ? props.productCategory
+  const parsedProductCategory =
+    productCategory && isProductCategory(productCategory)
+      ? productCategory
       : undefined;
 
   useEffect(() => {
@@ -49,7 +46,7 @@ const Products = (props: ProductsProps) => {
     queryFn: async () => {
       const productsFromBackend = await productsService.getAll({
         searchTerm,
-        productCategory,
+        parsedProductCategory,
         filterQuery
       });
 
@@ -77,9 +74,9 @@ const Products = (props: ProductsProps) => {
             <h1 className="text-center">Search results for: {searchTerm}</h1>
           ) : (
             <h1 className="text-center">
-              {props.productCategory === 'Mobiles'
+              {productCategory === 'Mobiles'
                 ? 'Mobile phones'
-                : props.productCategory}
+                : productCategory}
             </h1>
           )}
         </Row>

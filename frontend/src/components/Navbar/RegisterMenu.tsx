@@ -8,13 +8,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { NewUser } from '#src/types/types';
+import { NewUser } from '#src/types';
 
-interface RegisterMenuProps {
+const RegisterMenu = ({
+  setLoginDropdownOpen
+}: {
   setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const RegisterMenu = ({ setLoginDropdownOpen }: RegisterMenuProps) => {
+}) => {
   const { changeToast } = useToast();
 
   // Register a new user account

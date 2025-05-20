@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-import { Product } from '#src/types/types';
+import { Product } from '#src/types';
 
 const ProductCard = ({ product }: { product: Product }) => {
   const cart = useCart();

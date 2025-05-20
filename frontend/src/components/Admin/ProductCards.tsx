@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import ProductEditForm from '#src/components/Admin/ProductEditForm';
 
-import { Product, ItemToDelete } from '#src/types/types.ts';
+import { Product, ItemToDelete } from '#src/types';
 
 const ProductAccordion = ({
   product,

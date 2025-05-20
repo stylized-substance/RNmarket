@@ -1,4 +1,4 @@
-import { LoginCredentials, LoginPayload } from '#src/types/types';
+import { LoginCredentials, LoginPayload } from '#src/types';
 import { isLoginPayload } from '#src/utils/typeNarrowers';
 import { useMutation } from '@tanstack/react-query';
 import authorizationService from '#src/services/authorization';

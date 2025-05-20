@@ -4,11 +4,7 @@ import { Formik } from 'formik';
 import { Row, Form } from 'react-bootstrap';
 
 import { isProductSortOption } from '#src/utils/typeNarrowers.ts';
-import { ProductSortOption } from '#src/types/types.ts';
-
-interface ProductSortDropdownValue {
-  option: ProductSortOption;
-}
+import { ProductSortDropdownValue } from '#src/types';
 
 const ProductSortDropdown = () => {
   const productContext = useProducts();

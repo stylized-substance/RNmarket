@@ -22,16 +22,7 @@ import * as yup from 'yup';
 
 import ordersService from '#src/services/orders';
 
-import { CartItemForBackend, NewOrder } from '#src/types/types.ts';
-
-interface CheckoutFormValues {
-  email: string;
-  name: string;
-  address: string;
-  zipcode: string;
-  city: string;
-  country: string;
-}
+import { CartItemForBackend, NewOrder, CheckoutFormValues } from '#src/types';
 
 const Checkout = () => {
   // Import currently logged on user and access token refreshal hook

@@ -6,7 +6,7 @@ import {
   NewOrder,
   OrderInDb,
   OrderFromBackend
-} from '#src/types/types.ts';
+} from '#src/types';
 import { isString, isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl =

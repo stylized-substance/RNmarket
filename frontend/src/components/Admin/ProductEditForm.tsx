@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-import { Product, EditedProduct } from '#src/types/types.ts';
+import { Product, EditedProduct } from '#src/types';
 
 const ProductEditForm = ({
   product,

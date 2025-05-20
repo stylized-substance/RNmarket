@@ -8,7 +8,7 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 
-import { CartItem } from '#src/types/types.ts';
+import { CartItem } from '#src/types';
 
 const CartProducts = () => {
   const cart = useCart();

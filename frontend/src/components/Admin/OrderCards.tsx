@@ -2,7 +2,7 @@ import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 
-import { OrderFromBackend, ItemToDelete } from '#src/types/types.ts';
+import { OrderFromBackend, ItemToDelete } from '#src/types';
 
 const OrderCards = ({
   orders,

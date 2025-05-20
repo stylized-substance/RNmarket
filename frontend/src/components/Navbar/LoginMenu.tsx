@@ -6,16 +6,15 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { LoginCredentials } from '#src/types/types.ts';
+import { LoginCredentials } from '#src/types';
 
-interface LoginMenuProps {
-  setShowRegisterMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
 const LoginMenu = ({
   setShowRegisterMenu,
   setLoginDropdownOpen
-}: LoginMenuProps) => {
+}: {
+  setShowRegisterMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoginDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { login } = useAuth();
 
   const handleLogin = (credentials: LoginCredentials) => {

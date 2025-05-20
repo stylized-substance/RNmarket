@@ -1,6 +1,6 @@
 import { backendAddress } from '#src/utils/config';
 import axios from 'axios';
-import { ReviewFromBackend, NewReview, LoginPayload } from '#src/types/types';
+import { ReviewFromBackend, NewReview, LoginPayload } from '#src/types';
 import { isApiErrorResponse } from '#src/utils/typeNarrowers';
 
 const baseUrl =

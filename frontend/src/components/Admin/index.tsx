@@ -19,7 +19,7 @@ import UserCards from '#src/components/Admin/UserCards';
 import DeleteModal from '#src/components/Admin/DeleteModal';
 import ProductAddForm from '#src/components/Admin/ProductAddForm';
 
-import { ItemToDelete } from '#src/types/types';
+import { ItemToDelete } from '#src/types';
 
 const Admin = () => {
   const { changeToast } = useToast();

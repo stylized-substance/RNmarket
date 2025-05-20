@@ -7,7 +7,7 @@ import {
   CartState,
   CartItem,
   ProductSortOption
-} from '#src/types/types';
+} from '#src/types';
 
 const isString = (param: unknown): param is string => {
   return typeof param === 'string';

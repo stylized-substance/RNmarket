@@ -19,13 +19,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 
-import { LoginPayload } from '#src/types/types';
+import { LoginPayload } from '#src/types';
 
-interface NavBarProps {
+const NavBar = ({
+  loggedOnUser
+}: {
   loggedOnUser: LoginPayload | null | undefined;
-}
-
-const NavBar = (props: NavBarProps) => {
+}) => {
   const cart = useCart();
   const cartItems = cart.state;
 
@@ -117,7 +117,7 @@ const NavBar = (props: NavBarProps) => {
         </Form>
       </Row>
       <Row id="button-row">
-        {props.loggedOnUser && props.loggedOnUser.isadmin && (
+        {loggedOnUser && loggedOnUser.isadmin && (
           <Col>
             <Button
               onClick={() => navigate('/admin')}
@@ -137,7 +137,7 @@ const NavBar = (props: NavBarProps) => {
               setShowRegisterMenu(false);
             }}
           >
-            {!props.loggedOnUser ? (
+            {!loggedOnUser ? (
               <Dropdown.Toggle className="custom-button">
                 Login <i className="bi bi-box-arrow-in-right ms-2"></i>
               </Dropdown.Toggle>
