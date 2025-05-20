@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { User as UserModel } from '#src/models';
-import { User, NewUser } from '#src/types/types';
+import { User, NewUser } from '#src/types';
 import { toNewUser, parseString } from '#src/utils/typeNarrowers';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import bcrypt from 'bcrypt';

@@ -1,5 +1,5 @@
 import { products } from '../../data/data.json';
-import { Product, Review, User } from '#src/types/types';
+import { Product, Review, User } from '#src/types';
 import { toProduct } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';

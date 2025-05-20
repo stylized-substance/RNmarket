@@ -1,15 +1,7 @@
 import { parseString, parseNumber } from '#src/utils/typeNarrowers';
 import logger from '#src/utils/logger';
 import dotenv from 'dotenv';
-
-interface EnvVariables {
-  PORT: number;
-  DATABASE_URL: string;
-  JWTACCESSTOKENEXPIRATION: number;
-  JWTREFRESHTOKENEXPIRATION: number;
-  JWTACCESSTOKENSECRET: string;
-  JWTREFRESHTOKENSECRET: string;
-}
+import { EnvVariables } from '#src/types'
 
 const setDatabaseUrl = () => {
   switch (process.env.NODE_ENV) {

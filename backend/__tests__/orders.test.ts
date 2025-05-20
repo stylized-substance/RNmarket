@@ -15,7 +15,7 @@ import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
-import { OrderInDb } from '#src/types/types';
+import { OrderInDb } from '#src/types';
 
 const api = supertest(app);
 

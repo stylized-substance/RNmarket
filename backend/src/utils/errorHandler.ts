@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { UniqueConstraintError } from 'sequelize';
-import { TypeNarrowingError } from '#src/utils/typeNarrowers';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import logger from '#src/utils/logger';
-import { RefreshTokenExpiredError } from '#src/types/types';
+import {
+  RefreshTokenExpiredError,
+  TypeNarrowingError
+} from '#src/utils/customErrors';
 
 const errorHandler = (
   error: unknown,

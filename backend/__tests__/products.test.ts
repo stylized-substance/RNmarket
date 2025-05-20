@@ -11,7 +11,7 @@ import {
   assertValidType,
   getToken
 } from '#src/utils/testHelpers';
-import { ProductCategory, Product } from '#src/types/types';
+import { ProductCategory, Product } from '#src/types';
 import { Product as ProductModel, Review } from '#src/models';
 
 const api = supertest(app);

@@ -2,8 +2,8 @@ import { Request, Response, Router } from 'express';
 import tokenExtractor from '#src/middleware/tokenExtractor';
 import { Order as OrderModel } from '#src/models';
 import { Product as ProductModel } from '#src/models';
-import { NewOrder, OrderInDb } from '#src/types/types';
-import { OrderFromDb } from '#src/types/types';
+import { NewOrder, OrderInDb } from '#src/types';
+import { OrderFromDb } from '#src/types';
 import { toNewOrder, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 

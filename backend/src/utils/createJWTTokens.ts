@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { UserWithoutHash, RefreshToken, CartItems } from '#src/types/types';
+import { UserWithoutHash, RefreshToken, CartItems } from '#src/types';
 import { v4 as uuidv4 } from 'uuid';
 
 // Import JWT secrets from environment variables

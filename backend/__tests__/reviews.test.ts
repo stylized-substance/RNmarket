@@ -12,7 +12,7 @@ import {
   assertValidType,
   getToken
 } from '#src/utils/testHelpers';
-import { Review, NewReview } from '#src/types/types';
+import { Review, NewReview } from '#src/types';
 import { Review as ReviewModel } from '#src/models';
 import { User as UserModel, Product as ProductModel } from '#src/models';
 import { v4 as uuidv4 } from 'uuid';

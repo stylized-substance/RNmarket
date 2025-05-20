@@ -1,0 +1,8 @@
+export interface EnvVariables {
+  PORT: number;
+  DATABASE_URL: string;
+  JWTACCESSTOKENEXPIRATION: number;
+  JWTREFRESHTOKENEXPIRATION: number;
+  JWTACCESSTOKENSECRET: string;
+  JWTREFRESHTOKENSECRET: string;
+}

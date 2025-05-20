@@ -6,10 +6,7 @@ import {
   parseString
 } from '#src/utils/typeNarrowers';
 import { Review } from '#src/models';
-import {
-  ProductSearchParameters,
-  ProductQueryParameters
-} from '#src/types/types';
+import { ProductSearchParameters, ProductQueryParameters } from '#src/types';
 import { Op } from 'sequelize';
 
 const processProductQueryParameters = (

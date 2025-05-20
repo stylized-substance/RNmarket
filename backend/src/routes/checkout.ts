@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { createTemporaryToken } from '#src/utils/createJWTTokens';
 import { toCartItems } from '#src/utils/typeNarrowers';
-import { CartItems } from '#src/types/types';
+import { CartItems } from '#src/types';
 
 const router: Router = Router();
 

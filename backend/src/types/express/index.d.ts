@@ -1,4 +1,4 @@
-import ProductSearchParameters from '#src/types/types';
+import ProductSearchParameters from '#src/types';
 
 // Extend Express Request object type with custom parameters
 declare global {

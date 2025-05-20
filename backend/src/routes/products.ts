@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { Product as ProductModel } from '#src/models';
 import { processProductQueryParameters } from '#src/middleware/processProductQueryParameters';
 import tokenExtractor from '#src/middleware/tokenExtractor';
-import { Product } from '#src/types/types';
+import { Product } from '#src/types';
 import { isProduct, toProduct, parseString } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 

@@ -4,7 +4,7 @@ import { Product as ProductModel } from '#src/models';
 import { Op } from 'sequelize';
 import { parseString } from '#src/utils/typeNarrowers';
 import tokenExtractor from '#src/middleware/tokenExtractor';
-import { NewReview, EditedReview, Review } from '#src/types/types';
+import { NewReview, EditedReview, Review } from '#src/types';
 import { toNewReview, toEditedReview } from '#src/utils/typeNarrowers';
 import { v4 as uuidv4 } from 'uuid';
 

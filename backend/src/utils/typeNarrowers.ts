@@ -12,8 +12,9 @@ import {
   ProductCategory,
   EditedReview,
   CartItems,
-  TypeNarrowingError
-} from '#src/types/types';
+} from '#src/types';
+
+import { TypeNarrowingError } from '#src/utils/customErrors'
 
 const isBoolean = (param: unknown): param is boolean => {
   return typeof param === 'boolean';

@@ -4,7 +4,8 @@ import { User as UserModel } from '#src/models';
 import { RefreshToken as RefreshTokenModel } from '#src/models';
 import { parseString } from '#src/utils/typeNarrowers';
 import { createJWTTokens } from '#src/utils/createJWTTokens';
-import { LoginPayload, User, RefreshTokenExpiredError } from '#src/types/types';
+import { LoginPayload, User } from '#src/types';
+import { RefreshTokenExpiredError } from '#src/utils/customErrors'
 
 const router: Router = Router();
 
