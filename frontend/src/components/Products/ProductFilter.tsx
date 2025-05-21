@@ -17,9 +17,12 @@ const ProductFilter = () => {
   const productContext = useProducts();
 
   const handleSubmit = (formValues: ProductFilterState) => {
+    // Don't add 'instock' to query if it is false
+    const { instock, ...rest } = formValues;
+    const queryObject = instock === false ? rest : formValues;
     // Construct URL query string from form values
-    const query = `?${Object.entries(formValues)
-      .map((property) => `${property[0]}=${property[1]}`)
+    const query = `?${Object.entries(queryObject)
+      .map((entry) => `${entry[0]}=${entry[1]}`)
       .join('&')}`;
 
     // Update product filter state
