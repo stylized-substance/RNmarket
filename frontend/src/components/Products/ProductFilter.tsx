@@ -33,6 +33,17 @@ const ProductFilter = () => {
     navigate(`${location.pathname}${query}`);
   };
 
+  // Reset product filter state by navigating to product category page
+  const handleReset = () => {
+    navigate(`${location.pathname}`);
+    productContext.dispatch({
+      type: 'toggledFilterShouldInitialize',
+      payload: {
+        value: true
+      }
+    });
+  };
+
   const formSchema = yup.object().shape({
     lowestPrice: yup
       .number()
@@ -161,6 +172,9 @@ const ProductFilter = () => {
               </Form.Group>
               <Button type="submit" className="custom-button">
                 Submit
+              </Button>
+              <Button onClick={handleReset} className="custom-button">
+                Reset filter
               </Button>
             </Stack>
           </Form>

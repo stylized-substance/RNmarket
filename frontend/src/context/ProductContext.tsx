@@ -13,7 +13,8 @@ const ProductContext = createContext<ProductContextType | null>(null);
 const initialState: ProductContextType['state'] = {
   products: [],
   sortOption: 'nameAsc',
-  filter: {}
+  filter: {},
+  filterShouldInitialize: true
 };
 
 const productReducer = (
@@ -23,6 +24,9 @@ const productReducer = (
   switch (action.type) {
     case 'added': {
       return { ...state, products: action.payload };
+    }
+    case 'reinitializedProducts': {
+      return { ...state, products: [] };
     }
     case 'sorted': {
       // Temporarily add lowercase titles to products so orderBy function works properly when sorting by name
@@ -80,8 +84,8 @@ const productReducer = (
     case 'filtered': {
       return { ...state, filter: action.payload.filter };
     }
-    case 'filterReset': {
-      return { ...state, filter: initialState.filter };
+    case 'toggledFilterShouldInitialize': {
+      return { ...state, filterShouldInitialize: action.payload.value };
     }
     default: {
       throw new Error('productReducer was called with an unknown action type');

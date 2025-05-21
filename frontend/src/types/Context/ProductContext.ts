@@ -6,6 +6,9 @@ export type ProductContextAction =
       payload: Product[];
     }
   | {
+      type: 'reinitializedProducts';
+    }
+  | {
       type: 'sorted';
       payload: {
         sortOption: ProductSortOption;
@@ -18,7 +21,10 @@ export type ProductContextAction =
       };
     }
   | {
-      type: 'filterReset';
+      type: 'toggledFilterShouldInitialize';
+      payload: {
+        value: boolean;
+      };
     };
 
 export interface ProductContextType {
@@ -26,6 +32,7 @@ export interface ProductContextType {
     products: Product[] | [];
     sortOption: ProductSortOption;
     filter: ProductFilterState;
+    filterShouldInitialize: boolean;
   };
   dispatch: React.Dispatch<ProductContextAction>;
 }

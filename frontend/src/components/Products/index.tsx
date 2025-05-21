@@ -19,6 +19,8 @@ import { useEffect, useRef } from 'react';
 const Products = ({ productCategory }: { productCategory?: string }) => {
   const productContext = useProducts();
   const dispatchRef = useRef(productContext.dispatch);
+  const initialLoad = useRef(true);
+  const previousCategory = useRef(productCategory);
 
   // Parse search term and product filter query from URL
   const [searchTerm] = new URLSearchParams(useLocation().search).getAll(
@@ -35,7 +37,6 @@ const Products = ({ productCategory }: { productCategory?: string }) => {
   // Fetch products with Tanstack Query
   // Refetch query when product search term, category or filter query changes
   const filterQuery = searchTerm ? undefined : urlFilter;
-
   const {
     data: productsFromBackend,
     isPending,
@@ -54,6 +55,13 @@ const Products = ({ productCategory }: { productCategory?: string }) => {
     }
   });
 
+  // Reset product state when products refetch
+  useEffect(() => {
+    dispatchRef.current({
+      type: 'reinitializedProducts'
+    });
+  }, [productsFromBackend]);
+
   // Save products to context and set initial product filter values based on properties of products
   // Using productContext.dispatch here would require having the context as a dependency for useEffect, thus causing a render loop. A ref is used instead.
   useEffect(() => {
@@ -63,17 +71,46 @@ const Products = ({ productCategory }: { productCategory?: string }) => {
         payload: productsFromBackend
       });
 
-      dispatchRef.current({
-        type: 'filtered',
-        payload: {
-          filter: {
-            ...getFilterValues(productsFromBackend),
-            instock: false // Show all products, including those not in stock
+      // Trigger product filter reset on initial page load and when 'Reset filter' button is pressed
+      if (
+        initialLoad.current === true ||
+        productContext.state.filterShouldInitialize === true
+      ) {
+        dispatchRef.current({
+          type: 'filtered',
+          payload: {
+            filter: {
+              ...getFilterValues(productsFromBackend),
+              instock: false // Show all products, including those not in stock
+            }
           }
+        });
+
+        dispatchRef.current({
+          type: 'toggledFilterShouldInitialize',
+          payload: {
+            value: false
+          }
+        });
+
+        initialLoad.current = false;
+      }
+    }
+  }, [productsFromBackend, productContext.state.filterShouldInitialize]);
+
+  // Trigger product filter reset when product category changes
+  useEffect(() => {
+    if (previousCategory.current !== productCategory) {
+      dispatchRef.current({
+        type: 'toggledFilterShouldInitialize',
+        payload: {
+          value: true
         }
       });
+
+      previousCategory.current = productCategory;
     }
-  }, [productsFromBackend]);
+  }, [productCategory]);
 
   return (
     <Col id="products-page">
