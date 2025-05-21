@@ -13,13 +13,7 @@ const ProductContext = createContext<ProductContextType | null>(null);
 const initialState: ProductContextType['state'] = {
   products: [],
   sortOption: 'nameAsc',
-  filter: {
-    lowestPrice: 0,
-    highestPrice: 10000,
-    lowestRating: 1,
-    highestRating: 5,
-    instock: false
-  }
+  filter: {}
 };
 
 const productReducer = (

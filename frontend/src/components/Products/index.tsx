@@ -13,6 +13,7 @@ import ProductSortDropdown from '#src/components/Products/ProductSortDropdown';
 import ProductFilter from '#src/components/Products/ProductFilter';
 
 import { isProductCategory } from '#src/utils/typeNarrowers';
+import { getFilterValues } from '#src/utils/getFilterValues';
 import { useEffect, useRef } from 'react';
 
 const Products = ({ productCategory }: { productCategory?: string }) => {
@@ -31,40 +32,48 @@ const Products = ({ productCategory }: { productCategory?: string }) => {
       ? productCategory
       : undefined;
 
-  useEffect(() => {
-    // Reset product filter form state when product category or search term changes
-    // A ref is used to prevent a render loop while having necessary functions as useEffect dependencies
-    dispatchRef.current({ type: 'filterReset' });
-  }, [productCategory, searchTerm]);
-
   // Fetch products with Tanstack Query
+  // Refetch query when product search term, category or filter query changes
   const filterQuery = searchTerm ? undefined : urlFilter;
 
-  // Refetch query when product search term, category or filter query changes
-  const { isPending, isError, error } = useQuery({
+  const {
+    data: productsFromBackend,
+    isPending,
+    isError,
+    error
+  } = useQuery({
     queryKey: ['products', searchTerm, productCategory, filterQuery],
     queryFn: async () => {
-      const productsFromBackend = await productsService.getAll({
+      const products = await productsService.getAll({
         searchTerm,
         parsedProductCategory,
         filterQuery
       });
 
-      productContext.dispatch({
+      return products;
+    }
+  });
+
+  // Save products to context and set initial product filter values based on properties of products
+  // Using productContext.dispatch here would require having the context as a dependency for useEffect, thus causing a render loop. A ref is used instead.
+  useEffect(() => {
+    if (productsFromBackend && productsFromBackend.length > 0) {
+      dispatchRef.current({
         type: 'added',
         payload: productsFromBackend
       });
 
-      productContext.dispatch({
-        type: 'sorted',
+      dispatchRef.current({
+        type: 'filtered',
         payload: {
-          sortOption: productContext.state.sortOption
+          filter: {
+            ...getFilterValues(productsFromBackend),
+            instock: false // Show all products, including those not in stock
+          }
         }
       });
-
-      return productsFromBackend;
     }
-  });
+  }, [productsFromBackend]);
 
   return (
     <Col id="products-page">
