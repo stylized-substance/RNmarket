@@ -11,10 +11,10 @@ import {
   Laptop,
   ProductCategory,
   EditedReview,
-  CartItems,
+  CartItems
 } from '#src/types';
 
-import { TypeNarrowingError } from '#src/utils/customErrors'
+import { TypeNarrowingError } from '#src/utils/customErrors';
 
 const isBoolean = (param: unknown): param is boolean => {
   return typeof param === 'boolean';
@@ -32,24 +32,28 @@ const parseString = (param: unknown): string => {
   return param;
 };
 
-const isNumber = (param: unknown): param is number => {
+const isNumberLike = (param: unknown): boolean => {
   if (typeof param === 'number' && !isNaN(param)) {
     return true;
   }
 
-  if (typeof param === 'string' && param.trim() !== '') {
-    return !isNaN(Number(param));
+  if (
+    typeof param === 'string' &&
+    param.trim() !== '' &&
+    !isNaN(Number(param))
+  ) {
+    return true;
   }
 
   return false;
 };
 
 const parseNumber = (param: unknown): number => {
-  if (!isNumber(param)) {
+  if (!isNumberLike(param)) {
     throw new TypeNarrowingError(`Input (${param}) is not a number`);
   }
 
-  return param;
+  return Number(param);
 };
 
 const isObject = (param: unknown): param is object => {
@@ -89,7 +93,7 @@ const isNewOrder = (param: unknown): param is NewOrder => {
         'id' in product &&
         isString(product.id) &&
         'quantity' in product &&
-        isNumber(product.quantity)
+        isNumberLike(product.quantity)
       );
     }) &&
     'email' in param &&
@@ -119,7 +123,7 @@ const isCartItems = (param: unknown): param is CartItems => {
         'id' in product &&
         isString(product.id) &&
         'quantity' in product &&
-        isNumber(product.quantity)
+        isNumberLike(product.quantity)
       );
     })
   );
@@ -186,7 +190,7 @@ const isNewReview = (param: unknown): param is NewReview => {
     'content' in param &&
     isString(param.title) &&
     'rating' in param &&
-    isNumber(param.rating)
+    isNumberLike(param.rating)
   );
 };
 
@@ -198,7 +202,7 @@ const isEditedReview = (param: unknown): param is EditedReview => {
     'content' in param &&
     isString(param.title) &&
     'rating' in param &&
-    isNumber(param.rating)
+    isNumberLike(param.rating)
   );
 };
 
@@ -245,7 +249,7 @@ const isProduct = (param: unknown): param is Product => {
     isString(param.category) &&
     isProductCategory(param.category) &&
     'price' in param &&
-    isNumber(param.price) &&
+    isNumberLike(param.price) &&
     'specs' in param &&
     isStringArray(param.specs)
   );
@@ -337,7 +341,7 @@ const toProduct = (param: unknown): Product => {
 export {
   isString,
   parseString,
-  isNumber,
+  isNumberLike,
   parseNumber,
   isLoginPayload,
   isNewOrder,

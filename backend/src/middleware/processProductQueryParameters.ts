@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import {
-  isNumber,
+  isNumberLike,
   parseNumber,
   parseProductCategory,
   parseString
@@ -61,7 +61,7 @@ const processProductQueryParameters = (
 
   // Limit number of products returned
   // Handle invalid limit parameter
-  if (req.query.limit && !isNumber(Number(req.query.limit))) {
+  if (req.query.limit && !isNumberLike(Number(req.query.limit))) {
     return res.status(400).json({ Error: 'Invalid product query limit' });
   }
 
@@ -135,6 +135,7 @@ const processProductQueryParameters = (
     }
 
     if (lowestPrice > highestPrice) {
+      console.log(typeof lowestPrice, typeof highestPrice);
       return res
         .status(400)
         .json({ Error: 'Lowest price cannot be higher than highest price' });

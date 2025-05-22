@@ -10,7 +10,7 @@ import ProductCards from '#src/components/Products/ProductCards';
 import ProductsPending from '#src/components/Products/ProductsPending';
 import ProductsError from '#src/components/Products/ProductsError';
 import ProductSortDropdown from '#src/components/Products/ProductSortDropdown';
-import ProductFilter from '#src/components/Products/ProductFilter';
+import ProductFilter from '#src/components/Products/ProductFilter/index.tsx';
 
 import { isProductCategory } from '#src/utils/typeNarrowers';
 import { getFilterValues } from '#src/utils/getFilterValues';
