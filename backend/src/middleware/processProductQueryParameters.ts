@@ -122,14 +122,23 @@ const processProductQueryParameters = (
   }
 
   if (lowestPrice && highestPrice) {
-    if (lowestPrice < 0 || lowestPrice > 10000) {
-      return res.status(400).json({ Error: 'Invalid lowest price query' });
+    if (lowestPrice < 0) {
+      return res
+        .status(400)
+        .json({ Error: 'Lowest price must be greater than 0' });
     }
 
-    if (highestPrice < 0 || highestPrice > 10000) {
-      return res.status(400).json({ Error: 'Invalid highest price query' });
+    if (highestPrice < 0) {
+      return res
+        .status(400)
+        .json({ Error: 'Highest price must be greater than 0' });
     }
 
+    if (lowestPrice > highestPrice) {
+      return res
+        .status(400)
+        .json({ Error: 'Lowest price cannot be higher than highest price' });
+    }
     where = {
       ...where,
       price: {

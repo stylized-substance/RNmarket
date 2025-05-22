@@ -171,27 +171,39 @@ describe('GET requests', () => {
 
     test('GET /api/products fails with an invalid price range', async () => {
       let lowestPrice = 10;
-      let highestPrice = 10000000;
+      let highestPrice = 1;
 
       let response = await api
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
       assert400Response(response);
       expect(response.body).toStrictEqual({
-        Error: 'Invalid highest price query'
+        Error: 'Lowest price cannot be higher than highest price'
       });
 
       lowestPrice = -1;
-      highestPrice = 50000;
+      highestPrice = 10;
 
       response = await api
         .get('/api/products')
         .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
       assert400Response(response);
       expect(response.body).toStrictEqual({
-        Error: 'Invalid lowest price query'
+        Error: 'Lowest price must be greater than 0'
+      });
+
+      lowestPrice = 10;
+      highestPrice = -1;
+
+      response = await api
+        .get('/api/products')
+        .query(`lowestPrice=${lowestPrice}&highestPrice=${highestPrice}`);
+      assert400Response(response);
+      expect(response.body).toStrictEqual({
+        Error: 'Highest price must be greater than 0'
       });
     });
+    
 
     test('GET /api/products fails if lowestPrice or highestPrice is omitted', async () => {
       let response = await api.get('/api/products').query('lowestPrice=10');

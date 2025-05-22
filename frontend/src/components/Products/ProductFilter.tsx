@@ -48,6 +48,7 @@ const ProductFilter = () => {
     });
   };
 
+  // TODO: prevent lowestprice greater than highestprice
   const formSchema = yup.object().shape({
     lowestPrice: yup
       .number()
