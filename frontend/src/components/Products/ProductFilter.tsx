@@ -15,6 +15,7 @@ const ProductFilter = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const productContext = useProducts();
+  const highestPrice = productContext.state.filter.highestPrice ?? 0;
 
   const handleSubmit = (formValues: ProductFilterState) => {
     // Don't add 'instock' to query if it is false
@@ -52,12 +53,12 @@ const ProductFilter = () => {
       .number()
       .required()
       .min(0, 'Must be 0 or higher')
-      .max(10000, 'Must be 10000 or lower'),
+      .max(highestPrice, `Must be ${highestPrice} or lower`),
     highestPrice: yup
       .number()
       .required()
       .min(0, 'Must be 0 or higher')
-      .max(10000, 'Must be 10000 or lower'),
+      .max(highestPrice, `Must be ${highestPrice} or lower`),
     lowestRating: yup
       .number()
       .required()
