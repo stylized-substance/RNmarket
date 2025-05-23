@@ -5,11 +5,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Stack from 'react-bootstrap/Stack';
-import PriceFieldWrapper from '#src/components/Products/ProductFilter/PriceFieldWrapper';
 import { Formik, FormikErrors } from 'formik';
 import * as yup from 'yup';
 
 import { ProductFilterState } from '#src/types';
+import { parseNumber } from '#src/utils/typeNarrowers';
 
 const ProductFilter = () => {
   const navigate = useNavigate();
@@ -48,12 +48,45 @@ const ProductFilter = () => {
     });
   };
 
-  // TODO: prevent lowestprice greater than highestprice
+  // Custom handleChange function for Formik. Prevents lowest price input going higher than highest price input and vice versa
+  const customHandleChange =
+    (
+      formikHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+      setFieldValue: (
+        field: string,
+        value: ProductFilterState[keyof ProductFilterState],
+        shouldValidate?: boolean
+      ) => Promise<void | FormikErrors<ProductFilterState>>,
+      values: ProductFilterState
+    ) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      formikHandleChange(e);
+      const { name, value } = e.target;
+      const parsedValue = parseNumber(value);
+
+      if (values.lowestPrice && values.highestPrice) {
+        if (name === 'lowestPrice') {
+          if (parsedValue > values.highestPrice)
+            void setFieldValue('highestPrice', parsedValue, false);
+        } else if (name === 'highestPrice') {
+          if (parsedValue < values.lowestPrice) {
+            void setFieldValue('lowestPrice', parsedValue, false);
+          }
+        }
+      }
+    };
+
   const formSchema = yup.object().shape({
-    lowestPrice: yup.number().required().min(0, 'Must be 0 or higher'),
-    // .max(highestPrice, `Must be ${highestPrice} or lower`),
-    highestPrice: yup.number().required().min(0, 'Must be 0 or higher'),
-    // .max(highestPrice, `Must be ${highestPrice} or lower`),
+    lowestPrice: yup
+      .number()
+      .required()
+      .min(0, 'Must be 0 or higher')
+      .max(highestPrice, `Must be ${highestPrice} or lower`),
+    highestPrice: yup
+      .number()
+      .required()
+      .min(0, 'Must be 0 or higher')
+      .max(highestPrice, `Must be ${highestPrice} or lower`),
     lowestRating: yup
       .number()
       .required()
@@ -66,23 +99,6 @@ const ProductFilter = () => {
       .max(5, 'Must be 5 or lower'),
     instock: yup.boolean().required()
   });
-
-  const handleBlur = (
-    values: ProductFilterState,
-    setFieldValue: (
-      field: string,
-      value: ProductFilterState[keyof ProductFilterState],
-      shouldValidate?: boolean
-    ) => Promise<void | FormikErrors<ProductFilterState>>
-  ) => {
-    if (values.lowestPrice && values.highestPrice) {
-      if (values.lowestPrice > values.highestPrice) {
-        void setFieldValue('lowestPrice', values.highestPrice, false);
-      } else if (values.highestPrice < values.lowestPrice) {
-        void setFieldValue('highestPrice', values.lowestPrice, false);
-      }
-    }
-  };
 
   return (
     <>
@@ -103,44 +119,50 @@ const ProductFilter = () => {
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Stack gap={3}>
-              <PriceFieldWrapper>
-                <Form.Group>
-                  <Form.Label>
-                    <b>Lowest price</b>
-                  </Form.Label>
-                  <InputGroup hasValidation>
-                    <Form.Control
-                      type="number"
-                      name="lowestPrice"
-                      value={values.lowestPrice}
-                      onChange={handleChange}
-                      onBlur={void handleBlur(values, setFieldValue)}
-                      isInvalid={touched.lowestPrice && !!errors.lowestPrice}
-                    ></Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.lowestPrice}
-                    </Form.Control.Feedback>
-                  </InputGroup>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>
-                    <b>Highest price</b>
-                  </Form.Label>
-                  <InputGroup hasValidation>
-                    <Form.Control
-                      type="number"
-                      name="highestPrice"
-                      value={values.highestPrice}
-                      onChange={handleChange}
-                      onBlur={void handleBlur(values, setFieldValue)}
-                      isInvalid={touched.highestPrice && !!errors.highestPrice}
-                    ></Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.highestPrice}
-                    </Form.Control.Feedback>
-                  </InputGroup>
-                </Form.Group>
-              </PriceFieldWrapper>
+              <Form.Group>
+                <Form.Label>
+                  <b>Lowest price</b>
+                </Form.Label>
+                <InputGroup hasValidation>
+                  <Form.Control
+                    type="number"
+                    name="lowestPrice"
+                    min={0}
+                    value={values.lowestPrice}
+                    onChange={customHandleChange(
+                      handleChange,
+                      setFieldValue,
+                      values
+                    )}
+                    isInvalid={touched.lowestPrice && !!errors.lowestPrice}
+                  ></Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.lowestPrice}
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>
+                  <b>Highest price</b>
+                </Form.Label>
+                <InputGroup hasValidation>
+                  <Form.Control
+                    type="number"
+                    name="highestPrice"
+                    min={0}
+                    value={values.highestPrice}
+                    onChange={customHandleChange(
+                      handleChange,
+                      setFieldValue,
+                      values
+                    )}
+                    isInvalid={touched.highestPrice && !!errors.highestPrice}
+                  ></Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.highestPrice}
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
               <Form.Group>
                 <Form.Label>
                   <b>Lowest rating</b>
@@ -149,6 +171,8 @@ const ProductFilter = () => {
                   <Form.Control
                     type="number"
                     name="lowestRating"
+                    min={1}
+                    max={5}
                     value={values.lowestRating}
                     onChange={handleChange}
                     isInvalid={touched.lowestRating && !!errors.lowestRating}
@@ -166,6 +190,8 @@ const ProductFilter = () => {
                   <Form.Control
                     type="number"
                     name="highestRating"
+                    min={1}
+                    max={5}
                     value={values.highestRating}
                     onChange={handleChange}
                     isInvalid={touched.highestRating && !!errors.highestRating}

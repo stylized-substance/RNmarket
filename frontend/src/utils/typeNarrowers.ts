@@ -33,6 +33,14 @@ const isNumber = (param: unknown): param is number => {
   return typeof value === 'number' && !isNaN(value);
 };
 
+const parseNumber = (param: unknown): number => {
+  if (!isNumber(param)) {
+    throw new Error(`Type error: Input is not a number`);
+  }
+
+  return Number(param);
+};
+
 const isBoolean = (param: unknown): param is boolean => {
   return typeof param === 'boolean';
 };
@@ -134,6 +142,7 @@ export {
   isObject,
   isString,
   parseString,
+  parseNumber,
   isNewReview,
   isApiErrorResponse,
   isLoginPayload,
