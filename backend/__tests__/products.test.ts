@@ -203,7 +203,6 @@ describe('GET requests', () => {
         Error: 'Highest price must be greater than 0'
       });
     });
-    
 
     test('GET /api/products fails if lowestPrice or highestPrice is omitted', async () => {
       let response = await api.get('/api/products').query('lowestPrice=10');

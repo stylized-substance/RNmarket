@@ -1,3 +1,3 @@
-import { NewOrder } from '#src/types'
+import { NewOrder } from '#src/types';
 
 export type CartItems = Pick<NewOrder, 'products'>;

@@ -1,4 +1,4 @@
-export type { EnvVariables } from '#src/types/config/envConfig'
+export type { EnvVariables } from '#src/types/config/envConfig';
 
 export type {
   BaseProduct,
@@ -9,33 +9,22 @@ export type {
   ProductWithoutReviews,
   ProductSearchParameters,
   ProductQueryParameters
-} from '#src/types/products'
+} from '#src/types/products';
 
 // Enum type exported without type keyword so it can be used at runtime
-export { ProductCategory } from '#src/types/products'
+export { ProductCategory } from '#src/types/products';
 
-export type {
-  LoginPayload,
-  RefreshToken
-} from '#src/types/login'
+export type { LoginPayload, RefreshToken } from '#src/types/login';
 
 export type {
   NewOrder,
   OrderInDb,
   OrderFromDb,
   OrderForFrontend
-} from '#src/types/orders'
+} from '#src/types/orders';
 
-export type { CartItems } from '#src/types/cart'
+export type { CartItems } from '#src/types/cart';
 
-export type {
-  Review,
-  NewReview,
-  EditedReview
-} from '#src/types/reviews'
+export type { Review, NewReview, EditedReview } from '#src/types/reviews';
 
-export type {
-  User,
-  UserWithoutHash,
-  NewUser
-} from '#src/types/users'
+export type { User, UserWithoutHash, NewUser } from '#src/types/users';

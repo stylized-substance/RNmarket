@@ -1,4 +1,4 @@
-import { Review } from '#src/types'
+import { Review } from '#src/types';
 
 // Define special omit for unions
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown

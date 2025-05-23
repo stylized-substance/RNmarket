@@ -1,7 +1,7 @@
 import { parseString, parseNumber } from '#src/utils/typeNarrowers';
 import logger from '#src/utils/logger';
 import dotenv from 'dotenv';
-import { EnvVariables } from '#src/types'
+import { EnvVariables } from '#src/types';
 
 const setDatabaseUrl = () => {
   switch (process.env.NODE_ENV) {
