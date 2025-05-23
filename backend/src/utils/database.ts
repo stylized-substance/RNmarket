@@ -28,7 +28,6 @@ const migrationConfig = {
   logger: process.env.NODE_ENV?.startsWith('test') ? undefined : console
 };
 
-// Disable migration logging while running tests
 const runMigrations = async () => {
   const migrator = new Umzug(migrationConfig);
   try {
