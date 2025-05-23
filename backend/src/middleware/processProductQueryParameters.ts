@@ -109,19 +109,18 @@ const processProductQueryParameters = (
   }
 
   // Filter products by price
-  if (lowestPrice && !highestPrice) {
+  if (lowestPrice !== undefined && highestPrice === undefined) {
     return res
       .status(400)
       .json({ Error: 'Highest value in price range query missing' });
   }
-
-  if (!lowestPrice && highestPrice) {
+  if (lowestPrice === undefined && highestPrice !== undefined) {
     return res
       .status(400)
       .json({ Error: 'Lowest value in price range query missing' });
   }
 
-  if (lowestPrice && highestPrice) {
+  if (lowestPrice !== undefined && highestPrice !== undefined) {
     if (lowestPrice < 0) {
       return res
         .status(400)
@@ -135,7 +134,6 @@ const processProductQueryParameters = (
     }
 
     if (lowestPrice > highestPrice) {
-      console.log(typeof lowestPrice, typeof highestPrice);
       return res
         .status(400)
         .json({ Error: 'Lowest price cannot be higher than highest price' });
