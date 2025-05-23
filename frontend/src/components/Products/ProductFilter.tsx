@@ -48,7 +48,7 @@ const ProductFilter = () => {
     });
   };
 
-  // Custom handleChange function for Formik. Prevents lowest price input going higher than highest price input and vice versa
+  // Custom handleChange function for Formik. Prevents lowest number input going higher than highest input and vice versa. Used for lowest/highest price/rating inputs.
   const customHandleChange =
     (
       formikHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
@@ -62,6 +62,7 @@ const ProductFilter = () => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       formikHandleChange(e);
       const { name, value } = e.target;
+      console.log(name, value)
       const parsedValue = parseNumber(value);
 
       if (values.lowestPrice && values.highestPrice) {
@@ -71,6 +72,17 @@ const ProductFilter = () => {
         } else if (name === 'highestPrice') {
           if (parsedValue < values.lowestPrice) {
             void setFieldValue('lowestPrice', parsedValue, false);
+          }
+        }
+      }
+
+      if (values.lowestRating && values.highestRating) {
+        if (name === 'lowestRating') {
+          if (parsedValue > values.highestRating)
+            void setFieldValue('highestRating', parsedValue, false);
+        } else if (name === 'highestRating') {
+          if (parsedValue < values.lowestRating) {
+            void setFieldValue('lowestRating', parsedValue, false);
           }
         }
       }
@@ -175,7 +187,11 @@ const ProductFilter = () => {
                     min={1}
                     max={5}
                     value={values.lowestRating}
-                    onChange={handleChange}
+                    onChange={customHandleChange(
+                      handleChange,
+                      setFieldValue,
+                      values
+                    )}
                     isInvalid={touched.lowestRating && !!errors.lowestRating}
                   ></Form.Control>
                   <Form.Control.Feedback type="invalid">
@@ -194,7 +210,11 @@ const ProductFilter = () => {
                     min={1}
                     max={5}
                     value={values.highestRating}
-                    onChange={handleChange}
+                    onChange={customHandleChange(
+                      handleChange,
+                      setFieldValue,
+                      values
+                    )}
                     isInvalid={touched.highestRating && !!errors.highestRating}
                   ></Form.Control>
                   <Form.Control.Feedback type="invalid">
