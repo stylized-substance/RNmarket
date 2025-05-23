@@ -18,6 +18,7 @@ const sequelize = new Sequelize(`${dbUrl}`, {
   logging: (msg) => logger(msg)
 });
 
+// Disable migration logging while running tests
 const migrationConfig = {
   migrations: {
     glob: `${migrationsFolder}/*.{js,ts}`
