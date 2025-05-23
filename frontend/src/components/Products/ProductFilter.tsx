@@ -150,6 +150,7 @@ const ProductFilter = () => {
                     type="number"
                     name="highestPrice"
                     min={0}
+                    max={highestPrice}
                     value={values.highestPrice}
                     onChange={customHandleChange(
                       handleChange,
